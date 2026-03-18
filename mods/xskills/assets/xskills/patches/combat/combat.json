@@ -1,0 +1,308 @@
+[
+  {
+    "file": "game:entities/lore/bell",
+    "op": "add",
+    "path": "/client/behaviors/-",
+    "value": {
+      "code": "XSkillsEntity",
+      "xp": 5.0
+    }
+  },
+  {
+    "file": "game:entities/lore/bell",
+    "op": "add",
+    "path": "/server/behaviors/-",
+    "value": {
+      "code": "XSkillsEntity",
+      "xp": 5.0
+    }
+  },
+  {
+    "file": "game:entities/lore/drifter",
+    "op": "add",
+    "path": "/client/behaviors/-",
+    "value": {
+      "code": "XSkillsEntity",
+      "xpByType": {
+        "*-normal": 1.0,
+        "*-deep": 1.5,
+        "*-tainted": 2.0,
+        "*-corrupt": 2.5,
+        "*-nightmare": 3.0,
+        "*-double-headed": 3.5
+      }
+    }
+  },
+  {
+    "file": "game:entities/lore/drifter",
+    "op": "add",
+    "path": "/server/behaviors/-",
+    "value": {
+      "code": "XSkillsEntity",
+      "xpByType": {
+        "*-normal": 1.0,
+        "*-deep": 1.5,
+        "*-tainted": 2.0,
+        "*-corrupt": 2.5,
+        "*-nightmare": 3.0,
+        "*-double-headed": 3.5
+      }
+    }
+  },
+  {
+    "file": "game:entities/lore/bowtorn",
+    "op": "add",
+    "path": "/client/behaviors/-",
+    "value": {
+      "code": "XSkillsEntity",
+      "xpByType": {
+        "*-surface": 0.5,
+        "*-deep": 1.0,
+        "*-tainted": 1.5,
+        "*-corrupt": 2.0,
+        "*-nightmare": 2.5,
+        "*-gearfoot": 3.0
+      }
+    }
+  },
+  {
+    "file": "game:entities/lore/bowtorn",
+    "op": "add",
+    "path": "/server/behaviors/-",
+    "value": {
+      "code": "XSkillsEntity",
+      "xpByType": {
+        "*-surface": 0.5,
+        "*-deep": 1.0,
+        "*-tainted": 1.5,
+        "*-corrupt": 2.0,
+        "*-nightmare": 2.5,
+        "*-gearfoot": 3.0
+      }
+    }
+  },
+  {
+    "file": "game:entities/lore/shiver",
+    "op": "add",
+    "path": "/client/behaviors/-",
+    "value": {
+      "code": "XSkillsEntity",
+      "xpByType": {
+        "*-surface": 1.0,
+        "*-deep": 1.5,
+        "*-tainted": 2.0,
+        "*-corrupt": 2.5,
+        "*-nightmare": 3.0,
+        "*-stilt": 3.5,
+        "*-bellhead": 4.0,
+        "*-deepsplit": 4.0
+      }
+    }
+  },
+  {
+    "file": "game:entities/lore/shiver",
+    "op": "add",
+    "path": "/server/behaviors/-",
+    "value": {
+      "code": "XSkillsEntity",
+      "xpByType": {
+        "*-surface": 1.0,
+        "*-deep": 1.5,
+        "*-tainted": 2.0,
+        "*-corrupt": 2.5,
+        "*-nightmare": 3.0,
+        "*-stilt": 3.5,
+        "*-bellhead": 4.0,
+        "*-deepsplit": 4.0
+      }
+    }
+  },
+  {
+    "file": "game:entities/lore/locust",
+    "op": "add",
+    "path": "/client/behaviors/-",
+    "value": {
+      "code": "XSkillsEntity",
+      "xpByType": {
+        "*-bronze": 0.75,
+        "*-corrupt": 1.0,
+        "locust-corrupt-sawblade": 2.0
+      }
+    }
+  },
+  {
+    "file": "game:entities/lore/locust",
+    "op": "add",
+    "path": "/server/behaviors/-",
+    "value": {
+      "code": "XSkillsEntity",
+      "xpByType": {
+        "*-bronze": 0.75,
+        "*-corrupt": 1.0,
+        "locust-corrupt-sawblade": 2.0
+      }
+    }
+  },
+  {
+    "file": "game:entities/lore/boss/eidolon-immobilized",
+    "op": "add",
+    "path": "/client/behaviors/-",
+    "value": {
+      "code": "XSkillsEntity",
+      "xp": 50.0
+    }
+  },
+  {
+    "file": "game:entities/lore/boss/eidolon-immobilized",
+    "op": "add",
+    "path": "/server/behaviors/-",
+    "value": {
+      "code": "XSkillsEntity",
+      "xp": 50.0
+    }
+  },
+  {
+    "file": "game:entities/lore/boss/erel",
+    "op": "add",
+    "path": "/client/behaviors/-",
+    "value": {
+      "code": "XSkillsEntity",
+      "xp": 50.0
+    }
+  },
+  {
+    "file": "game:entities/lore/boss/erel",
+    "op": "add",
+    "path": "/server/behaviors/-",
+    "value": {
+      "code": "XSkillsEntity",
+      "xp": 50.0
+    }
+  },
+  {
+    "file": "game:entities/nonliving/strawdummy",
+    "op": "add",
+    "path": "/client/behaviors/-",
+    "value": {
+      "code": "XSkillsEntity",
+      "xp": 0.0
+    }
+  },
+  {
+    "file": "game:entities/nonliving/strawdummy",
+    "op": "add",
+    "path": "/server/behaviors/-",
+    "value": {
+      "code": "XSkillsEntity",
+      "xp": 0.0
+    }
+  },
+  {
+    "file": "game:entities/land/wild-goblin",
+    "op": "add",
+    "path": "/client/behaviors/-",
+    "value": {
+      "code": "XSkillsEntity",
+      "xp": 1.0
+    }
+  },
+  {
+    "file": "game:entities/land/wild-goblin",
+    "op": "add",
+    "path": "/server/behaviors/-",
+    "value": {
+      "code": "XSkillsEntity",
+      "xp": 1.0
+    }
+  },
+  {
+    "file": "game:entities/land/wild-goblin_spear",
+    "op": "add",
+    "path": "/server/behaviors/-",
+    "value": {
+      "code": "XSkillsEntity",
+      "xp": 1.25
+    }
+  },
+  {
+    "file": "game:entities/land/wild-goblin_spear",
+    "op": "add",
+    "path": "/client/behaviors/-",
+    "value": {
+      "code": "XSkillsEntity",
+      "xp": 1.25
+    }
+  },
+  {
+    "file": "theneighbours:entities/land/brower",
+    "op": "add",
+    "path": "/server/behaviors/-",
+    "value": {
+      "code": "XSkillsEntity",
+      "xp": 1.75
+    }
+  },
+  {
+    "file": "theneighbours:entities/land/brower",
+    "op": "add",
+    "path": "/client/behaviors/-",
+    "value": {
+      "code": "XSkillsEntity",
+      "xp": 1.75
+    }
+  },
+  {
+    "file": "theneighbours:entities/land/shintorickae",
+    "op": "add",
+    "path": "/server/behaviors/-",
+    "value": {
+      "code": "XSkillsEntity",
+      "xp": 2.2
+    }
+  },
+  {
+    "file": "theneighbours:entities/land/shintorickae",
+    "op": "add",
+    "path": "/client/behaviors/-",
+    "value": {
+      "code": "XSkillsEntity",
+      "xp": 2.2
+    }
+  },
+  {
+    "file": "theneighbours:entities/land/tickling",
+    "op": "add",
+    "path": "/server/behaviors/-",
+    "value": {
+      "code": "XSkillsEntity",
+      "xp": 2.5
+    }
+  },
+  {
+    "file": "theneighbours:entities/land/tickling",
+    "op": "add",
+    "path": "/client/behaviors/-",
+    "value": {
+      "code": "XSkillsEntity",
+      "xp": 2.5
+    }
+  },
+  {
+    "file": "theneighbours:entities/land/turtor",
+    "op": "add",
+    "path": "/server/behaviors/-",
+    "value": {
+      "code": "XSkillsEntity",
+      "xp": 0.0
+    }
+  },
+  {
+    "file": "theneighbours:entities/land/turtor",
+    "op": "add",
+    "path": "/client/behaviors/-",
+    "value": {
+      "code": "XSkillsEntity",
+      "xp": 0.0
+    }
+  }
+]

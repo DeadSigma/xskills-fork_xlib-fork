@@ -1,0 +1,424 @@
+{
+  "classexpmult": {
+    "commoner": 0.1,
+    "blackguard": 0.2,
+    "vanguard": 0.15,
+    "archer": 0.15,
+    "clockmaker": -0.2,
+    "hunter": 0.0,
+    "malefactor": -0.1,
+    "miner": -0.05,
+    "forager": -0.15,
+    "gatherer": -0.15,
+    "mercenary": 0.15
+  },
+  "swordsman": {
+    "requirements": [
+      {
+        "code": "ability",
+        "minimumTier": 3,
+        "skill": "combat",
+        "ability": "warrior",
+        "requiredTier": 1
+      },
+      {
+        "code": "exclusiveAbility",
+        "minimumTier": 3,
+        "skill": "combat",
+        "ability": "archer",
+        "exclusiveTier": 3
+      },
+      {
+        "code": "exclusiveAbility",
+        "minimumTier": 3,
+        "skill": "combat",
+        "ability": "spearman",
+        "exclusiveTier": 3
+      }
+    ]
+  },
+  "archer": {
+    "requirements": [
+      {
+        "code": "ability",
+        "minimumTier": 3,
+        "skill": "combat",
+        "ability": "warrior",
+        "requiredTier": 1
+      },
+      {
+        "code": "exclusiveAbility",
+        "minimumTier": 3,
+        "skill": "combat",
+        "ability": "swordsman",
+        "exclusiveTier": 3
+      },
+      {
+        "code": "exclusiveAbility",
+        "minimumTier": 3,
+        "skill": "combat",
+        "ability": "spearman",
+        "exclusiveTier": 3
+      }
+    ]
+  },
+  "spearman": {
+    "requirements": [
+      {
+        "code": "ability",
+        "minimumTier": 3,
+        "skill": "combat",
+        "ability": "warrior",
+        "requiredTier": 1
+      },
+      {
+        "code": "exclusiveAbility",
+        "minimumTier": 3,
+        "skill": "combat",
+        "ability": "swordsman",
+        "exclusiveTier": 3
+      },
+      {
+        "code": "exclusiveAbility",
+        "minimumTier": 3,
+        "skill": "combat",
+        "ability": "archer",
+        "exclusiveTier": 3
+      }
+    ]
+  },
+  "tank": {
+    "requirements": [
+      {
+        "code": "ability",
+        "minimumTier": 2,
+        "skill": "combat",
+        "ability": "warrior",
+        "requiredTier": 1
+      }
+    ]
+  },
+  "defender": {
+    "requirements": [
+      {
+        "code": "ability",
+        "minimumTier": 2,
+        "skill": "combat",
+        "ability": "warrior",
+        "requiredTier": 1
+      },
+      {
+        "code": "exclusiveAbility",
+        "minimumTier": 2,
+        "skill": "combat",
+        "ability": "guardian",
+        "exclusiveTier": 2
+      }
+    ]
+  },
+  "guardian": {
+    "requirements": [
+      {
+        "code": "ability",
+        "minimumTier": 2,
+        "skill": "combat",
+        "ability": "warrior",
+        "requiredTier": 1
+      },
+      {
+        "code": "exclusiveAbility",
+        "minimumTier": 2,
+        "skill": "combat",
+        "ability": "defender",
+        "exclusiveTier": 2
+      }
+    ]
+  },
+  "toolmastery": {
+    "requirements": [
+      {
+        "code": "or",
+        "minimumTier": 3,
+        "requirements": [
+          {
+            "code": "ability",
+            "skill": "farming",
+            "ability": "farmer",
+            "requiredTier": 1
+          },
+          {
+            "code": "ability",
+            "skill": "mining",
+            "ability": "miner",
+            "requiredTier": 1
+          },
+          {
+            "code": "ability",
+            "skill": "digging",
+            "ability": "digger",
+            "requiredTier": 1
+          },
+          {
+            "code": "ability",
+            "skill": "forestry",
+            "ability": "forester",
+            "requiredTier": 1
+          },
+          {
+            "code": "ability",
+            "skill": "metalworking",
+            "ability": "metalworker",
+            "requiredTier": 1
+          }
+        ]
+      }
+    ]
+  },
+  "ironfist": {
+    "requirements": [
+      {
+        "code": "exclusiveAbility",
+        "minimumTier": 1,
+        "skill": "combat",
+        "ability": "monk",
+        "exclusiveTier": 1
+      },
+      {
+        "code": "ability",
+        "minimumTier": 3,
+        "skill": "combat",
+        "ability": "warrior",
+        "requiredTier": 1
+      }
+    ]
+  },
+  "monk": {
+    "requirements": [
+      {
+        "code": "exclusiveAbility",
+        "minimumTier": 1,
+        "skill": "combat",
+        "ability": "ironfist",
+        "exclusiveTier": 1
+      },
+      {
+        "code": "skill",
+        "minimumTier": 2,
+        "skill": "combat",
+        "requiredLevel": 5
+      },
+      {
+        "code": "skill",
+        "minimumTier": 3,
+        "skill": "combat",
+        "requiredLevel": 8
+      },
+      {
+        "code": "ability",
+        "minimumTier": 3,
+        "skill": "combat",
+        "ability": "warrior",
+        "requiredTier": 1
+      }
+    ]
+  },
+  "heavyarmorexpert": {
+    "requirements": [
+      {
+        "code": "exclusiveAbility",
+        "minimumTier": 1,
+        "skill": "combat",
+        "ability": "lightarmorexpert",
+        "exclusiveTier": 1
+      },
+      {
+        "code": "exclusiveAbility",
+        "minimumTier": 1,
+        "skill": "combat",
+        "ability": "armoredagility",
+        "exclusiveTier": 1
+      },
+      {
+        "code": "ability",
+        "minimumTier": 2,
+        "skill": "combat",
+        "ability": "warrior",
+        "requiredTier": 1
+      }
+    ]
+  },
+  "lightarmorexpert": {
+    "requirements": [
+      {
+        "code": "exclusiveAbility",
+        "minimumTier": 1,
+        "skill": "combat",
+        "ability": "heavyarmorexpert",
+        "exclusiveTier": 1
+      },
+      {
+        "code": "exclusiveAbility",
+        "minimumTier": 1,
+        "skill": "combat",
+        "ability": "armoredagility",
+        "exclusiveTier": 1
+      }
+    ]
+  },
+  "armoredagility": {
+    "requirements": [
+      {
+        "code": "exclusiveAbility",
+        "minimumTier": 1,
+        "skill": "combat",
+        "ability": "heavyarmorexpert",
+        "exclusiveTier": 1
+      },
+      {
+        "code": "exclusiveAbility",
+        "minimumTier": 1,
+        "skill": "combat",
+        "ability": "lightarmorexpert",
+        "exclusiveTier": 1
+      }
+    ]
+  },
+  "warrior": {
+    "requirements": [
+      {
+        "code": "not",
+        "minimumTier": 1,
+        "requirement": {
+          "code": "class",
+          "classes": [
+            "clockmaker"
+          ]
+        }
+      }
+    ]
+  },
+  "sniper": {
+    "requirements": [
+      {
+        "code": "ability",
+        "minimumTier": 1,
+        "skill": "combat",
+        "ability": "archer",
+        "requiredTier": 1
+      },
+      {
+        "code": "ability",
+        "minimumTier": 2,
+        "skill": "combat",
+        "ability": "archer",
+        "requiredTier": 2
+      }
+    ]
+  },
+  "shovelknight": {
+    "requirements": [
+      {
+        "code": "skill",
+        "minimumTier": 1,
+        "skill": "digging",
+        "requiredLevel": 3
+      },
+      {
+        "code": "skill",
+        "minimumTier": 2,
+        "skill": "digging",
+        "requiredLevel": 6
+      }
+    ]
+  },
+  "vampire": {
+    "requirements": [
+      {
+        "code": "ability",
+        "minimumTier": 3,
+        "skill": "combat",
+        "ability": "warrior",
+        "requiredTier": 1
+      },
+      {
+        "code": "ability",
+        "minimumTier": 1,
+        "skill": "survival",
+        "ability": "longlife",
+        "requiredTier": 2
+      },
+      {
+        "code": "daytime",
+        "minimumTier": 1,
+        "before": 0.1,
+        "after": 0.9
+      },
+      {
+        "code": "exclusiveAbility",
+        "minimumTier": 1,
+        "skill": "survival",
+        "ability": "photosynthesis",
+        "exclusiveTier": 1
+      }
+    ]
+  },
+  "drunkenmaster": {
+    "requirements": [
+      {
+        "code": "ability",
+        "minimumTier": 1,
+        "skill": "combat",
+        "ability": "monk",
+        "requiredTier": 1
+      },
+      {
+        "code": "or",
+        "minimumTier": 1,
+        "requirements": [
+          {
+            "code": "ability",
+            "skill": "cooking",
+            "ability": "chef",
+            "requiredTier": 1
+          },
+          {
+            "code": "ability",
+            "skill": "combat",
+            "ability": "warrior",
+            "requiredTier": 1
+          }
+        ]
+      }
+    ]
+  },
+  "bloodlust": {
+    "requirements": [
+      {
+        "code": "ability",
+        "minimumTier": 1,
+        "skill": "combat",
+        "ability": "warrior",
+        "requiredTier": 1
+      },
+      {
+        "code": "class",
+        "minimumTier": 1,
+        "classes": [
+          "malefactor",
+          "blackguard"
+        ]
+      }
+    ]
+  },
+  "monsterexpert": {
+    "requirements": [
+      {
+        "code": "knowledge",
+        "minimumTier": 1,
+        "hideUntilFulfilled": true,
+        "name": "xskills:monster",
+        "level": 1
+      }
+    ]
+  }
+}

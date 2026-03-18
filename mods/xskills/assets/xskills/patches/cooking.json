@@ -1,0 +1,241 @@
+[
+  {
+    "file": "game:blocktypes/wood/firepit",
+    "op": "addmerge",
+    "path": "/entityBehaviors",
+    "value": [
+      {
+        "name": "XskillsOwnable"
+      }
+    ]
+  },
+  {
+    "file": "game:blocktypes/clay/oven",
+    "op": "addmerge",
+    "path": "/entityBehaviors",
+    "value": [
+      {
+        "name": "XskillsOwnable"
+      }
+    ]
+  },
+  {
+    "file": "game:blocktypes/wood/fruitpress",
+    "op": "addmerge",
+    "path": "/entityBehaviors",
+    "value": [
+      {
+        "name": "XskillsOwnable"
+      }
+    ]
+  },
+  {
+    "dependsOn": [ { "modid": "chiseltools" } ],
+    "file": "chiseltools:blocktypes/chiseledfirepit",
+    "op": "addmerge",
+    "path": "/entityBehaviors",
+    "value": [
+      {
+        "name": "XskillsOwnable"
+      }
+    ]
+  },
+  {
+    "dependsOn": [ { "modid": "chiseltools" } ],
+    "file": "chiseltools:blocktypes/chiseledoven",
+    "op": "addmerge",
+    "path": "/entityBehaviors",
+    "value": [
+      {
+        "name": "XskillsOwnable"
+      }
+    ]
+  },
+  {
+    "dependsOn": [ { "modid": "stonebakeoven" } ],
+    "file": "stonebakeoven:blocktypes/ovenbakingtopbrick",
+    "op": "addmerge",
+    "path": "/entityBehaviors",
+    "value": [
+      {
+        "name": "XskillsOwnable"
+      }
+    ]
+  },
+  {
+    "dependsOn": [ { "modid": "stonebakeoven" } ],
+    "file": "stonebakeoven:blocktypes/ovenbakingtopcobble",
+    "op": "addmerge",
+    "path": "/entityBehaviors",
+    "value": [
+      {
+        "name": "XskillsOwnable"
+      }
+    ]
+  },
+  {
+    "dependsOn": [ { "modid": "stonebakeoven" } ],
+    "file": "stonebakeoven:blocktypes/ovenbakingtopplain",
+    "op": "addmerge",
+    "path": "/entityBehaviors",
+    "value": [
+      {
+        "name": "XskillsOwnable"
+      }
+    ]
+  },
+  {
+    "dependsOn": [ { "modid": "aculinaryartillery" } ],
+    "file": "aculinaryartillery:blocktypes/mixingbowl",
+    "op": "addmerge",
+    "path": "/entityBehaviors",
+    "value": [
+      {
+        "name": "XskillsOwnable"
+      }
+    ]
+  },
+  {
+    "dependsOn": [ { "modid": "aculinaryartillery" } ],
+    "file": "aculinaryartillery:blocktypes/mixingbowlmini",
+    "op": "addmerge",
+    "path": "/entityBehaviors",
+    "value": [
+      {
+        "name": "XskillsOwnable"
+      }
+    ]
+  },
+  {
+    "dependsOn": [ { "modid": "decor" } ],
+    "file": "decor:blocktypes/stoves/castironfireplace",
+    "op": "addmerge",
+    "path": "/entityBehaviors",
+    "value": [
+      {
+        "name": "XskillsOwnable"
+      }
+    ]
+  },
+  {
+    "dependsOn": [ { "modid": "decor" } ],
+    "file": "decor:blocktypes/stoves/castironstove",
+    "op": "addmerge",
+    "path": "/entityBehaviors",
+    "value": [
+      {
+        "name": "XskillsOwnable"
+      }
+    ]
+  },
+  {
+    "dependsOn": [ { "modid": "decor" } ],
+    "file": "decor:blocktypes/stoves/castironstovefirewood",
+    "op": "addmerge",
+    "path": "/entityBehaviors",
+    "value": [
+      {
+        "name": "XskillsOwnable"
+      }
+    ]
+  },
+  {
+    "dependsOn": [ { "modid": "decor" } ],
+    "file": "decor:blocktypes/stoves/castironstovev2",
+    "op": "addmerge",
+    "path": "/entityBehaviors",
+    "value": [
+      {
+        "name": "XskillsOwnable"
+      }
+    ]
+  },
+  {
+    "dependsOn": [ { "modid": "decor" } ],
+    "file": "decor:blocktypes/stoves/ironoven",
+    "op": "addmerge",
+    "path": "/entityBehaviors",
+    "value": [
+      {
+        "name": "XskillsOwnable"
+      }
+    ]
+  },
+  {
+    "dependsOn": [ { "modid": "decor" } ],
+    "file": "decor:blocktypes/stoves/ovenwglass",
+    "op": "addmerge",
+    "path": "/entityBehaviors",
+    "value": [
+      {
+        "name": "XskillsOwnable"
+      }
+    ]
+  },
+  {
+    "dependsOn": [ { "modid": "decor" } ],
+    "file": "decor:blocktypes/stoves/ovenwglassfancy",
+    "op": "addmerge",
+    "path": "/entityBehaviors",
+    "value": [
+      {
+        "name": "XskillsOwnable"
+      }
+    ]
+  },
+  {
+    "dependsOn": [ { "modid": "decor" } ],
+    "file": "decor:blocktypes/stoves/stoneoven",
+    "op": "addmerge",
+    "path": "/entityBehaviors",
+    "value": [
+      {
+        "name": "XskillsOwnable"
+      }
+    ]
+  },
+  {
+    "dependsOn": [ { "modid": "decor" } ],
+    "file": "decor:blocktypes/stoves/stonestove",
+    "op": "addmerge",
+    "path": "/entityBehaviors",
+    "value": [
+      {
+        "name": "XskillsOwnable"
+      }
+    ]
+  },
+  {
+    "dependsOn": [ { "modid": "decor" } ],
+    "file": "decor:blocktypes/stoves/tableovenwglass",
+    "op": "addmerge",
+    "path": "/entityBehaviors",
+    "value": [
+      {
+        "name": "XskillsOwnable"
+      }
+    ]
+  },
+  {
+    "dependsOn": [ { "modid": "decor" } ],
+    "file": "decor:blocktypes/stoves/tableovenwglassfancy",
+    "op": "addmerge",
+    "path": "/entityBehaviors",
+    "value": [
+      {
+        "name": "XskillsOwnable"
+      }
+    ]
+  },
+  {
+    "dependsOn": [ { "modid": "decor" } ],
+    "file": "decor:blocktypes/stoves/tablestoneoven",
+    "op": "addmerge",
+    "path": "/entityBehaviors",
+    "value": [
+      {
+        "name": "XskillsOwnable"
+      }
+    ]
+  }
+]

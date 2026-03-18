@@ -1,0 +1,12 @@
+{
+    "type": "code",
+    "modid": "xlibfork",
+    "name": "XLib Fork",
+    "authors": [ "Xandu", "El_Neuman" ],
+    "description": "Adds a leveling and an effect api to the game.",
+    "website": "https://www.vintagestory.at/forums/topic/1720-xlib-and-xskills/",
+    "version": "1.0.0-rc.3",
+    "dependencies": {
+        "game": ""
+    }
+}
