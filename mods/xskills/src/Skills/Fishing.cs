@@ -52,17 +52,16 @@ namespace XSkills
                 2, 3, new int[] { 15, 30, 45 }));
 
 
-            // Опытный раздельщик: шанс получить дополнительное филе
-            // 3 - уровень 
-            // 3 - тира
-            // 10, 1 - 10% шанс, +1 филе за уровень
-            // 20, 1 - 20% шанс, +1 филе за уровень
-            // 30, 1 - 30% шанс, +1 филе за уровень
+            // Опытный разделщик
+            // 2 - минимальный уровень навыка для открытия
+            // 3 - максимальный тир прокачки
+            // 10, 20, 30 - шанс получить дополнительное филе в %
+            // 3, 4, 5 - максимальное количество филе
             FishFilleterId = this.AddAbility(new Ability(
-                "fishfilleter",
-                "xskills:ability-fishfilleter",
-                "xskills:abilitydesc-fishfilleter",
-                3, 3, new int[] { 10, 1, 20, 1, 30, 1 }));
+                 "fishfilleter",
+                 "xskills:ability-fishfilleter",
+                 "xskills:abilitydesc-fishfilleter",
+                 3, 3, new int[] { 10, 3, 20, 4, 30, 5 }));
 
             // Хорошая наживка: ускорение поклевки
             // 5 - уровень
@@ -242,10 +241,8 @@ namespace XSkills
                 float bonusChance = ability.Value(0) / 100f;
                 int extraMeatCount = 0;
 
-                // ВЫЧИСЛЯЕМ МАКСИМАЛЬНЫЙ БОНУС: 
-                // Уровень рыбалки, но жестко ограничиваем (Math.Min) цифрой 5.
-                // Если уровень 0 (вдруг), ставим минимум 1, чтобы не сломать рандом.
-                int maxBonusPerFish = Math.Max(1, Math.Min(5, playerSkill.Level));
+                // Берет минимум между лимитом из перка (3, 4 или 5) и текущим уровнем рыбака.
+                int maxBonusPerFish = Math.Max(1, Math.Min(ability.Value(1), playerSkill.Level));
 
                 if (__instance.ProcessedStacks != null && __instance.ProcessedStacks.Length > 0)
                 {
