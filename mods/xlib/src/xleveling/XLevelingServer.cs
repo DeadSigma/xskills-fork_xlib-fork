@@ -250,36 +250,61 @@ namespace XLib.XLeveling
         /// <summary>
         /// Loads the configuration.
         /// </summary>
+        /// <summary>
+        /// Loads the configuration.
+        /// </summary>
+        /// <summary>
+        /// Loads the configuration.
+        /// </summary>
         private void LoadConfiguration()
         {
             // =========================================================================
-            // ВАЖНАЯ НАСТРОЙКА: Установить TRUE перед компиляцией, если нужно 
-            // принудительно обновить/сбросить все конфиги (xleveling.json и все навыки) 
-            // у игроков до твоих новых стандартных значений.
+            // ВЕРСИЯ КОНФИГА МОДА:
             // =========================================================================
-            bool forceConfigReset = true;
+            int CURRENT_CONFIG_VERSION = 4;
 
-            //load general configuration
+            bool forceConfigReset = false;
+
             string path = Path.Combine("XLeveling", "xleveling.json");
             ICoreServerAPI api = XLeveling.Api as ICoreServerAPI;
+
             try
             {
-                this.XLeveling.Mod.Logger.Debug("Load: " + path);
+                this.Config = api.LoadModConfig<Config>(path);
 
-                if (forceConfigReset)
+                if (this.Config == null || this.Config.configVersion < CURRENT_CONFIG_VERSION)
                 {
-                    this.Config = new Config(); // Принудительно берем чистый конфиг из кода
-                    api.Server.LogNotification("[XLeveling] FORCED RESET: xleveling.json updated to defaults.");
-                }
-                else
-                {
-                    this.Config = api.LoadModConfig<Config>(path) ?? new Config();
+                    forceConfigReset = true;
+                    this.Config = new Config();
+                    this.Config.configVersion = CURRENT_CONFIG_VERSION;
+                    api.Server.LogNotification($"[XLeveling] CONFIG UPDATE: xleveling.json updated to version {CURRENT_CONFIG_VERSION}.");
                 }
             }
             catch (Exception error)
             {
-                api.Server.LogError("[XLeveling] Error while loading: " + path);
+                forceConfigReset = true;
+                this.Config = new Config();
+                this.Config.configVersion = CURRENT_CONFIG_VERSION;
+                api.Server.LogError("[XLeveling] Error while loading: " + path + ". Resetting to defaults.");
                 api.Server.LogError(error.Message);
+            }
+
+            // --- ЖЕСТКИЙ СБРОС ФАЙЛОВ (Удаляем старые конфиги с диска) ---
+            if (forceConfigReset)
+            {
+                string configDir = Path.Combine(Vintagestory.API.Config.GamePaths.ModConfig, "XLeveling");
+                if (Directory.Exists(configDir))
+                {
+                    foreach (Skill skill in this.XLeveling.SkillSetTemplate.Skills)
+                    {
+                        string fullPath = Path.Combine(configDir, skill.Name + ".json");
+                        if (File.Exists(fullPath))
+                        {
+                            File.Delete(fullPath); // Уничтожаем старый сломанный баланс!
+                            api.Server.LogNotification($"[XLeveling] Deleted old config: {skill.Name}.json");
+                        }
+                    }
+                }
             }
 
             LimitationRequirement specialisations;
@@ -289,36 +314,26 @@ namespace XLib.XLeveling
             this.XLeveling.Mod.Logger.Debug("Save: " + path);
             api.StoreModConfig(this.Config, path);
 
-            //load skill configuration
+            // 2. Теперь загружаем конфиги навыков (игра создаст новые, так как старых уже нет)
             foreach (Skill skill in this.XLeveling.SkillSetTemplate.Skills)
             {
-                SkillConfig skillConfig = new SkillConfig(skill); // Берем новые базовые значения
-                path = Path.Combine("XLeveling", skill.Name + ".json");
+                SkillConfig skillConfig;
+                string skillPath = Path.Combine("XLeveling", skill.Name + ".json");
                 try
                 {
-                    this.XLeveling.Mod.Logger.Debug("Load: " + path);
-
-                    if (forceConfigReset)
-                    {
-                        api.Server.LogNotification($"[XLeveling] FORCED RESET: {skill.Name}.json updated to defaults.");
-                    }
-                    else
-                    {
-                        SkillConfig loaded = api.LoadModConfig<SkillConfig>(path);
-                        if (loaded != null) skillConfig = loaded;
-                    }
-
-                    skill.FromConfig(skillConfig);
+                    this.XLeveling.Mod.Logger.Debug("Load: " + skillPath);
+                    skillConfig = api.LoadModConfig<SkillConfig>(skillPath);
+                    if (skillConfig != null) skill.FromConfig(skillConfig);
                 }
                 catch (Exception error)
                 {
-                    api.Server.LogError("[XLeveling] Error while loading: " + path);
+                    api.Server.LogError("[XLeveling] Error while loading: " + skillPath);
                     api.Server.LogError(error.Message);
                 }
 
-                this.XLeveling.Mod.Logger.Debug("Save: " + path);
-                // Сохраняем новые (или загруженные) значения обратно в файл
-                api.StoreModConfig(skillConfig, path);
+                this.XLeveling.Mod.Logger.Debug("Save: " + skillPath);
+                skillConfig = new SkillConfig(skill);
+                api.StoreModConfig(skillConfig, skillPath);
             }
 
             //remove requirements

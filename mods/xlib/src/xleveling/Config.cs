@@ -82,6 +82,14 @@ namespace XLib.XLeveling
         /// </summary>
         public bool trackExpGain;
 
+        // --- ДОБАВЛЯЕМ ВЕРСИЮ КОНФИГА ---
+        /// <summary>
+        /// The configuration version used for migrations and compatibility checks.
+        /// Increment this value when changing the config layout.
+        /// </summary>
+        [ProtoMember(10)]
+        [DefaultValue(1)]
+        public int configVersion;
         /// <summary>
         /// Initializes a new instance of the <see cref="Config"/> class.
         /// </summary>
@@ -97,6 +105,7 @@ namespace XLib.XLeveling
             this.skillBookExpMult = 0.5f;
             this.disabledRequirements = new List<string>();
             this.trackExpGain = false;
+            this.configVersion = 1;
         }
     }//!class Config
 }
