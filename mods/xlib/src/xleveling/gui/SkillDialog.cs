@@ -355,7 +355,7 @@ namespace XLib.XLeveling
         /// </summary>
         public override string ToggleKeyCombinationCode
         {
-            get { return "skilldialoghotkey"; }
+            get { return "skilldialoghotkey_v2"; }
         }
     }//!class SkillDialog
 }//!namespace xleveling

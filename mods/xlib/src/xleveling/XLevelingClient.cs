@@ -89,8 +89,8 @@ namespace XLib.XLeveling
             this.channel.RegisterMessageType(typeof(KnowledgePackage));
             this.channel.SetMessageHandler<KnowledgePackage>(this.MessageHandler);
 
-            api.Input.RegisterHotKey("skilldialoghotkey", "Show/Hide Skill Dialog", GlKeys.K, HotkeyType.GUIOrOtherControls);
-            api.Input.SetHotKeyHandler("skilldialoghotkey", this.OnHotKeySkillDialog);
+            api.Input.RegisterHotKey("skilldialoghotkey_v2", "Show/Hide Skill Dialog", GlKeys.K, HotkeyType.GUIOrOtherControls);
+            api.Input.SetHotKeyHandler("skilldialoghotkey_v2", this.OnHotKeySkillDialog);
         }
 
         /// <summary>
