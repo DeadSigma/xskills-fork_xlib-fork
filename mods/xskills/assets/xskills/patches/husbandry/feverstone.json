@@ -9,6 +9,11 @@
         "xp": 0.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonehorses"
+      }
     ]
   },
   {
@@ -21,6 +26,11 @@
         "xp": 0.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonehorses"
+      }
     ]
   },
   {
@@ -33,6 +43,11 @@
         "xp": 1.0,
         "catchable": "false"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonehorses"
+      }
     ]
   },
   {
@@ -44,6 +59,11 @@
         "code": "XSkillsAnimal",
         "xp": 1.0,
         "catchable": "false"
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonehorses"
       }
     ]
   },
@@ -57,6 +77,11 @@
         "xp": 0.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
+      }
     ]
   },
   {
@@ -69,6 +94,11 @@
         "xp": 0.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
+      }
     ]
   },
   {
@@ -81,6 +111,11 @@
         "xp": 1.0,
         "catchable": "false"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
+      }
     ]
   },
   {
@@ -92,6 +127,11 @@
         "code": "XSkillsAnimal",
         "xp": 1.0,
         "catchable": "false"
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
       }
     ]
   },
@@ -105,6 +145,11 @@
         "xp": 0.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
+      }
     ]
   },
   {
@@ -117,6 +162,11 @@
         "xp": 0.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
+      }
     ]
   },
   {
@@ -129,6 +179,11 @@
         "xp": 1.5,
         "catchable": "false"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
+      }
     ]
   },
   {
@@ -140,6 +195,11 @@
         "code": "XSkillsAnimal",
         "xp": 1.5,
         "catchable": "false"
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
       }
     ]
   },
@@ -153,6 +213,11 @@
         "xp": 0.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
+      }
     ]
   },
   {
@@ -165,6 +230,11 @@
         "xp": 0.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
+      }
     ]
   },
   {
@@ -177,6 +247,11 @@
         "xp": 1.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
+      }
     ]
   },
   {
@@ -188,6 +263,11 @@
         "code": "XSkillsAnimal",
         "xp": 1.0,
         "catchable": "true"
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
       }
     ]
   },
@@ -201,6 +281,11 @@
         "xp": 0.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
+      }
     ]
   },
   {
@@ -213,6 +298,11 @@
         "xp": 0.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
+      }
     ]
   },
   {
@@ -225,6 +315,11 @@
         "xp": 1.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
+      }
     ]
   },
   {
@@ -236,6 +331,11 @@
         "code": "XSkillsAnimal",
         "xp": 1.0,
         "catchable": "true"
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
       }
     ]
   },
@@ -249,6 +349,11 @@
         "xp": 0.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
+      }
     ]
   },
   {
@@ -261,6 +366,11 @@
         "xp": 0.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
+      }
     ]
   },
   {
@@ -273,6 +383,11 @@
         "xp": 1.0,
         "catchable": "false"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
+      }
     ]
   },
   {
@@ -284,6 +399,11 @@
         "code": "XSkillsAnimal",
         "xp": 1.0,
         "catchable": "false"
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
       }
     ]
   },
@@ -297,6 +417,11 @@
         "xp": 0.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
+      }
     ]
   },
   {
@@ -309,6 +434,11 @@
         "xp": 0.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
+      }
     ]
   },
   {
@@ -321,6 +451,11 @@
         "xp": 1.0,
         "catchable": "false"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
+      }
     ]
   },
   {
@@ -332,6 +467,11 @@
         "code": "XSkillsAnimal",
         "xp": 1.0,
         "catchable": "false"
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
       }
     ]
   },
@@ -345,6 +485,11 @@
         "xp": 1.0,
         "catchable": "false"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
+      }
     ]
   },
   {
@@ -357,6 +502,11 @@
         "xp": 1.0,
         "catchable": "false"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
+      }
     ]
   },
   {
@@ -369,6 +519,11 @@
         "xp": 0.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
+      }
     ]
   },
   {
@@ -380,6 +535,11 @@
         "code": "XSkillsAnimal",
         "xp": 0.0,
         "catchable": "true"
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
       }
     ]
   },
@@ -393,6 +553,11 @@
         "xp": 1.0,
         "catchable": "false"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
+      }
     ]
   },
   {
@@ -405,6 +570,11 @@
         "xp": 1.0,
         "catchable": "false"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
+      }
     ]
   },
   {
@@ -417,6 +587,11 @@
         "xp": 0.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
+      }
     ]
   },
   {
@@ -428,6 +603,11 @@
         "code": "XSkillsAnimal",
         "xp": 0.0,
         "catchable": "true"
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
       }
     ]
   },
@@ -441,6 +621,11 @@
         "xp": 1.0,
         "catchable": "false"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
+      }
     ]
   },
   {
@@ -453,6 +638,11 @@
         "xp": 1.0,
         "catchable": "false"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
+      }
     ]
   },
   {
@@ -465,6 +655,11 @@
         "xp": 0.75,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
+      }
     ]
   },
   {
@@ -476,6 +671,11 @@
         "code": "XSkillsAnimal",
         "xp": 0.75,
         "catchable": "true"
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
       }
     ]
   },
@@ -489,6 +689,11 @@
         "xp": 0.75,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
+      }
     ]
   },
   {
@@ -500,6 +705,11 @@
         "code": "XSkillsAnimal",
         "xp": 0.75,
         "catchable": "true"
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
       }
     ]
   },
@@ -513,6 +723,11 @@
         "xp": 0.75,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
+      }
     ]
   },
   {
@@ -524,6 +739,11 @@
         "code": "XSkillsAnimal",
         "xp": 0.75,
         "catchable": "true"
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "feverstonewilds"
       }
     ]
   }

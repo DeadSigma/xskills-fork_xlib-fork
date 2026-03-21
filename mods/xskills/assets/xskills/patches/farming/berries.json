@@ -1,6 +1,6 @@
 [
   {
-    "file": "game:blocktypes/plant/bigberrybush",
+    "file": "game:blocktypes/plant/bush/*",
     "op": "addmerge",
     "path": "/behaviorsByType/*-ripe",
     "value": [
@@ -26,19 +26,6 @@
     ]
   },
   {
-    "file": "game:blocktypes/plant/smallberrybush",
-    "op": "addmerge",
-    "path": "/behaviorsByType/*-ripe",
-    "value": [
-      {
-        "name": "XSkillsBerryBush",
-        "properties": {
-          "xp": 0.33
-        }
-      }
-    ]
-  },
-  {
     "file": "wildcraftfruit:blocktypes/plant/berry/berrybush",
     "op": "addmerge",
     "path": "/behaviorsByType/*-dwarfpine-ripe",
@@ -48,6 +35,11 @@
         "properties": {
           "xp": 0.33
         }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
       }
     ]
   },
@@ -61,6 +53,11 @@
         "properties": {
           "xp": 0.33
         }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
       }
     ]
   },
@@ -75,6 +72,11 @@
           "xp": 0.33
         }
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
+      }
     ]
   },
   {
@@ -88,6 +90,11 @@
           "xp": 0.33
         }
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
+      }
     ]
   },
   {
@@ -100,6 +107,11 @@
         "properties": {
           "xp": 0.33
         }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
       }
     ]
   },
@@ -114,6 +126,11 @@
           "xp": 0.33
         }
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
+      }
     ]
   },
   {
@@ -126,6 +143,11 @@
         "properties": {
           "xp": 0.33
         }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
       }
     ]
   },
@@ -140,6 +162,11 @@
           "xp": 0.33
         }
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
+      }
     ]
   },
   {
@@ -152,6 +179,11 @@
         "properties": {
           "xp": 0.33
         }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
       }
     ]
   },
@@ -166,6 +198,11 @@
           "xp": 0.33
         }
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
+      }
     ]
   },
   {
@@ -178,6 +215,11 @@
         "properties": {
           "xp": 0.33
         }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
       }
     ]
   },
@@ -192,6 +234,11 @@
           "xp": 0.33
         }
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
+      }
     ]
   },
   {
@@ -204,6 +251,11 @@
         "properties": {
           "xp": 0.33
         }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
       }
     ]
   },
@@ -218,6 +270,11 @@
           "xp": 0.33
         }
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
+      }
     ]
   },
   {
@@ -230,6 +287,11 @@
         "properties": {
           "xp": 0.33
         }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
       }
     ]
   },
@@ -244,6 +306,11 @@
           "xp": 0.33
         }
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
+      }
     ]
   },
   {
@@ -256,6 +323,11 @@
         "properties": {
           "xp": 0.33
         }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
       }
     ]
   },
@@ -270,6 +342,11 @@
           "xp": 0.33
         }
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
+      }
     ]
   },
   {
@@ -282,6 +359,11 @@
         "properties": {
           "xp": 0.33
         }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
       }
     ]
   },
@@ -296,6 +378,11 @@
           "xp": 0.33
         }
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
+      }
     ]
   },
   {
@@ -308,6 +395,11 @@
         "properties": {
           "xp": 0.33
         }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
       }
     ]
   },
@@ -322,6 +414,11 @@
           "xp": 0.33
         }
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
+      }
     ]
   },
   {
@@ -335,6 +432,11 @@
           "xp": 0.33
         }
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
+      }
     ]
   },
   {
@@ -347,6 +449,11 @@
         "properties": {
           "xp": 0.33
         }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
       }
     ]
   },
@@ -361,6 +468,11 @@
           "xp": 0.33
         }
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
+      }
     ]
   },
   {
@@ -373,6 +485,11 @@
         "properties": {
           "xp": 0.33
         }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
       }
     ]
   },
@@ -387,6 +504,11 @@
           "xp": 0.33
         }
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
+      }
     ]
   },
   {
@@ -399,6 +521,11 @@
         "properties": {
           "xp": 0.33
         }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
       }
     ]
   },
@@ -413,6 +540,11 @@
           "xp": 0.33
         }
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
+      }
     ]
   },
   {
@@ -426,6 +558,11 @@
           "xp": 0.33
         }
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
+      }
     ]
   },
   {
@@ -438,6 +575,11 @@
         "properties": {
           "xp": 0.33
         }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
       }
     ]
   },
@@ -452,6 +594,11 @@
           "xp": 0.33
         }
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
+      }
     ]
   },
   {
@@ -465,6 +612,11 @@
           "xp": 0.33
         }
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
+      }
     ]
   },
   {
@@ -477,6 +629,11 @@
         "properties": {
           "xp": 0.33
         }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
       }
     ]
   },
@@ -491,6 +648,11 @@
           "xp": 0.33
         }
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
+      }
     ]
   },
   {
@@ -503,6 +665,11 @@
         "properties": {
           "xp": 0.33
         }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
       }
     ]
   },
@@ -517,6 +684,11 @@
           "xp": 0.33
         }
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
+      }
     ]
   },
   {
@@ -530,6 +702,11 @@
           "xp": 0.33
         }
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
+      }
     ]
   },
   {
@@ -542,6 +719,11 @@
         "properties": {
           "xp": 0.33
         }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
       }
     ]
   },
@@ -556,6 +738,11 @@
           "xp": 0.33
         }
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
+      }
     ]
   },
   {
@@ -568,6 +755,11 @@
         "properties": {
           "xp": 0.33
         }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
       }
     ]
   },
@@ -582,6 +774,11 @@
           "xp": 0.33
         }
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
+      }
     ]
   },
   {
@@ -595,6 +792,11 @@
           "xp": 0.33
         }
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
+      }
     ]
   },
   {
@@ -607,6 +809,11 @@
         "properties": {
           "xp": 0.33
         }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
       }
     ]
   },
@@ -621,6 +828,11 @@
           "xp": 0.33
         }
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
+      }
     ]
   },
   {
@@ -633,6 +845,11 @@
         "properties": {
           "xp": 0.33
         }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
       }
     ]
   }

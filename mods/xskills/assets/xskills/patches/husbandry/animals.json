@@ -448,6 +448,11 @@
         "catchable": "true",
         "scale": 1.0
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildfarm"
+      }
     ]
   },
   {
@@ -461,6 +466,11 @@
         "catchable": "true",
         "scale": 1.0
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildfarm"
+      }
     ]
   },
   {
@@ -473,6 +483,11 @@
         "xp": 1.5,
         "catchable": "false"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildfarm"
+      }
     ]
   },
   {
@@ -484,6 +499,11 @@
         "code": "XSkillsAnimal",
         "xp": 1.5,
         "catchable": "false"
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildfarm"
       }
     ]
   },

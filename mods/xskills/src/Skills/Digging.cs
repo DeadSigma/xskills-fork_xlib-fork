@@ -6,6 +6,7 @@ using Vintagestory.API.MathTools;
 using Vintagestory.API.Util;
 using Vintagestory.GameContent;
 using XLib.XLeveling;
+using HarmonyLib;
 
 namespace XSkills
 {
@@ -318,7 +319,7 @@ namespace XSkills
                     {
                         if (itemStack.Item == clay)
                         {
-                            clay = null; 
+                            clay = null;
                             break;
                         }
                     }
@@ -382,4 +383,142 @@ namespace XSkills
             return drops;
         }
     }//!class XSkillsSandBehavior
+     // --- ПАТЧИ ДЛЯ ЛОТКА (ПРОМЫВКА ПОЧВЫ И ЛУТ) ---
+    [HarmonyPatch(typeof(Vintagestory.GameContent.BlockPan))]
+    public class BlockPanPatches
+    {
+        // 1. Быстрая промывка (Quick Pan) - Ускоряем процесс анимации
+        [HarmonyPatch("OnHeldInteractStep")]
+        [HarmonyPrefix]
+        public static void StepPrefix(EntityAgent byEntity, ref float secondsUsed)
+        {
+            if (byEntity == null) return;
+            Digging digging = XLeveling.Instance(byEntity.Api)?.GetSkill("digging") as Digging;
+            if (digging != null)
+            {
+                PlayerAbility quickPan = byEntity.GetBehavior<PlayerSkillSet>()?[digging.Id]?[digging.QuickPanId];
+                if (quickPan != null && quickPan.Tier > 0)
+                {
+                    // Ускоряем время. 50% = x1.5, 100% = x2.0
+                    secondsUsed *= (1.0f + quickPan.Value(0) / 100f);
+                }
+            }
+        }
+
+        // 2. Быстрая промывка (Quick Pan) - Ускоряем финиш (выдачу лута)
+        [HarmonyPatch("OnHeldInteractStop")]
+        [HarmonyPrefix]
+        public static void StopPrefix(EntityAgent byEntity, ref float secondsUsed)
+        {
+            if (byEntity == null) return;
+            Digging digging = XLeveling.Instance(byEntity.Api)?.GetSkill("digging") as Digging;
+            if (digging != null)
+            {
+                PlayerAbility quickPan = byEntity.GetBehavior<PlayerSkillSet>()?[digging.Id]?[digging.QuickPanId];
+                if (quickPan != null && quickPan.Tier > 0)
+                {
+                    secondsUsed *= (1.0f + quickPan.Value(0) / 100f);
+                }
+            }
+        }
+
+        // 3. Золотоискатель (Gold Digger) - Увеличиваем добычу
+        [HarmonyPatch("CreateDrop")]
+        [HarmonyPrefix]
+        public static bool CreateDropPrefix(Vintagestory.GameContent.BlockPan __instance, EntityAgent byEntity, string fromBlockCode)
+        {
+            EntityPlayer entityPlayer = byEntity as EntityPlayer;
+            IPlayer player = entityPlayer?.Player;
+
+            // Читаем ванильные дропы лотка через Reflection
+            var dropsBySourceMat = (Dictionary<string, PanningDrop[]>)AccessTools.Field(typeof(Vintagestory.GameContent.BlockPan), "dropsBySourceMat").GetValue(__instance);
+
+            PanningDrop[] drops = null;
+            foreach (string val in dropsBySourceMat.Keys)
+            {
+                if (WildcardUtil.Match(val, fromBlockCode))
+                {
+                    drops = dropsBySourceMat[val];
+                    break;
+                }
+            }
+
+            if (drops == null) return false;
+
+            Block block = byEntity.Api.World.GetBlock(new AssetLocation(fromBlockCode));
+            string rocktype = (block != null) ? block.Variant["rock"] : null;
+            drops.Shuffle(byEntity.Api.World.Rand);
+
+            // Считаем бонус от перка Золотоискатель
+            float yieldMultiplier = 1.0f;
+            Digging digging = XLeveling.Instance(byEntity.Api)?.GetSkill("digging") as Digging;
+            if (digging != null)
+            {
+                PlayerSkill playerSkill = byEntity.GetBehavior<PlayerSkillSet>()?[digging.Id];
+                PlayerAbility goldDigger = playerSkill?[digging.GoldDiggerId];
+                if (goldDigger != null && goldDigger.Tier > 0)
+                {
+                    yieldMultiplier += goldDigger.SkillDependentValue() / 100f;
+                }
+            }
+
+            int i = 0;
+            while (i < drops.Length)
+            {
+                PanningDrop drop = drops[i];
+                double num = byEntity.Api.World.Rand.NextDouble();
+
+                float extraMul = 1f;
+                if (drop.DropModbyStat != null)
+                {
+                    extraMul = byEntity.Stats.GetBlended(drop.DropModbyStat);
+                }
+
+                float val2 = drop.Chance.nextFloat() * extraMul;
+                ItemStack stack = drop.ResolvedItemstack;
+
+                // Заменяем породу у предметов (например медный самородок "в граните")
+                if (drops[i].Code.Path.Contains("{rocktype}"))
+                {
+                    var resolveMethod = AccessTools.Method(typeof(Vintagestory.GameContent.BlockPan), "Resolve");
+                    stack = (ItemStack)resolveMethod.Invoke(__instance, new object[] { drops[i].Type, drops[i].Code.Path.Replace("{rocktype}", rocktype) });
+                }
+
+                if (num < (double)val2 && stack != null)
+                {
+                    stack = stack.Clone();
+
+                    // --- МАГИЯ УВЕЛИЧЕНИЯ ЛУТА ---
+                    float totalYield = stack.StackSize * yieldMultiplier;
+                    int finalStackSize = (int)totalYield;
+
+                    // Дробный шанс на дополнительный предмет (например, при множителе 1.25 есть шанс 25% на +1 самородок)
+                    if (byEntity.Api.World.Rand.NextDouble() < (totalYield - finalStackSize))
+                    {
+                        finalStackSize++;
+                    }
+                    stack.StackSize = Math.Max(1, finalStackSize);
+
+                    // Начисляем немного опыта копателя за нахождение ценностей
+                    if (digging != null)
+                    {
+                        PlayerSkill playerSkill = byEntity.GetBehavior<PlayerSkillSet>()?[digging.Id];
+                        playerSkill?.AddExperience(stack.StackSize * 2.5f);
+                    }
+
+                    if (player == null || !player.InventoryManager.TryGiveItemstack(stack, true))
+                    {
+                        byEntity.Api.World.SpawnItemEntity(stack, byEntity.Pos.XYZ, null);
+                    }
+
+                    return false; // Лут выдан, отменяем ванильный оригинальный метод CreateDrop
+                }
+                else
+                {
+                    i++;
+                }
+            }
+            return false; // Отменяем ванильный метод CreateDrop
+        }
+    }
 }//!namespace XSkills

@@ -71,7 +71,7 @@ namespace XSkills
                 "oreminer",
                 "xskills:ability-oreminer",
                 "xskills:abilitydesc-oreminer",
-                 1, 3, new int[] { 5, 1, 15, 10, 2, 30, 10, 2, 50 }));
+                 1, 3, new int[] { 5, 1, 15, 10, 2, 30, 13, 2, 50 }));
 
             // more gemstone drops
             // 0: base value
@@ -81,7 +81,7 @@ namespace XSkills
                 "gemstoneminer",
                 "xskills:ability-gemstoneminer",
                 "xskills:abilitydesc-gemstoneminer",
-                5, 3, new int[] { 5, 1, 15, 10, 2, 30, 10, 2, 50 }));
+                5, 3, new int[] { 5, 1, 15, 10, 2, 30, 13, 2, 50 }));
 
             // momentum
             // 0: base value

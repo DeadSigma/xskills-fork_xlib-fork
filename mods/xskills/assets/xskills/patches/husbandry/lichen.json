@@ -19,6 +19,11 @@
           "*-adult": 1.0
         }
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "lichen"
+      }
     ]
   },
   {
@@ -40,6 +45,11 @@
           "*-baby": 0.8,
           "*-adult": 1.0
         }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "lichen"
       }
     ]
   }

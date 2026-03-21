@@ -797,4 +797,63 @@ namespace XLib.XEffects
             return !preventDefault;
         }
     }//!class ConsumablePatch
+    /// <summary>
+    /// Patch for fixing unlearn points when drinking liquids from containers.
+    /// </summary>
+    [HarmonyPatch(typeof(Vintagestory.GameContent.BlockLiquidContainerBase), "tryEatStop")]
+    public class LiquidDrinkUnlearnPatch
+    {
+        /// <summary>
+        /// Captures the amount of liquid and unlearn points before the player drinks.
+        /// </summary>
+        [HarmonyPrefix]
+        public static void Prefix(Vintagestory.GameContent.BlockLiquidContainerBase __instance, float secondsUsed, ItemSlot slot, EntityAgent byEntity, out float[] __state)
+        {
+            __state = new float[] { 0f, 0f };
+            if (byEntity?.Api?.Side != EnumAppSide.Server) return;
+            if (secondsUsed < 0.95f) return;
+
+            __state[0] = __instance.GetCurrentLitres(slot.Itemstack);
+
+            ItemStack liquidStack = __instance.GetContent(slot.Itemstack);
+            if (liquidStack != null && liquidStack.Collectible != null)
+            {
+                ConsumableBehavior beh = liquidStack.Collectible.GetCollectibleBehavior<ConsumableBehavior>(false);
+                if (beh != null)
+                {
+                    __state[1] = beh.UnlearnPoints;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Calculates the amount of liquid consumed and awards unlearn points.
+        /// </summary>
+        [HarmonyPostfix]
+        public static void Postfix(Vintagestory.GameContent.BlockLiquidContainerBase __instance, float secondsUsed, ItemSlot slot, EntityAgent byEntity, float[] __state)
+        {
+            if (__state == null || __state[1] <= 0f) return;
+
+            float litresAfter = __instance.GetCurrentLitres(slot.Itemstack);
+            float litresDrank = __state[0] - litresAfter;
+
+            if (litresDrank > 0.0001f)
+            {
+                float pointsGained = __state[1] * litresDrank;
+
+                PlayerSkillSet playerSkillSet = byEntity.GetBehavior<PlayerSkillSet>();
+                if (playerSkillSet != null)
+                {
+                    playerSkillSet.UnlearnPoints = Math.Min(playerSkillSet.UnlearnPoints + pointsGained, 10.0f);
+
+                    Vintagestory.API.Server.IServerPlayer serverPlayer = playerSkillSet.Player as Vintagestory.API.Server.IServerPlayer;
+                    if (serverPlayer != null)
+                    {
+                        CommandPackage package = new CommandPackage(EnumXLevelingCommand.UnlearnPoints, playerSkillSet.UnlearnPoints);
+                        (byEntity.Api.Network.GetChannel("XLeveling") as Vintagestory.API.Server.IServerNetworkChannel)?.SendPacket(package, serverPlayer);
+                    }
+                }
+            }
+        }
+    }
 }//!namespace XLib.XEffects

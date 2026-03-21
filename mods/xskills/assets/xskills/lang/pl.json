@@ -459,28 +459,38 @@
     "book-meteorology": "Meteorologia dla początkujących",
 
     "xskills:skill-fishing": "Rybołówstwo",
-    "xskills:ability-strongline": "Mocna żyłka",
-    "xskills:abilitydesc-strongline": "Podczas używania wędki istnieje {0}% szansy, że nie straci ona wytrzymałości.",
 
-    "xskills:ability-fisher": "Rybak",
-    "xskills:abilitydesc-fisher": "Otrzymujesz o {0}% więcej doświadczenia dla umiejętności rybołówstwa. PROFESJA.\nLiczba profesji, których możesz się nauczyć, jest ograniczona.",
-
-    "xskills:ability-fishfilleter": "Doświadczony filetujący",
-    "xskills:abilitydesc-fishfilleter": "Podczas filetowania ryby istnieje {0}% szansy na otrzymanie dodatkowego filetu, plus {1} za każdy poziom umiejętności rybołówstwa.",
-
-    "xskills:ability-goodbait": "Dobra przynęta",
-    "xskills:abilitydesc-goodbait": "Twoja przynęta szybciej przyciąga ryby. Czas oczekiwania na branie jest skrócony o {0}%.",
-
-    "xskills:ability-autobaiter": "Zręczne ręce",
-    "xskills:abilitydesc-autobaiter": "Automatycznie zakłada przynętę z ekwipunku na wędkę podczas zarzucania.",
-
-    "xskills:ability-baitmaster": "Mistrz przynęty",
-    "xskills:abilitydesc-baitmaster": "Twoje doświadczenie pozwala ostrożnie zdejmować zdobycz z haczyka. Istnieje {0}% szansy na niezużycie przynęty po udanym połowie.",
-
-    "xskills:ability-doublehook": "Podwójny haczyk",
-    "xskills:abilitydesc-doublehook": "Przywiązujesz drugi haczyk do żyłki. Przy udanym połowie istnieje {0}% szansy na wyciągnięcie dwóch ryb naraz.",
-
-    "xskills:ability-magnetichook": "Magnetyczny haczyk",
-    "xskills:abilitydesc-magnetichook": "Z {0}% szansą wyciągniesz z wody nie rybę, lecz jakiś przedmiot. Może to być zarówno bezużyteczny śmieć, jak i bardzo rzadki artefakt."
+	"xskills:ability-strongline": "Mocna żyłka",
+	"xskills:abilitydesc-strongline": "Z szansą {0}% (+{1}% za każdy poziom rybołówstwa, maksymalnie {2}%) twoja wędka nie straci wytrzymałości podczas użycia.",
+	
+	"xskills:ability-fisher": "Rybak",
+	"xskills:abilitydesc-fisher": "Otrzymujesz o {0}% więcej doświadczenia dla umiejętności rybołówstwa. PROFESJA.\nLiczba profesji, których możesz się nauczyć, jest ograniczona.",
+	
+	"xskills:ability-fishfilleter": "Doświadczony filetujący",
+	"xskills:abilitydesc-fishfilleter": "Podczas filetowania ryb masz {0}% szansy (+{1}% za każdy poziom rybołówstwa, maksymalnie {2}%) na otrzymanie dodatkowych filetów.\nMaksymalna liczba bonusowych filetów jest równa poziomowi umiejętności (do 5).",
+	
+	"xskills:ability-goodbait": "Dobra przynęta",
+	"xskills:abilitydesc-goodbait": "Ryby biorą o {0}% szybciej (+{1}% za każdy poziom rybołówstwa, maksymalnie {2}%).",
+	
+	"xskills:ability-autobaiter": "Zręczne ręce",
+	"xskills:abilitydesc-autobaiter": "Automatycznie zakłada przynętę z ekwipunku na wędkę podczas zarzucania.",
+	
+	"xskills:ability-baitmaster": "Mistrz przynęt",
+	"xskills:abilitydesc-baitmaster": "Z szansą {0}% (+{1}% za każdy poziom rybołówstwa, maksymalnie {2}%) nie zużyjesz przynęty przy udanym połowie.",
+	
+	"xskills:ability-doublehook": "Podwójny haczyk",
+	"xskills:abilitydesc-doublehook": "Z szansą {0}% (+{1}% za każdy poziom rybołówstwa, maksymalnie {2}%) możesz wyciągnąć dwie ryby jednym rzutem!",
+	
+	"xskills:ability-magnetichook": "Magnetyczny haczyk",
+	"xskills:abilitydesc-magnetichook": "Z szansą {0}% (+{1}% za każdy poziom rybołówstwa, maksymalnie {2}%) zamiast ryby wyciągniesz losowy przedmiot.",
+	
+	"xskills:perk-chance": "Aktualna szansa: {0}%%\n(Szansa bazowa {1}%% + {2}%% z poziomu)",
+	"xskills:perk-bonus": "Aktualny bonus: +{0}%%\n(Szansa bazowa {1}%% + {2}%% z poziomu)",
+	"xskills:perk-damage": "Aktualny bonus do obrażeń/pancerza: +{0}%%\n(Szansa bazowa {1}%% + {2}%% z poziomu)",
+	"xskills:perk-maxbonus": "Maksymalny bonus obecnie: {0} szt.",
+	
+	"xskills:armor-heavy-dec": "Prędkość chodzenia, Tempo głodu, Efektywność leczenia",
+	"xskills:armor-heavy-inc": "Celność walki dystansowej, Szybkość naciągania łuku",
+	"xskills:armor-light-inc": "Efektywność leczenia, Celność walki dystansowej, Szybkość naciągania łuku"
 
 }

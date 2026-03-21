@@ -9,6 +9,11 @@
         "xp": 0.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "moreanimals"
+      }
     ]
   },
   {
@@ -21,6 +26,11 @@
         "xp": 0.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "moreanimals"
+      }
     ]
   },
   {
@@ -33,6 +43,11 @@
         "xp": 1.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "moreanimals"
+      }
     ]
   },
   {
@@ -44,6 +59,11 @@
         "code": "XSkillsAnimal",
         "xp": 1.0,
         "catchable": "true"
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "moreanimals"
       }
     ]
   },
@@ -57,6 +77,11 @@
         "xp": 0.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "moreanimals"
+      }
     ]
   },
   {
@@ -69,6 +94,11 @@
         "xp": 0.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "moreanimals"
+      }
     ]
   },
   {
@@ -81,6 +111,11 @@
         "xp": 1.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "moreanimals"
+      }
     ]
   },
   {
@@ -92,6 +127,11 @@
         "code": "XSkillsAnimal",
         "xp": 1.0,
         "catchable": "true"
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "moreanimals"
       }
     ]
   },
@@ -105,6 +145,11 @@
         "xp": 0.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "moreanimals"
+      }
     ]
   },
   {
@@ -117,6 +162,11 @@
         "xp": 0.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "moreanimals"
+      }
     ]
   },
   {
@@ -129,6 +179,11 @@
         "xp": 1.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "moreanimals"
+      }
     ]
   },
   {
@@ -140,6 +195,11 @@
         "code": "XSkillsAnimal",
         "xp": 1.0,
         "catchable": "true"
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "moreanimals"
       }
     ]
   },
@@ -153,6 +213,11 @@
         "xp": 0.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "moreanimals"
+      }
     ]
   },
   {
@@ -164,6 +229,11 @@
         "code": "XSkillsAnimal",
         "xp": 0.0,
         "catchable": "true"
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "moreanimals"
       }
     ]
   },
@@ -177,6 +247,11 @@
         "xp": 1.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "moreanimals"
+      }
     ]
   },
   {
@@ -188,6 +263,11 @@
         "code": "XSkillsAnimal",
         "xp": 1.0,
         "catchable": "true"
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "moreanimals"
       }
     ]
   }

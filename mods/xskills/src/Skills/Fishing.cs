@@ -26,10 +26,13 @@ namespace XSkills
         {
             XLeveling.Instance(api)?.RegisterSkill(this);
 
+            // Инициализация конфига рыбалки (со списком сокровищ)
+            this.Config = new FishingSkillConfig();
+
             this.ExperienceEquation = QuadraticEquation;
-            this.ExpBase = 200;
-            this.ExpMult = 100.0f;
-            this.ExpEquationValue = 8.0f;
+            this.ExpBase = 40;
+            this.ExpMult = 10.0f;
+            this.ExpEquationValue = 0.8f;
 
             // --- ПРОФЕССИЯ: Рыбак ---
             // 5 - уровень навыка для открытия
@@ -41,75 +44,91 @@ namespace XSkills
                 "xskills:abilitydesc-fisher",
                 5, 1, new int[] { 40 }));
 
-            // Крепкая леска
-            // 2 - минимальный уровень навыка для открытия
-            // 3 - максимальный тир прокачки
-            // 15, 30, 45 - шанс сохранения прочности в %
+            // Крепкая леска: шанс не потратить прочность удочки
+            // 3 - мин уровень (было 2)
+            // 3 - макс тир
+            // Немного ослаблен early game
+            // 8, 1, 25
+            // 15, 1, 35
+            // 22, 1, 45
             StrongLineId = this.AddAbility(new Ability(
                 "strongline",
                 "xskills:ability-strongline",
                 "xskills:abilitydesc-strongline",
-                2, 3, new int[] { 15, 30, 45 }));
+                2, 3, new int[] { 8, 1, 25, 15, 1, 35, 22, 1, 45 }));
 
 
-            // Опытный разделщик
-            // 2 - минимальный уровень навыка для открытия
-            // 3 - максимальный тир прокачки
-            // 10, 20, 30 - шанс получить дополнительное филе в %
-            // 3, 4, 5 - максимальное количество филе
+            // Опытный раздельщик: шанс получить дополнительное филе
+            // 4 - мин уровень (было 2)
+            // Чуть позже, так как это экономика еды
+            // 8, 1, 25, 2
+            // 12, 1, 35, 3
+            // 18, 1, 45, 4
             FishFilleterId = this.AddAbility(new Ability(
-                 "fishfilleter",
-                 "xskills:ability-fishfilleter",
-                 "xskills:abilitydesc-fishfilleter",
-                 3, 3, new int[] { 10, 3, 20, 4, 30, 5 }));
+                "fishfilleter",
+                "xskills:ability-fishfilleter",
+                "xskills:abilitydesc-fishfilleter",
+                4, 3, new int[] { 8, 1, 25, 2, 12, 1, 35, 3, 18, 1, 45, 4 }));
+
 
             // Хорошая наживка: ускорение поклевки
-            // 5 - уровень
-            // 3 - тира
-            // 10, 20, 30 - проценты ускорения
+            // 5 оставить (норм)
+            // Немного поднять scaling
+            // 6, 1, 30
+            // 12, 1, 40
+            // 18, 1, 50
             GoodBaitId = this.AddAbility(new Ability(
                 "goodbait",
                 "xskills:ability-goodbait",
                 "xskills:abilitydesc-goodbait",
-                5, 3, new int[] { 10, 20, 30 }));
+                5, 3, new int[] { 6, 1, 30, 12, 1, 40, 18, 1, 50 }));
 
-            // Ловкие руки: автоматическое насаживание наживки при забросе
-            // 4 уровень, 1 тир. Без процентов, она либо есть, либо её нет (значение 1)
+
+            // Ловкие руки: QoL перк
+            // 5 уровень (было 4)
             AutoBaiterId = this.AddAbility(new Ability(
                 "autobaiter",
                 "xskills:ability-autobaiter",
                 "xskills:abilitydesc-autobaiter",
-                4, 1, new int[] { 1 }));
+                5, 1, new int[] { 1 }));
 
-            // Мастер наживки: шанс не потратить червяка при улове
-            // 2 - минимальный уровень, 3 - максимальный тир
-            // 10, 20, 30 - шанс в процентах
+
+            // Мастер наживки: шанс не потратить наживку
+            // 3 уровень (было 2)
+            // Немного усилен late scaling
+            // 6, 1, 30
+            // 12, 1, 40
+            // 18, 1, 45
             BaitMasterId = this.AddAbility(new Ability(
                 "baitmaster",
                 "xskills:ability-baitmaster",
                 "xskills:abilitydesc-baitmaster",
-                2, 3, new int[] { 10, 20, 30 }));
+                2, 3, new int[] { 6, 1, 30, 12, 1, 40, 18, 1, 45 }));
 
-            // Двойной крючок: шанс выловить вторую случайную рыбу
-            // 7 - мин уровень, 3 - макс тир
-            // 10, 20, 30 - шанс срабатывания
+
+            // Двойной крючок: сильный перк → позже
+            // 8 уровень (было 7)
+            // Немного усилен базовый шанс
+            // 5, 1, 25
+            // 8, 1, 30
+            // 12, 1, 35
             DoubleHookId = this.AddAbility(new Ability(
                 "doublehook",
                 "xskills:ability-doublehook",
                 "xskills:abilitydesc-doublehook",
-                7, 3, new int[] { 10, 20, 30 }));
+                8, 3, new int[] { 5, 1, 25, 8, 1, 30, 12, 1, 35 }));
 
-            // Инициализация конфига рыбалки (со списком сокровищ)
-            this.Config = new FishingSkillConfig();
-            // Магнитный крючок: шанс выловить предмет вместо рыбы
-            // 1 - уровень
-            // 3 - тира
-            // 5, 10, 15 - шанс срабатывания в процентах
+
+            // Магнитный крючок: utility, но сильный экономически
+            // 6 уровень (было 7 в коде, но коммент 1)
+            // 5, 1, 25
+            // 8, 1, 30
+            // 12, 1, 35
             MagneticHookId = this.AddAbility(new Ability(
                 "magnetichook",
                 "xskills:ability-magnetichook",
                 "xskills:abilitydesc-magnetichook",
-                7, 3, new int[] { 5, 10, 15 }));
+                6, 3, new int[] { 5, 1, 25, 8, 1, 30, 12, 1, 35 }));
 
         }
     }
@@ -182,8 +201,11 @@ namespace XSkills
             PlayerAbility ability = playerSkill[fishing.StrongLineId];
             if (ability != null && ability.Tier > 0)
             {
-                float saveChance = ability.Value(0) / 100f;
+                // --- НОВАЯ МАТЕМАТИКА ШАНСА ---
+                int currentChance = ability.SkillDependentValue();
+                float saveChance = currentChance / 100f;
 
+                // Бросаем кубик на спасение прочности
                 if (world.Rand.NextDouble() < saveChance)
                 {
                     return false; // Отменяем урон
@@ -238,11 +260,14 @@ namespace XSkills
             PlayerAbility ability = playerSkill[fishing.FishFilleterId];
             if (ability != null && ability.Tier > 0)
             {
-                float bonusChance = ability.Value(0) / 100f;
+                // --- НОВАЯ МАТЕМАТИКА ШАНСА ---
+                int currentChance = ability.SkillDependentValue();
+                float bonusChance = currentChance / 100f;
+
                 int extraMeatCount = 0;
 
-                // Берет минимум между лимитом из перка (3, 4 или 5) и текущим уровнем рыбака.
-                int maxBonusPerFish = Math.Max(1, Math.Min(ability.Value(1), playerSkill.Level));
+                // Берет минимум между жестким лимитом 5 и текущим уровнем рыбака.
+                int maxBonusPerFish = Math.Max(1, Math.Min(5, playerSkill.Level));
 
                 if (__instance.ProcessedStacks != null && __instance.ProcessedStacks.Length > 0)
                 {
@@ -254,7 +279,6 @@ namespace XSkills
                             if (be.Api.World.Rand.NextDouble() < bonusChance)
                             {
                                 // Рандом от 1 до текущего максимума (включительно)
-                                // Метод Next(min, max) включает min, но ИСКЛЮЧАЕТ max, поэтому пишем +1
                                 int randomBonus = be.Api.World.Rand.Next(1, maxBonusPerFish + 1);
 
                                 extraMeatCount += randomBonus;
@@ -271,7 +295,8 @@ namespace XSkills
                             {
                                 __state = resolved.Clone();
                                 __state.StackSize = extraMeatCount;
-                                // Оставил лог, чтобы тебе было удобно проверить рандом
+
+                                // Лог для проверки
                                 be.Api.World.Logger.Notification($"[РЫБАЛКА] Мастерство (ур.{playerSkill.Level}): Игрок {byPlayer.PlayerName} получил +{extraMeatCount} бонусного филе.");
                             }
                         }
@@ -314,7 +339,8 @@ namespace XSkills
 
             if (ability != null && ability.Tier > 0)
             {
-                float bonusPercent = ability.Value(0);
+                // --- НОВАЯ МАТЕМАТИКА ПРОЦЕНТА УСКОРЕНИЯ ---
+                int bonusPercent = ability.SkillDependentValue();
                 float timeMultiplier = 1.0f + (bonusPercent / 100f);
 
                 var accumField = AccessTools.Field(typeof(Vintagestory.GameContent.EntityBobber), "swimmingAccum");
@@ -422,7 +448,9 @@ namespace XSkills
                 // Если наживки уже нет, спасать нечего
                 if (__instance.BaitStack == null) return;
 
-                float saveChance = ability.Value(0) / 100f;
+                // --- НОВАЯ МАТЕМАТИКА ШАНСА ---
+                int currentChance = ability.SkillDependentValue();
+                float saveChance = currentChance / 100f;
 
                 // Бросаем кубик на удачу
                 if (__instance.Api.World.Rand.NextDouble() < saveChance)
@@ -484,7 +512,7 @@ namespace XSkills
         [HarmonyPostfix]
         public static void Postfix(Vintagestory.GameContent.EntityBobber __instance, EntityAgent entityCatcher, bool __state)
         {
-            if (!__state) return; // Улова не было (или поймали ржавую шестеренку), выходим
+            if (!__state) return; // Улова не было (или поймали мусор), выходим
             if (__instance.Api.Side != EnumAppSide.Server) return;
 
             IPlayer player = (entityCatcher as EntityPlayer)?.Player;
@@ -496,12 +524,15 @@ namespace XSkills
 
             if (ability != null && ability.Tier > 0)
             {
-                float doubleChance = ability.Value(0) / 100f;
+                // --- НОВАЯ МАТЕМАТИКА ШАНСА ---
+                // Метод сам берет Базу + (Уровень * Бонус) и режет по Максимуму
+                int currentChance = ability.SkillDependentValue();
+                float doubleChance = currentChance / 100f;
 
                 // Бросаем кубик на вторую рыбу
                 if (__instance.Api.World.Rand.NextDouble() < doubleChance)
                 {
-                    // Магия рефлексии: просим игру сгенерировать нам случайную рыбу для этого озера
+                    // Магия рефлексии: просим игру сгенерировать нам случайную рыбу
                     var method = AccessTools.Method(typeof(Vintagestory.GameContent.EntityBobber), "getRandomFishEntityProperties");
                     if (method != null)
                     {
@@ -609,10 +640,9 @@ namespace XSkills
             Fishing fishing = XLeveling.Instance(player.Entity.Api)?.GetSkill("fishing") as Fishing;
             PlayerSkill playerSkill = player.Entity.GetBehavior<PlayerSkillSet>()?[fishing?.Id ?? -1];
             PlayerAbility ability = playerSkill?[fishing?.MagneticHookId ?? -1];
-
             if (ability == null || ability.Tier <= 0) return true;
 
-            // 1. Проверяем, есть ли на крючке вообще улов (рыба или ванильный мусор)
+            // Проверяем, есть ли улов
             bool hasCatch = false;
             var stateField = AccessTools.Field(typeof(Vintagestory.GameContent.EntityBobber), "bobberState");
             if (stateField != null && stateField.GetValue(__instance).ToString() == "NoEntityFishCatch") hasCatch = true;
@@ -627,9 +657,16 @@ namespace XSkills
 
             if (!hasCatch) return true;
 
-            // 2. Бросаем кубик на сокровище
-            float chance = ability.Value(0) / 100f;
-            if (__instance.Api.World.Rand.NextDouble() < chance)
+            // --- НОВАЯ МАТЕМАТИКА ШАНСА ---
+            int baseChance = ability.Value(0);     // 4, 6 или 10
+            int chancePerLevel = ability.Value(1); // 1
+            int maxChance = ability.Value(2);      // 30
+
+            // Считаем итоговый шанс: База + (Уровень рыбалки * 1), но не больше 30
+            float calculatedChance = Math.Min(baseChance + (playerSkill.Level * chancePerLevel), maxChance);
+            float finalChance = calculatedChance / 100f;
+
+            if (__instance.Api.World.Rand.NextDouble() < finalChance)
             {
                 FishingSkillConfig config = fishing.Config as FishingSkillConfig;
                 if (config != null && config.TreasureDrops != null && config.TreasureDrops.Count > 0)

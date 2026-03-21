@@ -481,6 +481,21 @@
             Prefix for the OnHeldInteractStop method.
             </summary>
         </member>
+        <member name="T:XLib.XEffects.LiquidDrinkUnlearnPatch">
+            <summary>
+            Patch for fixing unlearn points when drinking liquids from containers.
+            </summary>
+        </member>
+        <member name="M:XLib.XEffects.LiquidDrinkUnlearnPatch.Prefix(Vintagestory.GameContent.BlockLiquidContainerBase,System.Single,Vintagestory.API.Common.ItemSlot,Vintagestory.API.Common.EntityAgent,System.Single[]@)">
+            <summary>
+            Captures the amount of liquid and unlearn points before the player drinks.
+            </summary>
+        </member>
+        <member name="M:XLib.XEffects.LiquidDrinkUnlearnPatch.Postfix(Vintagestory.GameContent.BlockLiquidContainerBase,System.Single,Vintagestory.API.Common.ItemSlot,Vintagestory.API.Common.EntityAgent,System.Single[])">
+            <summary>
+            Calculates the amount of liquid consumed and awards unlearn points.
+            </summary>
+        </member>
         <member name="T:XLib.XEffects.AnimationEffect">
             <summary>
             Represents an effect that can play player animations

@@ -204,7 +204,12 @@
     "value": {
       "code": "XSkillsEntity",
       "xp": 1.0
-    }
+    },
+    "dependsOn": [
+      {
+        "modid": "theneighbours"
+      }
+    ]
   },
   {
     "file": "game:entities/land/wild-goblin",
@@ -213,7 +218,12 @@
     "value": {
       "code": "XSkillsEntity",
       "xp": 1.0
-    }
+    },
+    "dependsOn": [
+      {
+        "modid": "theneighbours"
+      }
+    ]
   },
   {
     "file": "game:entities/land/wild-goblin_spear",
@@ -222,7 +232,12 @@
     "value": {
       "code": "XSkillsEntity",
       "xp": 1.25
-    }
+    },
+    "dependsOn": [
+      {
+        "modid": "theneighbours"
+      }
+    ]
   },
   {
     "file": "game:entities/land/wild-goblin_spear",
@@ -231,7 +246,12 @@
     "value": {
       "code": "XSkillsEntity",
       "xp": 1.25
-    }
+    },
+    "dependsOn": [
+      {
+        "modid": "theneighbours"
+      }
+    ]
   },
   {
     "file": "theneighbours:entities/land/brower",
@@ -240,7 +260,12 @@
     "value": {
       "code": "XSkillsEntity",
       "xp": 1.75
-    }
+    },
+    "dependsOn": [
+      {
+        "modid": "theneighbours"
+      }
+    ]
   },
   {
     "file": "theneighbours:entities/land/brower",
@@ -249,7 +274,12 @@
     "value": {
       "code": "XSkillsEntity",
       "xp": 1.75
-    }
+    },
+    "dependsOn": [
+      {
+        "modid": "theneighbours"
+      }
+    ]
   },
   {
     "file": "theneighbours:entities/land/shintorickae",
@@ -258,7 +288,12 @@
     "value": {
       "code": "XSkillsEntity",
       "xp": 2.2
-    }
+    },
+    "dependsOn": [
+      {
+        "modid": "theneighbours"
+      }
+    ]
   },
   {
     "file": "theneighbours:entities/land/shintorickae",
@@ -267,7 +302,12 @@
     "value": {
       "code": "XSkillsEntity",
       "xp": 2.2
-    }
+    },
+    "dependsOn": [
+      {
+        "modid": "theneighbours"
+      }
+    ]
   },
   {
     "file": "theneighbours:entities/land/tickling",
@@ -276,7 +316,12 @@
     "value": {
       "code": "XSkillsEntity",
       "xp": 2.5
-    }
+    },
+    "dependsOn": [
+      {
+        "modid": "theneighbours"
+      }
+    ]
   },
   {
     "file": "theneighbours:entities/land/tickling",
@@ -285,7 +330,12 @@
     "value": {
       "code": "XSkillsEntity",
       "xp": 2.5
-    }
+    },
+    "dependsOn": [
+      {
+        "modid": "theneighbours"
+      }
+    ]
   },
   {
     "file": "theneighbours:entities/land/turtor",
@@ -294,7 +344,12 @@
     "value": {
       "code": "XSkillsEntity",
       "xp": 0.0
-    }
+    },
+    "dependsOn": [
+      {
+        "modid": "theneighbours"
+      }
+    ]
   },
   {
     "file": "theneighbours:entities/land/turtor",
@@ -303,6 +358,11 @@
     "value": {
       "code": "XSkillsEntity",
       "xp": 0.0
-    }
+    },
+    "dependsOn": [
+      {
+        "modid": "theneighbours"
+      }
+    ]
   }
 ]

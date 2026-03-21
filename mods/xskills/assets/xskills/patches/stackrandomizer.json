@@ -76,12 +76,24 @@
          "chance": 1, 
          "attributes": {"skill": "pottery", "experience": 20.0}
       },
-      {
-         "type": "item",
-         "code": "xlib:skillbook-aged-gray",
-         "chance": 1, 
-         "attributes": {"skill": "temporaladaptation", "experience": 100.0}
-      },
+        {
+            "type": "item",
+            "code": "xlib:skillbook-aged-gray",
+            "chance": 1,
+            "attributes": {
+                "skill": "temporaladaptation",
+                "experience": 100.0
+            }
+        },
+        {
+            "type": "item",
+            "code": "xlib:skillbook-aged-olive",
+            "chance": 1,
+            "attributes": {
+                "skill": "fishing",
+                "experience": 50.0
+            }
+        }
     ]
   }
 ]

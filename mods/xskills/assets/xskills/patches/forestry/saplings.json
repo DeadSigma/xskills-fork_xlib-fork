@@ -3,18 +3,45 @@
     "file": "game:blocktypes/plant/plaintreesapling",
     "op": "addmerge",
     "path": "/behaviors",
-    "value": [{ "name": "XSkillsSapling" }]
+    "value": [
+      {
+        "name": "XSkillsSapling"
+      }
+    ]
   },
   {
-    "file": "game:blocktypes/plant/fruittreesapling",
+    "file": "game:blocktypes/plant/fruittreebranch",
     "op": "addmerge",
     "path": "/behaviors",
-    "value": [{ "name": "XSkillsSapling" }]
+    "value": [
+      {
+        "name": "XSkillsFruitTreeSapling"
+      }
+    ]
+  },
+  {
+    "file": "game:blocktypes/plant/fruitingbushcutting",
+    "op": "addmerge",
+    "path": "/behaviors",
+    "value": [
+      {
+        "name": "XSkillsFruitTreeSapling"
+      }
+    ]
   },
   {
     "file": "wildcrafttree:blocktypes/plant/plaintreesapling",
     "op": "addmerge",
     "path": "/behaviors",
-    "value": [{ "name": "XSkillsSapling" }]
+    "value": [
+      {
+        "name": "XSkillsSapling"
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcrafttree"
+      }
+    ]
   }
 ]

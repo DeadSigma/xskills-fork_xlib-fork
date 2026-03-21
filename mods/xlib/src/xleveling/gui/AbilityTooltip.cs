@@ -68,8 +68,69 @@ namespace XLib.XLeveling
             double[] red = { 0.8, 0.0, 0.0 };
             double[] gray = { 0.5, 0.5, 0.5 };
 
-            //shows the current tier if exists
-            if (playerAbility.Tier > 0) sb.Append(playerAbility.Ability.FormattedDescription(playerAbility.Tier));
+            // 1. ПЕРКИ НА ШАНС (Вероятность события)
+            var chanceAbilities = new System.Collections.Generic.HashSet<string>
+    {
+        "magnetichook", "doublehook", "baitmaster", "strongline",
+        "carefuldigger", "carefullumberjack", "carefulminer",
+        "cultivatedseeds", "stonecutter", "feeder", "duplicator",
+        "jackpot", "happymeal", "finishingtouch", "fastpotter"
+    };
+
+            // 2. ПЕРКИ НА БОНУС / ДОБЫЧУ (Увеличение лута, скорости, ХП)
+            var bonusAbilities = new System.Collections.Generic.HashSet<string>
+    {
+        "goodbait", "greenthumb", "demetersbless", "gatherer", "orchardist",
+        "claydigger", "peatcutter", "saltpeterdigger", "golddigger",
+        "lumberjack", "moreladders", "stonebreaker", "oreminer",
+        "gemstoneminer", "butcher", "furrier", "bonebreaker",
+        "looter", "salvager", "dilution", "longlife", "hammerexpert",
+        "shovelexpert", "axeexpert", "pickaxeexpert", "fastfood"
+    };
+
+            // 3. ПЕРКИ НА УРОН И ЗАЩИТУ (Боевка)
+            var damageAbilities = new System.Collections.Generic.HashSet<string>
+    {
+        "swordsman", "archer", "spearman", "tank", "hunter", "toolmastery"
+    };
+
+            // 4. ПЕРКИ С МАКСИМАЛЬНЫМ ЛИМИТОМ ШТУК (Особая математика)
+            var maxBonusAbilities = new System.Collections.Generic.HashSet<string>
+    {
+        "fishfilleter" 
+        // Если в будущем добавишь перки типа meatcarver с такой же механикой лимита - просто впиши сюда
+    };
+
+            string abilityName = playerAbility.Ability.Name;
+
+            // Проверяем, есть ли наш перк хоть в одном из списков
+            if (chanceAbilities.Contains(abilityName) || bonusAbilities.Contains(abilityName) || damageAbilities.Contains(abilityName) || maxBonusAbilities.Contains(abilityName))
+            {
+                int baseVal = playerAbility.Value(0);
+                int bonusFromLevel = playerAbility.PlayerSkill.Level * playerAbility.Value(1);
+                int currentVal = playerAbility.SkillDependentValue();
+
+                // Подставляем текст в зависимости от категории перка
+                if (chanceAbilities.Contains(abilityName))
+                {
+                    sb.Append("\n\n" + Vintagestory.API.Config.Lang.Get("xskills:perk-chance", currentVal, baseVal, bonusFromLevel));
+                }
+                else if (bonusAbilities.Contains(abilityName))
+                {
+                    sb.Append("\n\n" + Vintagestory.API.Config.Lang.Get("xskills:perk-bonus", currentVal, baseVal, bonusFromLevel));
+                }
+                else if (damageAbilities.Contains(abilityName))
+                {
+                    sb.Append("\n\n" + Vintagestory.API.Config.Lang.Get("xskills:perk-damage", currentVal, baseVal, bonusFromLevel));
+                }
+                else if (maxBonusAbilities.Contains(abilityName))
+                {
+                    int maxBonus = Math.Max(1, Math.Min(5, playerAbility.PlayerSkill.Level));
+
+                    sb.Append("\n\n" + Vintagestory.API.Config.Lang.Get("xskills:perk-chance", currentVal, baseVal, bonusFromLevel));
+                    sb.Append("\n" + Vintagestory.API.Config.Lang.Get("xskills:perk-maxbonus", maxBonus));
+                }
+            }
 
             //shows the next tier if exists
             if (playerAbility.Tier < playerAbility.Ability.MaxTier)

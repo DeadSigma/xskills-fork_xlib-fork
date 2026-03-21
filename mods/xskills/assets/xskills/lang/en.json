@@ -455,26 +455,38 @@
     "xskills:skill-fishing": "Fishing",
 
     "xskills:ability-strongline": "Strong Line",
-    "xskills:abilitydesc-strongline": "When using a fishing rod, there is a {0}% chance it will not lose durability.",
+    "xskills:abilitydesc-strongline": "With a {0}% chance (+{1}% per Fishing level, up to {2}%), your fishing rod will not lose durability when used.",
 
     "xskills:ability-fisher": "Fisher",
-    "xskills:abilitydesc-fisher": "You gain {0}% more experience for the fishing skill. PROFESSION.\nThe number of professions you can learn is limited.",
+    "xskills:abilitydesc-fisher": "You gain {0}% more experience for the Fishing skill. PROFESSION.\nThe number of professions you can learn is limited.",
 
     "xskills:ability-fishfilleter": "Expert Filleter",
-    "xskills:abilitydesc-fishfilleter": "When filleting fish, there is a {0}% chance to get an extra fillet, plus {1} for each fishing skill level.",
+    "xskills:abilitydesc-fishfilleter": "When filleting fish, you have a {0}% chance (+{1}% per Fishing level, up to {2}%) to get extra fillets.\nThe maximum number of bonus fillets equals your skill level (up to 5).",
 
     "xskills:ability-goodbait": "Good Bait",
-    "xskills:abilitydesc-goodbait": "Your bait attracts fish faster. Bite waiting time is reduced by {0}%.",
+    "xskills:abilitydesc-goodbait": "Fish bite {0}% faster (+{1}% per Fishing level, up to {2}%).",
 
     "xskills:ability-autobaiter": "Nimble Hands",
     "xskills:abilitydesc-autobaiter": "Automatically attaches bait from your inventory to the fishing rod when casting.",
 
     "xskills:ability-baitmaster": "Bait Master",
-    "xskills:abilitydesc-baitmaster": "Your experience allows you to carefully remove the catch from the hook. There is a {0}% chance not to consume bait on a successful catch.",
+    "xskills:abilitydesc-baitmaster": "With a {0}% chance (+{1}% per Fishing level, up to {2}%), bait is not consumed on a successful catch.",
 
     "xskills:ability-doublehook": "Double Hook",
-    "xskills:abilitydesc-doublehook": "You tie a second hook to the line. On a successful catch there is a {0}% chance to pull out two fish at once.",
+    "xskills:abilitydesc-doublehook": "With a {0}% chance (+{1}% per Fishing level, up to {2}%), you can pull up two fish with a single cast!",
 
     "xskills:ability-magnetichook": "Magnetic Hook",
-    "xskills:abilitydesc-magnetichook": "With a {0}% chance you will pull an item from the water instead of a fish. It can be useless junk or a very rare artifact."
+    "xskills:abilitydesc-magnetichook": "With a {0}% chance (+{1}% per Fishing level, up to {2}%), you will pull a random item from the water instead of a fish.",
+
+    "xskills:fishing-currentchance": "Current chance: {0}% (Base {1}% + {2}% from level)",
+    "xskills:fishing-maxbonus": "Current maximum bonus: {0} fillets",
+
+    "perk-chance": "Current chance: {0}%% (Base chance {1}%% + {2}%% from level)",
+    "perk-bonus": "Current bonus: +{0}%% (Base chance {1}%% + {2}%% from level)",
+    "perk-damage": "Current damage/defense bonus: +{0}%% (Base chance {1}%% + {2}%% from level)",
+    "perk-maxbonus": "Current maximum bonus: {0} pcs.",
+
+    "xskills:armor-heavy-dec": "Walk speed, Hunger rate, Healing effectiveness",
+    "xskills:armor-heavy-inc": "Ranged accuracy, Bow draw speed",
+    "xskills:armor-light-inc": "Healing effectiveness, Ranged accuracy, Bow draw speed"
 }

@@ -453,27 +453,37 @@
     "book-meteorology": "Meteorologie für Anfänger",
 
     "xskills:skill-fishing": "Angeln",
-    "xskills:ability-strongline": "Starke Angelschnur",
-    "xskills:abilitydesc-strongline": "Beim Verwenden der Angelrute besteht eine Chance von {0}%, dass sie keine Haltbarkeit verliert.",
 
-    "xskills:ability-fisher": "Fischer",
-    "xskills:abilitydesc-fisher": "Du erhältst {0}% mehr Erfahrung für die Angel-Fähigkeit. BERUF.\nDie Anzahl der Berufe, die du erlernen kannst, ist begrenzt.",
-
-    "xskills:ability-fishfilleter": "Erfahrener Filetierer",
-    "xskills:abilitydesc-fishfilleter": "Beim Filetieren von Fischen besteht eine Chance von {0}%, ein zusätzliches Filet zu erhalten, plus weitere {1} pro Level der Angel-Fähigkeit.",
-
-    "xskills:ability-goodbait": "Guter Köder",
-    "xskills:abilitydesc-goodbait": "Dein Köder zieht Fische schneller an. Die Wartezeit auf einen Biss wird um {0}% reduziert.",
-
-    "xskills:ability-autobaiter": "Geschickte Hände",
-    "xskills:abilitydesc-autobaiter": "Setzt beim Auswerfen automatisch Köder aus dem Inventar auf die Angelrute.",
-
-    "xskills:ability-baitmaster": "Ködermeister",
-    "xskills:abilitydesc-baitmaster": "Deine Erfahrung erlaubt es dir, den Fang vorsichtig vom Haken zu nehmen. Es besteht eine Chance von {0}%, den Köder bei erfolgreichem Angeln nicht zu verbrauchen.",
-
-    "xskills:ability-doublehook": "Doppelhaken",
-    "xskills:abilitydesc-doublehook": "Du befestigst einen zweiten Haken an der Angelschnur. Bei erfolgreichem Angeln besteht eine Chance von {0}%, sofort zwei Fische zu fangen.",
-
-    "xskills:ability-magnetichook": "Magnetischer Haken",
-    "xskills:abilitydesc-magnetichook": "Mit einer Chance von {0}% ziehst du statt eines Fisches einen Gegenstand aus dem Wasser. Das kann sowohl nutzloser Müll als auch ein sehr seltenes Artefakt sein."
+	"xskills:ability-strongline": "Starke Angelschnur",
+	"xskills:abilitydesc-strongline": "Mit einer Chance von {0}% (+{1}% pro Angellevel, maximal {2}%) verliert deine Angel beim Benutzen keine Haltbarkeit.",
+	
+	"xskills:ability-fisher": "Fischer",
+	"xskills:abilitydesc-fisher": "Du erhältst {0}% mehr Erfahrung für die Angel-Fertigkeit. BERUF.\nDie Anzahl der Berufe, die du erlernen kannst, ist begrenzt.",
+	
+	"xskills:ability-fishfilleter": "Erfahrener Filetierer",
+	"xskills:abilitydesc-fishfilleter": "Beim Filetieren von Fischen besteht eine Chance von {0}% (+{1}% pro Angellevel, maximal {2}%), zusätzliche Filets zu erhalten.\nDie maximale Anzahl an Bonusfilets entspricht deinem Skilllevel (bis zu 5).",
+	
+	"xskills:ability-goodbait": "Guter Köder",
+	"xskills:abilitydesc-goodbait": "Fische beißen {0}% schneller an (+{1}% pro Angellevel, maximal {2}%).",
+	
+	"xskills:ability-autobaiter": "Geschickte Hände",
+	"xskills:abilitydesc-autobaiter": "Setzt beim Auswerfen automatisch Köder aus deinem Inventar auf die Angel.",
+	
+	"xskills:ability-baitmaster": "Ködermeister",
+	"xskills:abilitydesc-baitmaster": "Mit einer Chance von {0}% (+{1}% pro Angellevel, maximal {2}%) verbrauchst du bei einem erfolgreichen Fang keinen Köder.",
+	
+	"xskills:ability-doublehook": "Doppelhaken",
+	"xskills:abilitydesc-doublehook": "Mit einer Chance von {0}% (+{1}% pro Angellevel, maximal {2}%) kannst du zwei Fische mit einem Wurf fangen!",
+	
+	"xskills:ability-magnetichook": "Magnetischer Haken",
+	"xskills:abilitydesc-magnetichook": "Mit einer Chance von {0}% (+{1}% pro Angellevel, maximal {2}%) ziehst du statt eines Fisches einen zufälligen Gegenstand aus dem Wasser.",
+	
+	"xskills:perk-chance": "Aktuelle Chance: {0}%%\n(Basischance {1}%% + {2}%% durch Level)",
+	"xskills:perk-bonus": "Aktueller Bonus: +{0}%%\n(Basischance {1}%% + {2}%% durch Level)",
+	"xskills:perk-damage": "Aktueller Schadens-/Rüstungsbonus: +{0}%%\n(Basischance {1}%% + {2}%% durch Level)",
+	"xskills:perk-maxbonus": "Maximaler Bonus aktuell: {0} Stk.",
+	
+	"xskills:armor-heavy-dec": "Laufgeschwindigkeit, Hungerzunahme, Heilungseffizienz",
+	"xskills:armor-heavy-inc": "Fernkampfgenauigkeit, Bogenspann­geschwindigkeit",
+	"xskills:armor-light-inc": "Heilungseffizienz, Fernkampfgenauigkeit, Bogenspann­geschwindigkeit"
 }

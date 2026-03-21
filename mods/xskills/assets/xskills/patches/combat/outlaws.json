@@ -238,5 +238,5 @@
       "xp": 1.0
     },
     "dependsOn": [{ "modid": "outlawmod" }]
-  },
+  }
 ]

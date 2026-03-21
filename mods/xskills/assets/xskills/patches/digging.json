@@ -3,7 +3,8 @@
     "file": "game:blocktypes/soil/clay",
     "op": "addmerge",
     "path": "/behaviors",
-    "value": [{
+    "value": [
+      {
         "name": "XSkillsClay",
         "properties": {
           "xp": 0.33
@@ -15,7 +16,8 @@
     "file": "game:blocktypes/soil/peat",
     "op": "addmerge",
     "path": "/behaviors",
-    "value": [{
+    "value": [
+      {
         "name": "XSkillsPeat",
         "properties": {
           "xp": 0.33
@@ -27,7 +29,8 @@
     "file": "game:blocktypes/stone/saltpeter",
     "op": "addmerge",
     "path": "/behaviors",
-    "value": [{
+    "value": [
+      {
         "name": "XSkillsSalpeter",
         "properties": {
           "xp": 0.5
@@ -39,10 +42,11 @@
     "file": "game:blocktypes/soil/soil",
     "op": "addmerge",
     "path": "/behaviors",
-    "value": [{
-      "name": "XSkillsSoil",
-      "properties": {
-        "xp": 0.1
+    "value": [
+      {
+        "name": "XSkillsSoil",
+        "properties": {
+          "xp": 0.1
         }
       }
     ]
@@ -51,10 +55,11 @@
     "file": "game:blocktypes/stone/sand",
     "op": "addmerge",
     "path": "/behaviors",
-    "value": [{
-      "name": "XSkillsSand",
-      "properties": {
-        "xp": 0.1
+    "value": [
+      {
+        "name": "XSkillsSand",
+        "properties": {
+          "xp": 0.1
         }
       }
     ]
@@ -63,10 +68,11 @@
     "file": "game:blocktypes/stone/gravel",
     "op": "addmerge",
     "path": "/behaviors",
-    "value": [{
-      "name": "XSkillsSand",
-      "properties": {
-        "xp": 0.1
+    "value": [
+      {
+        "name": "XSkillsSand",
+        "properties": {
+          "xp": 0.1
         }
       }
     ]
@@ -75,10 +81,11 @@
     "file": "game:blocktypes/soil/forestfloor",
     "op": "addmerge",
     "path": "/behaviors",
-    "value": [{
-      "name": "XSkillsSoil",
-      "properties": {
-        "xp": 0.1
+    "value": [
+      {
+        "name": "XSkillsSoil",
+        "properties": {
+          "xp": 0.1
         }
       }
     ]
@@ -87,10 +94,11 @@
     "file": "game:blocktypes/soil/muddygravel",
     "op": "addmerge",
     "path": "/behaviors",
-    "value": [{
-      "name": "XSkillsSoil",
-      "properties": {
-        "xp": 0.1
+    "value": [
+      {
+        "name": "XSkillsSoil",
+        "properties": {
+          "xp": 0.1
         }
       }
     ]
@@ -99,12 +107,18 @@
     "file": "waterwheels:blocktypes/alluvialblock",
     "op": "addmerge",
     "path": "/behaviors",
-    "value": [{
+    "value": [
+      {
         "name": "XSkillsClay",
         "properties": {
           "xp": 0.33
         }
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "waterwheels"
+      }
     ]
-  },
+  }
 ]

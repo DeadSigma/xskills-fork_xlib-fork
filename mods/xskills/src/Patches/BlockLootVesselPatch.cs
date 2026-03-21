@@ -35,8 +35,11 @@ namespace XSkills
                         skillName = "survival";
                     else if (chance > 0.33f) 
                         skillName = "digging";
-                    else 
+                    else if (chance > 0.25f) 
                         skillName = "forestry";
+                    else 
+                        skillName = "fishing";
+                    
                     chance = 3.0f;
                     break;
 
@@ -114,6 +117,10 @@ namespace XSkills
 
                 case "temporaladaptation":
                     color = "gray";
+                    break;
+
+                case "fishing":
+                    color = "olive"; // Если не добавлял цвет в JSON, напиши тут "gray" или "olive"
                     break;
 
                 default:

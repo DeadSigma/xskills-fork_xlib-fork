@@ -9,6 +9,11 @@
         "xp": 1.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "cats"
+      }
     ]
   },
   {
@@ -21,6 +26,11 @@
         "xp": 1.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "cats"
+      }
     ]
   },
   {
@@ -32,6 +42,11 @@
         "code": "XSkillsAnimal",
         "xp": 0.0,
         "catchable": "true"
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "cats"
       }
     ]
   },
@@ -45,6 +60,11 @@
         "xp": 0.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "cats"
+      }
     ]
   },
   {
@@ -57,6 +77,11 @@
         "xp": 1.0,
         "catchable": "true"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "cats"
+      }
     ]
   },
   {
@@ -68,6 +93,11 @@
         "code": "XSkillsAnimal",
         "xp": 1.0,
         "catchable": "true"
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "cats"
       }
     ]
   }

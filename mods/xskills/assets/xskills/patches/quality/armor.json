@@ -5,12 +5,6 @@
     "path": "/attributes",
     "value": {"qualityType": 1}
   },
-  //{
-  //  "file": "game:itemtypes/resource/metallamellae",
-  //  "op": "addmerge",
-  //  "path": "/attributes",
-  //  "value": {"qualityType": 1}
-  //},
   {
     "file": "game:itemtypes/resource/metalnailsandstrips",
     "op": "addmerge",

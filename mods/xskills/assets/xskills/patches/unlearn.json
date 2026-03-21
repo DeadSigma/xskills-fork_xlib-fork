@@ -6,7 +6,9 @@
     "value": [
       {
         "name": "XLibConsumable",
-        "properties": { "unlearnPoints": 2.0 }
+        "properties": {
+          "unlearnPoints": 2.0
+        }
       }
     ]
   },
@@ -17,7 +19,9 @@
     "value": [
       {
         "name": "XLibConsumable",
-        "properties": { "unlearnPoints": 0.1 }
+        "properties": {
+          "unlearnPoints": 0.1
+        }
       }
     ]
   },
@@ -28,7 +32,9 @@
     "value": [
       {
         "name": "XLibConsumable",
-        "properties": { "unlearnPoints": 1.0 }
+        "properties": {
+          "unlearnPoints": 1.0
+        }
       }
     ]
   },
@@ -39,7 +45,14 @@
     "value": [
       {
         "name": "XLibConsumable",
-        "properties": { "unlearnPoints": 1.25 }
+        "properties": {
+          "unlearnPoints": 1.25
+        }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "expandedfoods"
       }
     ]
   },
@@ -50,7 +63,14 @@
     "value": [
       {
         "name": "XLibConsumable",
-        "properties": { "unlearnPoints": 0.25 }
+        "properties": {
+          "unlearnPoints": 0.25
+        }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "expandedfoods"
       }
     ]
   },
@@ -61,7 +81,14 @@
     "value": [
       {
         "name": "XLibConsumable",
-        "properties": { "unlearnPoints": 1.5 }
+        "properties": {
+          "unlearnPoints": 1.5
+        }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "expandedfoods"
       }
     ]
   },
@@ -72,7 +99,14 @@
     "value": [
       {
         "name": "XLibConsumable",
-        "properties": { "unlearnPoints": 0.5 }
+        "properties": {
+          "unlearnPoints": 0.5
+        }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "expandedfoods"
       }
     ]
   },
@@ -83,7 +117,14 @@
     "value": [
       {
         "name": "XLibConsumable",
-        "properties": { "unlearnPoints": 1.5 }
+        "properties": {
+          "unlearnPoints": 1.5
+        }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "expandedfoods"
       }
     ]
   },
@@ -94,7 +135,14 @@
     "value": [
       {
         "name": "XLibConsumable",
-        "properties": { "unlearnPoints": 0.5 }
+        "properties": {
+          "unlearnPoints": 0.5
+        }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "expandedfoods"
       }
     ]
   },
@@ -105,7 +153,14 @@
     "value": [
       {
         "name": "XLibConsumable",
-        "properties": { "unlearnPoints": 1.25 }
+        "properties": {
+          "unlearnPoints": 1.25
+        }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "expandedfoods"
       }
     ]
   },
@@ -116,7 +171,14 @@
     "value": [
       {
         "name": "XLibConsumable",
-        "properties": { "unlearnPoints": 0.25 }
+        "properties": {
+          "unlearnPoints": 0.25
+        }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "expandedfoods"
       }
     ]
   },
@@ -127,7 +189,14 @@
     "value": [
       {
         "name": "XLibConsumable",
-        "properties": { "unlearnPoints": 0.1 }
+        "properties": {
+          "unlearnPoints": 0.1
+        }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
       }
     ]
   },
@@ -138,7 +207,14 @@
     "value": [
       {
         "name": "XLibConsumable",
-        "properties": { "unlearnPoints": 0.25 }
+        "properties": {
+          "unlearnPoints": 0.25
+        }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
       }
     ]
   },
@@ -149,7 +225,14 @@
     "value": [
       {
         "name": "XLibConsumable",
-        "properties": { "unlearnPoints": 0.25 }
+        "properties": {
+          "unlearnPoints": 0.25
+        }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
       }
     ]
   },
@@ -160,7 +243,14 @@
     "value": [
       {
         "name": "XLibConsumable",
-        "properties": { "unlearnPoints": 1.25 }
+        "properties": {
+          "unlearnPoints": 1.25
+        }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
       }
     ]
   },
@@ -171,7 +261,14 @@
     "value": [
       {
         "name": "XLibConsumable",
-        "properties": { "unlearnPoints": 0.1 }
+        "properties": {
+          "unlearnPoints": 0.1
+        }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
       }
     ]
   },
@@ -182,7 +279,14 @@
     "value": [
       {
         "name": "XLibConsumable",
-        "properties": { "unlearnPoints": 1.0 }
+        "properties": {
+          "unlearnPoints": 1.0
+        }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "wildcraftfruit"
       }
     ]
   },
@@ -193,7 +297,14 @@
     "value": [
       {
         "name": "XLibConsumable",
-        "properties": { "unlearnPoints": 0.1 }
+        "properties": {
+          "unlearnPoints": 0.1
+        }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "floralzonesmediterraneanregion"
       }
     ]
   },
@@ -204,7 +315,14 @@
     "value": [
       {
         "name": "XLibConsumable",
-        "properties": { "unlearnPoints": 1.0 }
+        "properties": {
+          "unlearnPoints": 1.0
+        }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "floralzonesmediterraneanregion"
       }
     ]
   },
@@ -215,7 +333,14 @@
     "value": [
       {
         "name": "XLibConsumable",
-        "properties": { "unlearnPoints": 0.1 }
+        "properties": {
+          "unlearnPoints": 0.1
+        }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "floralzoneseastasiaticregion"
       }
     ]
   },
@@ -226,7 +351,14 @@
     "value": [
       {
         "name": "XLibConsumable",
-        "properties": { "unlearnPoints": 1.0 }
+        "properties": {
+          "unlearnPoints": 1.0
+        }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "floralzoneseastasiaticregion"
       }
     ]
   },
@@ -237,7 +369,14 @@
     "value": [
       {
         "name": "XLibConsumable",
-        "properties": { "unlearnPoints": 0.1 }
+        "properties": {
+          "unlearnPoints": 0.1
+        }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "floralzonescaribbeanregion"
       }
     ]
   },
@@ -248,7 +387,14 @@
     "value": [
       {
         "name": "XLibConsumable",
-        "properties": { "unlearnPoints": 1.0 }
+        "properties": {
+          "unlearnPoints": 1.0
+        }
+      }
+    ],
+    "dependsOn": [
+      {
+        "modid": "floralzonescaribbeanregion"
       }
     ]
   }

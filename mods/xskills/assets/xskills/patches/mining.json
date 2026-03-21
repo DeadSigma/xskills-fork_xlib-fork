@@ -17,6 +17,11 @@
       {
         "name": "XSkillsPickaxeBehavior"
       }
+    ],
+    "dependsOn": [
+      {
+        "modid": "swordz"
+      }
     ]
   },
   {
@@ -27,15 +32,10 @@
       {
         "name": "XSkillsPickaxeBehavior"
       }
-    ]
-  },
-  {
-    "file": "game:itemtypes/tool/pickaxe-diamond",
-    "op": "addmerge",
-    "path": "/behaviors",
-    "value": [
+    ],
+    "dependsOn": [
       {
-        "name": "XSkillsPickaxeBehavior"
+        "modid": "tstools"
       }
     ]
   },
@@ -126,6 +126,10 @@
     "file": "game:blocktypes/cloth/bomb",
     "op": "addmerge",
     "path": "/behaviors",
-    "value": [ { "name": "XSkillsBomb" } ]
+    "value": [
+      {
+        "name": "XSkillsBomb"
+      }
+    ]
   }
 ]
