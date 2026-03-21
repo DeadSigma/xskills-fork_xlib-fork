@@ -362,3 +362,8 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+
+VSModLauncher.csproj
+mods/xskills/xskills.csproj
+mods/xlib/xlib.csproj
