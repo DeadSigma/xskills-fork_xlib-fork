@@ -65,6 +65,7 @@
     <Content Include="assets\xlib\lang\pt-br.json" />
     <Content Include="assets\xlib\lang\ru.json" />
     <Content Include="modinfo.json" />
+	<Content Include="modicon.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="assets\xeffects\lang\fr.json" />
@@ -83,12 +84,47 @@
     <Content Include="assets\xlib\lang\es-419.json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	  <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
   <PropertyGroup />
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="if not exist &quot;..\..\releases\$(TargetName)&quot; mkdir &quot;..\..\releases\$(TargetName)&quot;&#xD;&#xA;copy &quot;$(TargetPath)&quot; &quot;$(ProjectDir)&quot;&#xD;&#xA;copy &quot;$(TargetDir)$(TargetName).pdb&quot; &quot;$(ProjectDir)&quot;&#xD;&#xA;copy &quot;$(TargetDir)$(TargetName).xml&quot; &quot;$(ProjectDir)&quot;&#xD;&#xA;cd &quot;$(ProjectDir)&quot;&#xD;&#xA;tar.exe -a -c -f &quot;..\..\releases\$(TargetName)\$(TargetName)_vout.zip&quot; &quot;$(TargetName).dll&quot; &quot;$(TargetName).xml&quot; &quot;modinfo.json&quot; &quot;assets&quot;" />
-  </Target>
-  <ProjectExtensions><VisualStudio><UserProperties assets_4xeffects_4lang_4uk_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
+	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+		<PropertyGroup>
+			<ModName>$([System.Text.RegularExpressions.Regex]::Match('$([System.IO.File]::ReadAllText("$(ProjectDir)modinfo.json"))', '"name"\s*:\s*"([^"]+)"').Groups[1].Value)</ModName>
+			<ModVersion>$([System.Text.RegularExpressions.Regex]::Match('$([System.IO.File]::ReadAllText("$(ProjectDir)modinfo.json"))', '"version"\s*:\s*"([^"]+)"').Groups[1].Value)</ModVersion>
+			<ZipTempDir>$(TargetDir)ZipTemp</ZipTempDir>
+			<ZipOutDir>..\..\releases\$(ModName)</ZipOutDir>
+		</PropertyGroup>
+
+		<MakeDir Directories="$(ZipOutDir)" Condition="!Exists('$(ZipOutDir)')" />
+		<RemoveDir Directories="$(ZipTempDir)" Condition="Exists('$(ZipTempDir)')" />
+		<MakeDir Directories="$(ZipTempDir)" />
+
+		<ItemGroup>
+			<TargetFiles Include="$(TargetPath)" />
+			<TargetFiles Include="$(TargetDir)$(TargetName).pdb" Condition="Exists('$(TargetDir)$(TargetName).pdb')" />
+			<TargetFiles Include="$(TargetDir)$(TargetName).xml" Condition="Exists('$(TargetDir)$(TargetName).xml')" />
+		</ItemGroup>
+		<Copy SourceFiles="@(TargetFiles)" DestinationFolder="$(ZipTempDir)" />
+
+		<ItemGroup>
+			<ProjectFiles Include="$(ProjectDir)modinfo.json" />
+			<ProjectFiles Include="$(ProjectDir)modicon.png" Condition="Exists('$(ProjectDir)modicon.png')" />
+		</ItemGroup>
+		<Copy SourceFiles="@(ProjectFiles)" DestinationFolder="$(ZipTempDir)" />
+
+		<ItemGroup>
+			<AssetFiles Include="$(ProjectDir)assets\**" />
+		</ItemGroup>
+		<Copy SourceFiles="@(AssetFiles)" DestinationFolder="$(ZipTempDir)\assets\%(RecursiveDir)" />
+
+		<ZipDirectory SourceDirectory="$(ZipTempDir)" DestinationFile="$(ZipOutDir)\$(ModName) v$(ModVersion).zip" Overwrite="true" />
+
+		<RemoveDir Directories="$(ZipTempDir)" />
+	</Target>
+  <ProjectExtensions>
+	  <VisualStudio>
+		  <UserProperties assets_4xeffects_4lang_4uk_1json__JsonSchema="" />
+	  </VisualStudio>
+  </ProjectExtensions>
 </Project>
