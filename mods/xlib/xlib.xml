@@ -3221,6 +3221,12 @@
             A value indicating if a chat message should be send if the player got experience
             </summary>
         </member>
+        <member name="F:XLib.XLeveling.Config.configVersion">
+            <summary>
+            The configuration version used for migrations and compatibility checks.
+            Increment this value when changing the config layout.
+            </summary>
+        </member>
         <member name="M:XLib.XLeveling.Config.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:XLib.XLeveling.Config"/> class.
@@ -6908,6 +6914,15 @@
             <exception cref="T:System.Exception">Is thrown if this function was called on the wrong side.</exception>
         </member>
         <member name="M:XLib.XLeveling.XLevelingServer.LoadConfiguration">
+            <summary>
+            Loads the configuration.
+            </summary>
+            <summary>
+            Loads the configuration.
+            </summary>
+            <summary>
+            Loads the configuration.
+            </summary>
             <summary>
             Loads the configuration.
             </summary>
