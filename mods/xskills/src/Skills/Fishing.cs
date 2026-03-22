@@ -175,7 +175,7 @@ namespace XSkills
             if (playerSkill == null) return;
 
             // Выдаем 15 опыта за рыбу
-            playerSkill.AddExperience(15.0f);
+            playerSkill.AddExperience(0.4f);
         }
     }
 
@@ -255,7 +255,7 @@ namespace XSkills
 
             // Начисляем опыт (базовый)
             int totalFishCount = slot.Itemstack.StackSize;
-            playerSkill.AddExperience(1.5f * totalFishCount);
+            playerSkill.AddExperience(0.4f * totalFishCount);
 
             PlayerAbility ability = playerSkill[fishing.FishFilleterId];
             if (ability != null && ability.Tier > 0)
@@ -284,7 +284,7 @@ namespace XSkills
                                 extraMeatCount += randomBonus;
 
                                 // Доп. опыт за мастерство
-                                playerSkill.AddExperience(0.5f);
+                                playerSkill.AddExperience(0.4f);
                             }
                         }
 
