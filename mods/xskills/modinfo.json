@@ -1,11 +1,11 @@
 {
   "type": "code",
   "modid": "xskillsfork",
-  "name": "XSkills",
+  "name": "xSkills Fork",
   "authors": [ "Xandu", "El_Neuman", "Mamorka" ],
   "description": "Adds skills to the game.",
   "website": "https://www.vintagestory.at/forums/topic/1720-xlib-and-xskills/",
-  "version": "1.0.0-rc.9",
+  "version": "1.0.0-rc.10",
   "dependencies": {
     "xlibfork": "1.0.0-rc.6"
   }

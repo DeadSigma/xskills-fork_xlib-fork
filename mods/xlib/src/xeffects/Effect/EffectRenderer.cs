@@ -104,7 +104,7 @@ namespace XLib.XEffects
             Shader?.Dispose();
             Shader = null;
             capi.Event.ReloadShader -= LoadShader;
-            capi.Event.UnregisterRenderer(this, EnumRenderStage.AfterFinalComposition);
+            capi.Event.UnregisterRenderer(this, EnumRenderStage.Ortho);
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace XLib.XEffects
                 return false;
             }
             capi.Event.ReloadShader += LoadShader;
-            capi.Event.RegisterRenderer(this, EnumRenderStage.AfterFinalComposition);
+            capi.Event.RegisterRenderer(this, EnumRenderStage.Ortho);
             return true;
         }
 

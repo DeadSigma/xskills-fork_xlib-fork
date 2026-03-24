@@ -240,7 +240,7 @@ namespace XSkills
                 "cateyes",
                 "xskills:ability-cateyes",
                 "xskills:abilitydesc-cateyes",
-                8, 2, new int[] { 6, 2000, 8, 2000 }));
+                8, 2, new int[] { 5, 2000, 10, 2000 }));
 
             // you will receive a weather forecast every day
             // 0: Number of days in the future for which you receive a forecast
@@ -619,7 +619,7 @@ namespace XSkills
             capi.Event.ReloadShader += LoadShader;
             LoadShader();
             nightVisionRenderer = new NightVisionRenderer(capi, nightVisionShaderProg);
-            capi.Event.RegisterRenderer(nightVisionRenderer, EnumRenderStage.AfterFinalComposition);
+            capi.Event.RegisterRenderer(nightVisionRenderer, EnumRenderStage.Ortho);
 
 #if !DEBUG
             if (!(this.Config as SurvivalSkillConfig).allowCatEyesToggle) return;

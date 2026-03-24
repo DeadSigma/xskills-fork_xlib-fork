@@ -154,7 +154,7 @@
 		</ItemGroup>
 		<Copy SourceFiles="@(AssetFiles)" DestinationFolder="$(ZipTempDir)\assets\%(RecursiveDir)" />
 
-		<ZipDirectory SourceDirectory="$(ZipTempDir)" DestinationFile="$(ZipOutDir)\$(ModName) v$(ModVersion).zip" Overwrite="true" />
+		<ZipDirectory SourceDirectory="$(ZipTempDir)" DestinationFile="$(ZipOutDir)\$(ModName) $(ModVersion).zip" Overwrite="true" />
 
 		<RemoveDir Directories="$(ZipTempDir)" />
 	</Target>
