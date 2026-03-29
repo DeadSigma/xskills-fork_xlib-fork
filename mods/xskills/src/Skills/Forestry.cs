@@ -141,6 +141,7 @@ namespace XSkills
             api.RegisterBlockBehaviorClass("XSkillsWood", typeof(XSkillsWoodBehavior));
             api.RegisterBlockBehaviorClass("XSkillsLeaves", typeof(XSkillsLeavesBehavior));
             api.RegisterBlockBehaviorClass("XSkillsCharcoal", typeof(XSkillsCharcoalBehavior));
+
         }
     }//!class Forestry
 

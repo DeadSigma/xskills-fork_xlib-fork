@@ -227,6 +227,9 @@ namespace XSkills
         /// <returns></returns>
         public static bool OnAdd(BlockEntityClayForm clayForm, int layer, Vec3i voxelPos, int radius, IPlayer byPlayer)
         {
+
+            if (layer < 0 || layer >= 16) return false;
+
             bool didadd = false;
             bool ignoreWrongVoxels = false;
 
@@ -315,7 +318,7 @@ namespace XSkills
                 {
                     Vec3i offPos = voxelPos.AddCopy(dx, 0, dz);
 
-                    if (offPos.X >= 0 && offPos.X < 16 && offPos.Y >= 0 && offPos.Y <= 16 && offPos.Z >= 0 && offPos.Z < 16)
+                    if (offPos.X >= 0 && offPos.X < 16 && offPos.Y >= 0 && offPos.Y < 16 && offPos.Z >= 0 && offPos.Z < 16)
                     {
                         if (clayForm.SelectedRecipe.Voxels[offPos.X, offPos.Y, offPos.Z] && ignoreRightVoxels) continue;
 
@@ -387,6 +390,8 @@ namespace XSkills
         public static Cuboidi LayerBounds(int layer, ClayFormingRecipe SelectedRecipe)
         {
             Cuboidi bounds = new Cuboidi(8, 8, 8, 8, 8, 8);
+
+            if (layer < 0 || layer >= 16) return bounds;
 
             for (int x = 0; x < 16; x++)
             {
