@@ -27,10 +27,18 @@ namespace XSkills
             if (!(farming?.Enabled ?? false)) return;
             Type patch = typeof(BEFrameRackPatch);
 
-            if (
-                farming[farming.BeekeeperId].Enabled)
+            if (farming[farming.BeekeeperId].Enabled)
             {
-                PatchMethod(harmony, type, patch, "TryHarvest");
+                // Оборачиваем в try-catch для защиты от багов базовой игры 1.22-rc.6
+                try
+                {
+                    PatchMethod(harmony, type, patch, "TryHarvest");
+                }
+                catch (Exception e)
+                {
+                    xSkills.Api.Logger.Warning("[XSkills] Не удалось пропатчить BEFrameRack.TryHarvest. Скорее всего это баг версии игры 1.22-rc.6. Способность пчеловода на этих блоках временно отключена.");
+                    xSkills.Api.Logger.VerboseDebug("[XSkills] Ошибка Harmony: " + e.Message);
+                }
             }
         }
 
