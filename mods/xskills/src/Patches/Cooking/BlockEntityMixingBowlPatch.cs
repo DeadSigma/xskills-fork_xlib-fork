@@ -33,17 +33,9 @@ namespace XSkills
             if(cooking[cooking.CanteenCookId].Enabled)
             {
                 PatchMethod(harmony, type, patch, "GetMatchingMixingRecipe");
+
             }
-            if (
-                cooking[cooking.CanteenCookId].Enabled ||
-                cooking[cooking.FastFoodId].Enabled ||
-                cooking[cooking.WellDoneId].Enabled ||
-                cooking[cooking.DilutionId].Enabled ||
-                cooking[cooking.GourmetId].Enabled ||
-                cooking[cooking.HappyMealId].Enabled)
-            {
-                PatchMethod(harmony, type, patch, "mixInput");
-            }
+            PatchMethod(harmony, type, patch, "mixInput");
 
             InventoryMixingBowlPatch.Apply(harmony, typeof(InventoryMixingBowl), xSkills);
             ItemSlotMixingBowlPatch.Apply(harmony, typeof(ItemSlotMixingBowl), xSkills);

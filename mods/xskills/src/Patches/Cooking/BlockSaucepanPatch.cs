@@ -28,16 +28,7 @@ namespace XSkills
             if (!(cooking?.Enabled ?? false)) return;
             Type patch = typeof(BlockSaucepanPatch);
 
-            if (
-                cooking[cooking.CanteenCookId].Enabled ||
-                cooking[cooking.FastFoodId].Enabled ||
-                cooking[cooking.WellDoneId].Enabled ||
-                cooking[cooking.DilutionId].Enabled ||
-                cooking[cooking.GourmetId].Enabled ||
-                cooking[cooking.HappyMealId].Enabled)
-            {
-                PatchMethod(harmony, type, patch, "DoSmelt");
-            }
+            PatchMethod(harmony, type, patch, "DoSmelt");
         }
 
         /// <summary>

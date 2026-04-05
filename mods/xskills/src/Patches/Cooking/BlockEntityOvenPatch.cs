@@ -31,18 +31,8 @@ namespace XSkills
             Type patch = typeof(BlockEntityOvenPatch);
 
             PatchMethod(harmony, ovenType, patch, "GetBlockInfo");
-
-            if (
-                cooking[cooking.CanteenCookId].Enabled ||
-                cooking[cooking.FastFoodId].Enabled ||
-                cooking[cooking.WellDoneId].Enabled ||
-                cooking[cooking.DilutionId].Enabled ||
-                cooking[cooking.GourmetId].Enabled ||
-                cooking[cooking.HappyMealId].Enabled)
-            {
-                PatchMethod(harmony, ovenType, patch, "OnInteract");
-                PatchMethod(harmony, ovenType, patch, "IncrementallyBake");
-            }
+            PatchMethod(harmony, ovenType, patch, "OnInteract");
+            PatchMethod(harmony, ovenType, patch, "IncrementallyBake");
         }
 
         /// <summary>

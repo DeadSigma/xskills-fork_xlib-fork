@@ -34,15 +34,21 @@ namespace XSkills
             if (!(cooking?.Enabled ?? false)) return false;
             if (original == null) return true;
 
-            switch (original.Name)  
+            switch (original.Name)
             {
                 case "CanSmelt":
-                    return 
+                    return
                         cooking[cooking.DesalinateId].Enabled ||
                         cooking[cooking.CanteenCookId].Enabled;
+                case "DoSmelt":
+                    // Обязательно патчим DoSmelt, чтобы всегда вызывать ApplyAbilities 
+                    // и выдавать базовый опыт, если навык Cooking в целом включен.
+                    return true;
+                case "GetOutputText":
+                    // GetOutputText нужен в основном для отображения измененного размера порции (CanteenCook)
+                    return cooking[cooking.CanteenCookId].Enabled;
                 default:
-                    return 
-                        cooking[cooking.CanteenCookId].Enabled;
+                    return true;
             }
         }
 
