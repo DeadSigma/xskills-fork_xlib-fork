@@ -1,4 +1,6 @@
-﻿using HarmonyLib;
+﻿using System;
+using Cairo;
+using HarmonyLib;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.GameContent;
@@ -34,7 +36,16 @@ namespace XSkills
 
             if (prob > __instance.entity.World.Rand.NextDouble())
             {
-                typeof(EntityBehaviorMilkable).GetField("lastMilkedTotalHours", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).SetValue(__instance, __instance.entity.World.Calendar.TotalHours);
+                // typeof(EntityBehaviorMilkable).GetField("lastMilkedTotalHours", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).SetValue(__instance, __instance.entity.World.Calendar.TotalHours);
+                try
+                {
+                    var field = typeof(EntityBehaviorMilkable).GetField("lastMilkedTotalHours", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+                    if (field != null)
+                    {
+                        field.SetValue(__instance, __instance.entity.World.Calendar.TotalHours);
+                    }
+                }
+                catch { }
                 __instance.entity.WatchedAttributes.SetFloat("lastMilkedTotalHours", (float)__instance.entity.World.Calendar.TotalHours);
                 ItemStack cheese;
                 if (0.2f < __instance.entity.World.Rand.NextDouble())
@@ -104,6 +115,7 @@ namespace XSkills
         public static bool TryFillLiquidContainer(ItemSlot slot, ItemStack contentStack, EntityAgent byEntity)
         {
             BlockLiquidContainerBase lcblock = slot.Itemstack?.Collectible as BlockLiquidContainerBase;
+
             if (lcblock == null) return false;
             if (slot.Itemstack.StackSize == 1)
             {
@@ -114,6 +126,9 @@ namespace XSkills
             else
             {
                 ItemStack containerStack = slot.TakeOut(1);
+
+                if (containerStack == null || containerStack.StackSize == 0) return false;
+
                 slot.MarkDirty();
                 contentStack.StackSize -= lcblock.TryPutLiquid(containerStack, contentStack, 10);
 
@@ -125,6 +140,5 @@ namespace XSkills
             }
             return false;
         }
-
     }//!class EntityBehaviorMilkablePatch
 }

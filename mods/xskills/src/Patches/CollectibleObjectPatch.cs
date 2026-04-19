@@ -169,7 +169,9 @@ namespace XSkills
         {
             __state = op.SourceSlot.Itemstack;
             if (op.CurrentPriority != EnumMergePriority.AutoMerge) return true;
+            if (op.SourceSlot.Itemstack == null) return true;
             if (!(op.SourceSlot.Itemstack.Collectible.Attributes?.KeyExists("qualityType") ?? false)) return true;
+            if (op.SinkSlot.Itemstack == null) return true;
             if (op.SourceSlot.Itemstack.Attributes.GetDecimal("quality") == 
                 op.SinkSlot.Itemstack.Attributes.GetDecimal("quality")) return true;
             return XSkills.Instance.XLeveling.Config.mergeQualities;
