@@ -34,7 +34,7 @@ namespace XSkills
             float diff = Math.Min(temperature, 1050.0f) - Math.Min(temp, 1050.0f);
             float quality = itemstack.Attributes.GetFloat("quality", 0.0f);
 
-            if (quality > 0.0f && (diff < -4.5f || diff > 0.0f))
+            if (quality > 0.0f && (diff < -1.0f || diff > 0.0f))
             {
                 //equals 2.0 quality at 1000 °C
                 itemstack.Attributes.SetFloat("quality", Math.Max(quality - diff * 0.002f, 0.01f));

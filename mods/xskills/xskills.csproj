@@ -128,34 +128,51 @@
 		<PropertyGroup>
 			<ModName>$([System.Text.RegularExpressions.Regex]::Match('$([System.IO.File]::ReadAllText("$(ProjectDir)modinfo.json"))', '"name"\s*:\s*"([^"]+)"').Groups[1].Value)</ModName>
 			<ModVersion>$([System.Text.RegularExpressions.Regex]::Match('$([System.IO.File]::ReadAllText("$(ProjectDir)modinfo.json"))', '"version"\s*:\s*"([^"]+)"').Groups[1].Value)</ModVersion>
+
 			<ZipTempDir>$(TargetDir)ZipTemp</ZipTempDir>
-			<ZipOutDir>..\..\releases\$(ModName)</ZipOutDir>
+			<ZipOutDir>..\..\..\releases\$(ModName)</ZipOutDir>
+
+			<!-- Папка живой версии -->
+			<DevOutDir>..\..\..\releases\$(ModName)\dev</DevOutDir>
+
 		</PropertyGroup>
 
 		<MakeDir Directories="$(ZipOutDir)" Condition="!Exists('$(ZipOutDir)')" />
+
 		<RemoveDir Directories="$(ZipTempDir)" Condition="Exists('$(ZipTempDir)')" />
 		<MakeDir Directories="$(ZipTempDir)" />
+
+		<!-- Очистка dev копии -->
+		<RemoveDir Directories="$(DevOutDir)" Condition="Exists('$(DevOutDir)')" />
+		<MakeDir Directories="$(DevOutDir)" />
 
 		<ItemGroup>
 			<TargetFiles Include="$(TargetPath)" />
 			<TargetFiles Include="$(TargetDir)$(TargetName).pdb" Condition="Exists('$(TargetDir)$(TargetName).pdb')" />
 			<TargetFiles Include="$(TargetDir)$(TargetName).xml" Condition="Exists('$(TargetDir)$(TargetName).xml')" />
 		</ItemGroup>
+
 		<Copy SourceFiles="@(TargetFiles)" DestinationFolder="$(ZipTempDir)" />
+		<Copy SourceFiles="@(TargetFiles)" DestinationFolder="$(DevOutDir)" />
 
 		<ItemGroup>
 			<ProjectFiles Include="$(ProjectDir)modinfo.json" />
 			<ProjectFiles Include="$(ProjectDir)modicon.png" Condition="Exists('$(ProjectDir)modicon.png')" />
 		</ItemGroup>
+
 		<Copy SourceFiles="@(ProjectFiles)" DestinationFolder="$(ZipTempDir)" />
+		<Copy SourceFiles="@(ProjectFiles)" DestinationFolder="$(DevOutDir)" />
 
 		<ItemGroup>
 			<AssetFiles Include="$(ProjectDir)assets\**" />
 		</ItemGroup>
-		<Copy SourceFiles="@(AssetFiles)" DestinationFolder="$(ZipTempDir)\assets\%(RecursiveDir)" />
 
-		<ZipDirectory SourceDirectory="$(ZipTempDir)" DestinationFile="$(ZipOutDir)\$(ModName) $(ModVersion).zip" Overwrite="true" />
+		<Copy SourceFiles="@(AssetFiles)" DestinationFolder="$(ZipTempDir)\assets\%(RecursiveDir)" />
+		<Copy SourceFiles="@(AssetFiles)" DestinationFolder="$(DevOutDir)\assets\%(RecursiveDir)" />
+
+		<ZipDirectory SourceDirectory="$(ZipTempDir)" DestinationFile="$(ZipOutDir)\$(ModName) v$(ModVersion).zip" Overwrite="true" />
 
 		<RemoveDir Directories="$(ZipTempDir)" />
+
 	</Target>
 </Project>
