@@ -383,6 +383,7 @@ namespace XSkills
             return drops;
         }
     }//!class XSkillsSandBehavior
+
      // --- ПАТЧИ ДЛЯ ЛОТКА (ПРОМЫВКА ПОЧВЫ И ЛУТ) ---
     [HarmonyPatch(typeof(Vintagestory.GameContent.BlockPan))]
     public class BlockPanPatches
@@ -399,8 +400,12 @@ namespace XSkills
                 PlayerAbility quickPan = byEntity.GetBehavior<PlayerSkillSet>()?[digging.Id]?[digging.QuickPanId];
                 if (quickPan != null && quickPan.Tier > 0)
                 {
-                    // Ускоряем время. 50% = x1.5, 100% = x2.0
-                    secondsUsed *= (1.0f + quickPan.Value(0) / 100f);
+                    // Добавляем компенсацию сетевой задержки (пинга) только для сервера.
+                    // 0.4 секунды реального времени с лихвой покроют задержку пакетов.
+                    float pingAllowance = (byEntity.Api.Side == EnumAppSide.Server) ? 0.4f : 0f;
+
+                    //  добавляем фору, затем умножаем (50% = x1.5, 100% = x2.0)
+                    secondsUsed = (secondsUsed + pingAllowance) * (1.0f + quickPan.Value(0) / 100f);
                 }
             }
         }
@@ -417,7 +422,9 @@ namespace XSkills
                 PlayerAbility quickPan = byEntity.GetBehavior<PlayerSkillSet>()?[digging.Id]?[digging.QuickPanId];
                 if (quickPan != null && quickPan.Tier > 0)
                 {
-                    secondsUsed *= (1.0f + quickPan.Value(0) / 100f);
+                    // Применяем ту же компенсацию в момент остановки взаимодействия
+                    float pingAllowance = (byEntity.Api.Side == EnumAppSide.Server) ? 0.4f : 0f;
+                    secondsUsed = (secondsUsed + pingAllowance) * (1.0f + quickPan.Value(0) / 100f);
                 }
             }
         }
