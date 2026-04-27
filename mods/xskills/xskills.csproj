@@ -72,6 +72,7 @@
     <Content Include="assets\xskills\lang\pl.json" />
     <Content Include="assets\xskills\lang\pt-br.json" />
     <Content Include="assets\xskills\lang\ro.json" />
+    <Content Include="assets\xskills\lang\zh-CN.json" />
     <Content Include="assets\xskills\lang\ru.json" />
     <Content Include="assets\xskills\lang\sv.json" />
     <Content Include="assets\xskills\lang\uk.json" />

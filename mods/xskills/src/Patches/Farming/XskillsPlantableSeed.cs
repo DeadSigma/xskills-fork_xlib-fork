@@ -70,9 +70,40 @@ namespace XSkills
             if (blockSel == null) return;
             IPlayer byPlayer = (byEntity as EntityPlayer).Player;
 
-            string lastCodePart = itemslot.Itemstack.Collectible.LastCodePart();
-            Block cropBlock = byEntity.World.GetBlock(CodeWithPath("crop-" + lastCodePart + "-1"));
-            if (cropBlock == null) return;
+            Block cropBlock = null;
+
+            // 1. Правильно читаем статические атрибуты из JSON файла предмета
+            if (itemslot.Itemstack.Collectible.Attributes != null && itemslot.Itemstack.Collectible.Attributes.KeyExists("cropBlockCode"))
+            {
+                string cropCode = itemslot.Itemstack.Collectible.Attributes["cropBlockCode"].AsString();
+                cropBlock = byEntity.World.GetBlock(AssetLocation.Create(cropCode, itemslot.Itemstack.Collectible.Code.Domain));
+            }
+
+            // 2. Умный запасной вариант: если код начинается с "seeds-", меняем только эту часть
+            // (чтобы seeds-chimera-potato-eggplant стало crop-chimera-potato-eggplant-1)
+            if (cropBlock == null)
+            {
+                string path = itemslot.Itemstack.Collectible.Code.Path;
+                if (path.StartsWith("seeds-"))
+                {
+                    string cropPath = "crop-" + path.Substring(6) + "-1";
+                    cropBlock = byEntity.World.GetBlock(CodeWithPath(cropPath));
+                }
+            }
+
+            // 3. Старый запасной вариант xskills (берет последнее слово, на самый крайний случай)
+            if (cropBlock == null)
+            {
+                string lastCodePart = itemslot.Itemstack.Collectible.LastCodePart();
+                cropBlock = byEntity.World.GetBlock(CodeWithPath("crop-" + lastCodePart + "-1"));
+            }
+
+            // 4. Если вообще ничего не сработало — отдаем управление оригинальной игре
+            if (cropBlock == null)
+            {
+                base.OnHeldInteractStart(itemslot, byEntity, blockSel, entitySel, firstEvent, ref handHandling);
+                return;
+            }
 
             Farming farming = XLeveling.Instance(api)?.GetSkill("farming") as Farming;
             if (farming == null)
