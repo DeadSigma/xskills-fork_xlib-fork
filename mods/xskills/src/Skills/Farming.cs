@@ -252,62 +252,7 @@ namespace XSkills
 
         public override void OnLoaded(ICoreAPI api)
         {
-            this.farming ??= XLeveling.Instance(api)?.GetSkill("farming") as Farming;
-            if (this.xp < 0.0f)
-            {
-                int currentCropStage = -1;
-
-                // 1. Умное определение текущей стадии роста (поддержка модов)
-                if (this.block is BlockCrop crop)
-                {
-                    currentCropStage = crop.CurrentCropStage;
-                }
-                else if (this.block.Variant != null && this.block.Variant.ContainsKey("stage"))
-                {
-                    // У большинства модов стадия прописана прямо в варианте блока (напр. stage="5")
-                    int.TryParse(this.block.Variant["stage"], out currentCropStage);
-                }
-                else
-                {
-                    // Запасной план: пытаемся достать цифру из конца кода (например, crop-chimera-7)
-                    if (!int.TryParse(this.block.Code?.EndVariant(), out currentCropStage))
-                    {
-                        currentCropStage = -1;
-                    }
-                }
-
-                // 2. Подсчет опыта
-                if (this.block.CropProps != null && currentCropStage >= 0)
-                {
-                    // Фолбэк: если автор мода не указал месяцы роста, берем 1.5 месяца (ванильный стандарт)
-                    float growthMonths = this.block.CropProps.TotalGrowthMonths;
-                    if (growthMonths <= 0.0f) growthMonths = 1.5f;
-
-                    // Защита от деления на ноль
-                    int stages = this.block.CropProps.GrowthStages;
-                    if (stages <= 0) stages = 1;
-
-                    float monthsPerStep = growthMonths / stages;
-
-                    if (this.block.CropProps.HarvestGrowthStageLoss > 0)
-                        this.xp = this.block.CropProps.HarvestGrowthStageLoss * monthsPerStep * 0.5f;
-                    else
-                        this.xp = growthMonths * 0.5f;
-
-                    float penalty = (float)Math.Pow(0.5f, stages - currentCropStage);
-                    this.xp = Math.Clamp(this.xp * penalty, 0.0f, 3.0f);
-
-                    // Если после всех расчетов опыт всё равно слишком мал, даем хотя бы базовую награду созревшему урожаю
-                    if (this.xp < 0.1f && currentCropStage >= stages)
-                    {
-                        this.xp = 0.5f;
-                    }
-                }
-                else
-                {
-                    this.xp = 0.0f;
-                }
-            }
+            this.farming = XLeveling.Instance(api)?.GetSkill("farming") as Farming;
         }
 
         public override ItemStack[] GetDrops(IWorldAccessor world, BlockPos pos, IPlayer byPlayer, ref float dropChanceMultiplier, ref EnumHandling handling)
@@ -525,64 +470,18 @@ namespace XSkills
             this.farming ??= XLeveling.Instance(api)?.GetSkill("farming") as Farming;
             if (this.xp < 0.0f)
             {
-                int currentCropStage = -1;
-                int maxStages = 1;
-                float growthMonths = 1.5f; // Ванильный стандарт
-
-                // 1. Вытягиваем настройки роста растения
-                if (this.block.CropProps != null)
+                int currentCropStage = (block as BlockCrop)?.CurrentCropStage ?? -1;
+                if (this.block.Drops.Length > 1 && block.CropProps != null && currentCropStage >= 0)
                 {
-                    maxStages = this.block.CropProps.GrowthStages;
-                    if (maxStages <= 0) maxStages = 1;
-
-                    growthMonths = this.block.CropProps.TotalGrowthMonths;
-                    if (growthMonths <= 0.0f) growthMonths = 1.5f;
-                }
-
-                // 2. Определяем текущую стадию растения
-                if (this.block is BlockCrop crop)
-                {
-                    currentCropStage = crop.CurrentCropStage;
-                }
-                else if (this.block.Variant != null && this.block.Variant.ContainsKey("stage"))
-                {
-                    int.TryParse(this.block.Variant["stage"], out currentCropStage);
-                }
-                else
-                {
-                    if (!int.TryParse(this.block.Code?.EndVariant(), out currentCropStage))
-                    {
-                        currentCropStage = -1;
-                    }
-                }
-
-                // 3. Подсчет опыта по классической формуле xskills
-                if (this.block.CropProps != null && currentCropStage >= 0)
-                {
-                    float monthsPerStep = growthMonths / maxStages;
-
-                    if (this.block.CropProps.HarvestGrowthStageLoss > 0)
-                        this.xp = this.block.CropProps.HarvestGrowthStageLoss * monthsPerStep * 0.5f;
-                    else
-                        this.xp = growthMonths * 0.5f;
-
-                    float penalty = (float)Math.Pow(0.5f, maxStages - currentCropStage);
+                    float monthsPerStep = block.CropProps.TotalGrowthMonths / block.CropProps.GrowthStages;
+                    if (block.CropProps.HarvestGrowthStageLoss > 0)
+                        this.xp = block.CropProps.HarvestGrowthStageLoss * monthsPerStep * 0.5f;
+                    else 
+                        this.xp = block.CropProps.TotalGrowthMonths * 0.5f;
+                    float penalty = (float)Math.Pow(0.5f, block.CropProps.GrowthStages - currentCropStage);
                     this.xp = Math.Clamp(this.xp * penalty, 0.0f, 3.0f);
                 }
-                else
-                {
-                    this.xp = 0.0f;
-                }
-
-                // 4. ЖЕСТКИЙ ФОЛБЭК: Защита от кривых модов и ванильной картошки.
-                // Если текущая стадия равна максимальной или цифра на конце кода совпадает с maxStages
-                bool isMaxStage = (currentCropStage >= maxStages) || (this.block.Code?.Path.EndsWith("-" + maxStages) == true);
-
-                if (isMaxStage && this.xp < 0.5f)
-                {
-                    this.xp = 0.5f; // Выдаем гарантированные 0.5 опыта за созревший куст
-                }
-
+                else this.xp = 0.0f;
             }
         }
 
@@ -593,7 +492,6 @@ namespace XSkills
 
         public override ItemStack[] GetDrops(IWorldAccessor world, BlockPos pos, IPlayer byPlayer, ref float dropChanceMultiplier, ref EnumHandling handling)
         {
-
             List<ItemStack> drops = new List<ItemStack>();
             if (this.farming == null) drops.ToArray();
             PlayerSkill playerSkill = byPlayer?.Entity.GetBehavior<PlayerSkillSet>()?[this.farming.Id];
@@ -706,10 +604,7 @@ namespace XSkills
                 }
             }
             return drops.ToArray();
-
         }
-
-
     }//!class XSkillsCropBehavior
 
     public class XSkillsFarmlandBehavior : BlockBehavior
