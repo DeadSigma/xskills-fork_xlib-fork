@@ -12,7 +12,7 @@
 	"perishweight": "Швидкість псування",
 	"cures": "Лікує",
 	"ingredient": "Інгредієнт",
-	
+
 	"stat-effect": "Стан",
 	"stat-effectdesc": "Змінює характеристику гравця.",
 	"condition-effect": "Умови",
@@ -30,7 +30,8 @@
 	"receivedDamageMultiplier-effect": "Множник отриманої шкоди",
 	"receivedDamageMultiplier-effectdesc": "Множить усю отриману шкоду на {0:N2}.",
 	"trigger-effect": "Тригер",
-	"trigger-effectdesc": "Активує ефект "{1}" на {2:N2} секунд після завершення цього ефекту.",
+	"trigger-effectdesc": "Активує ефект «{1}» на {2:N2} секунд після завершення цього ефекту.",
+
 	"walkspeed-effect": "Швидкість руху",
 	"walkspeed-effectdesc": "Збільшує швидкість руху на {0:P2}.",
 	"exhaustion-effect": "Виснаження",
