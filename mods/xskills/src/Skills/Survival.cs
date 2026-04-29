@@ -896,6 +896,10 @@ namespace XSkills
                 Dictionary<string, string> result = new Dictionary<string, string>();
                 result.Add("invSwitchCD", this.invSwitchCD.ToString(provider));
                 result.Add("allowCatEyesToggle", this.allowCatEyesToggle.ToString(provider));
+
+                // ДОБАВЛЕНО: Сохраняем параметр потери опыта
+                result.Add("expLossOnDeath", this.expLossOnDeath.ToString(provider));
+
                 return result;
             }
             set
@@ -909,6 +913,10 @@ namespace XSkills
 
                 value.TryGetValue("allowCatEyesToggle", out str);
                 if (str != null) bool.TryParse(str, out this.allowCatEyesToggle);
+
+                // ДОБАВЛЕНО: Читаем параметр потери опыта
+                value.TryGetValue("expLossOnDeath", out str);
+                if (str != null) float.TryParse(str, styles, provider, out this.expLossOnDeath);
             }
         }
 
@@ -919,5 +927,10 @@ namespace XSkills
         [ProtoMember(2)]
         [DefaultValue(false)]
         public bool allowCatEyesToggle = false;
-    }//!class CombatSkillConfig
+
+        // ДОБАВЛЕНО: Само поле с дефолтным значением 0.5f (как было в жестком коде)
+        [ProtoMember(3)]
+        [DefaultValue(0.5f)]
+        public float expLossOnDeath = 0.5f;
+    }//!class SurvivalSkillConfig
 }//!namespace XSkills

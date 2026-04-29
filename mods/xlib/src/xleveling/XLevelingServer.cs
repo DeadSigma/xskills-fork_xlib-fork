@@ -261,7 +261,7 @@ namespace XLib.XLeveling
             // =========================================================================
             // ВЕРСИЯ КОНФИГА МОДА:
             // =========================================================================
-            int CURRENT_CONFIG_VERSION = 4;
+            int CURRENT_CONFIG_VERSION = 5;
 
             bool forceConfigReset = false;
 
@@ -289,19 +289,34 @@ namespace XLib.XLeveling
                 api.Server.LogError(error.Message);
             }
 
-            // --- ЖЕСТКИЙ СБРОС ФАЙЛОВ (Удаляем старые конфиги с диска) ---
+            // --- ЖЕСТКИЙ СБРОС ФАЙЛОВ ---
             if (forceConfigReset)
             {
                 string configDir = Path.Combine(Vintagestory.API.Config.GamePaths.ModConfig, "XLeveling");
                 if (Directory.Exists(configDir))
                 {
+                    // Впишите сюда названия навыков, конфиги которых нужно сбросить.
+                    // Если хотите сбросить вообще ВСЕ конфиги, просто добавьте "all".
+                    List<string> skillsToReset = new List<string> {
+            "survival" 
+            // "combat", 
+            // "farming",
+            // "all" 
+        };
+
+                    bool resetAll = skillsToReset.Contains("all");
+
                     foreach (Skill skill in this.XLeveling.SkillSetTemplate.Skills)
                     {
-                        string fullPath = Path.Combine(configDir, skill.Name + ".json");
-                        if (File.Exists(fullPath))
+                        // Проверяем: если сбрасываем всё ИЛИ текущий навык есть в нашем списке
+                        if (resetAll || skillsToReset.Contains(skill.Name))
                         {
-                            File.Delete(fullPath); // Уничтожаем старый сломанный баланс!
-                            api.Server.LogNotification($"[XLeveling] Deleted old config: {skill.Name}.json");
+                            string fullPath = Path.Combine(configDir, skill.Name + ".json");
+                            if (File.Exists(fullPath))
+                            {
+                                File.Delete(fullPath);
+                                api.Server.LogNotification($"[XLeveling] Config Reset: Deleted old {skill.Name}.json to apply new default values.");
+                            }
                         }
                     }
                 }

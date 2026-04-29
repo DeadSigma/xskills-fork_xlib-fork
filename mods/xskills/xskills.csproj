@@ -61,18 +61,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="assets\xskills\lang\ar.json" />
     <Content Include="assets\xskills\lang\cn.json" />
     <Content Include="assets\xskills\lang\de.json" />
     <Content Include="assets\xskills\lang\en.json" />
     <Content Include="assets\xskills\lang\es-es.json" />
     <Content Include="assets\xskills\lang\fr.json" />
-    <Content Include="assets\xskills\lang\it.json" />
-    <Content Include="assets\xskills\lang\nl.json" />
     <Content Include="assets\xskills\lang\pl.json" />
     <Content Include="assets\xskills\lang\pt-br.json" />
     <Content Include="assets\xskills\lang\ro.json" />
-    <Content Include="assets\xskills\lang\zh-CN.json" />
     <Content Include="assets\xskills\lang\ru.json" />
     <Content Include="assets\xskills\lang\sv.json" />
     <Content Include="assets\xskills\lang\uk.json" />
@@ -123,7 +119,7 @@
     <BaseOutputPath>./bin</BaseOutputPath>
   </PropertyGroup>
   <ProjectExtensions>
-    <VisualStudio><UserProperties assets_4xskills_4lang_4en_1json__JsonSchema="" assets_4xskills_4lang_4nl_1json__JsonSchema="" /></VisualStudio>
+    <VisualStudio><UserProperties assets_4xskills_4lang_4en_1json__JsonSchema="" /></VisualStudio>
   </ProjectExtensions>
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
 		<PropertyGroup>
