@@ -99,14 +99,25 @@ namespace XSkills
             ItemStack[] stacks = __instance.GetCookingStacks(cookingSlotsProvider, false);
             CookingRecipe recipe = __instance.GetMatchingCookingRecipe(world, stacks, out _);
             __instance.MaxServingSize = maxServingSize;
-
             //desalinate
             if (recipe != null)
             {
                 if (recipe.Code == "salt" || recipe.Code == "lime")
                 {
+                    // Достаем настройку из конфига (если ты добавил bypassDesalinationLock)
+                    CookingSkillConfig config = cooking.Config as CookingSkillConfig;
+                    bool bypass = config?.bypassDesalinationLock ?? false;
+
+                    // Проверяем, включена ли способность в принципе (в настройках XLeveling)
+                    bool isSkillEnabled = cooking[cooking.DesalinateId]?.Enabled ?? false;
+
                     PlayerAbility playerAbility = playerSkill[cooking.DesalinateId];
-                    if (playerAbility == null || playerAbility.Tier <= 0) return false;
+
+                    // Блокируем ТОЛЬКО если: обход выключен И навык глобально включен И (способности нет или уровень 0)
+                    if (!bypass && isSkillEnabled && (playerAbility == null || playerAbility.Tier <= 0))
+                    {
+                        return false;
+                    }
                 }
                 __result = true;
             }

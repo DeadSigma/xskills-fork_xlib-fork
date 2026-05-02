@@ -873,12 +873,18 @@ namespace XSkills
             {
                 Shader.Use();
                 capi.Render.GlToggleBlend(true, EnumBlendMode.Overlay);
+
                 capi.Render.GLDisableDepthTest();
+
                 Shader.BindTexture2D("primaryScene", capi.Render.FrameBuffers[(int)EnumFrameBuffer.Primary].ColorTextureIds[0], 0);
                 Shader.Uniform("intensity", nightVisionIntensity);
                 Shader.Uniform("brightness", NightVisionBrightness + ability.Value(0));
+
                 capi.Render.RenderMesh(quadRef);
                 Shader.Stop();
+
+                capi.Render.GLEnableDepthTest();
+                capi.Render.GlToggleBlend(true, EnumBlendMode.Standard);
             }
             curShader?.Use();
         }

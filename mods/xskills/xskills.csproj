@@ -15,8 +15,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="bin\**" />
+    <Compile Remove="src\Patches\Mining\**" />
     <EmbeddedResource Remove="bin\**" />
+    <EmbeddedResource Remove="src\Patches\Mining\**" />
     <None Remove="bin\**" />
+    <None Remove="src\Patches\Mining\**" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="0Harmony, Version=2.0.4.0, Culture=neutral, processorArchitecture=MSIL">
@@ -111,9 +114,6 @@
   <ItemGroup>
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="src\Patches\Mining\" />
   </ItemGroup>
   <PropertyGroup>
     <BaseOutputPath>./bin</BaseOutputPath>

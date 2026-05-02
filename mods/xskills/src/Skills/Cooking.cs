@@ -732,6 +732,10 @@ namespace XSkills
         [ProtoMember(2)]
         [DefaultValue(0.05f)]
         public float fruitPressExpPerLitre = 0.05f;
+
+        [ProtoMember(3)]
+        [DefaultValue(false)]
+        public bool bypassDesalinationLock = false;
     }
 
     public class XskillsCookingRecipeNames : ICookingRecipeNamingHelper
