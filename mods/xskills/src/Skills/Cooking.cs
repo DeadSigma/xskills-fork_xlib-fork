@@ -710,6 +710,9 @@ namespace XSkills
                 Dictionary<string, string> result = new Dictionary<string, string>();
                 result.Add("expBase", this.expBase.ToString(provider));
                 result.Add("fruitPressExpPerLitre", this.fruitPressExpPerLitre.ToString(provider));
+
+                result.Add("bypassDesalinationLock", this.bypassDesalinationLock.ToString(provider));
+
                 return result;
             }
             set
@@ -720,8 +723,12 @@ namespace XSkills
 
                 value.TryGetValue("expBase", out str);
                 if (str != null) float.TryParse(str, styles, provider, out this.expBase);
+
                 value.TryGetValue("fruitPressExpPerLitre", out str);
                 if (str != null) float.TryParse(str, styles, provider, out this.fruitPressExpPerLitre);
+
+                value.TryGetValue("bypassDesalinationLock", out str);
+                if (str != null) bool.TryParse(str, out this.bypassDesalinationLock);
             }
         }
 
