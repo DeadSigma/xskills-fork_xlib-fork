@@ -1,4 +1,6 @@
-﻿using PrimitiveSurvival.ModSystem;
+﻿// В ТОПКУ: using PrimitiveSurvival.ModSystem;
+
+using System;
 using System.Reflection;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
@@ -7,24 +9,39 @@ using Vintagestory.GameContent;
 
 namespace XSkills
 {
-    /// <summary>
-    /// I know this whole thing is a mess.
-    /// </summary>
     public class XSkillsItemHoePrimitive : ItemHoe
     {
         SkillItem[] toolModes;
-        ItemHoeExtended dummyHoe;
+
+        // Меняем жесткий тип на базовый класс Item (или ItemHoe)
+        Item dummyHoe;
 
         public override void OnLoaded(ICoreAPI api)
         {
-            dummyHoe ??= new ItemHoeExtended();
-            dummyHoe.Attributes = this.Attributes;
-            dummyHoe.Class = this.Class;
-            dummyHoe.Code = this.Code;
-            dummyHoe.Durability = this.Durability;
-            typeof(ItemHoeExtended).GetField("api", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(dummyHoe, api);
+            if (dummyHoe == null)
+            {
+                // Создаем экземпляр через рефлексию! 
+                // Теперь компилятор не создаст жесткой ссылки на primitivesurvival.dll
+                Type hoeType = Type.GetType("PrimitiveSurvival.ModSystem.ItemHoeExtended, primitivesurvival");
+                if (hoeType != null)
+                {
+                    dummyHoe = (Item)Activator.CreateInstance(hoeType);
+                }
+            }
 
-            dummyHoe.OnLoaded(api);
+            if (dummyHoe != null)
+            {
+                dummyHoe.Attributes = this.Attributes;
+                dummyHoe.Class = this.Class;
+                dummyHoe.Code = this.Code;
+                dummyHoe.Durability = this.Durability;
+
+                //  Меняем typeof(ItemHoeExtended) на dummyHoe.GetType()
+                dummyHoe.GetType().GetField("api", BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(dummyHoe, api);
+
+                dummyHoe.OnLoaded(api);
+            }
+
             base.OnLoaded(api);
             HoeUtil.OnLoaded(api, ref toolModes);
         }
@@ -64,36 +81,38 @@ namespace XSkills
 
         public override WorldInteraction[] GetHeldInteractionHelp(ItemSlot inSlot)
         {
-            return HoeUtil.GetHeldInteractionHelp(api, inSlot).Append(dummyHoe.GetHeldInteractionHelp(inSlot));
+            var baseHelp = HoeUtil.GetHeldInteractionHelp(api, inSlot);
+            var dummyHelp = dummyHoe?.GetHeldInteractionHelp(inSlot) ?? Array.Empty<WorldInteraction>();
+            return baseHelp.Append(dummyHelp);
         }
 
         public override void OnHeldInteractStart(ItemSlot itemslot, EntityAgent byEntity, BlockSelection blockSel, EntitySelection entitySel, bool firstEvent, ref EnumHandHandling handHandling)
         {
-            dummyHoe.OnHeldInteractStart(itemslot, byEntity, blockSel, entitySel, firstEvent, ref handHandling);
+            dummyHoe?.OnHeldInteractStart(itemslot, byEntity, blockSel, entitySel, firstEvent, ref handHandling);
         }
 
         public override void OnHeldInteractStop(float secondsUsed, ItemSlot slot, EntityAgent byEntity, BlockSelection blockSel, EntitySelection entitySel)
         {
-            dummyHoe.OnHeldInteractStop(secondsUsed, slot, byEntity, blockSel, entitySel);
+            dummyHoe?.OnHeldInteractStop(secondsUsed, slot, byEntity, blockSel, entitySel);
         }
 
         public override bool OnHeldInteractStep(float secondsUsed, ItemSlot slot, EntityAgent byEntity, BlockSelection blockSel, EntitySelection entitySel)
         {
             if (blockSel == null) return false;
-            if (secondsUsed > 0.6f && byEntity.Attributes.GetInt("didtill", 0) == 0 && 
+            if (secondsUsed > 0.6f && byEntity.Attributes.GetInt("didtill", 0) == 0 &&
                 byEntity.World.Side == EnumAppSide.Server && !byEntity.Controls.ShiftKey)
             {
                 DoTill(secondsUsed, slot, byEntity, blockSel, entitySel);
                 byEntity.Attributes.SetInt("didtill", 1);
             }
-            dummyHoe.OnHeldInteractStep(secondsUsed, slot, byEntity, blockSel, entitySel);
+
+            dummyHoe?.OnHeldInteractStep(secondsUsed, slot, byEntity, blockSel, entitySel);
             return secondsUsed < 1f;
         }
 
         public override bool OnHeldInteractCancel(float secondsUsed, ItemSlot slot, EntityAgent byEntity, BlockSelection blockSel, EntitySelection entitySel, EnumItemUseCancelReason cancelReason)
         {
-            return dummyHoe.OnHeldInteractCancel(secondsUsed, slot, byEntity, blockSel, entitySel, cancelReason);
+            return dummyHoe?.OnHeldInteractCancel(secondsUsed, slot, byEntity, blockSel, entitySel, cancelReason) ?? true;
         }
-
-    }//!public class XSkillsItemHoe
-}//!namespace XSkills
+    }
+}

@@ -1,6 +1,9 @@
 ﻿{
   "adrenalinerush-effect": "Adrenalina",
   "adrenalinerush-effectdesc": "",
+  "armor-heavy-dec": "Velocidade de movimento, Velocidade de fome, Eficiência de cura",
+  "armor-heavy-inc": "Precisão à distância, Velocidade de puxar o arco",
+  "armor-light-inc": "Eficiência de cura, Precisão à distância, Velocidade de puxar o arco",
   "beehive-harvest": "Retirar a colheita da colmeia",
   "block-cage-wooden-east": "Gaiola",
   "block-cage-wooden-north": "Gaiola",
@@ -18,6 +21,9 @@
   "catchable": "Catchable",
   "cloudiness-range": "Nebulosidade de {0:P2} a {1:P2}",
   "cooking-finished": "Cozimento finalizado: {0}",
+  "group-collecting": "Coleta",
+  "group-processing": "Processamento",
+  "group-survival": "Sobrevivência",
   "harvestable-in-days": "Colhível em {0:N1} dias",
   "in-days": "Em {0} dias",
   "isnearby": "Está próximo!",
@@ -70,6 +76,10 @@
   "meteorology": "Meteorologia",
   "monster": "Monster",
   "owner-desc": "Dono: {0}",
+  "perk-bonus": "Bônus atual: +{0}%\n(Chance base {1}% + {2}% por nível)",
+  "perk-chance": "Chance atual: {0}%\n(Chance base {1}% + {2}% por nível)",
+  "perk-damage": "Bônus atual de dano/defesa: +{0}%\n(Chance base {1}% + {2}% por nível)",
+  "perk-maxbonus": "Bônus máximo atual: {0} un.",
   "pottery-finished": "Queima concluída: {0}",
   "probability-of-precipitation-range": "Probabilidade de precipitação de {0:P2} a {1:P2}",
   "progress": "Progresso: {0:P0}",
@@ -98,6 +108,7 @@
   "skill-cooking": "Cozinha",
   "skill-digging": "Escavação",
   "skill-farming": "Agricultura",
+  "skill-fishing": "Pesca",
   "skill-forestry": "Lenhador",
   "skill-husbandry": "Pastoreio",
   "skill-metalworking": "Metalurgia",
@@ -131,11 +142,17 @@
   "ability-armoredagility": "Agilidade blindada",
   "abilitydesc-armoredagility": "Reduz a penalidade de velocidade de caminhada por usar armadura em {0}%.",
 
+  "ability-autobaiter": "Mãos ágeis",
+  "abilitydesc-autobaiter": "Coloca automaticamente a isca do inventário na vara ao lançar.",
+
   "ability-automatedsmithing": "Forja Automatizada",
   "abilitydesc-automatedsmithing": "Seus martelos de forja podem trabalhar itens com até {0} camadas.",
 
   "ability-axeexpert": "Especialista em Machado",
   "abilitydesc-axeexpert": "Quebrar um bloco com um machado aumenta sua velocidade de corte de árvores com machados em {0}% e adicionalmente 0.{1}% para cada nível na habilidade de lenhador. Máximo em {2}%. Este efeito acumula até {3} vezes e dura {4} segundos.",
+
+  "ability-baitmaster": "Mestre da isca",
+  "abilitydesc-baitmaster": "Com chance de {0}% (+{1}% por nível de pescador, até {2}%), você não gastará a isca ao capturar um peixe com sucesso.",
 
   "ability-beekeeper": "Apicultor",
   "abilitydesc-beekeeper": "Quebrar colmeias colhíveis irá lhe dar {0} favos de mel a mais.",
@@ -242,6 +259,9 @@
   "ability-diver": "Mergulhador",
   "abilitydesc-diver": "Reduz seu consumo de oxigênio em {0}%.",
 
+  "ability-doublehook": "Anzol duplo",
+  "abilitydesc-doublehook": "Com chance de {0}% (+{1}% por nível de pescador, até {2}%), você pode puxar dois peixes de uma vez!",
+
   "ability-drunkenmaster": "Mestre bêbado",
   "abilitydesc-drunkenmaster": "Aumenta o dano causado com as mãos nuas em até {0}% dependendo da sua embriaguez, mas reduz o dano em {1}% se estiver sóbrio.",
 
@@ -275,6 +295,12 @@
   "ability-finishingtouch": "Toque Final",
   "abilitydesc-finishingtouch": "Você tem uma chance a cada golpe de terminar instantaneamente um trabalho de forja. Quanto mais avançado o trabalho, maior a chance. A chance máxima é de {0}% e adicionalmente 0.{1}% para cada nível na habilidade de metalurgia. Essa chance é limitada a {2}% por golpe.",
 
+  "ability-fisher": "Pescador",
+  "abilitydesc-fisher": "Você ganha {0}% mais experiência na habilidade de pesca. PROFISSÃO.\nO número de profissões que você pode aprender é limitado.",
+
+  "ability-fishfilleter": "Filetador experiente",
+  "abilitydesc-fishfilleter": "Ao filetar peixe, há uma chance de {0}% (+{1}% por nível de pescador, máximo {2}%) de obter filés adicionais.\nO número máximo de filés bônus é igual ao nível da habilidade (até 5).",
+
   "ability-forester": "Florestal",
   "abilitydesc-forester": "Você receberá {0}% mais experiência por todas as atividades de floresta. A quantidade de profissões que você pode aprender é limitada.",
 
@@ -295,6 +321,9 @@
 
   "ability-golddigger": "Caçador de ouro",
   "abilitydesc-golddigger": "Aumenta os recursos obtidos na lavagem em {0}% e adicionalmente em {1}% por nível da habilidade de mineração. Máximo {2}%.",
+
+  "ability-goodbait": "Boa isca",
+  "abilitydesc-goodbait": "Os peixes mordem {0}% mais rápido (+{1}% por nível de pescador, até {2}%).",
 
   "ability-gourmet": "Gourmet",
   "abilitydesc-gourmet": "A comida que você cozinha agora pode ter qualidade com um valor base de {0} e um valor máximo de {1} qualidade. Comer comida com qualidade dá ao jogador que come um efeito positivo por 10 minutos. O efeito depende dos valores nutricionais da comida. A intensidade do efeito depende da qualidade da comida. Você pode ter apenas um desses efeitos ao mesmo tempo.",
@@ -373,6 +402,9 @@
 
   "ability-machinelearning": "Aprendizado de Máquina",
   "abilitydesc-machinelearning": "Você pode compartilhar seu conhecimento de forja com martelos de forja e eles podem se beneficiar de algumas de suas habilidades.",
+
+  "ability-magnetichook": "Anzol magnético",
+  "abilitydesc-magnetichook": "Com chance de {0}% (+{1}% por nível de pescador, até {2}%), você puxará um item aleatório em vez de um peixe.",
 
   "ability-masshusbandry": "Pecuária em Massa",
   "abilitydesc-masshusbandry": "Aumenta o número de descendentes dos animais em {0}% e adicionalmente {1}% para cada nível na habilidade de pastoreio e {2}% vezes a geração do animal mãe até um máximo de {3}%.",
@@ -529,6 +561,9 @@
 
   "ability-strongback": "Costas Fortes",
   "abilitydesc-strongback": "Adiciona um inventário adicional com {0} slots ao seu personagem. Você pode trocar os itens entre este inventário e sua barra de atalhos. [default: R]",
+
+  "ability-strongline": "Linha resistente",
+  "abilitydesc-strongline": "Com chance de {0}% (+{1}% por nível de pescador, até {2}%), sua vara não perderá durabilidade ao ser usada.",
 
   "ability-swordsman": "Espadachim",
   "abilitydesc-swordsman": "Aumenta o dano que você causa com espadas em {0}% e adicionalmente {1}% para cada nível na habilidade de combate. Máximo em {2}%.",

@@ -1,6 +1,9 @@
 ﻿{
   "adrenalinerush-effect": "アドレナリン上昇",
   "adrenalinerush-effectdesc": "",
+  "armor-heavy-dec": "移動速度、空腹速度、回復効率",
+  "armor-heavy-inc": "遠距離精度、弓の引き速度",
+  "armor-light-inc": "回復効率、遠距離精度、弓の引き速度",
   "beehive-harvest": "蜂の巣から収穫物を取り出す",
   "block-cage-wooden-east": "檻",
   "block-cage-wooden-north": "檻",
@@ -18,6 +21,9 @@
   "catchable": "Catchable",
   "cloudiness-range": "曇り度 {0:P2} ～ {1:P2}",
   "cooking-finished": "調理終了: {0}",
+  "group-collecting": "採集",
+  "group-processing": "加工",
+  "group-survival": "サバイバル",
   "harvestable-in-days": "収穫まで残り{0:N1}日",
   "in-days": "{0}日後",
   "isnearby": " までもう少し！",
@@ -70,6 +76,10 @@
   "meteorology": "気象学",
   "monster": "モンスター",
   "owner-desc": "所有者: {0}",
+  "perk-bonus": "現在のボーナス: +{0}%\n(基本確率 {1}% + レベルによる {2}%)",
+  "perk-chance": "現在の確率: {0}%\n(基本確率 {1}% + レベルによる {2}%)",
+  "perk-damage": "現在のダメージ/防御ボーナス: +{0}%\n(基本確率 {1}% + レベルによる {2}%)",
+  "perk-maxbonus": "現在の最大ボーナス: {0}",
   "pottery-finished": "焼成完了: {0}",
   "probability-of-precipitation-range": "降水確率 {0:P2} ～ {1:P2}",
   "progress": "進捗: {0:P0}",
@@ -98,6 +108,7 @@
   "skill-cooking": "料理",
   "skill-digging": "掘削",
   "skill-farming": "農業",
+  "skill-fishing": "釣り",
   "skill-forestry": "林業",
   "skill-husbandry": "畜産",
   "skill-metalworking": "金属加工",
@@ -131,11 +142,17 @@
   "ability-armoredagility": "装甲敏捷",
   "abilitydesc-armoredagility": "鎧装備時の移動速度低下を {0}% 軽減します。",
 
+  "ability-autobaiter": "器用な手",
+  "abilitydesc-autobaiter": "キャスト時にインベントリから自動的に餌を釣り竿に装着する。",
+
   "ability-automatedsmithing": "自動鍛造",
   "abilitydesc-automatedsmithing": "柄付きハンマーは{0}層までのアイテムを加工出来ます。",
 
   "ability-axeexpert": "斧の達人",
   "abilitydesc-axeexpert": "斧でブロックを壊すと斧での伐採速度が{0}%増加、林業スキルのレベル毎に0.{1}%追加されます。最大で{2}%。この効果は最大{3}回までストックされ、{4}秒間持続します。",
+
+  "ability-baitmaster": "餌の達人",
+  "abilitydesc-baitmaster": "{0}%の確率（釣りレベルごとに+{1}%、最大{2}%）で、魚を釣っても餌を消費しない。",
 
   "ability-beekeeper": "養蜂家",
   "abilitydesc-beekeeper": "収穫可能なハチの巣を壊すと{0}個のハニカムを獲得出来ます。",
@@ -242,6 +259,9 @@
   "ability-diver": "ダイバー",
   "abilitydesc-diver": "酸素消費量を{0}%減少させます。",
 
+  "ability-doublehook": "ダブルフック",
+  "abilitydesc-doublehook": "{0}%の確率（釣りレベルごとに+{1}%、最大{2}%）で、1回のキャストで2匹釣れる！",
+
   "ability-drunkenmaster": "酔拳の達人",
   "abilitydesc-drunkenmaster": "酔い具合に応じて素手ダメージが最大 {0}% 上昇しますが、素面では {1}% 減少します。",
 
@@ -275,6 +295,12 @@
   "ability-finishingtouch": "画龍点睛",
   "abilitydesc-finishingtouch": "1発当てる毎に、瞬時に鍛冶作業を終了させるチャンスがあります。高度な作業であればあるほど、その確率は大きくなります。最大確率は{0}%で、金属加工技能のレベル毎に0.{1}%の追加確率が発生します。この確率は1発あたり{2}%が上限となります。",
 
+  "ability-fisher": "釣り師",
+  "abilitydesc-fisher": "釣りスキルの経験値を{0}%多く獲得する。職業。\n習得できる職業数には制限がある。",
+
+  "ability-fishfilleter": "熟練のフィレ職人",
+  "abilitydesc-fishfilleter": "魚を解体する際、{0}%の確率（釣りレベルごとに+{1}%、最大{2}%）で追加のフィレを獲得する。\nボーナスフィレの最大数はスキルレベルに等しい（最大5）。",
+
   "ability-forester": "森の住人",
   "abilitydesc-forester": "全ての森林活動で得られる経験値が{0}%増加します。習得出来る専門職は限定されています。",
 
@@ -295,6 +321,9 @@
 
   "ability-golddigger": "金採掘者",
   "abilitydesc-golddigger": "選鉱時の獲得量が {0}% 増加し、さらに採掘スキル1レベルごとに {1}% 増加します。最大 {2}%。",
+
+  "ability-goodbait": "良い餌",
+  "abilitydesc-goodbait": "魚の食いつき速度が{0}%向上（釣りレベルごとに+{1}%、最大{2}%）。",
 
   "ability-gourmet": "美食家",
   "abilitydesc-gourmet": "調理した料理は、基本値{0}、最大値{1}の品質に差が出るようになります。品質を持つ食品を食べると、食べたプレイヤーは10分間プラスの効果を得られます。効果は食べ物の栄養価に依存します。効果の強さは食べ物の品質によって異なります。効果は同時に1つだけです。",
@@ -373,6 +402,9 @@
 
   "ability-machinelearning": "機械学習",
   "abilitydesc-machinelearning": "鍛冶の知識を柄付きハンマーと共有し、アビリティの一部を役立てます。",
+
+  "ability-magnetichook": "磁力フック",
+  "abilitydesc-magnetichook": "{0}%の確率（釣りレベルごとに+{1}%、最大{2}%）で、魚の代わりにランダムなアイテムを引き上げる。",
 
   "ability-masshusbandry": "大規模畜産",
   "abilitydesc-masshusbandry": "動物の子孫の数を{0}%増加させ、さらに畜産スキルのレベル毎に{1}%増加し、母動物の世代の{2}倍の最大{3}%まで増加させます。",
@@ -529,6 +561,9 @@
 
   "ability-strongback": "強力な足腰",
   "abilitydesc-strongback": "キャラクターに{0}個のスロットを追加インベントリに追加します。このインベントリとホットバーの間でアイテムを切り替えることができます。[デフォルト：R］",
+
+  "ability-strongline": "強力な釣り糸",
+  "abilitydesc-strongline": "{0}%の確率（釣りレベルごとに+{1}%、最大{2}%）で、使用しても釣り竿の耐久値が減らない。",
 
   "ability-swordsman": "剣士",
   "abilitydesc-swordsman": "剣の与ダメージを{0}%増加させ、戦闘スキルのレベル毎に{1}%追加で増加させます。最大で{2}%になります。",

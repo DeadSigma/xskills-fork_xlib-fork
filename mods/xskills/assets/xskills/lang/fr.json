@@ -1,6 +1,9 @@
 ﻿{
   "adrenalinerush-effect": "Poussée d'adrénaline",
   "adrenalinerush-effectdesc": "",
+  "armor-heavy-dec": "Vitesse de déplacement, Vitesse de faim, Efficacité de soin",
+  "armor-heavy-inc": "Précision à distance, Vitesse de tension de l’arc",
+  "armor-light-inc": "Efficacité de soin, Précision à distance, Vitesse de tension de l’arc",
   "beehive-harvest": "Récupérer la récolte de la ruche",
   "block-cage-wooden-east": "Cage",
   "block-cage-wooden-north": "Cage",
@@ -18,6 +21,9 @@
   "catchable": "Catchable",
   "cloudiness-range": "Nébulosité de {0:P2} à {1:P2}",
   "cooking-finished": "Cooking finished: {0}",
+  "group-collecting": "Collecte",
+  "group-processing": "Transformation",
+  "group-survival": "Survie",
   "harvestable-in-days": "Récoltable dans {0:N1} jours",
   "in-days": "Dans {0} jours",
   "isnearby": " est proche!",
@@ -70,6 +76,10 @@
   "meteorology": "Météorologie",
   "monster": "Monster",
   "owner-desc": "Owner: {0}",
+  "perk-bonus": "Bonus actuel : +{0}%\n(Chance de base {1}% + {2}% du niveau)",
+  "perk-chance": "Chance actuelle : {0}%\n(Chance de base {1}% + {2}% du niveau)",
+  "perk-damage": "Bonus actuel de dégâts/défense : +{0}%\n(Chance de base {1}% + {2}% du niveau)",
+  "perk-maxbonus": "Bonus maximum actuel : {0} unités",
   "pottery-finished": "Cuisson terminée : {0}",
   "probability-of-precipitation-range": "Probabilité de précipitations de {0:P2} à {1:P2}",
   "progress": "Progrès: {0:P0}",
@@ -98,6 +108,7 @@
   "skill-cooking": "Cuisine",
   "skill-digging": "Creusage",
   "skill-farming": "Agriculture",
+  "skill-fishing": "Pêche",
   "skill-forestry": "Sylviculture",
   "skill-husbandry": "Élevage",
   "skill-metalworking": "Travail des métaux",
@@ -131,11 +142,17 @@
   "ability-armoredagility": "Agilité blindée",
   "abilitydesc-armoredagility": "Réduit la pénalité de vitesse de déplacement due au port d’armure de {0}%.",
 
+  "ability-autobaiter": "Mains agiles",
+  "abilitydesc-autobaiter": "Attache automatiquement un appât depuis l’inventaire à la canne lors du lancer.",
+
   "ability-automatedsmithing": "Forgeage automatique",
   "abilitydesc-automatedsmithing": "Vos marteaux à bascule peuvent travailler des pièces jusqu'à {0} couches.",
 
   "ability-axeexpert": "Expert de la hache",
   "abilitydesc-axeexpert": "Casser un bloc avec une hache augmente votre vitesse de bûcheronnage de {0}% et 0.{1}% additionnel pour chaque niveau de la compétence Sylviculture. Maximisé à {2}%. Cet effet s'empile jusqu'a {3} fois et dure {4} secondes.",
+
+  "ability-baitmaster": "Maître des appâts",
+  "abilitydesc-baitmaster": "Avec une chance de {0}% (+{1}% par niveau de pêcheur, max {2}%), vous ne consommez pas d’appât lors d’une capture réussie.",
 
   "ability-beekeeper": "Apiculteur",
   "abilitydesc-beekeeper": "Casser une ruche vous donnera {0} rayon(s) de miel supplémentaire(s).",
@@ -242,6 +259,9 @@
   "ability-diver": "Diver",
   "abilitydesc-diver": "Reduces your oxygen consumption by {0}%.",
 
+  "ability-doublehook": "Hameçon double",
+  "abilitydesc-doublehook": "Avec une chance de {0}% (+{1}% par niveau de pêcheur, max {2}%), vous pouvez attraper deux poissons en un seul lancer !",
+
   "ability-drunkenmaster": "Maître ivre",
   "abilitydesc-drunkenmaster": "Augmente les dégâts infligés à mains nues jusqu’à {0}% selon votre ivresse, mais réduit les dégâts de {1}% si vous êtes sobre.",
 
@@ -275,6 +295,12 @@
   "ability-finishingtouch": "Touche finale",
   "abilitydesc-finishingtouch": "Vous avez une chance à chaque coup de finir instantanément la pièce à forger. Plus le travail est avancé, plus grande est la probabilité. La probabilité maximale est de {0}% et 0.{1}% additionel pour chaque niveau de votre compétence de Travail des métaux. Cette probabilité est plafonnée à {2}% par coup.",
 
+  "ability-fisher": "Pêcheur",
+  "abilitydesc-fisher": "Vous gagnez {0}% d’expérience en plus en pêche. PROFESSION.\nLe nombre de professions que vous pouvez apprendre est limité.",
+
+  "ability-fishfilleter": "Fileteur expérimenté",
+  "abilitydesc-fishfilleter": "Lors du filetage, il y a {0}% de chance (+{1}% par niveau de pêcheur, max {2}%) d’obtenir des filets supplémentaires.\nLe nombre maximal de filets bonus correspond au niveau de compétence (jusqu’à 5).",
+
   "ability-forester": "Forestier",
   "abilitydesc-forester": "Vous recevrez {0}% d'expérience en plus pour toutes les activités de sylviculture. Le nombre de specializations que vous pouvez apprendre est limité.",
 
@@ -295,6 +321,9 @@
 
   "ability-golddigger": "Chercheur d’or",
   "abilitydesc-golddigger": "Augmente les gains du tamisage de {0}% et de {1}% supplémentaires par niveau de minage. Maximum {2}%.",
+
+  "ability-goodbait": "Bon appât",
+  "abilitydesc-goodbait": "Les poissons mordent {0}% plus vite (+{1}% par niveau de pêcheur, max {2}%).",
 
   "ability-gourmet": "Gourmet",
   "abilitydesc-gourmet": "La nourriture que vous cuisez peuvent maintenant avoir une qualité d'une valeur de base de {0} et une valeur maximale de {1}. Manger de la nourriture de bonne qualité donnera au joueur un effet positif pour 10 minutes. L'effet dépends de la qualité de la nourriture. Vous ne pouvez avoir qu'un seul effet actif à la fois.",
@@ -373,6 +402,9 @@
 
   "ability-machinelearning": "Machine Learning",
   "abilitydesc-machinelearning": "Vous pouvez partager vos connaissances en forgeage avec les marteaux à bascule et ils peuvent profiter de certaines de vos aptitudes.",
+
+  "ability-magnetichook": "Hameçon magnétique",
+  "abilitydesc-magnetichook": "Avec une chance de {0}% (+{1}% par niveau de pêcheur, max {2}%), vous remonterez un objet aléatoire au lieu d’un poisson.",
 
   "ability-masshusbandry": "Éleveur en masse",
   "abilitydesc-masshusbandry": "Aumente le nombre de progéniture des animaux de {0}% et {1}% additionnel pour chaque niveau de votre compétence d'Élevage et {2}% que la génération de la mère augmente jusqu'a un maximum de {3}%.",
@@ -529,6 +561,9 @@
 
   "ability-strongback": "Déménageur",
   "abilitydesc-strongback": "Ajoute un inventaire supplémentaire avec {0} case(s) pour votre personnage. Vous pouvez intervertir cet inventaire avec votre barre de raccourcis avec la touche [R] (par défaut).",
+
+  "ability-strongline": "Ligne solide",
+  "abilitydesc-strongline": "Avec une chance de {0}% (+{1}% par niveau de pêcheur, max {2}%), votre canne ne perdra pas de durabilité lors de l’utilisation.",
 
   "ability-swordsman": "Épéiste",
   "abilitydesc-swordsman": "Augmente les dégats que vous infligez avec les épées de {0}% et {1}% additionnel pour chaque niveau de votre compétence de Combat. Maximisé à {2}%.",

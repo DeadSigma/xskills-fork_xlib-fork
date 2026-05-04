@@ -1,6 +1,9 @@
 ﻿{
   "adrenalinerush-effect": "Adrenaline rush",
   "adrenalinerush-effectdesc": "",
+  "armor-heavy-dec": "Viteza de deplasare, Rata de foame, Eficiența vindecării",
+  "armor-heavy-inc": "Precizie la distanță, Viteza de întindere a arcului",
+  "armor-light-inc": "Eficiența vindecării, Precizie la distanță, Viteza de întindere a arcului",
   "beehive-harvest": "Take the yields out of the beehive",
   "block-cage-wooden-east": "Cage",
   "block-cage-wooden-north": "Cage",
@@ -13,11 +16,18 @@
   "blockhelp-cage-release": "Release the {0}",
   "bloodlust-effect": "Bloodlust",
   "bloodlust-effectdesc": "",
+  "book-meteorology": "Meteorologie pentru începători",
   "book-monster": "Monster compendium",
   "catchable": "Catchable",
+  "cloudiness-range": "Nebulozitate de la {0:P2} la {1:P2}",
   "cooking-finished": "Cooking finished: {0}",
+  "group-collecting": "Colectare",
+  "group-processing": "Procesare",
+  "group-survival": "Supraviețuire",
   "harvestable-in-days": "Harvestable in {0:N1} days",
+  "in-days": "În {0} zile",
   "isnearby": " is nearby!",
+  "item-everlastingcharcoal": "Cărbune etern",
   "item-metalbit-*": "Metal Bits",
   "item-metalbit-bismuth": "Bismuth Bits",
   "item-metalbit-bismuthbronze": "Bismuth bronze Bits",
@@ -40,6 +50,7 @@
   "item-metalbit-titanium": "Titanium Bits",
   "item-metalbit-uranium": "Uranium Bits",
   "item-metalbit-zinc": "Zinc Bits",
+  "itemdesc-everlastingcharcoal": "O bucată de cărbune care arde foarte mult timp.",
   "itemdesc-metalbit-*": "Small bits of metal",
   "itemdesc-metalbit-bismuth": "Small bits of metal",
   "itemdesc-metalbit-bismuthbronze": "Small bits of bismuthbronze",
@@ -62,8 +73,15 @@
   "itemdesc-metalbit-titanium": "Small bits of titanium",
   "itemdesc-metalbit-uranium": "Small bits of uranium",
   "itemdesc-metalbit-zinc": "Small bits of zinc",
+  "meteorology": "Meteorologie",
   "monster": "Monster",
   "owner-desc": "Owner: {0}",
+  "perk-bonus": "Bonus curent: +{0}%\n(Șansă de bază {1}% + {2}% din nivel)",
+  "perk-chance": "Șansă curentă: {0}%\n(Șansă de bază {1}% + {2}% din nivel)",
+  "perk-damage": "Bonus curent de daune/apărare: +{0}%\n(Șansă de bază {1}% + {2}% din nivel)",
+  "perk-maxbonus": "Bonus maxim actual: {0} buc.",
+  "pottery-finished": "Ardere finalizată: {0}",
+  "probability-of-precipitation-range": "Probabilitatea precipitațiilor de la {0:P2} la {1:P2}",
   "progress": "Progress: {0:P0}",
   "quality-bad": "Quality: bad",
   "quality-common": "Quality: common",
@@ -90,6 +108,7 @@
   "skill-cooking": "Cooking",
   "skill-digging": "Digging",
   "skill-farming": "Farming",
+  "skill-fishing": "Pescuit",
   "skill-forestry": "Forestry",
   "skill-husbandry": "Husbandry",
   "skill-metalworking": "Metalworking",
@@ -97,6 +116,13 @@
   "skill-pottery": "Pottery",
   "skill-survival": "Survival",
   "skill-temporaladaptation": "Temporal Adaptation",
+  "sunrise-at": "Răsărit la {0}",
+  "sunset-at": "Apus la {0}",
+  "temperature-range": "Temperatură de la {0:0.0}°C la {1:0.0}°C",
+  "the-day-after-tomorrow": "Poimâine",
+  "today": "Astăzi",
+  "tomorrow": "Mâine",
+  "weather-forecast-from": "Prognoză meteo de la {0}",
 
   "ability-abundanceadaptation": "Abundance Adaptation",
   "abilitydesc-abundanceadaptation": "Increases your healing effectiveness by {0}% and your hungerrate by {1}%.",
@@ -113,11 +139,20 @@
   "ability-archer": "Archer",
   "abilitydesc-archer": "Increases the damage you deal with bows by {0}% and additional {1}% for each level at the combat skill. Maxed out at {2}%.",
 
+  "ability-armoredagility": "Agilitate în armură",
+  "abilitydesc-armoredagility": "Reduce penalizarea vitezei de deplasare pentru purtarea armurii cu {0}%.",
+
+  "ability-autobaiter": "Mâini agile",
+  "abilitydesc-autobaiter": "Atașează automat momeala din inventar la undiță la lansare.",
+
   "ability-automatedsmithing": "Automated Smithing",
   "abilitydesc-automatedsmithing": "Your helve hammers can work items with up to {0} layers.",
 
   "ability-axeexpert": "Axe Expert",
   "abilitydesc-axeexpert": "Breaking a block with an axe increases your tree felling speed with axes by {0}% and additional 0.{1}% for each level at the forestry skill. Maxed out at {2}%. This effect stacks up to {3} times and last {4} seconds.",
+
+  "ability-baitmaster": "Maestru al momelii",
+  "abilitydesc-baitmaster": "Cu o șansă de {0}% (+{1}% per nivel de pescar, până la {2}%) nu vei consuma momeala la o captură reușită.",
 
   "ability-beekeeper": "Beekeeper",
   "abilitydesc-beekeeper": "Breaking harvestable skeps will give you {0} more Honeycombs.",
@@ -148,6 +183,9 @@
 
   "ability-brightharvest": "Bright Harvest",
   "abilitydesc-brightharvest": "Your shears and scythes can break {0}% more blocks at once.",
+
+  "ability-bully": "Bătăuș",
+  "abilitydesc-bully": "Crește forța de recul a atacurilor corp la corp cu {0}% și suplimentar cu {1}% per nivel de luptă, până la {2}%.",
 
   "ability-burningrage": "Burning Rage",
   "abilitydesc-burningrage": "Every time you hit an enemy you have a chance of {0}% to ignite it.",
@@ -203,6 +241,9 @@
   "ability-cultivatedseeds": "Cultivated Seeds",
   "abilitydesc-cultivatedseeds": "If you plant seeds the planted plant has a chance of {0}% and additional {1}% for each level at your farming skill to skip a growth stage. If the crop was planted in a greenhouse this ability will always trigger and has a chance to trigger again. The chance is capped at {2}%.",
 
+  "ability-defender": "Apărător",
+  "abilitydesc-defender": "Crește șansa de a absorbi daunele cu scutul la parare activă cu {0}%.",
+
   "ability-demetersbless": "Demeter's Bless",
   "abilitydesc-demetersbless": "Increases the yield of gathered seeds by {0}% and additional {1}% for every level at the farming skill. Maxed out at {2}%.",
 
@@ -217,6 +258,12 @@
 
   "ability-diver": "Diver",
   "abilitydesc-diver": "Reduces your oxygen consumption by {0}%.",
+
+  "ability-doublehook": "Cârlig dublu",
+  "abilitydesc-doublehook": "Cu o șansă de {0}% (+{1}% per nivel de pescar, până la {2}%) poți prinde două pești dintr-o singură aruncare!",
+
+  "ability-drunkenmaster": "Maestru beat",
+  "abilitydesc-drunkenmaster": "Crește daunele provocate cu mâinile goale până la {0}% în funcție de intoxicație, dar le reduce cu {1}% dacă ești sobru.",
 
   "ability-duplicator": "Duplicator",
   "abilitydesc-duplicator": "You have a chance of {0}% and additional {1}% for each level at the metalworking skill to receive a second identical item after finishing a metal work on an anvil. Maxed out at {2}%. Does not affect some works, that have a smeltable product.",
@@ -239,11 +286,20 @@
   "ability-fastpotter": "Fast Potter",
   "abilitydesc-fastpotter": "You have a chance for every step to instantly finish a pottering work. The more advanced the work, the greater the chance. The maximal chance is {0}% and additional 0.{1}% for each level at the pottery skill. This chance is capped at {2}% per step.",
 
+  "ability-featherfall": "Cădere ușoară",
+  "abilitydesc-featherfall": "Reduce daunele de cădere cu {0} și suplimentar cu {1}%.",
+
   "ability-feeder": "Feeder",
   "abilitydesc-feeder": "Animals eating from your troughs have a chance of {0}% and additional {1}% for each level at the husbandry skill up to a maximum of {2}% to not consume any feed. Animals additionally have a chance {3}% to increases it's generation when eating from your troughs up to generation {4}.",
 
   "ability-finishingtouch": "Finishing Touch",
   "abilitydesc-finishingtouch": "You have a chance for every hit to instantly finish a smithing work. The more advanced the work, the greater the chance. The maximal chance is {0}% and additional 0.{1}% for each level at the metalworking skill. This chance is capped at {2}% per hit.",
+
+  "ability-fisher": "Pescar",
+  "abilitydesc-fisher": "Primești cu {0}% mai multă experiență pentru abilitatea de pescuit. PROFESIE.\nNumărul de profesii pe care le poți învăța este limitat.",
+
+  "ability-fishfilleter": "Filetator experimentat",
+  "abilitydesc-fishfilleter": "La filetarea peștilor există o șansă de {0}% (+{1}% per nivel de pescar, maxim {2}%) de a obține fileuri suplimentare.\nNumărul maxim de fileuri bonus este egal cu nivelul abilității (până la 5).",
 
   "ability-forester": "Forester",
   "abilitydesc-forester": "You will receive {0}% more experience for all foresting activities. The amount of specializations you can learn is limited.",
@@ -263,6 +319,12 @@
   "ability-geologist": "Geologist",
   "abilitydesc-geologist": "Every time you break a rock you will be notified when there are ore blocks nearby. Higher tiers have a higher radius.",
 
+  "ability-golddigger": "Căutător de aur",
+  "abilitydesc-golddigger": "Crește randamentul la spălare cu {0}% și suplimentar cu {1}% per nivel de minerit. Maxim {2}%.",
+
+  "ability-goodbait": "Momeală bună",
+  "abilitydesc-goodbait": "Peștii mușcă cu {0}% mai repede (+{1}% per nivel de pescar, până la {2}%).",
+
   "ability-gourmet": "Gourmet",
   "abilitydesc-gourmet": "Food you cook can now have quality with a base value of {0} and a maximum value of {1} quality. Eating food with quality gives the eating player a positive effect for 10 minutes. The effect depends on the nutrition values of the food. The intensity of the effect depends on the quality of the food. You can have only one of these effects at the same time.",
 
@@ -271,6 +333,9 @@
 
   "ability-greenthumb": "Green Thumb",
   "abilitydesc-greenthumb": "Increases the yield of harvested crops by {0}% and additional {1}% for each level at the farming skill. Maxed out at {2}%.",
+
+  "ability-guardian": "Gardian",
+  "abilitydesc-guardian": "Crește șansa de a absorbi daunele cu scutul la parare pasivă cu {0}%.",
 
   "ability-hammerexpert": "Hammer Expert",
   "abilitydesc-hammerexpert": "After finishing a metal work on an anvil your hammer will get durability back. The returned durability corresponds to {0}% and additional {1}% for each level at the metalworking skill of the used durability. Maxed out at {2}%.",
@@ -283,6 +348,9 @@
 
   "ability-heatinghits": "Heating Hits",
   "abilitydesc-heatinghits": "Every hit on a smithing work on an anvil will increase its temperature by {0}°C.",
+
+  "ability-heavyarmorexpert": "Expert în armură grea",
+  "abilitydesc-heavyarmorexpert": "Reduce unele statistici oferite de armură cu {0}%, dar crește altele cu {1}%.\nReduce: eficiența vindecării, rata foamei {2}\nCrește: precizia la distanță, timpul de țintire {3}",
 
   "ability-heavyhits": "Heavy Hits",
   "abilitydesc-heavyhits": "Your heavy hits on slag works as a split.",
@@ -308,8 +376,14 @@
   "ability-juicer": "Juicer",
   "abilitydesc-juicer": "Increases the amount of juice you get from one fruit by {0}%.",
 
+  "ability-laststand": "Ultima rezistență",
+  "abilitydesc-laststand": "Ai o șansă să supraviețuiești unui atac fatal. Probabilitatea este egală cu sănătatea relativă rămasă înmulțită cu {0}%.",
+
   "ability-layerlayer": "Layer layer",
   "abilitydesc-layerlayer": "When you are copying layers you will copy {0} additional voxels.",
+
+  "ability-lightarmorexpert": "Expert în armură ușoară",
+  "abilitydesc-lightarmorexpert": "Cât timp nu porți armură care reduce viteza, următoarele statistici sunt crescute cu {0}%: eficiența vindecării, rata foamei, precizia la distanță, timpul de țintire {1}",
 
   "ability-lightfooted": "Light-footed",
   "abilitydesc-lightfooted": "Reduces the animal seeking range by {0}%.",
@@ -329,6 +403,9 @@
   "ability-machinelearning": "Machine Learning",
   "abilitydesc-machinelearning": "You can share your smithing knowledge with helve hammers and they can profit from some of your abilities.",
 
+  "ability-magnetichook": "Cârlig magnetic",
+  "abilitydesc-magnetichook": "Cu o șansă de {0}% (+{1}% per nivel de pescar, până la {2}%) vei scoate din apă un obiect aleator în loc de pește.",
+
   "ability-masshusbandry": "Mass Husbandry",
   "abilitydesc-masshusbandry": "Increases the number of offsprings of animals by {0}% and additional {1}% for each level at the husbandry skill and {2}% times the generation of the mother animal up to a maximum of {3}%.",
 
@@ -343,6 +420,9 @@
 
   "ability-metalworker": "Metalworker",
   "abilitydesc-metalworker": "You will receive {0}% more experience for the metalworking skill. The amount of specializations you can learn is limited.",
+
+  "ability-meteorologist": "Meteorolog",
+  "abilitydesc-meteorologist": "În fiecare zi vei primi prognoza meteo pentru următoarele {0} zile.",
 
   "ability-miner": "Miner",
   "abilitydesc-miner": "You will receive {0}% more experience for all mining activities. The amount of specializations you can learn is limited.",
@@ -389,8 +469,14 @@
   "ability-potter": "Potter",
   "abilitydesc-potter": "You will receive {0}% more experience for the pottery skill. The amount of specializations you can learn is limited.",
 
+  "ability-potterytimer": "Cronometru ceramică",
+  "abilitydesc-potterytimer": "Vei primi un mesaj când orice ceramică este arsă.",
+
   "ability-preserver": "Preserver",
   "abilitydesc-preserver": "Increases the time harvested meat from corpses keeps being fresh by {0}% and additional {1}% for each level at the husbandry skill up to a maximum of {2}%.",
+
+  "ability-quickpan": "Spălare rapidă",
+  "abilitydesc-quickpan": "Crește viteza de spălare cu {0}%.",
 
   "ability-rancher": "Rancher",
   "abilitydesc-rancher": "Increases the yield of milk from milkable animals and the number of eggs you can take of henboxes by {0}%. Additionally you have a chance of {1}% to increase the generation of a milked animal up to a maximum of generation {2}.",
@@ -464,6 +550,9 @@
   "ability-steeplechaser": "Steeplechaser",
   "abilitydesc-steeplechaser": "Increases your step height by {0}%.",
 
+  "ability-stoker": "Fochist",
+  "abilitydesc-stoker": "Distrugerea unui strat de cărbune are o șansă de {0}% să distrugă încă un strat.",
+
   "ability-stonebreaker": "Stonebreaker",
   "abilitydesc-stonebreaker": "Increases the number of stones you receive by {0}% and additional {1}% for each level at the mining skill. Maxed out at {2}%.",
 
@@ -473,8 +562,14 @@
   "ability-strongback": "Strong Back",
   "abilitydesc-strongback": "Adds an additional inventory with {0} slots to your character. You can switch the items between this inventory and your hotbar. [default: R]",
 
+  "ability-strongline": "Linie rezistentă",
+  "abilitydesc-strongline": "Cu o șansă de {0}% (+{1}% per nivel de pescar, până la {2}%) undița ta nu își va pierde durabilitatea la utilizare.",
+
   "ability-swordsman": "Swordsman",
   "abilitydesc-swordsman": "Increases the damage you deal with swords by {0}% and additional {1}% for each level at the combat skill. Maxed out at {2}%.",
+
+  "ability-tank": "Tanc",
+  "abilitydesc-tank": "Crește cantitatea de daune pe care o poți absorbi cu scutul cu {0}% și suplimentar cu {1}% per nivel de luptă. Maxim {2}%.",
 
   "ability-tanner": "Tanner",
   "abilitydesc-tanner": "Reduces the liquid consumption when tanning leather by {0}% and additional {1}% for each level at the husbandry skill up to a maximum of {2}%.",

@@ -1,6 +1,9 @@
 ﻿{
   "adrenalinerush-effect": "肾上腺素",
   "adrenalinerush-effectdesc": "",
+  "armor-heavy-dec": "移动速度、饥饿速度、治疗效率",
+  "armor-heavy-inc": "远程精度、拉弓速度",
+  "armor-light-inc": "治疗效率、远程精度、拉弓速度",
   "beehive-harvest": "把蜂箱里的东西拿出来",
   "block-cage-wooden-east": "笼子",
   "block-cage-wooden-north": "笼子",
@@ -18,6 +21,9 @@
   "catchable": "Catchable",
   "cloudiness-range": "云量从 {0:P2} 到 {1:P2}",
   "cooking-finished": "烹饪完成：{0}",
+  "group-collecting": "采集",
+  "group-processing": "加工",
+  "group-survival": "生存",
   "harvestable-in-days": "可在{0:N1}天内收获",
   "in-days": "{0}天后",
   "isnearby": " 就在附近！",
@@ -73,6 +79,10 @@
   "meteorology": "气象学",
   "monster": "怪兽",
   "owner-desc": "所有者：{0}",
+  "perk-bonus": "当前加成：+{0}%\n（基础概率 {1}% + 等级提供 {2}%）",
+  "perk-chance": "当前概率：{0}%\n（基础概率 {1}% + 等级提供 {2}%）",
+  "perk-damage": "当前伤害/防御加成：+{0}%\n（基础概率 {1}% + 等级提供 {2}%）",
+  "perk-maxbonus": "当前最大加成：{0} 个",
   "pottery-finished": "烧制完成：{0}",
   "probability-of-precipitation-range": "降水概率从 {0:P2} 到 {1:P2}",
   "progress": "进度：{0:P0}",
@@ -101,6 +111,7 @@
   "skill-cooking": "烹饪",
   "skill-digging": "挖掘",
   "skill-farming": "农耕",
+  "skill-fishing": "钓鱼",
   "skill-forestry": "林业",
   "skill-husbandry": "畜牧",
   "skill-metalworking": "打铁",
@@ -134,11 +145,17 @@
   "ability-armoredagility": "装甲敏捷",
   "abilitydesc-armoredagility": "减少穿戴护甲时的移动速度惩罚 {0}%。",
 
+  "ability-autobaiter": "灵巧双手",
+  "abilitydesc-autobaiter": "在抛竿时自动从背包中为鱼竿装上鱼饵。",
+
   "ability-automatedsmithing": "自动锻造",
   "abilitydesc-automatedsmithing": "你的柄锤可以自己打铁了！。",
 
   "ability-axeexpert": "斧头专家",
   "abilitydesc-axeexpert": "用斧头砍伐树木可以使你\n使用斧头破坏方块的速度\n提高{0}%，并且林业技能每级\n额外提高0.{1}%。最大为{2}%。此\n效果最多可叠加{3}次，\n并持续{4}秒。",
+
+  "ability-baitmaster": "诱饵大师",
+  "abilitydesc-baitmaster": "有 {0}% 的概率（每级钓鱼 +{1}%，最多 {2}%）在成功钓鱼时不消耗鱼饵。",
 
   "ability-beekeeper": "养蜂人",
   "abilitydesc-beekeeper": "打破可收获的蜂窝将为你\n提供额外{0}个的蜜脾。",
@@ -245,6 +262,9 @@
   "ability-diver": "潜水员",
   "abilitydesc-diver": "减少耗氧量{0}%.",
 
+  "ability-doublehook": "双钩",
+  "abilitydesc-doublehook": "有 {0}% 的概率（每级钓鱼 +{1}%，最多 {2}%）一次抛竿钓上两条鱼！",
+
   "ability-drunkenmaster": "醉拳大师",
   "abilitydesc-drunkenmaster": "根据醉酒程度提高空手伤害，最高 {0}%，但清醒时伤害降低 {1}%。",
 
@@ -278,6 +298,12 @@
   "ability-finishingtouch": "画龙点睛",
   "abilitydesc-finishingtouch": "你每次捶打都有机会立即\n完成一项锻造工作，等级\n越高几率越大，最高{0}%几率\n 铁匠技能每级额外增加0.{1}%。\n上限{2}%。",
 
+  "ability-fisher": "渔夫",
+  "abilitydesc-fisher": "钓鱼技能经验获取提高 {0}%。职业。\n你可以学习的职业数量是有限的。",
+
+  "ability-fishfilleter": "熟练鱼片师",
+  "abilitydesc-fishfilleter": "在处理鱼时，有 {0}% 的概率（每级钓鱼 +{1}%，最多 {2}%）获得额外鱼片。\n额外鱼片的最大数量等于技能等级（最多 5）。",
+
   "ability-forester": "林务官",
   "abilitydesc-forester": "所有林业活动的经验值将\n增加{0}%。你可以学习的专业\n数量是有限的。",
 
@@ -298,6 +324,9 @@
 
   "ability-golddigger": "淘金者",
   "abilitydesc-golddigger": "提高淘洗产出 {0}%，并且每级采矿技能额外提高 {1}%。最高 {2}%。",
+
+  "ability-goodbait": "优质鱼饵",
+  "abilitydesc-goodbait": "鱼上钩速度提高 {0}%（每级钓鱼 +{1}%，最多 {2}%）。",
 
   "ability-gourmet": "美食家",
   "abilitydesc-gourmet": "你烹饪的食物会获得一个\n“品质”属性，基础品质值为\n{0}，最大品质值为{1}食用\n高品质的食物会让玩家在\n接下来的10分钟内获得\n积极效果。效果的强度\n取决于食物的营养价值\n和品质。同时只能获得\n其中一种效果。",
@@ -376,6 +405,9 @@
 
   "ability-machinelearning": "机器学习",
   "abilitydesc-machinelearning": "你可以与锻造锤分享你的\n铁匠知识，让他们从你的\n能力中受益（WDF？）。",
+
+  "ability-magnetichook": "磁性鱼钩",
+  "abilitydesc-magnetichook": "有 {0}% 的概率（每级钓鱼 +{1}%，最多 {2}%）从水中拉出随机物品而不是鱼。",
 
   "ability-masshusbandry": "大规模畜牧业",
   "abilitydesc-masshusbandry": "动物后代数量增加{0}%，畜牧\n技能每级额外增加{1}%，高代数\n母体动物增加{2}%，\n最高可达{3}%。",
@@ -532,6 +564,9 @@
 
   "ability-strongback": "强壮背部",
   "abilitydesc-strongback": "给你的角色增加一个有{0}个槽位\n的额外背包。你可以在这个背\n包和你的快捷栏之间切换物品。\n[默认按键：R]",
+
+  "ability-strongline": "坚固鱼线",
+  "abilitydesc-strongline": "有 {0}% 的概率（每级钓鱼 +{1}%，最多 {2}%）在使用时鱼竿不会损失耐久度。",
 
   "ability-swordsman": "剑客",
   "abilitydesc-swordsman": "你用剑造成的伤害提高{0}%，\n战斗技能每级额外增加{1}%\n伤害。最高{2}%。",

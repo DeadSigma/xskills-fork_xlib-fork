@@ -1,6 +1,9 @@
 ﻿{
   "adrenalinerush-effect": "Adrenaline rush",
   "adrenalinerush-effectdesc": "",
+  "armor-heavy-dec": "Rörelsehastighet, Hungerhastighet, Läkeffektivitet",
+  "armor-heavy-inc": "Distansprecision, Bågens draghastighet",
+  "armor-light-inc": "Läkeffektivitet, Distansprecision, Bågens draghastighet",
   "beehive-harvest": "Take the yields out of the beehive",
   "block-cage-wooden-east": "Cage",
   "block-cage-wooden-north": "Cage",
@@ -18,6 +21,9 @@
   "catchable": "Catchable",
   "cloudiness-range": "Molnighet från {0:P2} till {1:P2}",
   "cooking-finished": "Cooking finished: {0}",
+  "group-collecting": "Insamling",
+  "group-processing": "Bearbetning",
+  "group-survival": "Överlevnad",
   "harvestable-in-days": "Harvestable in {0:N1} days",
   "in-days": "Om {0} dagar",
   "isnearby": " is nearby!",
@@ -70,6 +76,10 @@
   "meteorology": "Meteorologi",
   "monster": "Monster",
   "owner-desc": "Owner: {0}",
+  "perk-bonus": "Aktuell bonus: +{0}%\n(Grundchans {1}% + {2}% från nivå)",
+  "perk-chance": "Aktuell chans: {0}%\n(Grundchans {1}% + {2}% från nivå)",
+  "perk-damage": "Aktuell bonus till skada/försvar: +{0}%\n(Grundchans {1}% + {2}% från nivå)",
+  "perk-maxbonus": "Maximal bonus nu: {0} st.",
   "pottery-finished": "Bränning klar: {0}",
   "probability-of-precipitation-range": "Sannolikhet för nederbörd från {0:P2} till {1:P2}",
   "progress": "Progress: {0:P0}",
@@ -98,6 +108,7 @@
   "skill-cooking": "Cooking",
   "skill-digging": "Digging",
   "skill-farming": "Farming",
+  "skill-fishing": "Fiske",
   "skill-forestry": "Forestry",
   "skill-husbandry": "Husbandry",
   "skill-metalworking": "Metalworking",
@@ -131,11 +142,17 @@
   "ability-armoredagility": "Pansaragilitet",
   "abilitydesc-armoredagility": "Minskar straffet till rörelsehastighet från rustning med {0}%.",
 
+  "ability-autobaiter": "Smidiga händer",
+  "abilitydesc-autobaiter": "Fäster automatiskt bete från inventariet på spöt vid kast.",
+
   "ability-automatedsmithing": "Automated Smithing",
   "abilitydesc-automatedsmithing": "Your helve hammers can work items with up to {0} layers.",
 
   "ability-axeexpert": "Axe Expert",
   "abilitydesc-axeexpert": "Breaking a block with an axe increases your tree felling speed with axes by {0}% and additional 0.{1}% for each level at the forestry skill. Maxed out at {2}%. This effect stacks up to {3} times and last {4} seconds.",
+
+  "ability-baitmaster": "Betesmästare",
+  "abilitydesc-baitmaster": "Med en chans på {0}% (+{1}% per fiskarnivå, max {2}%) förbrukas inte bete vid lyckad fångst.",
 
   "ability-beekeeper": "Beekeeper",
   "abilitydesc-beekeeper": "Breaking harvestable skeps will give you {0} more Honeycombs.",
@@ -242,6 +259,9 @@
   "ability-diver": "Diver",
   "abilitydesc-diver": "Reduces your oxygen consumption by {0}%.",
 
+  "ability-doublehook": "Dubbelkrok",
+  "abilitydesc-doublehook": "Med en chans på {0}% (+{1}% per fiskarnivå, max {2}%) kan du fånga två fiskar i ett kast!",
+
   "ability-drunkenmaster": "Fullmästare",
   "abilitydesc-drunkenmaster": "Ökar skadan du gör med bara händer upp till {0}% beroende på din berusning, men minskar skadan med {1}% när du är nykter.",
 
@@ -275,6 +295,12 @@
   "ability-finishingtouch": "Finishing Touch",
   "abilitydesc-finishingtouch": "You have a chance for every hit to instantly finish a smithing work. The more advanced the work, the greater the chance. The maximal chance is {0}% and additional 0.{1}% for each level at the metalworking skill. This chance is capped at {2}% per hit.",
 
+  "ability-fisher": "Fiskare",
+  "abilitydesc-fisher": "Du får {0}% mer erfarenhet i fiske. YRKE.\nAntalet yrken du kan lära dig är begränsat.",
+
+  "ability-fishfilleter": "Erfaren fileterare",
+  "abilitydesc-fishfilleter": "Vid filetering av fisk finns en chans på {0}% (+{1}% per fiskarnivå, max {2}%) att få extra filéer.\nMaximalt antal bonusfiléer motsvarar färdighetsnivån (upp till 5).",
+
   "ability-forester": "Forester",
   "abilitydesc-forester": "You will receive {0}% more experience for all foresting activities. The amount of specializations you can learn is limited.",
 
@@ -295,6 +321,9 @@
 
   "ability-golddigger": "Guldgrävare",
   "abilitydesc-golddigger": "Ökar utbytet vid vaskning med {0}% och ytterligare {1}% per nivå i gruvfärdighet. Max {2}%.",
+
+  "ability-goodbait": "Bra bete",
+  "abilitydesc-goodbait": "Fisk nappar {0}% snabbare (+{1}% per fiskarnivå, max {2}%).",
 
   "ability-gourmet": "Gourmet",
   "abilitydesc-gourmet": "Food you cook can now have quality with a base value of {0} and a maximum value of {1} quality. Eating food with quality gives the eating player a positive effect for 10 minutes. The effect depends on the nutrition values of the food. The intensity of the effect depends on the quality of the food. You can have only one of these effects at the same time.",
@@ -373,6 +402,9 @@
 
   "ability-machinelearning": "Machine Learning",
   "abilitydesc-machinelearning": "You can share your smithing knowledge with helve hammers and they can profit from some of your abilities.",
+
+  "ability-magnetichook": "Magnetisk krok",
+  "abilitydesc-magnetichook": "Med en chans på {0}% (+{1}% per fiskarnivå, max {2}%) drar du upp ett slumpmässigt föremål istället för en fisk.",
 
   "ability-masshusbandry": "Mass Husbandry",
   "abilitydesc-masshusbandry": "Increases the number of offsprings of animals by {0}% and additional {1}% for each level at the husbandry skill and {2}% times the generation of the mother animal up to a maximum of {3}%.",
@@ -529,6 +561,9 @@
 
   "ability-strongback": "Strong Back",
   "abilitydesc-strongback": "Adds an additional inventory with {0} slots to your character. You can switch the items between this inventory and your hotbar. [default: R]",
+
+  "ability-strongline": "Stark lina",
+  "abilitydesc-strongline": "Med en chans på {0}% (+{1}% per fiskarnivå, max {2}%) förlorar ditt spö ingen hållbarhet vid användning.",
 
   "ability-swordsman": "Swordsman",
   "abilitydesc-swordsman": "Increases the damage you deal with swords by {0}% and additional {1}% for each level at the combat skill. Maxed out at {2}%.",

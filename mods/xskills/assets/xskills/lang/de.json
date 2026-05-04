@@ -1,6 +1,9 @@
 ﻿{
   "adrenalinerush-effect": "Adrenalinrausch",
   "adrenalinerush-effectdesc": "",
+  "armor-heavy-dec": "Bewegungsgeschwindigkeit, Hunger-Rate, Heilungseffizienz",
+  "armor-heavy-inc": "Fernkampfgenauigkeit, Bogenspann-Geschwindigkeit",
+  "armor-light-inc": "Heilungseffizienz, Fernkampfgenauigkeit, Bogenspann-Geschwindigkeit",
   "beehive-harvest": "Nimm die Erträge aus dem Bienenstock",
   "block-cage-wooden-east": "Käfig",
   "block-cage-wooden-north": "Käfig",
@@ -18,6 +21,9 @@
   "catchable": "Fangbar",
   "cloudiness-range": "Bewölkung zwischen {0:P2} und {1:P2}",
   "cooking-finished": "Kochen beendet: {0}",
+  "group-collecting": "Sammeln",
+  "group-processing": "Verarbeitung",
+  "group-survival": "Überleben",
   "harvestable-in-days": "Erntbar in {0:N1} Tagen",
   "in-days": "In {0} Tagen",
   "isnearby": " ist in der Nähe!",
@@ -70,6 +76,10 @@
   "meteorology": "Meteorologie",
   "monster": "Monster",
   "owner-desc": "Besitzer: {0}",
+  "perk-bonus": "Aktueller Bonus: +{0}%\n(Grundchance {1}% + {2}% durch Level)",
+  "perk-chance": "Aktuelle Chance: {0}%\n(Grundchance {1}% + {2}% durch Level)",
+  "perk-damage": "Aktueller Bonus auf Schaden/Verteidigung: +{0}%\n(Grundchance {1}% + {2}% durch Level)",
+  "perk-maxbonus": "Maximaler Bonus aktuell: {0} Stk.",
   "pottery-finished": "Brennen beendet: {0}",
   "probability-of-precipitation-range": "Regenwahrscheinlichkeit zwischen {0:P2} und {1:P2}",
   "progress": "Fortschritt: {0:P0}",
@@ -98,6 +108,7 @@
   "skill-cooking": "Kochen",
   "skill-digging": "Graben",
   "skill-farming": "Landwirtschaft",
+  "skill-fishing": "Angeln",
   "skill-forestry": "Forstwirtschaft",
   "skill-husbandry": "Tierhaltung",
   "skill-metalworking": "Metallbearbeitung",
@@ -131,11 +142,17 @@
   "ability-armoredagility": "Gepanzerte Beweglichkeit",
   "abilitydesc-armoredagility": "Reduziert die Einbußen bei der Gehgeschwindigkeit, die du durch das Tragen einer Rüstung erleidest, um {0}%.",
 
+  "ability-autobaiter": "Geschickte Hände",
+  "abilitydesc-autobaiter": "Setzt beim Auswerfen automatisch Köder aus dem Inventar auf die Angel.",
+
   "ability-automatedsmithing": "Automatisiertes Schmieden",
   "abilitydesc-automatedsmithing": "Deine Stielhämmer können Gegenstände mit bis zu {0} Schichten bearbeiten.",
 
   "ability-axeexpert": "Axtexperte",
   "abilitydesc-axeexpert": "Das Brechen eines Blocks mit einer Axt erhöht die Geschwindigkeit beim Fällen von Bäumen mit Axten um {0}% und zusätzlich um 0,{1}% für jede Stufe der Forstfertigkeit. Maximal bis {2}%. Dieser Effekt kann bis zu {3} Mal gestapelt werden und dauert {4} Sekunden an.",
+
+  "ability-baitmaster": "Ködermeister",
+  "abilitydesc-baitmaster": "Mit einer Chance von {0}% (+{1}% pro Angler-Level, max. {2}%) verbrauchen Sie beim erfolgreichen Fang keinen Köder.",
 
   "ability-beekeeper": "Imker",
   "abilitydesc-beekeeper": "Beim Zerstören von erntbaren Bienenkörben, erhältst du {0} Waben mehr.",
@@ -242,6 +259,9 @@
   "ability-diver": "Taucher",
   "abilitydesc-diver": "Reduziert deinen Sauerstoffverbrauch um {0}%.",
 
+  "ability-doublehook": "Doppelhaken",
+  "abilitydesc-doublehook": "Mit einer Chance von {0}% (+{1}% pro Angler-Level, max. {2}%) können Sie zwei Fische mit einem Wurf fangen!",
+
   "ability-drunkenmaster": "Drunken Master",
   "abilitydesc-drunkenmaster": "Erhöht den Schaden, den du mit bloßen Händen verursachst, abhängig von deinem Betrunkenheitsgrad um bis zu {0}%. Verringert deinen Schaden jedoch um {1}%, wenn du nüchtern bist.",
 
@@ -275,6 +295,12 @@
   "ability-finishingtouch": "Feinschliff",
   "abilitydesc-finishingtouch": "Du hast bei jedem Hammerschlag eine Chance, eine Metallarbeit sofort zu beenden. Je weiter fortgeschritten die Arbeit ist, desto größer ist die Chance. Die maximale Chance beträgt {0}% und zusätzlich 0,{1}% für jede Stufe deiner Metallbearbeitungsfertigkeit. Diese Chance ist auf {2}% pro Hammerschlag begrenzt.",
 
+  "ability-fisher": "Angler",
+  "abilitydesc-fisher": "Sie erhalten {0}% mehr Erfahrung für die Fertigkeit Angeln. BERUF.\nDie Anzahl der Berufe, die Sie erlernen können, ist begrenzt.",
+
+  "ability-fishfilleter": "Erfahrener Filetierer",
+  "abilitydesc-fishfilleter": "Beim Zerlegen von Fischen besteht eine Chance von {0}% (+{1}% pro Angler-Level, max. {2}%), zusätzliche Filets zu erhalten.\nDie maximale Anzahl an Bonus-Filets entspricht dem Fertigkeitslevel (bis zu 5).",
+
   "ability-forester": "Förster",
   "abilitydesc-forester": "Du erhältst {0}% mehr Erfahrung für alle Forstaktivitäten. Du kannst nur einen Beruf ausüben.",
 
@@ -295,6 +321,9 @@
 
   "ability-golddigger": "Goldgräber",
   "abilitydesc-golddigger": "Erhöht deine Ausbeute beim Sieben um {0}% und zusätzlich {1}% für jede Stufe der Grabenfertigkeit. Maximal bis {2}%.",
+
+  "ability-goodbait": "Guter Köder",
+  "abilitydesc-goodbait": "Fische beißen {0}% schneller an (+{1}% pro Angler-Level, max. {2}%).",
 
   "ability-gourmet": "Gourmet",
   "abilitydesc-gourmet": "Lebensmittel, die du zubereitest, können jetzt Qualität mit einem Basiswert von {0} und einem Höchstwert von {1} haben. Das Essen von Lebensmitteln mit Qualität gibt dem essenden Spieler 10 Minuten lang einen positiven Effekt. Die Wirkung hängt von den Nährwerten des Lebensmittels ab. Die Intensität des Effekts hängt von der Qualität des Lebensmittels ab. Du kannst nicht mehrere dieser Effekte gleichzeitig haben.",
@@ -373,6 +402,9 @@
 
   "ability-machinelearning": "Maschinelles Lernen",
   "abilitydesc-machinelearning": "Du kannst dein Schmiedewissen mit Stielhämmern teilen und sie können von einigen deiner Fähigkeiten profitieren.",
+
+  "ability-magnetichook": "Magnetischer Haken",
+  "abilitydesc-magnetichook": "Mit einer Chance von {0}% (+{1}% pro Angler-Level, max. {2}%) ziehen Sie statt eines Fisches einen zufälligen Gegenstand aus dem Wasser.",
 
   "ability-masshusbandry": "Massentierhaltung",
   "abilitydesc-masshusbandry": "Erhöht die Anzahl der Nachkommen von Tieren um {0}% und zusätzliche {1}% für jede Stufe der Tierhaltungsfertigkeit und die Generation des Muttertiers mal {2}% bis zu einem Maximum von {3}%.",
@@ -529,6 +561,9 @@
 
   "ability-strongback": "Starker Rücken",
   "abilitydesc-strongback": "Fügt deinem Charakter ein weiteres ein Inventar mit {0} Plätzen hinzu. Du kannst Items zwischen diesem Inventar und deiner Hotbar wechseln. [Standard: R]",
+
+  "ability-strongline": "Starke Angelschnur",
+  "abilitydesc-strongline": "Mit einer Chance von {0}% (+{1}% pro Angler-Level, max. {2}%) verliert Ihre Angel beim Benutzen keine Haltbarkeit.",
 
   "ability-swordsman": "Schwertkämpfer",
   "abilitydesc-swordsman": "Erhöht den Schaden, den du mit Schwertern verursachst, um {0}% und zusätzlich {1}% für jedes Level in der Kampffertigkeit. Maximal bis {2}%.",

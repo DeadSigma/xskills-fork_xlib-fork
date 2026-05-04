@@ -100,9 +100,10 @@ namespace XSkills
             {
                "healingeffectivness", "hungerrate"
             };
+
             MalusTraits = new List<string>()
             {
-                "rangedWeaponsAcc", "rangedWeaponsSpeed"
+             "rangedWeaponsAcc", "rangedWeaponsSpeed", "walkspeed"
             };
 
             if (XSkills.Instance.Api.ModLoader.IsModEnabled("combatoverhaul"))
@@ -117,6 +118,7 @@ namespace XSkills
                 {"rangedWeaponsAcc", "game:Ranged Accuracy"},
                 {"rangedWeaponsSpeed", "game:Ranged Charge Speed"},
                 {"steadyAim", "combatoverhaul:stat-steadyAim"},
+                {"walkspeed", "game:Walkspeed"}
             };
         }
     }

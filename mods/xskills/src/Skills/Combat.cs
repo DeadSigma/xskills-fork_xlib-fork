@@ -138,7 +138,7 @@ namespace XSkills
                 "heavyarmorexpert",
                 "xskills:ability-heavyarmorexpert",
                 "xskills:abilitydesc-heavyarmorexpert",
-                3, 2, new int[] { 20, 50, 40, 100 }));
+                3, 2, new int[] { 20, 25, 40, 50 }));
 
             // increases some traits if your armor has no movement penalty
             // 0: boni

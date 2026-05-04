@@ -1,6 +1,9 @@
 ﻿{
   "adrenalinerush-effect": "Nával adrenalinu",
   "adrenalinerush-effectdesc": "",
+  "armor-heavy-dec": "Rychlost chůze, Rychlost hladu, Efektivita léčení",
+  "armor-heavy-inc": "Přesnost na dálku, Rychlost natažení luku",
+  "armor-light-inc": "Efektivita léčení, Přesnost na dálku, Rychlost natažení luku",
   "beehive-harvest": "Vyber plástve z úlu",
   "block-cage-wooden-east": "Dřevěná klec",
   "block-cage-wooden-north": "Dřevěná klec",
@@ -18,6 +21,9 @@
   "catchable": "Catchable",
   "cloudiness-range": "Oblačnost mezi {0:P2} a {1:P2}",
   "cooking-finished": "Máš uvařeno: {0}",
+  "group-collecting": "Sběr",
+  "group-processing": "Zpracování",
+  "group-survival": "Přežití",
   "harvestable-in-days": " Možno sklízet za {0:N1} dní",
   "in-days": "Za {0} dní",
   "isnearby": " je blízko!",
@@ -70,6 +76,10 @@
   "meteorology": "Meteorology",
   "monster": "Monstrum",
   "owner-desc": "Majitel: {0}",
+  "perk-bonus": "Aktuální bonus: +{0}%\n(Základní šance {1}% + {2}% z úrovně)",
+  "perk-chance": "Aktuální šance: {0}%\n(Základní šance {1}% + {2}% z úrovně)",
+  "perk-damage": "Aktuální bonus k poškození/obraně: +{0}%\n(Základní šance {1}% + {2}% z úrovně)",
+  "perk-maxbonus": "Maximální bonus nyní: {0} ks.",
   "pottery-finished": "Firing finished: {0}",
   "probability-of-precipitation-range": "Pravděpodobnost deště od {0:P2} do {1:P2}",
   "progress": "Progress: {0:P0}",
@@ -99,6 +109,7 @@
   "skill-cooking": "Gastronomie",
   "skill-digging": "Kopání",
   "skill-farming": "Farmaření",
+  "skill-fishing": "Rybaření",
   "skill-forestry": "Lesnictví",
   "skill-husbandry": "Chovatelství",
   "skill-metalworking": "Zpracování Kovů",
@@ -132,11 +143,17 @@
   "ability-armoredagility": "Hbitost v brnění",
   "abilitydesc-armoredagility": "Snižuje penalizace k rychlosti chůze, které získáte za nošení brnění, o {0} %.",
 
+  "ability-autobaiter": "Obratné ruce",
+  "abilitydesc-autobaiter": "Automaticky nasazuje návnadu z inventáře na udici při nahození.",
+
   "ability-automatedsmithing": "Automatické kovářství",
   "abilitydesc-automatedsmithing": "Vaše kladiva dokážou zpracovat výrobky ( krumpáč, lopata atd. ) s až {0} vrstvami.",
 
   "ability-axeexpert": "Expert se sekerou",
   "abilitydesc-axeexpert": "Rozbití bloku sekerou zvýší rychlost kácení stromů pomocí seker o {0} % a dalších 0.{1} % za každou úroveň dovednosti Lesnictví. Maximální hodnota je {2} %. Tento efekt se hromadí až {3} krát a trvá {4} sekund.",
+
+  "ability-baitmaster": "Mistr návnady",
+  "abilitydesc-baitmaster": "S šancí {0}% (+{1}% za každý level rybáře, maximálně {2}%) nespotřebujete návnadu při úspěšném ulovení ryby.",
 
   "ability-beekeeper": "Včelař",
   "abilitydesc-beekeeper": "Rozbitím plných skepů medu  získáte o {0} více plástů.",
@@ -243,6 +260,9 @@
   "ability-diver": "Potápěč",
   "abilitydesc-diver": "Snižuje spotřebu kyslíku o {0} %.",
 
+  "ability-doublehook": "Dvojitý háček",
+  "abilitydesc-doublehook": "S šancí {0}% (+{1}% za každý level rybáře, maximálně {2}%) můžete vytáhnout dvě ryby jedním nahozením!",
+
   "ability-drunkenmaster": "Mistr Miloš Becherovka",
   "abilitydesc-drunkenmaster": "Zvyšuje poškození, které způsobíte holýma rukama, až o {0} % v závislosti na tom, jak jste opilí, ale snižuje poškození o {1} %, pokud jste střízliví.",
 
@@ -276,6 +296,12 @@
   "ability-finishingtouch": "Poslední dotek",
   "abilitydesc-finishingtouch": "Každý zásah má šanci okamžitě dokončit kovářskou práci. Čím pokročilejší práce, tím větší šance. Maximální šance je {0} % a navíc 0,1 % za každou úroveň dovednosti obrábění kovů. Tato šance je omezena na {2} % za zásah.",
 
+  "ability-fisher": "Rybář",
+  "abilitydesc-fisher": "Získáváte o {0}% více zkušeností za rybaření. PROFESЕ.\nPočet profesí, které můžete studovat, je omezen.",
+
+  "ability-fishfilleter": "Zkušený filetář",
+  "abilitydesc-fishfilleter": "Při zpracování ryb máte šanci {0}% (+{1}% za úroveň rybáře, max {2}%) získat další filety.\nMaximální počet bonusových filetů odpovídá úrovni dovednosti (do 5).",
+
   "ability-forester": "Lesník",
   "abilitydesc-forester": "Obdržíte o {0} % více zkušeností pro všechny lesnické činnosti. Počet profesí, které se můžete naučit, je omezený.",
 
@@ -296,6 +322,9 @@
 
   "ability-golddigger": "Zlatokop",
   "abilitydesc-golddigger": "Zvyšuje zisk itemů při přesívání o {0} % a dalších {1} % za každou úroveň dovednosti kopání. Maximálně {2} %.",
+
+  "ability-goodbait": "Kvalitní návnada",
+  "abilitydesc-goodbait": "Ryby berou o {0}% rychleji (+{1}% za každou úroveň rybáře, max {2}%).",
 
   "ability-gourmet": "Gurmán",
   "abilitydesc-gourmet": " Jídlo které uvaříš teď získá i kvalitu v základní hodnotě {0} maximálně však {1} kvality. Snězení takto kvalitního jídla dá hráči pozitivní efekt na 10 minut. Účinek závisí na nutričních hodnotách potravin. Intenzita účinku závisí na kvalitě jídla. Ve stejnou dobu můžete mít pouze jeden z těchto efektů.",
@@ -374,6 +403,9 @@
 
   "ability-machinelearning": "Strojové učení",
   "abilitydesc-machinelearning": "Své kovářské znalosti sdílíte s kladivy a oni mohou těžit z některých vašich schopností.",
+
+  "ability-magnetichook": "Magnetický háček",
+  "abilitydesc-magnetichook": "S šancí {0}% (+{1}% za každý level rybáře, maximálně {2}%) vytáhnete z vody místo ryby náhodný předmět.",
 
   "ability-masshusbandry": "Oligarcha",
   "abilitydesc-masshusbandry": "Zvyšuje počet potomků zvířat o {0}% a další {1}% pro každou úroveň chovatelství a {2}% krát generace matky zvířete až do {3}%.",
@@ -530,6 +562,9 @@
 
   "ability-strongback": "Silná záda",
   "abilitydesc-strongback": "Přidá k vaší postavě další inventář s {0} sloty. Mezi tímto inventářem a aktivním panelem můžete přepínat položky. [výchozí: R]",
+
+  "ability-strongline": "Pevný vlasec",
+  "abilitydesc-strongline": "S šancí {0}% (+{1}% za každý level rybáře, maximálně {2}%) vaše udice neztratí odolnost při použití.",
 
   "ability-swordsman": "Šermíř",
   "abilitydesc-swordsman": "Zvyšuje poškození, které způsobíte meči, o {0} % a dalších {1} % pro každou úroveň v bojové dovednosti. Max. {2} %.",

@@ -1,6 +1,9 @@
 ﻿{
   "adrenalinerush-effect": "Adrenaline rush",
   "adrenalinerush-effectdesc": "",
+  "armor-heavy-dec": "Walk speed, Hunger rate, Healing effectiveness",
+  "armor-heavy-inc": "Ranged accuracy, Bow draw speed",
+  "armor-light-inc": "Healing effectiveness, Ranged accuracy, Bow draw speed",
   "beehive-harvest": "Take the yields out of the beehive",
   "block-cage-wooden-east": "Cage",
   "block-cage-wooden-north": "Cage",
@@ -18,6 +21,11 @@
   "catchable": "Catchable",
   "cloudiness-range": "Cloudiness between {0:P2} and {1:P2}",
   "cooking-finished": "Cooking finished: {0}",
+  "fishing-currentchance": "Current chance: {0}% (Base {1}% + {2}% from level)",
+  "fishing-maxbonus": "Current maximum bonus: {0} fillets",
+  "group-collecting": "Collecting",
+  "group-processing": "Processing",
+  "group-survival": "Survival",
   "harvestable-in-days": "Harvestable in {0:N1} days",
   "in-days": "In {0} days",
   "isnearby": " is nearby!",
@@ -70,9 +78,9 @@
   "meteorology": "Meteorology",
   "monster": "Monster",
   "owner-desc": "Owner: {0}",
-  "perk-bonus": "Current bonus: +{0}%% (Base chance {1}%% + {2}%% from level)",
-  "perk-chance": "Current chance: {0}%% (Base chance {1}%% + {2}%% from level)",
-  "perk-damage": "Current damage/defense bonus: +{0}%% (Base chance {1}%% + {2}%% from level)",
+  "perk-bonus": "Current bonus: +{0}%\n(Base chance {1}% + {2}% from level)",
+  "perk-chance": "Current chance: {0}%\n(Base chance {1}% + {2}% from level)",
+  "perk-damage": "Current damage/defense bonus: +{0}%\n(Base chance {1}% + {2}% from level)",
   "perk-maxbonus": "Current maximum bonus: {0} pcs.",
   "pottery-finished": "Firing finished: {0}",
   "probability-of-precipitation-range": "Probability of rain from {0:P2} to {1:P2}",
@@ -102,6 +110,7 @@
   "skill-cooking": "Cooking",
   "skill-digging": "Digging",
   "skill-farming": "Farming",
+  "skill-fishing": "Fishing",
   "skill-forestry": "Forestry",
   "skill-husbandry": "Husbandry",
   "skill-metalworking": "Metalworking",
@@ -116,31 +125,6 @@
   "today": "Today",
   "tomorrow": "Tomorrow",
   "weather-forecast-from": "Weather forecast from {0}",
-  "xskills:ability-autobaiter": "Nimble Hands",
-  "xskills:ability-baitmaster": "Bait Master",
-  "xskills:ability-doublehook": "Double Hook",
-  "xskills:ability-fisher": "Fisher",
-  "xskills:ability-fishfilleter": "Expert Filleter",
-  "xskills:ability-goodbait": "Good Bait",
-  "xskills:ability-magnetichook": "Magnetic Hook",
-  "xskills:ability-strongline": "Strong Line",
-  "xskills:abilitydesc-autobaiter": "Automatically attaches bait from your inventory to the fishing rod when casting.",
-  "xskills:abilitydesc-baitmaster": "With a {0}% chance (+{1}% per Fishing level, up to {2}%), bait is not consumed on a successful catch.",
-  "xskills:abilitydesc-doublehook": "With a {0}% chance (+{1}% per Fishing level, up to {2}%), you can pull up two fish with a single cast!",
-  "xskills:abilitydesc-fisher": "You gain {0}% more experience for the Fishing skill. PROFESSION.\nThe number of professions you can learn is limited.",
-  "xskills:abilitydesc-fishfilleter": "When filleting fish, you have a {0}% chance (+{1}% per Fishing level, up to {2}%) to get extra fillets.\nThe maximum number of bonus fillets equals your skill level (up to 5).",
-  "xskills:abilitydesc-goodbait": "Fish bite {0}% faster (+{1}% per Fishing level, up to {2}%).",
-  "xskills:abilitydesc-magnetichook": "With a {0}% chance (+{1}% per Fishing level, up to {2}%), you will pull a random item from the water instead of a fish.",
-  "xskills:abilitydesc-strongline": "With a {0}% chance (+{1}% per Fishing level, up to {2}%), your fishing rod will not lose durability when used.",
-  "xskills:armor-heavy-dec": "Walk speed, Hunger rate, Healing effectiveness",
-  "xskills:armor-heavy-inc": "Ranged accuracy, Bow draw speed",
-  "xskills:armor-light-inc": "Healing effectiveness, Ranged accuracy, Bow draw speed",
-  "xskills:fishing-currentchance": "Current chance: {0}% (Base {1}% + {2}% from level)",
-  "xskills:fishing-maxbonus": "Current maximum bonus: {0} fillets",
-  "xskills:group-collecting": "Collecting",
-  "xskills:group-processing": "Processing",
-  "xskills:group-survival": "Survival",
-  "xskills:skill-fishing": "Fishing",
 
   "ability-abundanceadaptation": "Abundance Adaptation",
   "abilitydesc-abundanceadaptation": "Increases your healing effectiveness by {0}% and your hungerrate by {1}%.",
@@ -160,11 +144,17 @@
   "ability-armoredagility": "Armored Agility",
   "abilitydesc-armoredagility": "Reduces walkspeed penalties you receive for wearing armor by {0}%.",
 
+  "ability-autobaiter": "Nimble Hands",
+  "abilitydesc-autobaiter": "Automatically attaches bait from your inventory to the fishing rod when casting.",
+
   "ability-automatedsmithing": "Automated Smithing",
   "abilitydesc-automatedsmithing": "Your helve hammers can work items with up to {0} layers.",
 
   "ability-axeexpert": "Axe Expert",
   "abilitydesc-axeexpert": "Breaking a block with an axe increases your tree felling speed with axes by {0}% and additional 0.{1}% for each level at the forestry skill. Maxed out at {2}%. This effect stacks up to {3} times and last {4} seconds.",
+
+  "ability-baitmaster": "Bait Master",
+  "abilitydesc-baitmaster": "With a {0}% chance (+{1}% per Fishing level, up to {2}%), bait is not consumed on a successful catch.",
 
   "ability-beekeeper": "Beekeeper",
   "abilitydesc-beekeeper": "Breaking harvestable skeps will give you {0} more Honeycombs.",
@@ -271,6 +261,9 @@
   "ability-diver": "Diver",
   "abilitydesc-diver": "Reduces your oxygen consumption by {0}%.",
 
+  "ability-doublehook": "Double Hook",
+  "abilitydesc-doublehook": "With a {0}% chance (+{1}% per Fishing level, up to {2}%), you can pull up two fish with a single cast!",
+
   "ability-drunkenmaster": "Drunken Master",
   "abilitydesc-drunkenmaster": "Increases the damage you deal with your bare hands by up to {0}% depending on how drunk you are, but decreases your damage by {1}% if you are sober.",
 
@@ -304,6 +297,12 @@
   "ability-finishingtouch": "Finishing Touch",
   "abilitydesc-finishingtouch": "You have a chance for every hit to instantly finish a smithing work. The more advanced the work, the greater the chance. The maximal chance is {0}% and additional 0.{1}% for each level at the metalworking skill. This chance is capped at {2}% per hit.",
 
+  "ability-fisher": "Fisher",
+  "abilitydesc-fisher": "You gain {0}% more experience for the Fishing skill. PROFESSION.\nThe number of professions you can learn is limited.",
+
+  "ability-fishfilleter": "Expert Filleter",
+  "abilitydesc-fishfilleter": "When filleting fish, you have a {0}% chance (+{1}% per Fishing level, up to {2}%) to get extra fillets.\nThe maximum number of bonus fillets equals your skill level (up to 5).",
+
   "ability-forester": "Forester",
   "abilitydesc-forester": "You will receive {0}% more experience for all foresting activities. The amount of specializations you can learn is limited.",
 
@@ -324,6 +323,9 @@
 
   "ability-golddigger": "Gold Digger",
   "abilitydesc-golddigger": "Increases your yield while panning by {0}% and additional {1}% for each level at the digging skill. Maxed out at {2}%.",
+
+  "ability-goodbait": "Good Bait",
+  "abilitydesc-goodbait": "Fish bite {0}% faster (+{1}% per Fishing level, up to {2}%).",
 
   "ability-gourmet": "Gourmet",
   "abilitydesc-gourmet": "Food you cook can now have quality with a base value of {0} and a maximum value of {1} quality. Eating food with quality gives the eating player a positive effect for 10 minutes. The effect depends on the nutrition values of the food. The intensity of the effect depends on the quality of the food. You can have only one of these effects at the same time.",
@@ -402,6 +404,9 @@
 
   "ability-machinelearning": "Machine Learning",
   "abilitydesc-machinelearning": "You can share your smithing knowledge with helve hammers and they can profit from some of your abilities.",
+
+  "ability-magnetichook": "Magnetic Hook",
+  "abilitydesc-magnetichook": "With a {0}% chance (+{1}% per Fishing level, up to {2}%), you will pull a random item from the water instead of a fish.",
 
   "ability-masshusbandry": "Mass Husbandry",
   "abilitydesc-masshusbandry": "Increases the number of offsprings of animals by {0}% and additional {1}% for each level at the husbandry skill and {2}% times the generation of the mother animal up to a maximum of {3}%.",
@@ -558,6 +563,9 @@
 
   "ability-strongback": "Strong Back",
   "abilitydesc-strongback": "Adds an additional inventory with {0} slots to your character. You can switch the items between this inventory and your hotbar. [default: R]",
+
+  "ability-strongline": "Strong Line",
+  "abilitydesc-strongline": "With a {0}% chance (+{1}% per Fishing level, up to {2}%), your fishing rod will not lose durability when used.",
 
   "ability-swordsman": "Swordsman",
   "abilitydesc-swordsman": "Increases the damage you deal with swords by {0}% and additional {1}% for each level at the combat skill. Maxed out at {2}%.",

@@ -314,7 +314,14 @@ namespace XSkills
                 EntityBehaviorHealth playerHealth = player.Entity.GetBehavior("health") as EntityBehaviorHealth;
                 if (playerHealth != null)
                 {
-                    player.Entity.Stats.Set("maxhealthExtraPoints", "longlife", 0.01f * playerAbility.SkillDependentValue() * playerHealth.BaseMaxHealth, false);
+                    // Считаем бонус
+                    float bonusHealth = 0.01f * playerAbility.SkillDependentValue() * playerHealth.BaseMaxHealth;
+
+                    // Применяем стат
+                    player.Entity.Stats.Set("maxhealthExtraPoints", "longlife", bonusHealth, false);
+
+                    // Это запустит внутренний пересчет MaxHealth и синхронизацию с клиентом.
+                    playerHealth.MarkDirty();
                 }
             }
         }
