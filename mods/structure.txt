@@ -24,6 +24,7 @@ mods/
                     pl.json
                     ru.json
                     uk.json
+                    zn-CN.json
                 patches/
                     entities.json
                 shaders/
@@ -41,8 +42,6 @@ mods/
                 itemtypes/
                     skillbook.json
                 lang/
-                    ar.json
-                    cn.json
                     cs.json
                     de.json
                     en.json
@@ -58,6 +57,7 @@ mods/
                     ru.json
                     sv.json
                     uk.json
+                    zn-CN.json
         src/
             xeffects/
                 AffectedEntityBehavior.cs
@@ -139,11 +139,19 @@ mods/
         assets/
             game/
                 lang/
+                    cs.json
                     de.json
                     en.json
                     es-419.json
                     es-es.json
+                    fr.json
+                    it.json
+                    ja.json
                     pl.json
+                    ru.json
+                    sv.json
+                    uk.json
+                    zh-CN.json
             xskills/
                 blocktypes/
                     cage.json
@@ -157,7 +165,6 @@ mods/
                     metalbits/
                         metalbit.json
                 lang/
-                    ar.json
                     cn.json
                     cs.json
                     de.json
@@ -165,15 +172,14 @@ mods/
                     es-419.json
                     es-es.json
                     fr.json
-                    it.json
                     ja.json
-                    nl.json
                     pl.json
                     pt-br.json
                     ro.json
                     ru.json
                     sv.json
                     uk.json
+                    zn-CN.json
                 patches/
                     container.json
                     cooking.json
@@ -271,6 +277,7 @@ mods/
                 EntityPlayerPatch.cs
                 ItemHammerPatch.cs
                 ItemWearablePatch.cs
+                LeavesDropCompatibilityFix.cs
                 ManualPatch.cs
                 TradeItemPatch.cs
                 Combat/
@@ -306,6 +313,7 @@ mods/
                     BlockReedsPatch.cs
                     BlockWateringCanPatch.cs
                     ClayHiveTopPatch.cs
+                    CropAutoPatchSystem.cs
                     HoeUtil.cs
                     ItemPlantableSeedPatch.cs
                     ItemShearsPatch.cs

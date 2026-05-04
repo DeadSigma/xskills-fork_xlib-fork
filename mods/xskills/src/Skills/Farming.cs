@@ -593,11 +593,13 @@ namespace XSkills
 
         public override ItemStack[] GetDrops(IWorldAccessor world, BlockPos pos, IPlayer byPlayer, ref float dropChanceMultiplier, ref EnumHandling handling)
         {
-
             List<ItemStack> drops = new List<ItemStack>();
-            if (this.farming == null) drops.ToArray();
+
+            // Вот здесь мы добавляем пропущенный return:
+            if (this.farming == null) return drops.ToArray();
+
             PlayerSkill playerSkill = byPlayer?.Entity.GetBehavior<PlayerSkillSet>()?[this.farming.Id];
-            if(playerSkill == null) return drops.ToArray();
+            if (playerSkill == null) return drops.ToArray();
 
             //experience
             playerSkill.AddExperience(this.xp);
@@ -607,8 +609,8 @@ namespace XSkills
 
             for (int index = 0; index < block.Drops.Length; index++)
             {
-                //demeters bless
-                if (this.xp > 0.0f && block.Drops[index].ResolvedItemstack.GetName().Contains("seeds"))
+                // Проверяем ResolvedItemstack на null перед тем, как читать его имя!
+                if (this.xp > 0.0f && block.Drops[index].ResolvedItemstack != null && block.Drops[index].ResolvedItemstack.GetName().Contains("seeds"))
                 {
                     if (abilitySeeds != null)
                     {

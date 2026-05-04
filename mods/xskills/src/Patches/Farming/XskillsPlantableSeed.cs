@@ -123,6 +123,27 @@ namespace XSkills
             int range = 1;
             if (playerAbility != null && toolMode > 0) range = playerAbility.Ability.Value(toolMode, 0);
 
+            if (range == 1)
+            {
+                // Отдаем посадку 1х1 ванильному коду (или коду мода cancrops)
+                base.OnHeldInteractStart(itemslot, byEntity, blockSel, entitySel, firstEvent, ref handHandling);
+
+                // Если посадка удалась, накидываем сверху бонус от навыка Cultivated Seeds
+                if (handHandling == EnumHandHandling.PreventDefault)
+                {
+                    BlockEntityFarmland beFarmland = byEntity.World.BlockAccessor.GetBlockEntity(blockSel.Position) as BlockEntityFarmland;
+                    Block crop = byEntity.World.BlockAccessor.GetBlock(blockSel.Position);
+                    playerAbility = playerSkill[farming.CultivatedSeedsId];
+
+                    if (beFarmland != null && crop?.CropProps != null && playerAbility?.Tier > 0)
+                    {
+                        if (beFarmland.Roomness > 0) beFarmland.TryGrowCrop(api.World.Calendar.TotalHours);
+                        if (byEntity.World.Rand.NextDouble() < playerAbility.SkillDependentFValue()) beFarmland.TryGrowCrop(api.World.Calendar.TotalHours);
+                    }
+                }
+                return; // Прерываем выполнение, чтобы не запускать цикл XSkills
+            }
+
             int x = blockSel.Position.X;
             int y = blockSel.Position.Y;
             int z = blockSel.Position.Z;
@@ -148,7 +169,12 @@ namespace XSkills
                     BlockEntityFarmland farmland = byEntity.World.BlockAccessor.GetBlockEntity(pos) as BlockEntityFarmland;
                     if (farmland != null)
                     {
-                        bool planted = farmland.TryPlant(cropBlock, new DummySlot(), byEntity, blockSel);
+                        // СОХРАНЯЕМ ДАННЫЕ СЕМЕНИ: Создаем временный слот с копией нашего предмета
+                        ItemSlot tempSlot = new DummySlot(itemslot.Itemstack.Clone());
+                        tempSlot.Itemstack.StackSize = 1;
+
+                        // Передаем грядке этот слот, чтобы она могла прочитать все атрибуты
+                        bool planted = farmland.TryPlant(cropBlock, tempSlot, byEntity, blockSel);
                         if (planted)
                         {
                             handHandling = EnumHandHandling.PreventDefault;
@@ -164,10 +190,15 @@ namespace XSkills
 
                             // cultivated seeds
                             playerAbility = playerSkill[farming.CultivatedSeedsId];
-                            if (playerAbility?.Tier > 0 )
+                            if (playerAbility?.Tier > 0)
                             {
-                                if (farmland.Roomness > 0) farmland.TryGrowCrop(api.World.Calendar.TotalHours);
-                                if (byEntity.World.Rand.NextDouble() < playerAbility.SkillDependentFValue()) farmland.TryGrowCrop(api.World.Calendar.TotalHours);
+                                // МЯГКАЯ ЗАЩИТА: Проверяем, что блок существует и у него есть параметры урожая (CropProps)
+                                Block cropOnFarmland = byEntity.World.BlockAccessor.GetBlock(pos);
+                                if (cropOnFarmland != null && cropOnFarmland.CropProps != null)
+                                {
+                                    if (farmland.Roomness > 0) farmland.TryGrowCrop(api.World.Calendar.TotalHours);
+                                    if (byEntity.World.Rand.NextDouble() < playerAbility.SkillDependentFValue()) farmland.TryGrowCrop(api.World.Calendar.TotalHours);
+                                }
                             }
                         }
                     }

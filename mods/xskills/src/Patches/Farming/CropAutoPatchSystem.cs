@@ -10,9 +10,10 @@ namespace XSkills
         // чтобы гарантированно выполниться ПОСЛЕ того, как загрузятся сторонние моды.
         public override double ExecuteOrder() => 0.2; 
 
-        public override void AssetsFinalize(ICoreAPI api)
+        public override void AssetsLoaded(ICoreAPI api)
         {
-            base.AssetsFinalize(api);
+            base.AssetsLoaded(api);
+
 
             int patchedCount = 0;
 

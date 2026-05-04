@@ -186,7 +186,10 @@ namespace XLib.XLeveling
         {
             base.AssetsLoaded(api);
             this.Mod.Logger.Event("Initialize skills");
+
+
             LoadJsonSkills();
+
 
             int skillCount = 0;
             int skillsDisabled = 0;
@@ -401,26 +404,60 @@ namespace XLib.XLeveling
 
         private void RemoveRequirementsRecursive(List<Requirement> requirements, List<string> remove)
         {
-            if (requirements == null || remove == null) return;
-            if (remove.Count == 0) return;
-            requirements.RemoveAll(
-                (Requirement requirement) =>
-            {
-                if (requirement is NotRequirement notRequirement)
-                {
-                    return remove.Contains(notRequirement.Requirement.Name);
-                }
-                return remove.Contains(requirement.Name);
-            });
+            if (requirements == null || remove == null || remove.Count == 0) return;
 
+            // 1. Умная очистка вашего конфига от мусора (убираем "class:" и пробелы)
+            List<string> cleanRemove = new List<string>();
+            foreach (string r in remove)
+            {
+                if (!string.IsNullOrEmpty(r))
+                {
+                    cleanRemove.Add(r.Replace("class:", "").Replace("class: ", "").Trim().ToLowerInvariant());
+                }
+            }
+
+            // 2. Идем вглубь: AndRequirement и исправленный нами OrRequirement
             foreach (Requirement requirement in requirements)
             {
                 if (requirement is AndRequirement andRequirement)
                 {
                     RemoveRequirementsRecursive(andRequirement.Requirements, remove);
                 }
+                else if (requirement is OrRequirement orRequirement)
+                {
+                    RemoveRequirementsRecursive(orRequirement.Requirements, remove);
+                }
             }
+
+            // Удаляем пустые ветки "ИЛИ/И"
             requirements.RemoveAll((Requirement requirement) => (requirement as AndRequirement)?.Requirements.Count == 0);
+            requirements.RemoveAll((Requirement requirement) => (requirement as OrRequirement)?.Requirements.Count == 0);
+
+            // 3. Безжалостное удаление
+            requirements.RemoveAll(
+                (Requirement requirement) =>
+                {
+                    // Глобальный рубильник на всякий случай
+                    if (remove.Contains("DISABLE_ALL_CLASSES") && requirement.GetType().Name.Contains("ClassRequirement"))
+                    {
+                        return true;
+                    }
+
+                    // Чистим имя самого требования внутри игры
+                    string reqName = requirement.Name?.Replace("class:", "")?.Replace("class: ", "")?.Trim()?.ToLowerInvariant();
+
+                    if (string.IsNullOrEmpty(reqName)) return false;
+
+                    // Если это требование "НЕ" (NotRequirement)
+                    if (requirement is NotRequirement notRequirement)
+                    {
+                        string notReqName = notRequirement.Requirement?.Name?.Replace("class:", "")?.Replace("class: ", "")?.Trim()?.ToLowerInvariant();
+                        return cleanRemove.Contains(notReqName);
+                    }
+
+                    // Если очищенное имя из игры совпало с очищенным именем из конфига — УДАЛЯЕМ!
+                    return cleanRemove.Contains(reqName);
+                });
         }
 
         /// <summary>
