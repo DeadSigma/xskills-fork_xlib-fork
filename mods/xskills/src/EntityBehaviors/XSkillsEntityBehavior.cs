@@ -119,12 +119,42 @@ namespace XSkills
         //combat overhaul compatibility method for weapon projectiles
         private static CollectibleObject COProjectiles(DamageSource dmgSource)
         {
-            ItemStack stack = (dmgSource as IWeaponDamageSource)?.Weapon;
-            if (stack != null) return stack.Collectible;
-            ProjectileEntity projectile2 = dmgSource.SourceEntity as ProjectileEntity;
-            if (projectile2 == null) return null;
-            if (projectile2.WeaponStack != null) return projectile2.WeaponStack.Collectible;
-            return projectile2.ProjectileStack?.Collectible;
+            // 1. Безопасно ищем свойство Weapon (замена IWeaponDamageSource)
+            try
+            {
+                var weaponProp = dmgSource.GetType().GetProperty("Weapon");
+                if (weaponProp != null)
+                {
+                    ItemStack stack = weaponProp.GetValue(dmgSource) as ItemStack;
+                    if (stack != null) return stack.Collectible;
+                }
+            }
+            catch { /* Игнорируем ошибки рефлексии */ }
+
+            // 2. Безопасно работаем с SourceEntity (замена ProjectileEntity)
+            var sourceEntity = dmgSource.SourceEntity;
+            if (sourceEntity == null) return null;
+
+            string typeName = sourceEntity.GetType().Name;
+            if (typeName == "ProjectileEntity" || typeName.Contains("Projectile"))
+            {
+                try
+                {
+                    dynamic projectile = sourceEntity;
+
+                    var weaponStack = projectile.WeaponStack as ItemStack;
+                    if (weaponStack != null) return weaponStack.Collectible;
+
+                    var projectileStack = projectile.ProjectileStack as ItemStack;
+                    return projectileStack?.Collectible;
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+
+            return null;
         }
 
         //calculates an armor tier for combat overhaul armor sets

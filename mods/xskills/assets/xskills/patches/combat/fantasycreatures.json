@@ -7,7 +7,7 @@
       "code": "XSkillsEntity",
       "xp": 1.0
     },
-    "dependsOn": [ { "modid": "fantasycreatures" } ]
+    "dependsOn": [ { "modid": "fantasycreaturesupdate" } ]
   },
   {
     "file": "fantasycreatures:entities/land/cavegoblin",
@@ -17,7 +17,7 @@
       "code": "XSkillsEntity",
       "xp": 1.0
     },
-    "dependsOn": [ { "modid": "fantasycreatures" } ]
+    "dependsOn": [ { "modid": "fantasycreaturesupdate" } ]
   },
   {
     "file": "fantasycreatures:entities/land/dragon",
@@ -27,7 +27,7 @@
       "code": "XSkillsEntity",
       "xp": 50.0
     },
-    "dependsOn": [ { "modid": "fantasycreatures" } ]
+    "dependsOn": [ { "modid": "fantasycreaturesupdate" } ]
   },
   {
     "file": "fantasycreatures:entities/land/dragon",
@@ -37,7 +37,7 @@
       "code": "XSkillsEntity",
       "xp": 50.0
     },
-    "dependsOn": [ { "modid": "fantasycreatures" } ]
+    "dependsOn": [ { "modid": "fantasycreaturesupdate" } ]
   },
   {
     "file": "fantasycreatures:entities/land/dragon-flying",
@@ -47,7 +47,7 @@
       "code": "XSkillsEntity",
       "xp": 50.0
     },
-    "dependsOn": [ { "modid": "fantasycreatures" } ]
+    "dependsOn": [ { "modid": "fantasycreaturesupdate" } ]
   },
   {
     "file": "fantasycreatures:entities/land/dragon-flying",
@@ -57,7 +57,7 @@
       "code": "XSkillsEntity",
       "xp": 50.0
     },
-    "dependsOn": [ { "modid": "fantasycreatures" } ]
+    "dependsOn": [ { "modid": "fantasycreaturesupdate" } ]
   },
   {
     "file": "fantasycreatures:entities/land/ent-shepherd",
@@ -67,7 +67,7 @@
       "code": "XSkillsEntity",
       "xp": 20.0
     },
-    "dependsOn": [ { "modid": "fantasycreatures" } ]
+    "dependsOn": [ { "modid": "fantasycreaturesupdate" } ]
   },
   {
     "file": "fantasycreatures:entities/land/ent-shepherd",
@@ -77,7 +77,7 @@
       "code": "XSkillsEntity",
       "xp": 20.0
     },
-    "dependsOn": [ { "modid": "fantasycreatures" } ]
+    "dependsOn": [ { "modid": "fantasycreaturesupdate" } ]
   },
   {
     "file": "fantasycreatures:entities/land/lonehuntergoblin",
@@ -87,7 +87,7 @@
       "code": "XSkillsEntity",
       "xp": 1.0
     },
-    "dependsOn": [ { "modid": "fantasycreatures" } ]
+    "dependsOn": [ { "modid": "fantasycreaturesupdate" } ]
   },
   {
     "file": "fantasycreatures:entities/land/lonehuntergoblin",
@@ -97,7 +97,7 @@
       "code": "XSkillsEntity",
       "xp": 1.0
     },
-    "dependsOn": [ { "modid": "fantasycreatures" } ]
+    "dependsOn": [ { "modid": "fantasycreaturesupdate" } ]
   },
   {
     "file": "fantasycreatures:entities/land/ork",
@@ -107,7 +107,7 @@
       "code": "XSkillsEntity",
       "xp": 1.0
     },
-    "dependsOn": [ { "modid": "fantasycreatures" } ]
+    "dependsOn": [ { "modid": "fantasycreaturesupdate" } ]
   },
   {
     "file": "fantasycreatures:entities/land/ork",
@@ -117,7 +117,7 @@
       "code": "XSkillsEntity",
       "xp": 1.0
     },
-    "dependsOn": [ { "modid": "fantasycreatures" } ]
+    "dependsOn": [ { "modid": "fantasycreaturesupdate" } ]
   },
   {
     "file": "fantasycreatures:entities/land/skeleton",
@@ -127,7 +127,7 @@
       "code": "XSkillsEntity",
       "xp": 1.0
     },
-    "dependsOn": [ { "modid": "fantasycreatures" } ]
+    "dependsOn": [ { "modid": "fantasycreaturesupdate" } ]
   },
   {
     "file": "fantasycreatures:entities/land/skeleton",
@@ -137,7 +137,7 @@
       "code": "XSkillsEntity",
       "xp": 1.0
     },
-    "dependsOn": [ { "modid": "fantasycreatures" } ]
+    "dependsOn": [ { "modid": "fantasycreaturesupdate" } ]
   },
   {
     "file": "fantasycreatures:entities/land/skeletonblkgrd",
@@ -147,7 +147,7 @@
       "code": "XSkillsEntity",
       "xp": 3.0
     },
-    "dependsOn": [ { "modid": "fantasycreatures" } ]
+    "dependsOn": [ { "modid": "fantasycreaturesupdate" } ]
   },
   {
     "file": "fantasycreatures:entities/land/skeletonblkgrd",
@@ -157,7 +157,7 @@
       "code": "XSkillsEntity",
       "xp": 3.0
     },
-    "dependsOn": [ { "modid": "fantasycreatures" } ]
+    "dependsOn": [ { "modid": "fantasycreaturesupdate" } ]
   },
   {
     "file": "fantasycreatures:entities/land/skeleton-deserter",
@@ -167,7 +167,7 @@
       "code": "XSkillsEntity",
       "xp": 1.0
     },
-    "dependsOn": [ { "modid": "fantasycreatures" } ]
+    "dependsOn": [ { "modid": "fantasycreaturesupdate" } ]
   },
   {
     "file": "fantasycreatures:entities/land/skeleton-deserter",
@@ -177,7 +177,7 @@
       "code": "XSkillsEntity",
       "xp": 1.0
     },
-    "dependsOn": [ { "modid": "fantasycreatures" } ]
+    "dependsOn": [ { "modid": "fantasycreaturesupdate" } ]
   },
   {
     "file": "fantasycreatures:entities/land/slime",
@@ -187,7 +187,7 @@
       "code": "XSkillsEntity",
       "xp": 3.0
     },
-    "dependsOn": [ { "modid": "fantasycreatures" } ]
+    "dependsOn": [ { "modid": "fantasycreaturesupdate" } ]
   },
   {
     "file": "fantasycreatures:entities/land/slime",
@@ -197,7 +197,7 @@
       "code": "XSkillsEntity",
       "xp": 3.0
     },
-    "dependsOn": [ { "modid": "fantasycreatures" } ]
+    "dependsOn": [ { "modid": "fantasycreaturesupdate" } ]
   },
   {
     "file": "fantasycreatures:entities/land/surface_skeleton",
@@ -207,7 +207,7 @@
       "code": "XSkillsEntity",
       "xp": 1.0
     },
-    "dependsOn": [ { "modid": "fantasycreatures" } ]
+    "dependsOn": [ { "modid": "fantasycreaturesupdate" } ]
   },
   {
     "file": "fantasycreatures:entities/land/surface_skeleton",
@@ -217,7 +217,7 @@
       "code": "XSkillsEntity",
       "xp": 1.0
     },
-    "dependsOn": [ { "modid": "fantasycreatures" } ]
+    "dependsOn": [ { "modid": "fantasycreaturesupdate" } ]
   },
   {
     "file": "fantasycreatures:entities/land/surfacegoblin",
@@ -227,7 +227,7 @@
       "code": "XSkillsEntity",
       "xp": 1.0
     },
-    "dependsOn": [ { "modid": "fantasycreatures" } ]
+    "dependsOn": [ { "modid": "fantasycreaturesupdate" } ]
   },
   {
     "file": "fantasycreatures:entities/land/surfacegoblin",
@@ -237,7 +237,7 @@
       "code": "XSkillsEntity",
       "xp": 1.0
     },
-    "dependsOn": [ { "modid": "fantasycreatures" } ]
+    "dependsOn": [ { "modid": "fantasycreaturesupdate" } ]
   },
   {
     "file": "fantasycreatures:entities/land/treant",
@@ -247,7 +247,7 @@
       "code": "XSkillsEntity",
       "xp": 50.0
     },
-    "dependsOn": [ { "modid": "fantasycreatures" } ]
+    "dependsOn": [ { "modid": "fantasycreaturesupdate" } ]
   },
   {
     "file": "fantasycreatures:entities/land/treant",
@@ -257,6 +257,6 @@
       "code": "XSkillsEntity",
       "xp": 50.0
     },
-    "dependsOn": [ { "modid": "fantasycreatures" } ]
+    "dependsOn": [ { "modid": "fantasycreaturesupdate" } ]
   }
 ]

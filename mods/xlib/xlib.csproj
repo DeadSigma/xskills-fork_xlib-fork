@@ -56,7 +56,7 @@
     <Content Include="assets\xeffects\lang\pl.json" />
     <Content Include="assets\xeffects\lang\en.json" />
     <Content Include="assets\xeffects\lang\es-419.json" />
-    <Content Include="assets\xeffects\lang\zn-CN.json" />
+    <Content Include="assets\xeffects\lang\zh-CN.json" />
     <Content Include="assets\xeffects\lang\ru.json" />
     <Content Include="assets\xeffects\patches\entities.json" />
     <Content Include="assets\xlib\lang\de.json" />
@@ -73,7 +73,7 @@
     <Content Include="assets\xeffects\lang\ja.json" />
     <Content Include="assets\xeffects\lang\es-es.json" />
     <Content Include="assets\xeffects\lang\uk.json" />
-    <Content Include="assets\xlib\lang\zn-CN.json" />
+    <Content Include="assets\xlib\lang\zh-CN.json" />
     <Content Include="assets\xlib\lang\es-es.json" />
     <Content Include="assets\xlib\lang\nl.json" />
     <Content Include="assets\xlib\lang\ro.json" />
