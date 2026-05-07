@@ -76,7 +76,12 @@ namespace XSkills
             if (itemslot.Itemstack.Collectible.Attributes != null && itemslot.Itemstack.Collectible.Attributes.KeyExists("cropBlockCode"))
             {
                 string cropCode = itemslot.Itemstack.Collectible.Attributes["cropBlockCode"].AsString();
-                cropBlock = byEntity.World.GetBlock(AssetLocation.Create(cropCode, itemslot.Itemstack.Collectible.Code.Domain));
+
+                // ДОБАВЛЕНА ПРОВЕРКА НА NULL И ПУСТОТУ
+                if (!string.IsNullOrEmpty(cropCode))
+                {
+                    cropBlock = byEntity.World.GetBlock(AssetLocation.Create(cropCode, itemslot.Itemstack.Collectible.Code.Domain));
+                }
             }
 
             // 2. Умный запасной вариант: если код начинается с "seeds-", меняем только эту часть
