@@ -43,6 +43,12 @@ namespace XSkills
 
                 harmony = new Harmony("XSkillsPatch");
                 harmony.PatchAll(Assembly.GetExecutingAssembly());
+
+                // Фикс наковальни
+                KnapsterIntegration.ApplyPatches(harmony, api);
+                // Фикс лепки из глины
+                KnapsterClayIntegration.ApplyPatches(harmony, api);
+
                 Type type;
 
                 BlockEntityAnvilPatch.Apply(harmony, api.ClassRegistry.GetBlockEntity("Anvil"));
