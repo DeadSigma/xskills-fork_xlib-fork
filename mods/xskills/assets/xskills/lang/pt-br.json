@@ -493,6 +493,9 @@
   "ability-resinfarmer": "Cultivador de Resina",
   "abilitydesc-resinfarmer": "Toda vez que você corta um pinheiro, há uma chance de {0}% por tronco de madeira de pingar resina.",
 
+  "ability-safequenching": "Têmpera segura",
+  "abilitydesc-safequenching": "Com esta habilidade, suas ferramentas não irão mais se despedaçar em átomos durante a têmpera. Se a têmpera falhar, o item simplesmente será arruinado.",
+
   "ability-saltpeterdigger": "Cavador de Salitre",
   "abilitydesc-saltpeterdigger": "Aumenta a produção de salitre em {0}% e adicionalmente {1}% para cada nível na habilidade de escavação. Máximo em {2}%.",
 

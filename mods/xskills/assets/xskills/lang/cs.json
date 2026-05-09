@@ -494,6 +494,9 @@
   "ability-resinfarmer": "Farmář pryskyřice",
   "abilitydesc-resinfarmer": "Pokaždé, když pokácíte borovici, existuje pravděpodobnost {0} % na každé poleno, že z ní ukápne pryskyřice.",
 
+  "ability-safequenching": "Bezpečné kalení",
+  "abilitydesc-safequenching": "S touto schopností se vaše nástroje při kalení již nebudou rozpadat na atomy. Pokud se kalení nepovede, předmět se pouze poškodí.",
+
   "ability-saltpeterdigger": "Těžař ledku",
   "abilitydesc-saltpeterdigger": "Zvyšuje výnos sklizně ledku o {0} % a dalších {1} % pro každou úroveň dovednosti kopání. Max. o {2} %.",
 

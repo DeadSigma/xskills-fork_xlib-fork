@@ -496,6 +496,9 @@
   "ability-resinfarmer": "树脂农夫",
   "abilitydesc-resinfarmer": "每次砍伐一棵松树时，每根\n原木都有{0}%的几率掉落树脂。",
 
+  "ability-safequenching": "安全淬火",
+  "abilitydesc-safequenching": "拥有此技能后，你的工具在淬火时不再会裂解成原子。如果淬火失败，物品只会损坏。",
+
   "ability-saltpeterdigger": "硝石挖掘机",
   "abilitydesc-saltpeterdigger": "硝石收获产量提高{0}%，挖掘\n技能每级额外提高{1}%。\n最大为{2}%。",
 

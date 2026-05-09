@@ -493,6 +493,9 @@
   "ability-resinfarmer": "Harzbauer",
   "abilitydesc-resinfarmer": "Jedes Mal, wenn du eine Kiefer fällst, besteht eine Wahrscheinlichkeit von {0}% pro Holzstamm, dass Harz abfällt.",
 
+  "ability-safequenching": "Sicheres Härten",
+  "abilitydesc-safequenching": "Mit dieser Fähigkeit werden eure Werkzeuge beim Härten nicht mehr in Atome zersplittern. Falls das Härten fehlschlägt, wird der Gegenstand einfach beschädigt.",
+
   "ability-saltpeterdigger": "Salpetergräber",
   "abilitydesc-saltpeterdigger": "Erhöht den Ertrag beim Abbauen von Salpeter um {0}% und zusätzlich um {1}% für jede Stufe der Grabenfertigkeit. Maximal bis {2}%.",
 

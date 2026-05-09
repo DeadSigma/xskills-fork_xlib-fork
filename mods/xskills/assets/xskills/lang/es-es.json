@@ -493,6 +493,9 @@
   "ability-resinfarmer": "Granjero de resina",
   "abilitydesc-resinfarmer": "Cada vez que tales un pino hay un {0}% de probabilidad por bloque de tronco de que obtengas resina.",
 
+  "ability-safequenching": "Temple seguro",
+  "abilitydesc-safequenching": "Con esta habilidad, tus herramientas ya no se desintegrarán en átomos durante el templado. Si el templado falla, el objeto simplemente se estropeará.",
+
   "ability-saltpeterdigger": "Excavador de salitre",
   "abilitydesc-saltpeterdigger": "Aumenta el salitre recolectado por bloque en un {0}%, con un {1}% adicional por cada nivel de Excavación. Máximo {2}%.",
 
