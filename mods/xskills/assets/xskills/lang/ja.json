@@ -347,7 +347,7 @@
   "abilitydesc-healer": "使用した回復アイテムは{1}秒間に{0}%追加で回復します。",
 
   "ability-heatinghits": "加熱打ち",
-  "abilitydesc-heatinghits": "金床上の鍛冶加工品を打つ度に、その温度が{0}℃上昇します。",
+  "abilitydesc-heatinghits": "加工物を叩くたびに温度が0.5°C上昇します。lvl2 > 1°C",
 
   "ability-heavyarmorexpert": "重装鎧の達人",
   "abilitydesc-heavyarmorexpert": "鎧による一部能力低下を {0}% 軽減し、一部能力を {1}% 上昇させます。\n低下軽減: 回復効果、空腹速度 {2}\n上昇: 射撃精度、照準時間 {3}",

@@ -348,7 +348,7 @@
   "abilitydesc-healer": "Léčebné náplasti, které používáte, vyléčí dalších {0} % za {1} sekund.",
 
   "ability-heatinghits": "Žhavé pohyby",
-  "abilitydesc-heatinghits": "Každé bouchnutí kladivem do obrobku na kovadlině zvýší jeho teplotu o {0}°C.",
+  "abilitydesc-heatinghits": "Každý úder do polotovaru jej zahřeje o 0.5°C. lvl2 > 1°C",
 
   "ability-heavyarmorexpert": "Expert na těžké brnění",
   "abilitydesc-heavyarmorexpert": "Snižuje některé hodnoty vlastností (z Classy), které získáte ze svého brnění, o {0} %. Zároveň však zvyšuje některé hodnoty vlastností o {1} %.\nSnižuje vlastnosti: {2}\nZvyšuje vlastnosti: {3}",

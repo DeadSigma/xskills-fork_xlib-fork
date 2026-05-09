@@ -347,7 +347,7 @@
   "abilitydesc-healer": "Healing items you use heal additional {0}% over {1} seconds.",
 
   "ability-heatinghits": "Heating Hits",
-  "abilitydesc-heatinghits": "Every hit on a smithing work on an anvil will increase its temperature by {0}°C.",
+  "abilitydesc-heatinghits": "Varje slag på arbetsstycket värmer upp det med 0.5°C. lvl2 > 1°C",
 
   "ability-heavyarmorexpert": "Tung rustnings-expert",
   "abilitydesc-heavyarmorexpert": "Minskar vissa egenskaper du får från rustning med {0}%. Men ökar också vissa egenskaper med {1}%.\nMinskade egenskaper: Läkeeffekt, Hungerhastighet {2}\nÖkade egenskaper: Skytteprecision, siktningstid {3}",

@@ -326,18 +326,29 @@ namespace XSkills
 
             //heating hits
             playerAbility = playerSkill?[__state.metalworking.HeatingHitsId];
-            float meltingpoint = 
+            float meltingpoint =
                 __state.anvilItemStack != null ?
                 collectible.GetMeltingPoint(world, null, new DummySlot(__state.anvilItemStack.GetBaseMaterial(__state.workItemStack))) :
                 0.0f;
-            if (meltingpoint > 0.0f && playerAbility != null)
+
+            // Оборачиваем всё в проверку на null, чтобы избежать вылета игры, если перк не прокачан
+            if (playerAbility != null)
             {
-                if (temperature < meltingpoint)
+                // Умножаем значение навыка на 0.5f: базовые 1 и 2 превратятся ровно в 0.5 и 1.0 градуса
+                float heatBonus = playerAbility.Value(0) * 0.5f;
+
+                if (meltingpoint > 0.0f)
                 {
-                    temperature = Math.Min(temperature + playerAbility.Value(0), meltingpoint);
+                    if (temperature < meltingpoint)
+                    {
+                        temperature = Math.Min(temperature + heatBonus, meltingpoint);
+                    }
+                }
+                else
+                {
+                    temperature += heatBonus;
                 }
             }
-            else temperature = temperature + playerAbility.Value(0);
             collectible.SetTemperature(world, __state.workItemStack, temperature);
 
             //blacksmith

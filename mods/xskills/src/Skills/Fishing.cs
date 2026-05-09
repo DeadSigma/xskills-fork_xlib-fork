@@ -730,7 +730,6 @@ namespace XSkills
 
                             // Звук вытаскивания
                             player.Entity.World.PlaySoundAt(new AssetLocation("sounds/environment/splash"), player.Entity, player, false, 12f, 1f);
-                            player.Entity.World.Logger.Notification($"[РЫБАЛКА] Искатель сокровищ: Игрок {player.PlayerName} выловил {selectedItemCode}!");
 
                             // ОТМЕНЯЕМ ВАНИЛЬНУЮ РЫБАЛКУ!
                             return false;

@@ -361,7 +361,7 @@
   "abilitydesc-healer": "Przedmioty lecznicze, których używasz, leczą dodatkowe {0}% w ciągu {1} sekund.",
 
   "ability-heatinghits": "Uderzenia rozgrzewające",
-  "abilitydesc-heatinghits": "Każde uderzenie w obrabiany metal na kowadle zwiększy jego temperaturę o {0}°C.",
+  "abilitydesc-heatinghits": "Każde uderzenie w obrabiany przedmiot podgrzewa go o 0.5°C. lvl2 > 1°C",
 
   "ability-heavyarmorexpert": "Ekspert ciężkiej zbroi",
   "abilitydesc-heavyarmorexpert": "Zmniejsza niektóre wartości cech, które otrzymujesz od swojego pancerza o {0}%. Ale także zwiększa niektóre wartości cech o {1}%.\nZmniejszone cechy: {2}\nZwiększone cechy: {3}",

@@ -347,7 +347,7 @@
   "abilitydesc-healer": "Los objetos de curación curan un {0}% adicional en {1} segundos.",
 
   "ability-heatinghits": "Fricción",
-  "abilitydesc-heatinghits": "Cada golpe del martillo en el yunque aumentará su temperatura en {0}°C.",
+  "abilitydesc-heatinghits": "Cada golpe sobre una pieza la calienta en 0.5°C. lvl2 > 1°C",
 
   "ability-heavyarmorexpert": "Experto en armadura pesada",
   "abilitydesc-heavyarmorexpert": "Reduce algunas estadísticas que recibes de la armadura en {0}%. Pero también aumenta otras en {1}%.\nReduce: efecto de curación, velocidad de hambre {2}\nAumenta: precisión a distancia, tiempo de apuntado {3}",

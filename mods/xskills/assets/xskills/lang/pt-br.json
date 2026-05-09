@@ -347,7 +347,7 @@
   "abilitydesc-healer": "Itens de cura que você usar curam adicionalmente {0}% ao longo de {1} segundos.",
 
   "ability-heatinghits": "Aquecimento por Golpes",
-  "abilitydesc-heatinghits": "Cada golpe em um trabalho de forja em uma bigorna aumentará sua temperatura em {0}°C.",
+  "abilitydesc-heatinghits": "Cada golpe em uma peça aquece ela em 0.5°C. lvl2 > 1°C",
 
   "ability-heavyarmorexpert": "Especialista em armadura pesada",
   "abilitydesc-heavyarmorexpert": "Reduz alguns atributos recebidos da armadura em {0}%. Mas também aumenta outros em {1}%.\nReduz: efeito de cura, velocidade da fome {2}\nAumenta: precisão de tiro, tempo de mira {3}",

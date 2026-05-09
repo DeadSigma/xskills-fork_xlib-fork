@@ -262,6 +262,8 @@ namespace XSkills
 
             foreach (EntityProperties entity in Api.World.EntityTypes)
             {
+                if (entity == null) continue;
+
                 float damage = 0.0f;
                 int damageTier = -1;
                 float health = 0.0f;
@@ -275,59 +277,71 @@ namespace XSkills
                 JsonObject[] serverBehaviors = entity.Server?.BehaviorsAsJsonObj;
                 JsonObject[] clientBehaviors = entity.Client?.BehaviorsAsJsonObj;
 
-                foreach (JsonObject json in serverBehaviors)
+                if (serverBehaviors != null)
                 {
-                    string code = json["code"].AsString();
-                    if (code == "taskai")
+                    foreach (JsonObject json in serverBehaviors)
                     {
-                        JsonObject[] tasks = json["aitasks"].AsArray();
-                        foreach (JsonObject aitask in tasks)
-                        {
-                            code = aitask["code"].AsString();
-                            if (!(code == "meleeattack" || code == "melee")) continue;
+                        if (json == null) continue;
+                        string code = json["code"]?.AsString();
 
-                            damage = Math.Max(aitask["damage"].AsFloat(), damage);
-                            damageTier = Math.Max(aitask["damageTier"].AsInt(), damageTier);
+                        if (code == "taskai")
+                        {
+                            // Безопасное получение массива aitasks
+                            JsonObject[] tasks = json["aitasks"]?.AsArray();
+                            if (tasks != null)
+                            {
+                                foreach (JsonObject aitask in tasks)
+                                {
+                                    if (aitask == null) continue;
+                                    string taskCode = aitask["code"]?.AsString();
+                                    if (!(taskCode == "meleeattack" || taskCode == "melee")) continue;
+
+                                    damage = Math.Max(aitask["damage"]?.AsFloat() ?? 0f, damage);
+                                    damageTier = Math.Max(aitask["damageTier"]?.AsInt() ?? -1, damageTier);
+                                }
+                            }
                         }
-                    }
-                    else if (code == "health")
-                    {
-                        health = json["maxhealth"].AsFloat();
-                    }
-                    else if (code == "multiply")
-                    {
-                        //is probably an animal
-                        isMultipliable = true;
-                    }
-                    else if (code == "XSkillsEntity")
-                    {
-                        isXskillsEntity = true;
-                        break;
-                    }
-                    else if (code == "XSkillsAnimal")
-                    {
-                        isXskillsAnimal = true;
-                        break;
+                        else if (code == "health")
+                        {
+                            health = json["maxhealth"]?.AsFloat() ?? 0f;
+                        }
+                        else if (code == "multiply")
+                        {
+                            isMultipliable = true;
+                        }
+                        else if (code == "XSkillsEntity")
+                        {
+                            isXskillsEntity = true;
+                            break;
+                        }
+                        else if (code == "XSkillsAnimal")
+                        {
+                            isXskillsAnimal = true;
+                            break;
+                        }
                     }
                 }
 
                 if (isXskillsEntity || isXskillsAnimal) continue;
 
-                if (!isMultipliable && entity.Code.Path.Contains("male"))
+                // Безопасная проверка Code и Path
+                if (!isMultipliable && entity.Code != null && entity.Code.Path != null && entity.Code.Path.Contains("male"))
                 {
-                    //is also an animal when the female version can multiply
                     AssetLocation assetLocation = new AssetLocation(entity.Code.Domain, entity.Code.Path.Replace("male", "female"));
                     EntityProperties female = Api.World.GetEntityType(assetLocation);
                     if (female != null)
                     {
                         JsonObject[] behaviors2 = female.Server?.BehaviorsAsJsonObj ?? female.Client?.BehaviorsAsJsonObj;
-                        foreach (JsonObject json in behaviors2)
+                        if (behaviors2 != null)
                         {
-                            string code = json["code"].AsString();
-                            if (code == "multiply")
+                            foreach (JsonObject json in behaviors2)
                             {
-                                //is probably an animal
-                                isMultipliable = true;
+                                if (json == null) continue;
+                                if (json["code"]?.AsString() == "multiply")
+                                {
+                                    isMultipliable = true;
+                                    break; // Выходим из цикла, если нашли
+                                }
                             }
                         }
                     }
@@ -354,8 +368,8 @@ namespace XSkills
                     }
 
                     JsonObject[] newBehaviorsArray = newBehaviors.ToArray();
-                    JsonObject[] newServerBeh = serverBehaviors.AddRangeToArray(newBehaviorsArray);
-                    JsonObject[] newClientBeh = clientBehaviors.AddRangeToArray(newBehaviorsArray);
+                    JsonObject[] newServerBeh = (serverBehaviors ?? new JsonObject[0]).AddRangeToArray(newBehaviorsArray);
+                    JsonObject[] newClientBeh = (clientBehaviors ?? new JsonObject[0]).AddRangeToArray(newBehaviorsArray);
 
                     if (entity.Server != null) entity.Server.BehaviorsAsJsonObj = newServerBeh;
                     if (entity.Client != null) entity.Client.BehaviorsAsJsonObj = newClientBeh;

@@ -347,7 +347,7 @@
   "abilitydesc-healer": "Healing items you use heal additional {0}% over {1} seconds.",
 
   "ability-heatinghits": "Heating Hits",
-  "abilitydesc-heatinghits": "Every hit on a smithing work on an anvil will increase its temperature by {0}°C.",
+  "abilitydesc-heatinghits": "Fiecare lovitură asupra piesei o încălzește cu 0.5°C. lvl2 > 1°C",
 
   "ability-heavyarmorexpert": "Expert în armură grea",
   "abilitydesc-heavyarmorexpert": "Reduce unele statistici oferite de armură cu {0}%, dar crește altele cu {1}%.\nReduce: eficiența vindecării, rata foamei {2}\nCrește: precizia la distanță, timpul de țintire {3}",

@@ -347,7 +347,7 @@
   "abilitydesc-healer": "Heilgegenstände, die du verwendest, heilen zusätzlich {0}% über {1} Sekunden.",
 
   "ability-heatinghits": "Heizende Schläge",
-  "abilitydesc-heatinghits": "Jeder Schlag auf eine Metallarbeit an einem Amboss erhöht die Temperatur um {0}°C.",
+  "abilitydesc-heatinghits": "Jeder Schlag auf das Werkstück erhitzt es um 0.5°C. lvl2 > 1°C",
 
   "ability-heavyarmorexpert": "Experte für schwere Rüstung",
   "abilitydesc-heavyarmorexpert": "Verringert einige Werte, die du von deiner Rüstung erhältst, um {0}%. Erhöht aber auch einige Werte um {1}%.\nVerringert Werte: {3}\nErhöht Werte: {4}",
