@@ -18,9 +18,41 @@ namespace XSkills
 
             string currentState = __instance.GetState(slot.Itemstack);
 
-            // Сохраняем копию предмета ДО поломки
+            // Проверяем, остывает ли предмет в критической зоне
             if ((currentState == "quench" || currentState == "overheat") && temperature < slot.Itemstack.Collectible.GetTemperature(world, slot.Itemstack) - 2f)
             {
+                // Ищем игрока до того, как предмет потенциально сломается
+                IPlayer player = null;
+                if (slot.Inventory is InventoryBasePlayer invPlayer)
+                {
+                    player = invPlayer.Player;
+                }
+                else
+                {
+                    string uid = slot.Itemstack.Attributes.GetString("forgedByUid");
+                    if (uid != null)
+                    {
+                        player = world.PlayerByUid(uid);
+                    }
+                }
+
+                // Проверяем уровень перка
+                if (player != null)
+                {
+                    Metalworking metalworking = XLeveling.Instance(world.Api)?.GetSkill("metalworking") as Metalworking;
+                    if (metalworking != null)
+                    {
+                        PlayerAbility playerAbility = player.Entity?.GetBehavior<PlayerSkillSet>()?[metalworking.Id]?[metalworking.SafeQuenchingId];
+
+                        // ЕСЛИ УРОВЕНЬ ПЕРКА 2: Полностью отменяем шанс поломки
+                        if (playerAbility != null && playerAbility.Tier >= 2)
+                        {
+                            slot.Itemstack.TempAttributes.SetBool("willbreak", false);
+                        }
+                    }
+                }
+
+                // Сохраняем копию предмета на случай, если перк 1-го уровня и предмет сломается
                 __state = slot.Itemstack.Clone();
             }
         }
@@ -28,7 +60,7 @@ namespace XSkills
         [HarmonyPostfix]
         public static void Postfix(CollectibleBehaviorQuenchable __instance, IWorldAccessor world, ItemSlot slot, float temperature, ItemStack __state)
         {
-            // Если предмет исчез (сломался)
+            // Если предмет исчез (сломался), значит сработал код разрушения (перк не 2 уровня)
             if (__state != null && slot.Itemstack == null)
             {
                 IPlayer player = null;
@@ -54,19 +86,18 @@ namespace XSkills
                     {
                         PlayerAbility playerAbility = player.Entity?.GetBehavior<PlayerSkillSet>()?[metalworking.Id]?[metalworking.SafeQuenchingId];
 
-                        if (playerAbility != null && playerAbility.Tier > 0)
+                        // ЕСЛИ УРОВЕНЬ ПЕРКА 1: Выдаем деформированную заготовку
+                        if (playerAbility != null && playerAbility.Tier >= 1)
                         {
                             string metalGroupCode = AccessTools.Field(typeof(CollectibleBehaviorQuenchable), "metalGroupCode").GetValue(__instance) as string ?? "metal";
                             string metalCode = __state.Collectible.Variant[metalGroupCode] ?? "iron";
 
-                            // 1. Возвращаем WorkItem (заготовку для наковальни)
                             Item workItem = world.GetItem(new AssetLocation("game", "workitem-" + metalCode));
 
                             if (workItem != null)
                             {
                                 ItemStack workItemStack = new ItemStack(workItem, 1);
 
-                                // 2. Пытаемся найти рецепт того, что игрок ковал
                                 SmithingRecipe shatteredRecipe = null;
                                 var recipes = world.Api.GetSmithingRecipes();
                                 if (recipes != null)
@@ -82,7 +113,6 @@ namespace XSkills
                                     }
                                 }
 
-                                // 3. Если рецепт найден, "ломаем" форму
                                 if (shatteredRecipe != null)
                                 {
                                     byte[,,] voxels = new byte[16, 6, 16];
@@ -96,17 +126,16 @@ namespace XSkills
                                                 {
                                                     double rand = world.Rand.NextDouble();
                                                     if (rand < 0.15)
-                                                        voxels[x, y, z] = (byte)EnumVoxelMaterial.Empty; // 15% шанс откола
+                                                        voxels[x, y, z] = (byte)EnumVoxelMaterial.Empty;
                                                     else if (rand < 0.25)
-                                                        voxels[x, y, z] = (byte)EnumVoxelMaterial.Slag;  // 10% шанс превращения в шлак
+                                                        voxels[x, y, z] = (byte)EnumVoxelMaterial.Slag;
                                                     else
-                                                        voxels[x, y, z] = (byte)EnumVoxelMaterial.Metal; // Оставшийся металл
+                                                        voxels[x, y, z] = (byte)EnumVoxelMaterial.Metal;
                                                 }
                                             }
                                         }
                                     }
 
-                                    // Сохраняем деформированные воксели в заготовку
                                     MethodInfo serializeMethod = typeof(BlockEntityAnvil).GetMethod("serializeVoxels", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
                                     if (serializeMethod != null)
                                     {
@@ -119,7 +148,6 @@ namespace XSkills
                                     }
                                 }
 
-                                // Сохраняем исходную температуру
                                 workItemStack.Collectible.SetTemperature(world, workItemStack, temperature);
                                 slot.Itemstack = workItemStack;
                                 slot.MarkDirty();

@@ -494,7 +494,7 @@
   "abilitydesc-resinfarmer": "Every time you cut down a pine there is a chance of {0}% per wood log that it drips resin.",
 
   "ability-safequenching": "Säker härdning",
-  "abilitydesc-safequenching": "Med denna förmåga kommer dina verktyg inte längre att splittras till atomer under härdning. Om härdningen misslyckas blir föremålet bara förstört.",
+  "abilitydesc-safequenching": "Dina verktyg kommer inte längre att splittras till atomer under härdning.\nNivå {0}: Om härdningen misslyckas förvandlas föremålet till ett deformerat arbetsstycke.\nNivå {1}: Dina föremål får {2}% skydd mot förstörelse.",
 
   "ability-saltpeterdigger": "Saltpeter Digger",
   "abilitydesc-saltpeterdigger": "Increases saltpeter harvesting yield by {0}% and additional {1}% for each level at the digging skill. Maxed out at {2}%.",

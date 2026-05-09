@@ -494,7 +494,7 @@
   "abilitydesc-resinfarmer": "Every time you cut down a pine there is a chance of {0}% per wood log that it drips resin.",
 
   "ability-safequenching": "Călire sigură",
-  "abilitydesc-safequenching": "Cu această abilitate, uneltele tale nu se vor mai dezintegra în atomi în timpul călirii. Dacă procesul eșuează, obiectul va fi doar deteriorat.",
+  "abilitydesc-safequenching": "Uneltele tale nu se vor mai dezintegra în atomi în timpul călirii.\nNivelul {0}: Dacă procesul de călire eșuează, obiectul se va transforma într-o piesă deformată.\nNivelul {1}: Obiectele tale primesc {2}% protecție împotriva distrugerii.",
 
   "ability-saltpeterdigger": "Saltpeter Digger",
   "abilitydesc-saltpeterdigger": "Increases saltpeter harvesting yield by {0}% and additional {1}% for each level at the digging skill. Maxed out at {2}%.",

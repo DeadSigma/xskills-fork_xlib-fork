@@ -508,7 +508,7 @@
   "abilitydesc-resinfarmer": "Za każdym razem, gdy ścinasz sosnę, istnieje szansa {0}% na każdy kawałek drewna, że wypłynie z niej żywica.",
 
   "ability-safequenching": "Bezpieczne hartowanie",
-  "abilitydesc-safequenching": "Dzięki tej umiejętności twoje narzędzia nie będą już rozpadać się na atomy podczas hartowania. Jeśli hartowanie się nie powiedzie, przedmiot po prostu zostanie uszkodzony.",
+  "abilitydesc-safequenching": "Twoje narzędzia nie będą już rozpadać się na atomy podczas hartowania.\nPoziom {0}: Jeśli hartowanie się nie powiedzie, przedmiot zamieni się w zdeformowany półprodukt.\nPoziom {1}: Twoje przedmioty otrzymują {2}% ochrony przed zniszczeniem.",
 
   "ability-saltpeterdigger": "Kopacz saletry",
   "abilitydesc-saltpeterdigger": "Zwiększa wydajność zbioru saletry o {0}% i dodatkowo o {1}% za każdy poziom w umiejętności kopanie. Maksymalnie na poziomie {2}%.",

@@ -494,7 +494,7 @@
   "abilitydesc-resinfarmer": "マツを伐採する度に、丸太1本あたり{0}%の確率で樹脂が垂れてます。",
 
   "ability-safequenching": "安全焼入れ",
-  "abilitydesc-safequenching": "この能力があれば、焼入れ中に道具が原子レベルまで砕け散ることはありません。焼入れに失敗した場合、アイテムは単に壊れるだけです。",
+  "abilitydesc-safequenching": "焼入れ中に道具が原子レベルまで砕け散ることはなくなります。\nレベル{0}: 焼入れに失敗した場合、アイテムは変形した素材になります。\nレベル{1}: アイテムは破壊に対して{2}%の耐性を得ます。",
 
   "ability-saltpeterdigger": "硝石掘削者",
   "abilitydesc-saltpeterdigger": "硝石の収穫量を{0}%増加、掘削スキルのレベル毎に{1}%追加します。最大で{2}%になります。",

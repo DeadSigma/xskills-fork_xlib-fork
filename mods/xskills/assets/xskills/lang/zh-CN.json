@@ -556,7 +556,7 @@
   "abilitydesc-resinfarmer": "每砍倒一块松木，有 {0}% 几率额外获得树脂。",
 
   "ability-safequenching": "安全淬火",
-  "abilitydesc-safequenching": "拥有此技能后，你的工具在淬火时不再会裂解成原子。如果淬火失败，物品只会损坏。",
+  "abilitydesc-safequenching": "你的工具在淬火时不再会裂解成原子。\n{0}级：如果淬火失败，物品会变成变形的坯料。\n{1}级：你的物品获得{2}%的防损坏保护。",
 
   "ability-saltpeterdigger": "硝石采集者",
   "abilitydesc-saltpeterdigger": "获得硝石数量提高 {0}%，并且每级挖掘技能额外提高 {1}%。最大值：{2}%。",
