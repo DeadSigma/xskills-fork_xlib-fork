@@ -346,8 +346,8 @@
   "ability-healer": "Curandeiro",
   "abilitydesc-healer": "Itens de cura que você usar curam adicionalmente {0}% ao longo de {1} segundos.",
 
-  "ability-heatinghits": "Aquecimento por Golpes",
-  "abilitydesc-heatinghits": "Cada golpe em uma peça aquece ela em 0.5°C. lvl2 > 1°C",
+  "ability-heatinghits": "Golpes aquecedores",
+  "abilitydesc-heatinghits": "Cada golpe na peça aquece ela em {0}°C.",
 
   "ability-heavyarmorexpert": "Especialista em armadura pesada",
   "abilitydesc-heavyarmorexpert": "Reduz alguns atributos recebidos da armadura em {0}%. Mas também aumenta outros em {1}%.\nReduz: efeito de cura, velocidade da fome {2}\nAumenta: precisão de tiro, tempo de mira {3}",
@@ -494,7 +494,7 @@
   "abilitydesc-resinfarmer": "Toda vez que você corta um pinheiro, há uma chance de {0}% por tronco de madeira de pingar resina.",
 
   "ability-safequenching": "Têmpera segura",
-  "abilitydesc-safequenching": "Suas ferramentas não irão mais se despedaçar em átomos durante a têmpera.\nNível {0}: Se a têmpera falhar, o item se transformará em uma peça deformada.\nNível {1}: Seus itens recebem {2}% de proteção contra destruição.",
+  "abilitydesc-safequenching": "Com esta habilidade, suas ferramentas não irão mais se despedaçar em átomos durante a têmpera. Se a têmpera falhar, o item simplesmente será danificado.",
 
   "ability-saltpeterdigger": "Cavador de Salitre",
   "abilitydesc-saltpeterdigger": "Aumenta a produção de salitre em {0}% e adicionalmente {1}% para cada nível na habilidade de escavação. Máximo em {2}%.",

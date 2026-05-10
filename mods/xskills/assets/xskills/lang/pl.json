@@ -360,8 +360,8 @@
   "ability-healer": "Uzdrowiciel",
   "abilitydesc-healer": "Przedmioty lecznicze, których używasz, leczą dodatkowe {0}% w ciągu {1} sekund.",
 
-  "ability-heatinghits": "Uderzenia rozgrzewające",
-  "abilitydesc-heatinghits": "Każde uderzenie w obrabiany przedmiot podgrzewa go o 0.5°C. lvl2 > 1°C",
+  "ability-heatinghits": "Rozgrzewające uderzenia",
+  "abilitydesc-heatinghits": "Każde uderzenie w obrabiany przedmiot podgrzewa go o {0}°C.",
 
   "ability-heavyarmorexpert": "Ekspert ciężkiej zbroi",
   "abilitydesc-heavyarmorexpert": "Zmniejsza niektóre wartości cech, które otrzymujesz od swojego pancerza o {0}%. Ale także zwiększa niektóre wartości cech o {1}%.\nZmniejszone cechy: {2}\nZwiększone cechy: {3}",
@@ -508,7 +508,7 @@
   "abilitydesc-resinfarmer": "Za każdym razem, gdy ścinasz sosnę, istnieje szansa {0}% na każdy kawałek drewna, że wypłynie z niej żywica.",
 
   "ability-safequenching": "Bezpieczne hartowanie",
-  "abilitydesc-safequenching": "Twoje narzędzia nie będą już rozpadać się na atomy podczas hartowania.\nPoziom {0}: Jeśli hartowanie się nie powiedzie, przedmiot zamieni się w zdeformowany półprodukt.\nPoziom {1}: Twoje przedmioty otrzymują {2}% ochrony przed zniszczeniem.",
+  "abilitydesc-safequenching": "Dzięki tej umiejętności twoje narzędzia podczas hartowania nie będą już rozpadać się na atomy. Jeśli hartowanie się nie powiedzie, przedmiot po prostu zostanie uszkodzony.",
 
   "ability-saltpeterdigger": "Kopacz saletry",
   "abilitydesc-saltpeterdigger": "Zwiększa wydajność zbioru saletry o {0}% i dodatkowo o {1}% za każdy poziom w umiejętności kopanie. Maksymalnie na poziomie {2}%.",

@@ -346,8 +346,8 @@
   "ability-healer": "Healer",
   "abilitydesc-healer": "Healing items you use heal additional {0}% over {1} seconds.",
 
-  "ability-heatinghits": "Coups chauffants",
-  "abilitydesc-heatinghits": "Chaque coup sur une pièce augmente sa température de 0.5°C. lvl2 > 1°C",
+  "ability-heatinghits": "Frappes chauffantes",
+  "abilitydesc-heatinghits": "Chaque coup porté sur la pièce augmente sa température de {0}°C.",
 
   "ability-heavyarmorexpert": "Expert en armure lourde",
   "abilitydesc-heavyarmorexpert": "Réduit certaines statistiques obtenues grâce à l’armure de {0}%. Mais augmente aussi certaines statistiques de {1}%.\nRéduit : Effet de soin, Vitesse de faim {2}\nAugmente : Précision à distance, Temps de visée {3}",
@@ -493,8 +493,8 @@
   "ability-resinfarmer": "Récolteur de résine",
   "abilitydesc-resinfarmer": "Chaque fois que vous coupez un pin, il y a une chance de {0}% par bûche qu'elle produise de la résine.",
 
-  "ability-safequenching": "Trempe sûre",
-  "abilitydesc-safequenching": "Vos outils ne se désintégreront plus en atomes pendant la trempe.\nNiveau {0} : Si la trempe échoue, l'objet deviendra une pièce déformée.\nNiveau {1} : Vos objets gagnent {2}% de protection contre la destruction.",
+  "ability-safequenching": "Trempe sécurisée",
+  "abilitydesc-safequenching": "Avec cet atout, vos outils ne seront plus réduits en atomes lors de la trempe. Si la trempe échoue, l'objet sera simplement endommagé.",
 
   "ability-saltpeterdigger": "Creuseur de salpêtre",
   "abilitydesc-saltpeterdigger": "Augmente le rendement de la récolte de salpêtre de {0}% et {1}% additionnel pour chaque niveau de la compétence Creusage. Maximisé à {2}%.",

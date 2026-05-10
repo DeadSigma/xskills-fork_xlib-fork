@@ -349,7 +349,7 @@
   "abilitydesc-healer": "Healing items you use heal additional {0}% over {1} seconds.",
 
   "ability-heatinghits": "Heating Hits",
-  "abilitydesc-heatinghits": "Each hit on a workpiece heats it by 0.5°C. lvl2 > 1°C",
+  "abilitydesc-heatinghits": "Each hit on the workpiece heats it up by {0}°C.",
 
   "ability-heavyarmorexpert": "Heavy Armor Expert",
   "abilitydesc-heavyarmorexpert": "Decreases some trait values you receive from your armor by {0}%. But also increases some trait values by {1}%.\nDecreases traits: {2}\nIncreases traits: {3}",
@@ -496,7 +496,7 @@
   "abilitydesc-resinfarmer": "Every time you cut down a pine there is a chance of {0}% per wood log that it drips resin.",
 
   "ability-safequenching": "Safe Quenching",
-  "abilitydesc-safequenching": "Your tools will no longer split into atoms during quenching.\nLevel {0}: If the quenching fails, the item will turn into a deformed workpiece.\nLevel {1}: Your items gain {2}% protection from destruction.",
+  "abilitydesc-safequenching": "With this perk, your tools will no longer split into atoms during quenching. If the quenching fails, the item will simply be damaged.",
 
   "ability-saltpeterdigger": "Saltpeter Digger",
   "abilitydesc-saltpeterdigger": "Increases saltpeter harvesting yield by {0}% and additional {1}% for each level at the digging skill. Maxed out at {2}%.",

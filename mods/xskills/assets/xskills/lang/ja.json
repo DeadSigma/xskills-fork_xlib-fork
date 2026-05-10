@@ -346,8 +346,8 @@
   "ability-healer": "癒し手",
   "abilitydesc-healer": "使用した回復アイテムは{1}秒間に{0}%追加で回復します。",
 
-  "ability-heatinghits": "加熱打ち",
-  "abilitydesc-heatinghits": "加工物を叩くたびに温度が0.5°C上昇します。lvl2 > 1°C",
+  "ability-heatinghits": "加熱打撃",
+  "abilitydesc-heatinghits": "加工物への一撃ごとに温度が{0}°C上昇します。",
 
   "ability-heavyarmorexpert": "重装鎧の達人",
   "abilitydesc-heavyarmorexpert": "鎧による一部能力低下を {0}% 軽減し、一部能力を {1}% 上昇させます。\n低下軽減: 回復効果、空腹速度 {2}\n上昇: 射撃精度、照準時間 {3}",
@@ -494,7 +494,7 @@
   "abilitydesc-resinfarmer": "マツを伐採する度に、丸太1本あたり{0}%の確率で樹脂が垂れてます。",
 
   "ability-safequenching": "安全焼入れ",
-  "abilitydesc-safequenching": "焼入れ中に道具が原子レベルまで砕け散ることはなくなります。\nレベル{0}: 焼入れに失敗した場合、アイテムは変形した素材になります。\nレベル{1}: アイテムは破壊に対して{2}%の耐性を得ます。",
+  "abilitydesc-safequenching": "この能力があれば、焼入れ時に道具が原子レベルまで砕け散ることはなくなります。焼入れに失敗した場合、アイテムは単に壊れるだけです。",
 
   "ability-saltpeterdigger": "硝石掘削者",
   "abilitydesc-saltpeterdigger": "硝石の収穫量を{0}%増加、掘削スキルのレベル毎に{1}%追加します。最大で{2}%になります。",

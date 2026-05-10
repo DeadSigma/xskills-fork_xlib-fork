@@ -346,8 +346,8 @@
   "ability-healer": "Heiler",
   "abilitydesc-healer": "Heilgegenstände, die du verwendest, heilen zusätzlich {0}% über {1} Sekunden.",
 
-  "ability-heatinghits": "Heizende Schläge",
-  "abilitydesc-heatinghits": "Jeder Schlag auf das Werkstück erhitzt es um 0.5°C. lvl2 > 1°C",
+  "ability-heatinghits": "Erhitzende Schläge",
+  "abilitydesc-heatinghits": "Jeder Schlag auf das Werkstück erhitzt es um {0}°C.",
 
   "ability-heavyarmorexpert": "Experte für schwere Rüstung",
   "abilitydesc-heavyarmorexpert": "Verringert einige Werte, die du von deiner Rüstung erhältst, um {0}%. Erhöht aber auch einige Werte um {1}%.\nVerringert Werte: {3}\nErhöht Werte: {4}",
@@ -494,7 +494,7 @@
   "abilitydesc-resinfarmer": "Jedes Mal, wenn du eine Kiefer fällst, besteht eine Wahrscheinlichkeit von {0}% pro Holzstamm, dass Harz abfällt.",
 
   "ability-safequenching": "Sicheres Härten",
-  "abilitydesc-safequenching": "Eure Werkzeuge werden beim Härten nicht mehr in Atome zersplittern.\nStufe {0}: Falls das Härten fehlschlägt, wird der Gegenstand zu einem deformierten Rohling.\nStufe {1}: Eure Gegenstände erhalten {2}% Schutz vor Zerstörung.",
+  "abilitydesc-safequenching": "Mit diesem Perk werden eure Werkzeuge beim Härten nicht mehr in Atome gespalten. Falls das Härten fehlschlägt, wird der Gegenstand einfach beschädigt.",
 
   "ability-saltpeterdigger": "Salpetergräber",
   "abilitydesc-saltpeterdigger": "Erhöht den Ertrag beim Abbauen von Salpeter um {0}% und zusätzlich um {1}% für jede Stufe der Grabenfertigkeit. Maximal bis {2}%.",

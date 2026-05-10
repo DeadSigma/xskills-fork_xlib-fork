@@ -349,8 +349,8 @@
   "ability-healer": "治疗",
   "abilitydesc-healer": "你使用的治疗物品会在{1}秒内\n额外治疗{0}%。",
 
-  "ability-heatinghits": "热能锤击",
-  "abilitydesc-heatinghits": "每次击打工件都会使其升温0.5°C。lvl2 > 1°C",
+  "ability-heatinghits": "加热锤击",
+  "abilitydesc-heatinghits": "每次敲击工件都会使其升温 {0}°C。",
 
   "ability-heavyarmorexpert": "重甲专家",
   "abilitydesc-heavyarmorexpert": "减少护甲带来的部分负面属性 {0}%，同时提升部分属性 {1}%。\n减少属性：治疗效果、饥饿速度 {2}\n提升属性：射击精度、瞄准时间 {3}",
@@ -497,7 +497,7 @@
   "abilitydesc-resinfarmer": "每次砍伐一棵松树时，每根\n原木都有{0}%的几率掉落树脂。",
 
   "ability-safequenching": "安全淬火",
-  "abilitydesc-safequenching": "你的工具在淬火时不再会裂解成原子。\n{0}级：如果淬火失败，物品会变成变形的坯料。\n{1}级：你的物品获得{2}%的防损坏保护。",
+  "abilitydesc-safequenching": "有了这个技能，你的工具在淬火时将不再裂解成原子。如果淬火失败，物品只会损坏。",
 
   "ability-saltpeterdigger": "硝石挖掘机",
   "abilitydesc-saltpeterdigger": "硝石收获产量提高{0}%，挖掘\n技能每级额外提高{1}%。\n最大为{2}%。",

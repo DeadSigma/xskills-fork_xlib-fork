@@ -347,8 +347,8 @@
   "ability-healer": "Léčitel",
   "abilitydesc-healer": "Léčebné náplasti, které používáte, vyléčí dalších {0} % za {1} sekund.",
 
-  "ability-heatinghits": "Žhavé pohyby",
-  "abilitydesc-heatinghits": "Každý úder do polotovaru jej zahřeje o 0.5°C. lvl2 > 1°C",
+  "ability-heatinghits": "Zahřívací údery",
+  "abilitydesc-heatinghits": "Každý úder do polotovaru jej zahřeje o {0}°C.",
 
   "ability-heavyarmorexpert": "Expert na těžké brnění",
   "abilitydesc-heavyarmorexpert": "Snižuje některé hodnoty vlastností (z Classy), které získáte ze svého brnění, o {0} %. Zároveň však zvyšuje některé hodnoty vlastností o {1} %.\nSnižuje vlastnosti: {2}\nZvyšuje vlastnosti: {3}",
@@ -495,7 +495,7 @@
   "abilitydesc-resinfarmer": "Pokaždé, když pokácíte borovici, existuje pravděpodobnost {0} % na každé poleno, že z ní ukápne pryskyřice.",
 
   "ability-safequenching": "Bezpečné kalení",
-  "abilitydesc-safequenching": "Vaše nástroje se při kalení již nebudou rozpadat na atomy.\nÚroveň {0}: Pokud se kalení nepovede, předmět se změní na deformovaný polotovar.\nÚroveň {1}: Vaše předměty získají {2}% ochranu proti zničení.",
+  "abilitydesc-safequenching": "S touto schopností se vaše nástroje při kalení už nerozpadnou na atomy. Pokud kalení selže, předmět se jednoduše poškodí.",
 
   "ability-saltpeterdigger": "Těžař ledku",
   "abilitydesc-saltpeterdigger": "Zvyšuje výnos sklizně ledku o {0} % a dalších {1} % pro každou úroveň dovednosti kopání. Max. o {2} %.",

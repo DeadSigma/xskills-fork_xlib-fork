@@ -156,9 +156,13 @@ namespace XSkills
             if (__state) __instance.SetWasPlate(__state);
         }
 
-        public static void OnReceivedClientPacketPrefix(BlockEntityAnvil __instance, IPlayer player)
+        public static void OnReceivedClientPacketPostfix(BlockEntityAnvil __instance)
         {
-            __instance.SetUsedByPlayer(player);
+            if (__instance.WorkItemStack != null)
+            {
+                float currentTemp = __instance.WorkItemStack.Collectible.GetTemperature(__instance.Api.World, __instance.WorkItemStack);
+                __instance.WorkItemStack.Collectible.SetTemperature(__instance.Api.World, __instance.WorkItemStack, currentTemp, false);
+            }
         }
 
         public static void OnUpsetPrefix(BlockEntityAnvil __instance, Vec3i voxelPos, BlockFacing towardsFace)
@@ -334,8 +338,8 @@ namespace XSkills
             // Оборачиваем всё в проверку на null, чтобы избежать вылета игры, если перк не прокачан
             if (playerAbility != null)
             {
-                // Умножаем значение навыка на 0.5f: базовые 1 и 2 превратятся ровно в 0.5 и 1.0 градуса
-                float heatBonus = playerAbility.Value(0) * 0.5f;
+                // Возвращаем 1.0 и 2.0 градуса за удар
+                float heatBonus = playerAbility.Value(0);
 
                 if (meltingpoint > 0.0f)
                 {
@@ -349,7 +353,8 @@ namespace XSkills
                     temperature += heatBonus;
                 }
             }
-            collectible.SetTemperature(world, __state.workItemStack, temperature);
+            // Явно передаем false, чтобы отменить читерские 50 секунд после каждого удара
+            collectible.SetTemperature(world, __state.workItemStack, temperature, false);
 
             //blacksmith
             collectible = __state.recipe.Output.ResolvedItemstack.Collectible;

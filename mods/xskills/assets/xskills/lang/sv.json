@@ -346,8 +346,8 @@
   "ability-healer": "Healer",
   "abilitydesc-healer": "Healing items you use heal additional {0}% over {1} seconds.",
 
-  "ability-heatinghits": "Heating Hits",
-  "abilitydesc-heatinghits": "Varje slag på arbetsstycket värmer upp det med 0.5°C. lvl2 > 1°C",
+  "ability-heatinghits": "Upphettande slag",
+  "abilitydesc-heatinghits": "Varje slag mot arbetsstycket värmer upp det med {0}°C.",
 
   "ability-heavyarmorexpert": "Tung rustnings-expert",
   "abilitydesc-heavyarmorexpert": "Minskar vissa egenskaper du får från rustning med {0}%. Men ökar också vissa egenskaper med {1}%.\nMinskade egenskaper: Läkeeffekt, Hungerhastighet {2}\nÖkade egenskaper: Skytteprecision, siktningstid {3}",
@@ -494,7 +494,7 @@
   "abilitydesc-resinfarmer": "Every time you cut down a pine there is a chance of {0}% per wood log that it drips resin.",
 
   "ability-safequenching": "Säker härdning",
-  "abilitydesc-safequenching": "Dina verktyg kommer inte längre att splittras till atomer under härdning.\nNivå {0}: Om härdningen misslyckas förvandlas föremålet till ett deformerat arbetsstycke.\nNivå {1}: Dina föremål får {2}% skydd mot förstörelse.",
+  "abilitydesc-safequenching": "Med denna förmåga kommer dina verktyg inte längre att splittras till atomer vid härdning. Om härdningen misslyckas blir föremålet helt enkelt förstört.",
 
   "ability-saltpeterdigger": "Saltpeter Digger",
   "abilitydesc-saltpeterdigger": "Increases saltpeter harvesting yield by {0}% and additional {1}% for each level at the digging skill. Maxed out at {2}%.",

@@ -346,8 +346,8 @@
   "ability-healer": "Healer",
   "abilitydesc-healer": "Healing items you use heal additional {0}% over {1} seconds.",
 
-  "ability-heatinghits": "Heating Hits",
-  "abilitydesc-heatinghits": "Fiecare lovitură asupra piesei o încălzește cu 0.5°C. lvl2 > 1°C",
+  "ability-heatinghits": "Lovituri încălzitoare",
+  "abilitydesc-heatinghits": "Fiecare lovitură aplicată piesei o încălzește cu {0}°C.",
 
   "ability-heavyarmorexpert": "Expert în armură grea",
   "abilitydesc-heavyarmorexpert": "Reduce unele statistici oferite de armură cu {0}%, dar crește altele cu {1}%.\nReduce: eficiența vindecării, rata foamei {2}\nCrește: precizia la distanță, timpul de țintire {3}",
@@ -494,7 +494,7 @@
   "abilitydesc-resinfarmer": "Every time you cut down a pine there is a chance of {0}% per wood log that it drips resin.",
 
   "ability-safequenching": "Călire sigură",
-  "abilitydesc-safequenching": "Uneltele tale nu se vor mai dezintegra în atomi în timpul călirii.\nNivelul {0}: Dacă procesul de călire eșuează, obiectul se va transforma într-o piesă deformată.\nNivelul {1}: Obiectele tale primesc {2}% protecție împotriva distrugerii.",
+  "abilitydesc-safequenching": "Cu această abilitate, uneltele tale nu se vor mai dezintegra în atomi în timpul călirii. Dacă procesul de călire eșuează, obiectul va fi doar deteriorat.",
 
   "ability-saltpeterdigger": "Saltpeter Digger",
   "abilitydesc-saltpeterdigger": "Increases saltpeter harvesting yield by {0}% and additional {1}% for each level at the digging skill. Maxed out at {2}%.",
