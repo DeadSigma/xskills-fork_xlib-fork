@@ -1,7 +1,9 @@
-﻿{
-  "ability-heatinghits": "Colpi riscaldanti",
-  "abilitydesc-heatinghits": "Ogni colpo sul pezzo in lavorazione lo riscalda di {0}°C.",
-
-  "ability-safequenching": "Tempra sicura",
-  "abilitydesc-safequenching": "Con questo talento, i tuoi strumenti non verranno più ridotti in atomi durante la tempra. Se la tempra fallisce, l'oggetto verrà semplicemente danneggiato."
+{
+    "xskills:hotkey-steeplechasertoggle": "xSkills: Attiva/disattiva Camminatore",
+    "xskills:steeplechaser-off": "Camminatore: Disattivo",
+    "xskills:steeplechaser-on": "Camminatore: Attivo",
+    "ability-heatinghits": "Colpi riscaldanti",
+    "abilitydesc-heatinghits": "Ogni colpo sul pezzo in lavorazione lo riscalda di {0}°C.",
+    "ability-safequenching": "Tempra sicura",
+    "abilitydesc-safequenching": "Con questo talento, i tuoi strumenti non verranno più ridotti in atomi durante la tempra. Se la tempra fallisce, l'oggetto verrà semplicemente danneggiato."
 }

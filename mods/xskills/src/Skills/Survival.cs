@@ -418,7 +418,7 @@ namespace XSkills
         }
 
         //steeplechaser
-        public static void OnSteeplechaser(PlayerAbility playerAbility, int oldTier)
+        public void OnSteeplechaser(PlayerAbility playerAbility, int oldTier)
         {
             float mult = 1.0f;
             if (oldTier > 0)
@@ -429,6 +429,17 @@ namespace XSkills
 
             EntityBehaviorControlledPhysics physics = playerAbility.PlayerSkill.PlayerSkillSet.Player.Entity.GetBehavior<EntityBehaviorControlledPhysics>();
             if (physics == null) return;
+
+            // Если это локальный игрок-клиент и способность сейчас "выключена" на кнопку, 
+            // мы не применяем изменение от прокачки прямо сейчас, чтобы не сломать высоту шага.
+            if (this.capi != null && !this.steeplechaserActive)
+            {
+                if (playerAbility.PlayerSkill.PlayerSkillSet.Player.PlayerUID == this.capi.World.Player.PlayerUID)
+                {
+                    return;
+                }
+            }
+
             physics.StepHeight *= mult;
         }
 
@@ -616,6 +627,7 @@ namespace XSkills
         {
             base.FromConfig(config);
             InitNightVision();
+            InitSteeplechaserToggle();
         }
 
         private void InitNightVision()
@@ -683,6 +695,48 @@ namespace XSkills
                     }
                 }
                 LoadShader();
+                return true;
+            });
+        }
+
+        private bool steeplechaserActive = true;
+
+        private void InitSteeplechaserToggle()
+        {
+            capi = this.XLeveling.Api as ICoreClientAPI;
+            if (capi == null) return;
+
+#if !DEBUG
+    if (!(this.Config as SurvivalSkillConfig).allowSteeplechaserToggle) return;
+#endif
+
+            capi.Input.RegisterHotKey("steeplechasertoggle", Lang.Get("xskills:hotkey-steeplechasertoggle"), GlKeys.J, HotkeyType.CharacterControls);
+            capi.Input.SetHotKeyHandler("steeplechasertoggle", (KeyCombination key) =>
+            {
+                IPlayer player = capi.World.Player;
+                if (player?.Entity == null) return true;
+
+                PlayerAbility ability = player.Entity.GetBehavior<PlayerSkillSet>()?[this.Id]?[this.SteeplechaserId];
+                if (ability == null || ability.Tier <= 0) return true;
+
+                EntityBehaviorControlledPhysics physics = player.Entity.GetBehavior<EntityBehaviorControlledPhysics>();
+                if (physics == null) return true;
+
+                float mult = 1.0f + ability.Value(0) * 0.01f;
+
+                this.steeplechaserActive = !this.steeplechaserActive;
+
+                if (this.steeplechaserActive)
+                {
+                    physics.StepHeight *= mult;
+                    capi.ShowChatMessage(Lang.Get("xskills:steeplechaser-on"));
+                }
+                else
+                {
+                    physics.StepHeight /= mult;
+                    capi.ShowChatMessage(Lang.Get("xskills:steeplechaser-off"));
+                }
+
                 return true;
             });
         }
@@ -910,7 +964,8 @@ namespace XSkills
                 result.Add("invSwitchCD", this.invSwitchCD.ToString(provider));
                 result.Add("allowCatEyesToggle", this.allowCatEyesToggle.ToString(provider));
 
-                // ДОБАВЛЕНО: Сохраняем параметр потери опыта
+                result.Add("allowSteeplechaserToggle", this.allowSteeplechaserToggle.ToString(provider));
+
                 result.Add("expLossOnDeath", this.expLossOnDeath.ToString(provider));
 
                 return result;
@@ -926,6 +981,9 @@ namespace XSkills
 
                 value.TryGetValue("allowCatEyesToggle", out str);
                 if (str != null) bool.TryParse(str, out this.allowCatEyesToggle);
+
+                value.TryGetValue("allowSteeplechaserToggle", out str);
+                if (str != null) bool.TryParse(str, out this.allowSteeplechaserToggle);
 
                 // ДОБАВЛЕНО: Читаем параметр потери опыта
                 value.TryGetValue("expLossOnDeath", out str);
@@ -945,5 +1003,9 @@ namespace XSkills
         [ProtoMember(3)]
         [DefaultValue(0.5f)]
         public float expLossOnDeath = 0.5f;
+
+        [ProtoMember(4)]
+        [DefaultValue(true)]
+        public bool allowSteeplechaserToggle = true;
     }//!class SurvivalSkillConfig
 }//!namespace XSkills
