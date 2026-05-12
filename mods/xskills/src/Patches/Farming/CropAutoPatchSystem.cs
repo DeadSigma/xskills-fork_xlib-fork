@@ -48,7 +48,7 @@ namespace XSkills
             }
 
             // Выводим в лог сервера сообщение, чтобы видеть, что всё работает
-            api.Logger.Notification($"[XSkills] Автоматически найдено и пропатчено культур из других модов: {patchedCount}");
+           // api.Logger.Notification($"[XSkills] Автоматически найдено и пропатчено культур из других модов: {patchedCount}");
         }
     }
 }

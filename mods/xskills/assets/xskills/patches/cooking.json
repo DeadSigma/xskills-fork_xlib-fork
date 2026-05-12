@@ -96,17 +96,6 @@
     ]
   },
   {
-    "dependsOn": [ { "modid": "aculinaryartillery" } ],
-    "file": "aculinaryartillery:blocktypes/mixingbowlmini",
-    "op": "addmerge",
-    "path": "/entityBehaviors",
-    "value": [
-      {
-        "name": "XskillsOwnable"
-      }
-    ]
-  },
-  {
     "dependsOn": [ { "modid": "decor" } ],
     "file": "decor:blocktypes/stoves/castironfireplace",
     "op": "addmerge",
