@@ -119,7 +119,7 @@ namespace XLib.XLeveling
             this.skillBookExpMult = 0.5f;
             this.disabledRequirements = new List<string>();
             this.trackExpGain = false;
-            this.configVersion = 1;
+            this.configVersion = 6;
             this.disableAllClassRequirements = false;
         }
     }//!class Config

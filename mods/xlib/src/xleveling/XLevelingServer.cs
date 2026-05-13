@@ -261,7 +261,7 @@ namespace XLib.XLeveling
             // =========================================================================
             // ВЕРСИЯ КОНФИГА МОДА:
             // =========================================================================
-            int CURRENT_CONFIG_VERSION = 5;
+            int CURRENT_CONFIG_VERSION = 6;
 
             bool forceConfigReset = false;
 

@@ -77,7 +77,7 @@ namespace XSkills
                 "wellrested",
                 "xskills:ability-wellrested",
                 "xskills:abilitydesc-wellrested",
-                1, 2, new int[] { 6, 480, 12, 600}));
+                1, 2, new int[] { 6, 1440, 12, 1920}));
 
             // boni for not wearing clothes
             // 0: walkspeed boni, 1: walkspeed mali
