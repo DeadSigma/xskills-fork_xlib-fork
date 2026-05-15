@@ -394,11 +394,6 @@ namespace XSkills
             //if the workitemstack was set to null, the item was finished
             ItemStack resolvedStack = __state.recipe?.Output.ResolvedItemstack;
 
-            if (resolvedStack != null && byPlayer != null)
-            {
-                resolvedStack.Attributes.SetString("forgedByUid", byPlayer.PlayerUID);
-            }
-
             float quality = resolvedStack?.Attributes.GetFloat("quality") ?? 0.0f;
             resolvedStack?.Attributes.RemoveAttribute("quality");
             if (__instance.WorkItemStack != null || __state.metalworking == null) return;

@@ -33,17 +33,10 @@ namespace XSkills
             {
                 IPlayer player = null;
 
+                // Берем игрока строго из инвентаря. Зависимость от forgedByUid полностью удалена.
                 if (slot.Inventory is InventoryBasePlayer invPlayer)
                 {
                     player = invPlayer.Player;
-                }
-                else
-                {
-                    string uid = __state.Attributes.GetString("forgedByUid");
-                    if (uid != null)
-                    {
-                        player = world.PlayerByUid(uid);
-                    }
                 }
 
                 if (player != null)
@@ -64,10 +57,7 @@ namespace XSkills
 
                             if (workItem != null)
                             {
-                                // ОШИБКА БЫЛА ЗДЕСЬ: Жестко задан размер стака 1
-                                // ItemStack workItemStack = new ItemStack(workItem, 1); 
-
-                                // ИСПРАВЛЕНИЕ: Создаем стак для текущего слота (1 шт.)
+                                // Создаем стак для текущего слота
                                 ItemStack workItemStack = new ItemStack(workItem, 1);
 
                                 // 2. Пытаемся найти рецепт того, что игрок ковал
@@ -126,28 +116,21 @@ namespace XSkills
                                 // Сохраняем исходную температуру
                                 workItemStack.Collectible.SetTemperature(world, workItemStack, temperature);
 
-                                // Возвращаем первую заготовку в текущий слот
+                                // Возвращаем сломанную заготовку в текущий слот
                                 slot.Itemstack = workItemStack;
                                 slot.MarkDirty();
 
                                 // Если в исходном стаке было больше одного предмета, возвращаем остальные
                                 if (__state.StackSize > 1)
                                 {
-                                    int remainingCount = __state.StackSize - 1;
+                                    ItemStack extraItems = __state.Clone(); // Клонируем исходный неповрежденный предмет!
+                                    extraItems.StackSize = __state.StackSize - 1; // Возвращаем всё, кроме одного сломавшегося
 
-                                    // Обрабатываем каждый оставшийся предмет отдельно, так как они нестакаемые
-                                    for (int i = 0; i < remainingCount; i++)
+                                    // Пытаемся выдать остаток в инвентарь
+                                    if (!player.InventoryManager.TryGiveItemstack(extraItems))
                                     {
-                                        // Клонируем деформированную заготовку (размер стака будет 1)
-                                        ItemStack singleExtraItem = workItemStack.Clone();
-                                        singleExtraItem.StackSize = 1;
-
-                                        // Пытаемся выдать 1 шт. в инвентарь
-                                        if (!player.InventoryManager.TryGiveItemstack(singleExtraItem))
-                                        {
-                                            // Если места нет (метод вернул false), выбрасываем под ноги игроку
-                                            world.SpawnItemEntity(singleExtraItem, player.Entity.Pos.XYZ);
-                                        }
+                                        // Если места нет (метод вернул false), выбрасываем под ноги игроку
+                                        world.SpawnItemEntity(extraItems, player.Entity.Pos.XYZ);
                                     }
                                 }
                             }
