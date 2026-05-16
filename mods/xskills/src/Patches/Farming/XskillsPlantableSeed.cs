@@ -137,7 +137,7 @@ namespace XSkills
                 if (handHandling == EnumHandHandling.PreventDefault)
                 {
                     BlockEntityFarmland beFarmland = byEntity.World.BlockAccessor.GetBlockEntity(blockSel.Position) as BlockEntityFarmland;
-                    Block crop = byEntity.World.BlockAccessor.GetBlock(blockSel.Position);
+                    Block crop = byEntity.World.BlockAccessor.GetBlock(blockSel.Position.UpCopy()); // Правильно: получает блок над грядкой
                     playerAbility = playerSkill[farming.CultivatedSeedsId];
 
                     if (beFarmland != null && crop?.CropProps != null && playerAbility?.Tier > 0)
@@ -197,9 +197,8 @@ namespace XSkills
                             playerAbility = playerSkill[farming.CultivatedSeedsId];
                             if (playerAbility?.Tier > 0)
                             {
-                                // МЯГКАЯ ЗАЩИТА: Проверяем, что блок существует и у него есть параметры урожая (CropProps)
-                                Block cropOnFarmland = byEntity.World.BlockAccessor.GetBlock(pos);
-                                if (cropOnFarmland != null && cropOnFarmland.CropProps != null)
+                                // МЯГКАЯ ЗАЩИТА: Используем уже известный cropBlock
+                                if (cropBlock != null && cropBlock.CropProps != null)
                                 {
                                     if (farmland.Roomness > 0) farmland.TryGrowCrop(api.World.Calendar.TotalHours);
                                     if (byEntity.World.Rand.NextDouble() < playerAbility.SkillDependentFValue()) farmland.TryGrowCrop(api.World.Calendar.TotalHours);
