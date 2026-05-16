@@ -485,18 +485,29 @@ namespace XSkills
     [HarmonyPatch(typeof(Vintagestory.GameContent.EntityBobber), "TryCatchFish")]
     public class DoubleHookPatch
     {
-        // В Prefix мы выясняем, успешная ли это рыбалка (а не мусор)
-        [HarmonyPrefix]
-        public static void Prefix(Vintagestory.GameContent.EntityBobber __instance, out bool __state)
+        // Создаем контейнер для сохранения состояния наживки между Prefix и Postfix
+        public class HookState
         {
-            __state = false; // По умолчанию считаем, что улова нет
+            public bool IsCatch;
+            public ItemStack SavedBait;
+        }
+
+        [HarmonyPrefix]
+        public static void Prefix(Vintagestory.GameContent.EntityBobber __instance, out HookState __state)
+        {
+            // Сохраняем наживку ДО того, как Fishing Config или ванильная игра ее уничтожит
+            __state = new HookState
+            {
+                IsCatch = false,
+                SavedBait = __instance.BaitStack?.Clone()
+            };
 
             // 1. Проверяем невидимую рыбу (состояние NoEntityFishCatch)
             var stateField = AccessTools.Field(typeof(Vintagestory.GameContent.EntityBobber), "bobberState");
             if (stateField != null)
             {
-                string stateName = stateField.GetValue(__instance).ToString();
-                if (stateName == "NoEntityFishCatch") __state = true;
+                string stateName = stateField.GetValue(__instance)?.ToString();
+                if (stateName == "NoEntityFishCatch") __state.IsCatch = true;
             }
 
             // 2. Проверяем физическую рыбу, если она подплыла
@@ -504,15 +515,14 @@ namespace XSkills
             if (caughtFishField != null)
             {
                 Entity fish = caughtFishField.GetValue(__instance) as Entity;
-                if (fish != null && fish.Alive) __state = true;
+                if (fish != null && fish.Alive) __state.IsCatch = true;
             }
         }
 
-        // В Postfix мы выдаем награду, если рыбалка была успешной
         [HarmonyPostfix]
-        public static void Postfix(Vintagestory.GameContent.EntityBobber __instance, EntityAgent entityCatcher, bool __state)
+        public static void Postfix(Vintagestory.GameContent.EntityBobber __instance, EntityAgent entityCatcher, HookState __state)
         {
-            if (!__state) return; // Улова не было (или поймали мусор), выходим
+            if (!__state.IsCatch) return; // Улова не было, выходим
             if (__instance.Api.Side != EnumAppSide.Server) return;
 
             IPlayer player = (entityCatcher as EntityPlayer)?.Player;
@@ -524,43 +534,39 @@ namespace XSkills
 
             if (ability != null && ability.Tier > 0)
             {
-                // --- НОВАЯ МАТЕМАТИКА ШАНСА ---
-                // Метод сам берет Базу + (Уровень * Бонус) и режет по Максимуму
                 int currentChance = ability.SkillDependentValue();
                 float doubleChance = currentChance / 100f;
 
-                // Бросаем кубик на вторую рыбу
                 if (__instance.Api.World.Rand.NextDouble() < doubleChance)
                 {
-                    // Магия рефлексии: просим игру сгенерировать нам случайную рыбу
                     var method = AccessTools.Method(typeof(Vintagestory.GameContent.EntityBobber), "getRandomFishEntityProperties");
                     if (method != null)
                     {
-                        object[] args = new object[] { 0f, false }; // abundanceValue, printDebug
+                        // Временно "вешаем" сохраненную наживку обратно на крючок, 
+                        // чтобы Fishing Config мог ее прочитать.
+                        ItemStack originalBait = __instance.BaitStack;
+                        __instance.BaitStack = __state.SavedBait;
+
+                        object[] args = new object[] { __state.SavedBait, 0f, false };
                         EntityProperties etype = method.Invoke(__instance, args) as EntityProperties;
+
+                        // Возвращаем все как было (скорее всего null), чтобы ничего не сломать
+                        __instance.BaitStack = originalBait;
 
                         if (etype != null && etype.Drops != null && etype.Drops.Length > 0)
                         {
                             CollectibleObject collObj = etype.Drops[0].ResolvedItemstack.Collectible;
-
-                            // Как и в ваниле, рандомно определяем возраст: малек или взрослая
                             string age = (__instance.Api.World.Rand.NextDouble() > 0.5) ? "adult" : "juvenile";
                             CollectibleObject deadFishItem = __instance.Api.World.GetItem(collObj.CodeWithVariant("age", age)) ?? collObj;
 
-                            // Создаем стак с рыбкой
                             ItemStack bonusFish = new ItemStack(deadFishItem, 1);
 
-                            // Пытаемся дать в руки/инвентарь, иначе кидаем на землю
                             if (!entityCatcher.TryGiveItemStack(bonusFish))
                             {
                                 __instance.Api.World.SpawnItemEntity(bonusFish, entityCatcher.Pos.XYZ);
                             }
 
-                            // Добавляем эпичности: звук дополнительного всплеска
                             player.Entity.World.PlaySoundAt(new AssetLocation("sounds/environment/mediumsplash"), player.Entity, player, false, 16f, 1f);
-
-                            // Сообщение в лог сервера для контроля
-                            player.Entity.World.Logger.Notification($"[РЫБАЛКА] Двойной крючок: Игрок {player.PlayerName} вытащил дополнительную рыбу!");
                         }
                     }
                 }

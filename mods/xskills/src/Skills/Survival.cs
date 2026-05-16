@@ -282,7 +282,6 @@ namespace XSkills
             this.MaxExpLossOnDeath = 10.0f;
         }
 
-        //huge stomach
         public void OnHugeStomach(PlayerAbility playerAbility, int oldTier)
         {
             IPlayer player = playerAbility.PlayerSkill.PlayerSkillSet.Player;
@@ -291,15 +290,37 @@ namespace XSkills
                 EntityBehaviorHunger playerHunger = player.Entity.GetBehavior<EntityBehaviorHunger>();
                 if (playerHunger != null)
                 {
-                    float saturationGrowth = (1500 + playerAbility.Value(0)) / playerHunger.MaxSaturation;
-                    playerHunger.MaxSaturation = (1500 + playerAbility.Value(0));
-                    playerHunger.FruitLevel *= saturationGrowth;
-                    playerHunger.GrainLevel *= saturationGrowth;
-                    playerHunger.VegetableLevel *= saturationGrowth;
-                    playerHunger.DairyLevel *= saturationGrowth;
-                    playerHunger.ProteinLevel *= saturationGrowth;
-                    playerHunger.Saturation *= saturationGrowth;
-                    playerHunger.UpdateNutrientHealthBoost();
+                    // 1. Узнаем, сколько объема твой мод УЖЕ добавил этому игроку ранее (если ничего, то 0)
+                    float alreadyAdded = player.Entity.Attributes.GetFloat("hugeStomachBonus", 0f);
+
+                    // 2. Узнаем, какой бонус должен быть на текущем уровне перка
+                    float newBonus = playerAbility.Value(0);
+
+                    // 3. Вычисляем разницу, которую нужно прибавить к текущему размеру желудка
+                    float delta = newBonus - alreadyAdded;
+
+                    // Если разница есть (перк вкачали впервые или повысили его уровень)
+                    if (delta != 0)
+                    {
+                        float oldMaxSat = playerHunger.MaxSaturation;
+                        float newMaxSat = oldMaxSat + delta;
+
+                        // Защита от деления на ноль
+                        float saturationGrowth = oldMaxSat > 0 ? (newMaxSat / oldMaxSat) : 1f;
+
+                        // Обновляем значения
+                        playerHunger.MaxSaturation = newMaxSat;
+                        playerHunger.FruitLevel *= saturationGrowth;
+                        playerHunger.GrainLevel *= saturationGrowth;
+                        playerHunger.VegetableLevel *= saturationGrowth;
+                        playerHunger.DairyLevel *= saturationGrowth;
+                        playerHunger.ProteinLevel *= saturationGrowth;
+                        playerHunger.Saturation *= saturationGrowth;
+                        playerHunger.UpdateNutrientHealthBoost();
+
+                        // 4. Записываем новый бонус в атрибуты игрока, чтобы не прибавить его дважды в будущем
+                        player.Entity.Attributes.SetFloat("hugeStomachBonus", newBonus);
+                    }
                 }
             }
         }
