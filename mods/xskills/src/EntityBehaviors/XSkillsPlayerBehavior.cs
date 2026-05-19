@@ -403,7 +403,7 @@ namespace XSkills
 
             //adrenaline rush
             playerAbility = playerSkill[this.combat.AdrenalineRushId];
-            if (newHealth > 0 && newHealth / healthTree.GetFloat("maxhealth") <= playerAbility.FValue(0))
+            if (playerAbility != null && newHealth > 0 && newHealth / healthTree.GetFloat("maxhealth") <= playerAbility.FValue(0))
             {
                 AffectedEntityBehavior affected = entity.GetBehavior<AffectedEntityBehavior>();
                 if (affected == null ||

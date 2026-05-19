@@ -140,11 +140,7 @@ namespace XLib.XLeveling
             this.XLeveling = xLeveling ?? throw new ArgumentNullException("The XLeveling system of a XLeveling server interface must not be null.");
             ICoreServerAPI api = this.XLeveling.Api as ICoreServerAPI ?? throw new Exception("Tried to create a server interface on the wrong side.");
 
-            api.Event.PlayerNowPlaying += OnPlayerNowPlaying;
-            api.Event.PlayerDisconnect += OnPlayerDisconnect;
-            api.Event.PlayerCreate += OnPlayerCreate;
-            api.Event.GameWorldSave += OnWorldSave;
-            api.Event.PlayerDeath += OnPlayerDeath;
+           
             this.Config = new Config();
             this.PlayerSkillSets = new Dictionary<IPlayer, PlayerSkillSet>();
 
@@ -249,6 +245,12 @@ namespace XLib.XLeveling
                     parsers.OptionalWord("knowledge"),
                     parsers.OptionalInt("quantity"),
                 });
+
+            api.Event.PlayerNowPlaying += OnPlayerNowPlaying;
+            api.Event.PlayerDisconnect += OnPlayerDisconnect;
+            api.Event.PlayerCreate += OnPlayerCreate;
+            api.Event.GameWorldSave += OnWorldSave;
+            api.Event.PlayerDeath += OnPlayerDeath;
         }
 
         /// <summary>
