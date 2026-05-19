@@ -71,10 +71,11 @@ namespace XSkills
             if (playerSkillSet == null) return damage;
 
             //last stand
-            if (Health != null && dmgSource.Type != EnumDamageType.Heal)
+            if (this.survival != null && Health != null && dmgSource.Type != EnumDamageType.Heal)
             {
-                PlayerAbility playerAbility = playerSkillSet[survival.Id]?[survival.LastStandId];
-                if (damage > Health.Health && Health.MaxHealth > 0.0f && playerAbility?.Tier > 0)
+                PlayerAbility playerAbility = playerSkillSet[this.survival.Id]?[this.survival.LastStandId];
+                // Проверка playerAbility != null, чтобы безопасно обращаться к .Tier
+                if (playerAbility != null && damage > Health.Health && Health.MaxHealth > 0.0f && playerAbility.Tier > 0)
                 {
                     float ratio = Health.Health / Health.MaxHealth;
                     if (ratio * playerAbility.FValue(0) >= this.entity.World.Rand.NextDouble())
@@ -85,18 +86,23 @@ namespace XSkills
             }
 
             //feather fall
-            if (dmgSource.Source == EnumDamageSource.Fall && dmgSource.Type == EnumDamageType.Gravity)
+            if (this.survival != null && dmgSource.Source == EnumDamageSource.Fall && dmgSource.Type == EnumDamageType.Gravity)
             {
-                PlayerAbility playerAbility = playerSkillSet[survival.Id]?[survival.FeatherFallId];
-                damage = Math.Max(damage - playerAbility.Value(0), 0);
-                damage *= 1.0f - playerAbility.FValue(1);
+                PlayerAbility playerAbility = playerSkillSet[this.survival.Id]?[this.survival.FeatherFallId];
+                // Проверка перед вызовом методов .Value() и .FValue()
+                if (playerAbility != null)
+                {
+                    damage = Math.Max(damage - playerAbility.Value(0), 0);
+                    damage *= 1.0f - playerAbility.FValue(1);
+                }
             }
 
             //timeless
             if (this.adaptation != null && dmgSource.Source == EnumDamageSource.Machine && dmgSource.SourceEntity == null && dmgSource.Type == EnumDamageType.Poison)
             {
                 PlayerAbility playerAbility = playerSkillSet[this.adaptation.Id]?[this.adaptation.TimelessId];
-                if (playerAbility.Tier > 0) damage = 0.0f;
+                // Проверка playerAbility != null
+                if (playerAbility != null && playerAbility.Tier > 0) damage = 0.0f;
             }
 
             //hunter
@@ -248,9 +254,12 @@ namespace XSkills
             {
                 //fast forward
                 PlayerAbility playerAbility = playeAdaptation[this.adaptation.FastForwardId];
-                float value = (float)(playerAbility.FValue(0) * (1.0f - temporalAffected.OwnStability));
-                entity.Stats.Set("hungerrate", "ability-ff", value, false);
-                entity.Stats.Set("miningSpeedMul", "ability-ff", value, false);
+                if (playerAbility != null)
+                {
+                    float value = (float)(playerAbility.FValue(0) * (1.0f - temporalAffected.OwnStability));
+                    entity.Stats.Set("hungerrate", "ability-ff", value, false);
+                    entity.Stats.Set("miningSpeedMul", "ability-ff", value, false);
+                }
             }
 
             if (change > 0.0)

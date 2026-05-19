@@ -24,6 +24,7 @@ namespace XSkills
         public int BreederId { get; private set; }
         public int MassHusbandryId { get; private set; }
 
+
         public Husbandry(ICoreAPI api) : base("husbandry", "xskills:skill-husbandry", "xskills:group-collecting")
         {
             (XLeveling.Instance(api))?.RegisterSkill(this);

@@ -46,7 +46,7 @@ namespace XSkills
         private ICoreClientAPI capi;
         private NightVisionRenderer nightVisionRenderer;
         private IShaderProgram nightVisionShaderProg;
-
+        private static Dictionary<string, float> _sessionStomachBonuses = new Dictionary<string, float>();
         public Survival(ICoreAPI api) : base("survival", "xskills:skill-survival", "xskills:group-survival")
         {
             (XLeveling.Instance(api))?.RegisterSkill(this);
@@ -282,6 +282,7 @@ namespace XSkills
             this.MaxExpLossOnDeath = 10.0f;
         }
 
+        //  Словарь в памяти сервера для отслеживания бонусов в текущей сессии
         public void OnHugeStomach(PlayerAbility playerAbility, int oldTier)
         {
             IPlayer player = playerAbility.PlayerSkill.PlayerSkillSet.Player;
@@ -290,36 +291,42 @@ namespace XSkills
                 EntityBehaviorHunger playerHunger = player.Entity.GetBehavior<EntityBehaviorHunger>();
                 if (playerHunger != null)
                 {
-                    // 1. Узнаем, сколько объема твой мод УЖЕ добавил этому игроку ранее (если ничего, то 0)
-                    float alreadyAdded = player.Entity.Attributes.GetFloat("hugeStomachBonus", 0f);
+                    string uid = player.PlayerUID;
 
-                    // 2. Узнаем, какой бонус должен быть на текущем уровне перка
-                    float newBonus = playerAbility.Value(0);
+                    // Узнаем, сколько мы добавили в ТЕКУЩЕЙ сессии игры
+                    _sessionStomachBonuses.TryGetValue(uid, out float alreadyAdded);
 
-                    // 3. Вычисляем разницу, которую нужно прибавить к текущему размеру желудка
+                    // Проверяем уровень. Если перк отменили (Tier == 0), бонус должен быть 0
+                    int currentTier = playerAbility.Tier;
+                    float newBonus = (currentTier > 0) ? playerAbility.Value(0) : 0f;
+
+                    // Считаем дельту
                     float delta = newBonus - alreadyAdded;
 
-                    // Если разница есть (перк вкачали впервые или повысили его уровень)
                     if (delta != 0)
                     {
                         float oldMaxSat = playerHunger.MaxSaturation;
                         float newMaxSat = oldMaxSat + delta;
 
-                        // Защита от деления на ноль
+                        // Защита от багов, чтобы желудок не схлопнулся в минус
+                        if (newMaxSat < 100) newMaxSat = 100;
+
                         float saturationGrowth = oldMaxSat > 0 ? (newMaxSat / oldMaxSat) : 1f;
 
-                        // Обновляем значения
                         playerHunger.MaxSaturation = newMaxSat;
                         playerHunger.FruitLevel *= saturationGrowth;
                         playerHunger.GrainLevel *= saturationGrowth;
                         playerHunger.VegetableLevel *= saturationGrowth;
                         playerHunger.DairyLevel *= saturationGrowth;
                         playerHunger.ProteinLevel *= saturationGrowth;
-                        playerHunger.Saturation *= saturationGrowth;
+
+                        // Обрезаем текущую сытость, если новый максимум стал меньше
+                        playerHunger.Saturation = Math.Min(playerHunger.Saturation * saturationGrowth, newMaxSat);
+
                         playerHunger.UpdateNutrientHealthBoost();
 
-                        // 4. Записываем новый бонус в атрибуты игрока, чтобы не прибавить его дважды в будущем
-                        player.Entity.Attributes.SetFloat("hugeStomachBonus", newBonus);
+                        // Записываем новый бонус в оперативную память сессии
+                        _sessionStomachBonuses[uid] = newBonus;
                     }
                 }
             }

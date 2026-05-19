@@ -29,7 +29,7 @@ namespace XSkills
         protected Cooking cooking;
         protected TemporalAdaptation temporalAdaptation;
         protected float xp;
-
+        protected EntityPlayer lastAttacker;
         public float XP { get =>  xp; }
 
         public override string PropertyName() => "XSkillsEntity";
@@ -73,6 +73,11 @@ namespace XSkills
                 damageSourceForDeath.SourceEntity as EntityPlayer ??
                 damageSourceForDeath.CauseEntity as EntityPlayer ??
                 (damageSourceForDeath.SourceEntity as EntityThrownStone)?.FiredBy as EntityPlayer;
+
+            if (byPlayer == null)
+            {
+                byPlayer = this.lastAttacker;
+            }
 
             PlayerSkillSet playerSkillSet = byPlayer?.GetBehavior<PlayerSkillSet>();
             if (playerSkillSet == null) return;
@@ -189,6 +194,12 @@ namespace XSkills
                 dmgSource.SourceEntity as EntityPlayer ??
                 dmgSource.CauseEntity as EntityPlayer ??
                 (dmgSource.SourceEntity as EntityThrownStone)?.FiredBy as EntityPlayer;
+
+            if (byPlayer != null)
+            {
+                this.lastAttacker = byPlayer;
+            }
+
             if (this.combat == null || byPlayer == null) return damage;
 
             PlayerSkillSet playerSkillSet = byPlayer.GetBehavior<PlayerSkillSet>();
