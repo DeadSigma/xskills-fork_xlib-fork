@@ -434,13 +434,16 @@ namespace XSkills
 
         protected virtual void BeforeDeath()
         {
-            //inventory unlink
+            // inventory unlink
             PlayerSkillSet playerSkillSet = this.entity.GetBehavior<PlayerSkillSet>();
-            if (playerSkillSet == null) return;
+
+            // Добавлена проверка: || this.survival == null
+            if (playerSkillSet == null || this.survival == null) return;
+
             PlayerSkill playerSurvival = playerSkillSet[this.survival.Id];
             if (playerSurvival == null) return;
 
-            PlayerAbility playerAbility = playerSurvival[survival.SoulboundBagId];
+            PlayerAbility playerAbility = playerSurvival[this.survival.SoulboundBagId];
             if (playerAbility?.Tier > 0)
             {
                 XSkillsPlayerInventory inv = (this.entity as EntityPlayer)?.Player.InventoryManager.GetOwnInventory("xskillshotbar") as XSkillsPlayerInventory;

@@ -90,7 +90,12 @@ namespace XLib.XLeveling
             {
                 string invalidChars = new string(Path.GetInvalidFileNameChars());
                 Regex regex = new Regex(string.Format("[{0}]", Regex.Escape(invalidChars)));
-                string str = this.XLeveling.Api.World.Config.GetString("XLevelingSkillsFile") ?? (this.XLeveling.Api as ICoreServerAPI).WorldManager.SaveGame.WorldName;
+
+                // ДОБАВЛЕНА ЗАЩИТА: операторы ?. и ?? "xleveling_save" спасут от null 
+                string str = this.XLeveling.Api.World.Config.GetString("XLevelingSkillsFile")
+                    ?? (this.XLeveling.Api as ICoreServerAPI).WorldManager.SaveGame?.WorldName
+                    ?? "xleveling_save";
+
                 str = regex.Replace(str, "");
                 return str + ".json";
             }
@@ -142,6 +147,8 @@ namespace XLib.XLeveling
             api.Event.PlayerDeath += OnPlayerDeath;
             this.Config = new Config();
             this.PlayerSkillSets = new Dictionary<IPlayer, PlayerSkillSet>();
+
+            this.DiscPlayerSkillSets = new Dictionary<string, SavedPlayerSkillSet>();
 
             //set paths and load data
             string savePath = SaveFileDirectory;
@@ -448,6 +455,8 @@ namespace XLib.XLeveling
         /// </summary>
         private void SaveData()
         {
+            if (this.PlayerSkillSets == null || this.DiscPlayerSkillSets == null) return;
+
             string saveFileName = this.SaveFileName;
             Dictionary<string, SavedPlayerSkillSet> toStore = new Dictionary<string, SavedPlayerSkillSet>();
 
