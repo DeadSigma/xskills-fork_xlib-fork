@@ -626,6 +626,39 @@ namespace XLib.XLeveling
             PlayerSkillSet playerSkillSet = byPlayer?.Entity?.GetBehavior<PlayerSkillSet>();
             if (playerSkillSet == null) return;
 
+            if (this.Config.deleteDataOnDeath)
+            {
+                // Сбрасываем все навыки до 0
+                foreach (PlayerSkill playerSkill in playerSkillSet.PlayerSkills)
+                {
+                    // Сбрасываем выбранные перки
+                    playerSkill.Reset();
+
+                    // Обнуляем опыт и уровень
+                    playerSkill.Experience = 0f;
+                    playerSkill.Level = 1; 
+
+                    // Сообщаем клиенту о сбросе перков
+                    this.channel.SendPacket(new CommandPackage(EnumXLevelingCommand.Reset, playerSkill.Skill.Id), byPlayer);
+
+                    // Синхронизируем обнуленный уровень и опыт с клиентом
+                    PlayerSkillPackage package = new PlayerSkillPackage(playerSkill);
+                    this.channel.SendPacket(package, byPlayer);
+                }
+
+                // Очищаем дополнительные знания и очки сброса
+                playerSkillSet.Knowledge.Clear();
+                playerSkillSet.UnlearnPoints = 0;
+
+                string deathMsg = Lang.GetL(byPlayer.LanguageCode, "xleveling:hardcore-death-message");
+                byPlayer.SendMessage(0, deathMsg, EnumChatType.Notification);
+
+                // Принудительно сохраняем данные в файл
+                this.SaveData();
+
+                return; 
+            }
+
             PlayerSkillSet killerSkillSet = (damageSource.GetCauseEntity()?.GetBehavior<PlayerSkillSet>());
             bool shouldLose = !(playerSkillSet.Sparring && (killerSkillSet?.Sparring ?? false));
 

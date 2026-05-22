@@ -107,6 +107,18 @@ namespace XLib.XLeveling
         /// </summary>
         /// 
 
+        /// <summary>
+        /// Если true, при смерти игрок навсегда теряет весь опыт и навыки (данные удаляются из сохранения)
+        /// </summary>
+        [ProtoMember(12)]
+        [DefaultValue(false)]
+        public bool deleteDataOnDeath;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Config"/> class.
+        /// </summary>
+        /// 
+
+
         public Config()
         {
             this.unlearnCooldown = 120.0f;
