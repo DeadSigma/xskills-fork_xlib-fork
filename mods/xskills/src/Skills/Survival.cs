@@ -8,6 +8,7 @@ using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Config;
+using Vintagestory.API.Server;
 using Vintagestory.API.Util;
 using Vintagestory.Client.NoObf;
 using Vintagestory.Common;
@@ -46,7 +47,6 @@ namespace XSkills
         private ICoreClientAPI capi;
         private NightVisionRenderer nightVisionRenderer;
         private IShaderProgram nightVisionShaderProg;
-        private static Dictionary<string, float> _sessionStomachBonuses = new Dictionary<string, float>();
         public Survival(ICoreAPI api) : base("survival", "xskills:skill-survival", "xskills:group-survival")
         {
             (XLeveling.Instance(api))?.RegisterSkill(this);
@@ -280,6 +280,53 @@ namespace XSkills
             this.ExpEquationValue = 0.4f;
             this.ExpLossOnDeath = 0.5f;
             this.MaxExpLossOnDeath = 10.0f;
+
+            // КОМАНДА ДЛЯ ПОЧИНКИ ЖЕЛУДКОВ
+            if (api is ICoreServerAPI sapi)
+            {
+                sapi.ChatCommands.Create("fixstomach")
+                    .WithDescription("Fixes corrupted max satiety from the Huge Stomach bug")
+                    .RequiresPrivilege(Privilege.chat) // Доступна всем игрокам
+                    .HandleWith((args) =>
+                    {
+                        var callerPlayer = args.Caller.Player as IServerPlayer;
+                        if (callerPlayer == null) return TextCommandResult.Success("Only players can use this.");
+
+                        EntityBehaviorHunger hunger = callerPlayer.Entity.GetBehavior<EntityBehaviorHunger>();
+                        if (hunger != null)
+                        {
+                            //  Сбрасываем желудок на ванильную базу
+                            hunger.MaxSaturation = 1500f;
+
+                            //  Удаляем старые багованные метки
+                            callerPlayer.Entity.Attributes.RemoveAttribute("hugeStomachBonus");
+                            callerPlayer.Entity.Attributes.RemoveAttribute("hugeStomachExpected");
+
+                            // Обрезаем текущую еду внутри игрока, чтобы его не разорвало от 6000 сытости
+                            hunger.FruitLevel = Math.Min(hunger.FruitLevel, 1500f);
+                            hunger.GrainLevel = Math.Min(hunger.GrainLevel, 1500f);
+                            hunger.VegetableLevel = Math.Min(hunger.VegetableLevel, 1500f);
+                            hunger.ProteinLevel = Math.Min(hunger.ProteinLevel, 1500f);
+                            hunger.DairyLevel = Math.Min(hunger.DairyLevel, 1500f);
+                            hunger.Saturation = Math.Min(hunger.Saturation, 1500f);
+                            hunger.UpdateNutrientHealthBoost();
+
+                            // Заставляем игру пересчитать перк Huge Stomach с нуля для этого игрока
+                            var survivalSkill = XLeveling.Instance(api)?.GetSkill("survival") as Survival;
+                            if (survivalSkill != null)
+                            {
+                                var ability = callerPlayer.Entity.GetBehavior<PlayerSkillSet>()?[survivalSkill.Id]?[survivalSkill.HugeStomachId];
+                                if (ability != null && ability.Tier > 0)
+                                {
+                                    survivalSkill.OnHugeStomach(ability, 0);
+                                }
+                            }
+
+                            return TextCommandResult.Success("Your stomach has been successfully fixed and recalculated!");
+                        }
+                        return TextCommandResult.Success("Could not find hunger behavior.");
+                    });
+            }
         }
 
         //  Словарь в памяти сервера для отслеживания бонусов в текущей сессии
@@ -291,16 +338,22 @@ namespace XSkills
                 EntityBehaviorHunger playerHunger = player.Entity.GetBehavior<EntityBehaviorHunger>();
                 if (playerHunger != null)
                 {
-                    string uid = player.PlayerUID;
+                    // 1. Получаем текущий желудок игрока
+                    float currentMaxSat = playerHunger.MaxSaturation;
 
-                    // Узнаем, сколько мы добавили в ТЕКУЩЕЙ сессии игры
-                    _sessionStomachBonuses.TryGetValue(uid, out float alreadyAdded);
+                    // 2. Читаем из базы: сколько мы добавляли в прошлый раз и какой итоговый желудок мы ему оставили
+                    float alreadyAdded = player.Entity.Attributes.GetFloat("hugeStomachBonus", 0f);
+                    float expectedMaxSat = player.Entity.Attributes.GetFloat("hugeStomachExpected", -1f);
 
-                    // Проверяем уровень. Если перк отменили (Tier == 0), бонус должен быть 0
+                    // 3. ЗАЩИТА ОТ БАГОВ (Смерть или Мод на расы):
+                    if (expectedMaxSat != -1f && Math.Abs(currentMaxSat - expectedMaxSat) > 1f)
+                    {
+                        alreadyAdded = 0f;
+                    }
+
+                    // 4. Считаем дельту
                     int currentTier = playerAbility.Tier;
                     float newBonus = (currentTier > 0) ? playerAbility.Value(0) : 0f;
-
-                    // Считаем дельту
                     float delta = newBonus - alreadyAdded;
 
                     if (delta != 0)
@@ -308,8 +361,7 @@ namespace XSkills
                         float oldMaxSat = playerHunger.MaxSaturation;
                         float newMaxSat = oldMaxSat + delta;
 
-                        // Защита от багов, чтобы желудок не схлопнулся в минус
-                        if (newMaxSat < 100) newMaxSat = 100;
+                        if (newMaxSat < 100) newMaxSat = 100; // Защита от отрицательных значений
 
                         float saturationGrowth = oldMaxSat > 0 ? (newMaxSat / oldMaxSat) : 1f;
 
@@ -320,13 +372,18 @@ namespace XSkills
                         playerHunger.DairyLevel *= saturationGrowth;
                         playerHunger.ProteinLevel *= saturationGrowth;
 
-                        // Обрезаем текущую сытость, если новый максимум стал меньше
                         playerHunger.Saturation = Math.Min(playerHunger.Saturation * saturationGrowth, newMaxSat);
 
                         playerHunger.UpdateNutrientHealthBoost();
 
-                        // Записываем новый бонус в оперативную память сессии
-                        _sessionStomachBonuses[uid] = newBonus;
+                        // 5. Железно сохраняем новые данные в базу персонажа
+                        player.Entity.Attributes.SetFloat("hugeStomachBonus", newBonus);
+                        player.Entity.Attributes.SetFloat("hugeStomachExpected", newMaxSat);
+                    }
+                    else if (expectedMaxSat == -1f)
+                    {
+                        // Инициализация для самых новых игроков, которые только зашли
+                        player.Entity.Attributes.SetFloat("hugeStomachExpected", currentMaxSat);
                     }
                 }
             }

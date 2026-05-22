@@ -312,17 +312,46 @@ namespace XSkills
 
         public override ItemStack[] GetDrops(IWorldAccessor world, BlockPos pos, IPlayer byPlayer, ref float dropChanceMultiplier, ref EnumHandling handling)
         {
-            ItemStack[] result = new ItemStack[0];
-            PlayerSkill playerSkill = byPlayer?.Entity.GetBehavior<PlayerSkillSet>()?[farming.Id];
-            if (playerSkill == null) return result;
+            List<ItemStack> drops = new List<ItemStack>();
 
-            //experience
+            // Базовые проверки на наличие скилла
+            if (this.farming == null) return drops.ToArray();
+            PlayerSkill playerSkill = byPlayer?.Entity.GetBehavior<PlayerSkillSet>()?[farming.Id];
+            if (playerSkill == null) return drops.ToArray();
+
+            // 1. Опыт выдается всегда
             playerSkill.AddExperience(this.xp);
 
-            //gatherer
+            // 2. Проверяем наличие перка Gatherer
             PlayerAbility playerAbility = playerSkill[farming.GathererId];
-            if (playerAbility != null) dropChanceMultiplier += playerAbility.SkillDependentFValue();
-            return result;
+            if (playerAbility == null || playerAbility.Tier <= 0 || block.Drops == null)
+                return drops.ToArray();
+
+
+            // Вычисляем шанс бонуса (напр. 0.1 для 10%)
+            float bonusChance = playerAbility.SkillDependentFValue();
+
+            // Подстраховка: если мод возвращает сырое число 10.0 вместо 0.1
+            if (bonusChance >= 1.0f) bonusChance *= 0.01f;
+
+            // Проверяем, что в руках у игрока
+            EnumTool? activeTool = byPlayer.InventoryManager?.ActiveTool;
+
+            for (int index = 0; index < block.Drops.Length; index++)
+            {
+                BlockDropItemStack dropConfig = block.Drops[index];
+
+                // Обязательная проверка инструмента
+                if (dropConfig.Tool.HasValue && dropConfig.Tool.Value != activeTool) continue;
+
+                ItemStack bonusDrop = dropConfig.GetNextItemStack(bonusChance);
+                if (bonusDrop != null && bonusDrop.StackSize > 0)
+                {
+                    drops.Add(bonusDrop);
+                }
+            }
+
+            return drops.ToArray();
         }
     }
 

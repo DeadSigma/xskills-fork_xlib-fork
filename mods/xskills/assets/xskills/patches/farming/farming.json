@@ -1,34 +1,80 @@
 [
-  {
-    "file": "game:blocktypes/plant/tallgrass",
-    "op": "addmerge",
-    "path": "/behaviors",
-    "value": [
-      {
-        "name": "XSkillsGrass",
-        "properties": {
-          "xp": 0.0
-        }
-      }
-    ]
-  },
-  {
-    "file": "game:blocktypes/soil/farmland",
-    "op": "addmerge",
-    "path": "/behaviors",
-    "value": [{ "name": "XSkillsFarmland" }],
-    "dependsOn": [{ "modid": "farmlanddropssoil", "invert": true }]
-  },
-  {
-    "file": "game:blocktypes/reed/skep",
-    "op": "addmerge",
-    "path": "/behaviors",
-    "value": [{
-      "name": "XSkillsSkep",
-      "properties": {
-        "xp": 2.0,
-        "harvestTime": 2.0
-      }
-    }]
-  }
+    {
+        "file": "game:blocktypes/plant/tallgrass",
+        "op": "addmerge",
+        "path": "/behaviors",
+        "value": [
+            {
+                "name": "XSkillsGrass",
+                "properties": {
+                    "xp": 11.1
+                }
+            }
+        ]
+    },
+    {
+        "file": "game:blocktypes/plant/tallgrass",
+        "op": "addmerge",
+        "path": "/behaviors",
+        "value": [
+            {
+                "name": "XSkillsGrass",
+                "properties": {
+                    "xp": 110.1
+                }
+            }
+        ]
+    },
+    {
+        "file": "game:blocktypes/soil/farmland",
+        "op": "addmerge",
+        "path": "/behaviors",
+        "value": [ { "name": "XSkillsFarmland" } ],
+        "dependsOn": [
+            {
+                "modid": "farmlanddropssoil",
+                "invert": true
+            }
+        ]
+    },
+    {
+        "file": "game:blocktypes/soil/farmland",
+        "op": "addmerge",
+        "path": "/behaviors",
+        "value": [ { "name": "XSkillsFarmland" } ],
+        "dependsOn": [
+            {
+                "modid": "farmlanddropssoil",
+                "invert": true
+            }
+        ]
+    },
+    {
+        "file": "game:blocktypes/reed/skep",
+        "op": "addmerge",
+        "path": "/behaviors",
+        "value": [
+            {
+                "name": "XSkillsSkep",
+                "properties": {
+                    "xp": 2.0,
+                    "harvestTime": 2.0
+                }
+            }
+        ]
+    },
+    {
+        "file": "game:blocktypes/reed/skep",
+        "op": "addmerge",
+        "path": "/behaviors",
+        "value": [
+            {
+                "name": "XSkillsSkep",
+                "properties": {
+                    "xp": 2.0,
+                    "harvestTime": 2.0
+                }
+            }
+        ]
+    }
 ]
