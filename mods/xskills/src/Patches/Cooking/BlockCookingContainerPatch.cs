@@ -53,75 +53,56 @@ namespace XSkills
         }
 
         /// <summary>
-        /// Prefix for the OnHeldInteractStop method.
-        /// Replaces the vanilla method.
+        /// Prefix for the CanSmelt method.
+        /// Temporarily increases MaxServingSize for the Canteen Cook ability.
         /// </summary>
-        /// <param name="__instance">The instance.</param>
-        /// <param name="__result">if set to <c>true</c> the item can be smelted.</param>
-        /// <param name="world">The world.</param>
-        /// <param name="cookingSlotsProvider">The cooking slots provider.</param>
-        /// <returns>
-        ///   <c>true</c> if the vanilla method should run; otherwise, <c>false</c>.
-        /// </returns>
         [HarmonyPrefix]
         [HarmonyPatch("CanSmelt")]
-        public static bool CanSmeltPrefix(BlockCookingContainer __instance, out bool __result, IWorldAccessor world, ISlotProvider cookingSlotsProvider)
+        public static void CanSmeltPrefix(BlockCookingContainer __instance, out int __state, ISlotProvider cookingSlotsProvider)
         {
-            __result = false;
+            __state = CookingUtil.SetMaxServingSize(__instance, cookingSlotsProvider);
+        }
+
+        /// <summary>
+        /// Postfix for the CanSmelt method.
+        /// Restores MaxServingSize and applies the Desalination lock check.
+        /// </summary>
+        [HarmonyPostfix]
+        [HarmonyPatch("CanSmelt")]
+        public static void CanSmeltPostfix(BlockCookingContainer __instance, ref bool __result, int __state, IWorldAccessor world, ISlotProvider cookingSlotsProvider)
+        {
+            // Возвращаем размер порции к ванильному значению
+            __instance.MaxServingSize = __state;
+
+            if (!__result) return;
+
+            // Проверка лока на опреснение (Desalinate)
             BlockEntityBehaviorOwnable ownable = CookingUtil.GetOwnableFromInventory(cookingSlotsProvider as InventoryBase);
-            if (ownable == null) return true;
-            IPlayer player = ownable.Owner;
-            if (player == null) return true;
+            IPlayer player = ownable?.Owner;
+            if (player == null) return;
 
             Cooking cooking = world.Api.ModLoader.GetModSystem<XLeveling>()?.GetSkill("cooking") as Cooking;
-            PlayerSkill playerSkill;
-            if (cooking == null) return true;
+            if (cooking == null) return;
 
-            try
-            {
-                //for some reason GetBehavior can throw an exception here
-                playerSkill = player.Entity.GetBehavior<PlayerSkillSet>()?[cooking.Id];
-            }
-            catch (NullReferenceException)
-            {
-                ownable.OwnerString = null;
-                ownable.Owner = null;
-                return true;
-            }
-
-            if (playerSkill == null) return true;
-
-            //canteen cook
-            int maxServingSize = __instance.MaxServingSize;
-            PlayerAbility ability = playerSkill[cooking.CanteenCookId];
-            if (ability != null) __instance.MaxServingSize = (int)(maxServingSize * ( 1.0f + ability.FValue(0)));
+            PlayerSkill playerSkill = player.Entity.GetBehavior<PlayerSkillSet>()?[cooking.Id];
+            if (playerSkill == null) return;
 
             ItemStack[] stacks = __instance.GetCookingStacks(cookingSlotsProvider, false);
             CookingRecipe recipe = __instance.GetMatchingCookingRecipe(world, stacks, out _);
-            __instance.MaxServingSize = maxServingSize;
-            //desalinate
-            if (recipe != null)
+
+            if (recipe != null && (recipe.Code == "salt" || recipe.Code == "lime"))
             {
-                if (recipe.Code == "salt" || recipe.Code == "lime")
+                CookingSkillConfig config = cooking.Config as CookingSkillConfig;
+                bool bypass = config?.bypassDesalinationLock ?? false;
+                bool isSkillEnabled = cooking[cooking.DesalinateId]?.Enabled ?? false;
+                PlayerAbility playerAbility = playerSkill[cooking.DesalinateId];
+
+                // Если перк не вкачан, мы принудительно запрещаем готовку, перекрывая решение ванильной игры
+                if (!bypass && isSkillEnabled && (playerAbility == null || playerAbility.Tier <= 0))
                 {
-                    // Достаем настройку из конфига (если ты добавил bypassDesalinationLock)
-                    CookingSkillConfig config = cooking.Config as CookingSkillConfig;
-                    bool bypass = config?.bypassDesalinationLock ?? false;
-
-                    // Проверяем, включена ли способность в принципе (в настройках XLeveling)
-                    bool isSkillEnabled = cooking[cooking.DesalinateId]?.Enabled ?? false;
-
-                    PlayerAbility playerAbility = playerSkill[cooking.DesalinateId];
-
-                    // Блокируем ТОЛЬКО если: обход выключен И навык глобально включен И (способности нет или уровень 0)
-                    if (!bypass && isSkillEnabled && (playerAbility == null || playerAbility.Tier <= 0))
-                    {
-                        return false;
-                    }
+                    __result = false;
                 }
-                __result = true;
             }
-            return false;
         }
 
         /// <summary>
