@@ -219,54 +219,6 @@ namespace XSkills
             foreach (Item item in this.XLeveling.Api.World.Items)
             {
                 if (item == null || item.Code == null) continue;
-                if (item.FirstCodePart(0) == "metalbit")
-                {
-                    if (item.Code?.Domain == "xskills")
-                    {
-                        if (this.XLeveling.Api is ICoreServerAPI && (Config as MetalworkingConfig).useVanillaBits)
-                        {
-                            GridRecipe recipe = new GridRecipe();
-                            recipe.IngredientPattern = "B";
-                            recipe.Height = 1;
-                            recipe.Width = 1;
-                            recipe.Shapeless = true;
-
-                            CraftingRecipeIngredient ingredient = new CraftingRecipeIngredient();
-                            ingredient.Code = new AssetLocation("xskills", item.Code.Path);
-                            ingredient.Type = EnumItemClass.Item;
-                            ingredient.Quantity = 1;
-
-                            CraftingRecipeIngredient output = new CraftingRecipeIngredient();
-                            output.Code = new AssetLocation("game", item.Code.Path);
-                            output.Type = EnumItemClass.Item;
-                            output.Quantity = 1;
-                            Item resolved = XLeveling.Api.World.GetItem(output.Code);
-                            if (resolved == null || resolved.IsMissing) { continue; }
-
-                            recipe.Ingredients = new Dictionary<string, CraftingRecipeIngredient>();
-                            recipe.Ingredients.Add("B", ingredient);
-                            recipe.RecipeGroup = 6;
-                            recipe.Output = output;
-                            recipe.Name = new AssetLocation("game", "recipes/grid/metalbit.json");
-
-                            if (recipe.Resolve(this.XLeveling.Api.World, "xskills"))
-                            {
-                                (this.XLeveling.Api as ICoreServerAPI)?.RegisterCraftingRecipe(recipe);
-                            }
-                        }
-
-                        Item bit = this.XLeveling.Api.World.GetItem(new AssetLocation("game", item.Code.Path));
-                        if (bit != null)
-                        {
-                            item.MaterialDensity = bit.MaterialDensity;
-                            if (bit.CombustibleProps != null)
-                            {
-                                item.CombustibleProps = bit.CombustibleProps.Clone();
-                                item.CombustibleProps.SmeltedRatio = (this.Config as MetalworkingConfig).bitsForIngot;
-                            }
-                        }
-                    }
-                }
             }
 
             float recipeRatio = (Config as MetalworkingConfig)?.chiselRecipesRatio ?? 1.0f;

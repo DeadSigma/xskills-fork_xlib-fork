@@ -87,7 +87,6 @@
     <Content Include="assets\xskills\recipes\barrel\mead.json" />
     <Content Include="assets\xskills\recipes\cooking\salt.json" />
     <Content Include="assets\xskills\recipes\cooking\lime.json" />
-    <Content Include="assets\xskills\shapes\item\bits\metalbit.json" />
     <Content Include="assets\xskills\skills\combat.json" />
     <Content Include="assets\xskills\skills\digging.json" />
     <Content Include="assets\xskills\skills\farming.json" />
@@ -113,6 +112,9 @@
   <ItemGroup>
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="assets\xskills\shapes\item\" />
   </ItemGroup>
   <PropertyGroup>
     <BaseOutputPath>./bin</BaseOutputPath>

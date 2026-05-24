@@ -1,0 +1,8 @@
+[
+    {
+        "file": "game:blocktypes/coalpile.json",
+        "op": "add",
+        "path": "/textures/everlastingcharcoal",
+        "value": { "base": "game:block/coal/charcoal" }
+    }
+]
