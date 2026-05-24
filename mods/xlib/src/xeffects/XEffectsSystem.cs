@@ -289,7 +289,7 @@ namespace XLib.XEffects
             effectFrame = new EffectFrame(api);
             api.Event.RegisterGameTickListener((float tick) => this.effectFrame.Update(), 100);
 
-            api.Input.RegisterHotKey("effectframehotkey", "Show/Hide Effect Hud", GlKeys.L, HotkeyType.GUIOrOtherControls);
+            api.Input.RegisterHotKey("effectframehotkey", Lang.Get("xskills:hotkey-effectframehotkey"), GlKeys.L, HotkeyType.GUIOrOtherControls);
             api.Input.SetHotKeyHandler("effectframehotkey", this.OnHotKeyEffectFrame);
         }
 

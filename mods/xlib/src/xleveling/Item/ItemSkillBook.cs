@@ -101,12 +101,21 @@ namespace XLib.XLeveling
             string skillName = inSlot.Itemstack.Attributes.GetString("skill");
             float exp = (float)inSlot.Itemstack.Attributes.GetDecimal("experience");
             string knowledge = inSlot.Itemstack.Attributes.GetString("knowledge");
+
+            // Проверяем, есть ли флаг прочитанной книги
+            bool isStudied = inSlot.Itemstack.Attributes.GetBool("studied", false);
+
             Skill skill = system.GetSkill(skillName);
 
             if (skill != null && exp != 0.0f)
                 dsc.AppendLine(Lang.Get("xlib:skillbook-dsc", skill.DisplayName, exp));
-            if (knowledge != null) 
+            if (knowledge != null)
                 dsc.AppendLine(Lang.Get("xlib:skillbook-dsc2", Lang.Get(knowledge)));
+
+            if (isStudied)
+            {
+                dsc.AppendLine("<font color=\"#ff9999\">" + Lang.Get("xlib:skillbook-studied") + "</font>");
+            }
         }
 
         /// <summary>
@@ -125,11 +134,52 @@ namespace XLib.XLeveling
         {
             base.OnHeldInteractStart(slot, byEntity, blockSel, entitySel, firstEvent, ref handling);
 
-            if (!slot.Empty)
+            if (slot.Empty || !firstEvent) return;
+
+            if (slot.Itemstack.Attributes.GetBool("studied", false))
             {
-                byEntity.World.RegisterCallback((dt) => playEatSound(byEntity, "eat", 1), 500);
-                byEntity.AnimManager?.StartAnimation("eat");
-                handling = EnumHandHandling.PreventDefault;
+                return;
+            }
+
+            handling = EnumHandHandling.PreventDefault;
+
+            // 1. Сначала получаем объект игрока (работает и на клиенте, и на сервере)
+            IPlayer player = (byEntity as EntityPlayer)?.Player;
+
+            byEntity.World.PlaySoundAt(new AssetLocation("xlib:sounds/knowledge_consuming"), byEntity, player, true, 16, 1f);
+
+            if (byEntity.World is IServerWorldAccessor)
+            {
+                if (player == null) return;
+
+                ItemStack readBook = slot.TakeOut(1);
+
+                string skillName = readBook.Attributes.GetString("skill");
+                float exp = (float)readBook.Attributes.GetDecimal("experience");
+                string knowledge = readBook.Attributes.GetString("knowledge");
+
+                XLeveling system = XLeveling.Instance(api);
+                Skill skill = system?.GetSkill(skillName);
+
+                PlayerSkillSet skillSet = byEntity.GetBehavior<PlayerSkillSet>();
+                PlayerSkill playerSkill = skill != null ? skillSet?[skill.Id] : null;
+
+                if (exp != 0.0f) playerSkill?.AddExperience(exp, false);
+
+                if (knowledge != null)
+                {
+                    skillSet.Knowledge.TryGetValue(knowledge, out int value);
+                    (XLeveling.Instance(api)?.IXLevelingAPI as XLevelingServer)?.SetPlayerKnowledge(player, knowledge, value + 1);
+                }
+
+                readBook.Attributes.SetBool("studied", true);
+
+                if (!player.InventoryManager.TryGiveItemstack(readBook))
+                {
+                    byEntity.World.SpawnItemEntity(readBook, byEntity.Pos.XYZ);
+                }
+
+                slot.MarkDirty();
             }
         }
 

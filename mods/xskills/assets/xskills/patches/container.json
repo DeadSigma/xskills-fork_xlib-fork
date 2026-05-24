@@ -10,11 +10,7 @@
         "file": "game:blocktypes/clay/fired/bowl",
         "op": "addmerge",
         "path": "/behaviors",
-        "value": [
-            {
-                "name": "XLibConsumable"
-            }
-        ]
+        "value": [ { "name": "XLibConsumable" } ]
     },
     {
         "dependsOn": [
@@ -27,11 +23,7 @@
         "file": "game:blocktypes/clay/fired/jug",
         "op": "addmerge",
         "path": "/behaviors",
-        "value": [
-            {
-                "name": "XLibConsumable"
-            }
-        ]
+        "value": [ { "name": "XLibConsumable" } ]
     },
     {
         "dependsOn": [
@@ -44,15 +36,12 @@
         "file": "game:blocktypes/wood/bucket",
         "op": "addmerge",
         "path": "/behaviors",
-        "value": [
-            {
-                "name": "XLibConsumable"
-            }
-        ]
+        "value": [ { "name": "XLibConsumable" } ]
     },
     {
         "dependsOn": [
             { "modid": "alchemy" },
+            { "modid": "aculinaryartillery" },
             {
                 "modid": "xdiseases",
                 "invert": true
@@ -71,6 +60,7 @@
     {
         "dependsOn": [
             { "modid": "alchemy" },
+            { "modid": "aculinaryartillery" },
             {
                 "modid": "xdiseases",
                 "invert": true
@@ -89,6 +79,7 @@
     {
         "dependsOn": [
             { "modid": "alchemy" },
+            { "modid": "tavernadditions" },
             {
                 "modid": "xdiseases",
                 "invert": true
@@ -107,6 +98,7 @@
     {
         "dependsOn": [
             { "modid": "alchemy" },
+            { "modid": "bricklayers" },
             {
                 "modid": "xdiseases",
                 "invert": true
@@ -115,15 +107,12 @@
         "file": "bricklayers:blocktypes/clay/bowlcolored",
         "op": "addmerge",
         "path": "/behaviors",
-        "value": [
-            {
-                "name": "XLibConsumable"
-            }
-        ]
+        "value": [ { "name": "XLibConsumable" } ]
     },
     {
         "dependsOn": [
             { "modid": "alchemy" },
+            { "modid": "bricklayers" },
             {
                 "modid": "xdiseases",
                 "invert": true
@@ -132,15 +121,12 @@
         "file": "bricklayers:blocktypes/clay/bowlglazed",
         "op": "addmerge",
         "path": "/behaviors",
-        "value": [
-            {
-                "name": "XLibConsumable"
-            }
-        ]
+        "value": [ { "name": "XLibConsumable" } ]
     },
     {
         "dependsOn": [
             { "modid": "alchemy" },
+            { "modid": "bricklayers" },
             {
                 "modid": "xdiseases",
                 "invert": true
@@ -149,15 +135,12 @@
         "file": "bricklayers:blocktypes/clay/bowlporcelain",
         "op": "addmerge",
         "path": "/behaviors",
-        "value": [
-            {
-                "name": "XLibConsumable"
-            }
-        ]
+        "value": [ { "name": "XLibConsumable" } ]
     },
     {
         "dependsOn": [
             { "modid": "alchemy" },
+            { "modid": "bricklayers" },
             {
                 "modid": "xdiseases",
                 "invert": true
@@ -166,15 +149,12 @@
         "file": "bricklayers:blocktypes/clay/largepotcolored",
         "op": "addmerge",
         "path": "/behaviors",
-        "value": [
-            {
-                "name": "XLibConsumable"
-            }
-        ]
+        "value": [ { "name": "XLibConsumable" } ]
     },
     {
         "dependsOn": [
             { "modid": "alchemy" },
+            { "modid": "bricklayers" },
             {
                 "modid": "xdiseases",
                 "invert": true
@@ -183,15 +163,12 @@
         "file": "bricklayers:blocktypes/clay/mugcolored",
         "op": "addmerge",
         "path": "/behaviors",
-        "value": [
-            {
-                "name": "XLibConsumable"
-            }
-        ]
+        "value": [ { "name": "XLibConsumable" } ]
     },
     {
         "dependsOn": [
             { "modid": "alchemy" },
+            { "modid": "bricklayers" },
             {
                 "modid": "xdiseases",
                 "invert": true
@@ -200,15 +177,12 @@
         "file": "bricklayers:blocktypes/clay/mugglazed",
         "op": "addmerge",
         "path": "/behaviors",
-        "value": [
-            {
-                "name": "XLibConsumable"
-            }
-        ]
+        "value": [ { "name": "XLibConsumable" } ]
     },
     {
         "dependsOn": [
             { "modid": "alchemy" },
+            { "modid": "bricklayers" },
             {
                 "modid": "xdiseases",
                 "invert": true
@@ -217,15 +191,12 @@
         "file": "bricklayers:blocktypes/clay/smallpotcolored",
         "op": "addmerge",
         "path": "/behaviors",
-        "value": [
-            {
-                "name": "XLibConsumable"
-            }
-        ]
+        "value": [ { "name": "XLibConsumable" } ]
     },
     {
         "dependsOn": [
             { "modid": "alchemy" },
+            { "modid": "bricklayers" },
             {
                 "modid": "xdiseases",
                 "invert": true
@@ -234,11 +205,7 @@
         "file": "bricklayers:blocktypes/clay/vat_liquid_small_colored",
         "op": "addmerge",
         "path": "/behaviors",
-        "value": [
-            {
-                "name": "XLibConsumable"
-            }
-        ]
+        "value": [ { "name": "XLibConsumable" } ]
     },
     {
         "dependsOn": [
@@ -266,7 +233,7 @@
                 "invert": true
             }
         ],
-        "file": "alchemy:blocktypes/flasks/claypotionflask",
+        "file": "alchemy:blocktypes/clay/raw/claypotionflask",
         "op": "addmerge",
         "path": "/behaviors",
         "value": [

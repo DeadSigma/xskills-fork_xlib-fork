@@ -212,7 +212,9 @@ namespace XSkills
             base.StartClientSide(api);
             this.XLeveling.CreateDescriptionFile();
 
-            api.Input.RegisterHotKey("xskillshotbarswitch", "Xskills hotbar switch", GlKeys.R);
+            string hotkeyDescription = Lang.Get("xskills:hotkey-xskillshotbarswitch");
+
+            api.Input.RegisterHotKey("xskillshotbarswitch", hotkeyDescription, GlKeys.R);
             api.Input.SetHotKeyHandler("xskillshotbarswitch", OnHotbarSwitch);
         }
 

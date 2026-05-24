@@ -430,7 +430,9 @@ namespace XSkills
                     }
                 }
                 else if (mealContainer == null || mealContainer is BlockPie)
-                {
+
+                    if (outputStack.Collectible.NutritionProps != null)
+                    {
                     float rel = scaledCooked - (int)scaledCooked;
                     totalCooked = (int)scaledCooked + (world.Rand.NextDouble() < rel ? 1 : 0);
                     if (outputStack.StackSize > cookedAmount) outputStack.StackSize += totalCooked - (int)(cookedAmount + 0.25f);

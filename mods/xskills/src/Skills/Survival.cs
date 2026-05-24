@@ -729,7 +729,7 @@ namespace XSkills
             if (!(this.Config as SurvivalSkillConfig).allowCatEyesToggle) return;
 #endif
 
-            capi.Input.RegisterHotKey("cateyestoggle", "Cat eyes toggle", GlKeys.P, HotkeyType.CharacterControls);
+            capi.Input.RegisterHotKey("cateyestoggle", Lang.Get("xskills:hotkey-cateyestoggle"), GlKeys.P, HotkeyType.CharacterControls);
             capi.Input.SetHotKeyHandler("cateyestoggle", (KeyCombination key) =>
             {
                 if (capi.World.Player.Entity.Controls.Sneak)
