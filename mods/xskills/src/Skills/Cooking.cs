@@ -446,31 +446,62 @@ namespace XSkills
 
             //desalinate
             playerAbility = skill[this.DesalinateId];
-            if (playerAbility.Tier > 0 && (
+            if (playerAbility != null && playerAbility.Tier > 0 && outputStack?.Collectible?.Code != null && (
                 outputStack.Collectible.Code.Path.Equals("salt") ||
                 outputStack.Collectible.Code.Path.Equals("lime")))
             {
-                ItemSlot[] slots = (outputSlot.Inventory as InventorySmelting)?.CookingSlots;
-                ItemSlot slot = (slots?.Length ?? 0) > 1 ? slots[1] : null;
-
                 int size0 = outputStack.StackSize * playerAbility.Value(0);
+
                 int size1 = outputStack.StackSize * playerAbility.Value(1);
-                if (slot != null && slot.Itemstack == null)
+                if (size1 <= 0) size1 = (int)(outputStack.StackSize * playerAbility.FValue(1));
+                if (size1 <= 0) size1 = 1;
+
+                // Умножение соли
+                outputStack.StackSize = size0;
+                if (outputSlot != null && outputSlot.Itemstack != null)
+                {
+                    outputSlot.Itemstack.StackSize = size0;
+                }
+
+                if (outputStack.StackSize == 0)
+                {
+                    outputStack = null;
+                    if (outputSlot != null) outputSlot.Itemstack = null;
+                }
+
+                // Ищем пустой слот ВНУТРИ котелка
+                ItemSlot bonusSlot = null;
+                InventoryBase inv = outputSlot?.Inventory as InventoryBase;
+
+                if (inv != null)
+                {
+                    // Пропускаем слоты 0, 1, 2 
+                    for (int i = 3; i < inv.Count; i++)
+                    {
+                        if (inv[i].Itemstack == null || inv[i].Itemstack.StackSize == 0)
+                        {
+                            bonusSlot = inv[i];
+                            break; 
+                        }
+                    }
+                }
+
+                // Выдаем известь в найденный пустой слот
+                if (bonusSlot != null && size1 > 0 && outputStack != null)
                 {
                     string itemName = outputStack.Collectible.Code.Path.Equals("salt") ? "game:lime" : "game:salt";
-                    outputStack.StackSize = size0;
-                    if (outputStack.StackSize == 0)
-                    {
-                        outputStack = null;
-                        outputSlot.Itemstack = null;
-                    }
+                    AssetLocation itemLoc = new AssetLocation(itemName);
 
-                    Item itemLime = world.GetItem(new AssetLocation(itemName));
-                    ItemStack stack = itemLime != null && size1 > 0 ? new ItemStack(itemLime, size1) : null;
-                    slot.Itemstack = stack;
-                    slot.MarkDirty();
-                    outputSlot.MarkDirty();
+                    CollectibleObject bonusCollectible = world.GetItem(itemLoc) as CollectibleObject ?? world.GetBlock(itemLoc);
+
+                    if (bonusCollectible != null)
+                    {
+                        bonusSlot.Itemstack = new ItemStack(bonusCollectible, size1);
+                        bonusSlot.MarkDirty();
+                    }
                 }
+
+                outputSlot?.MarkDirty();
             }
             if (outputStack == null) return;
 

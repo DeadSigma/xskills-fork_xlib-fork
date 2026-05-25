@@ -1,14 +1,19 @@
-{
-    "hotkey-cateyestoggle": "xSkills: Visione felina On/Off",
-    "hotkey-effectframehotkey": "xSkills: Mostra/Nascondi HUD effetti",
-    "hotkey-skilldialoghotkey_v2": "xSkills: Mostra/Nascondi menu abilità",
-    "hotkey-steeplechasertoggle": "xSkills: Camminatore On/Off",
-    "hotkey-xskillshotbarswitch": "xSkills: Cambia barra rapida",
-    "steeplechaser-off": "Camminatore: Disattivo",
-    "steeplechaser-on": "Camminatore: Attivo",
-    "xlib:skillbook-studied": "<font color=\"#ff9999\">Studiato</font>",
-    "ability-heatinghits": "Colpi riscaldanti",
-    "abilitydesc-heatinghits": "Ogni colpo sul pezzo in lavorazione lo riscalda di {0}°C.",
-    "ability-safequenching": "Tempra sicura",
-    "abilitydesc-safequenching": "Con questo talento, i tuoi strumenti non verranno più ridotti in atomi durante la tempra. Se la tempra fallisce, l'oggetto verrà semplicemente danneggiato."
+﻿{
+  "hotkey-cateyestoggle": "xSkills: Visione felina On/Off",
+  "hotkey-effectframehotkey": "xSkills: Mostra/Nascondi HUD effetti",
+  "hotkey-skilldialoghotkey_v2": "xSkills: Mostra/Nascondi menu abilità",
+  "hotkey-steeplechasertoggle": "xSkills: Camminatore On/Off",
+  "hotkey-xskillshotbarswitch": "xSkills: Cambia barra rapida",
+  "steeplechaser-off": "Camminatore: Disattivo",
+  "steeplechaser-on": "Camminatore: Attivo",
+  "xlib:skillbook-studied": "<font color=\"#ff9999\">Studiato</font>",
+
+  "ability-desalinate": "Desalinizzazione",
+  "abilitydesc-desalinate": "Permette di evaporare acqua salata in un calderone per estrarre minerali. Quando tutti e 4 gli slot di cottura sono completamente riempiti d'acqua salata, il processo di evaporazione produce {0} unità di sale e {1} unità di calce.",
+
+  "ability-heatinghits": "Colpi riscaldanti",
+  "abilitydesc-heatinghits": "Ogni colpo sul pezzo in lavorazione lo riscalda di {0}°C.",
+
+  "ability-safequenching": "Tempra sicura",
+  "abilitydesc-safequenching": "Con questo talento, i tuoi strumenti non verranno più ridotti in atomi durante la tempra. Se la tempra fallisce, l'oggetto verrà semplicemente danneggiato."
 }
