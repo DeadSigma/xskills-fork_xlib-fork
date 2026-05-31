@@ -41,7 +41,9 @@ namespace XSkills
     {
         public static void Apply(Harmony harmony, Type type, XSkills xSkills)
         {
-            PatchMethod(harmony, type, typeof(ItemStackMeleeWeaponStatsPatch), "FromItemStack");
+            // необходимо ссылаться именно на ЭТОТ класс патча, чтобы Harmony нашёл postfix для дальнего боя
+            // (тот, который использует 'ref ItemStackRangedStats __result'), а не патч для ближнего боя.
+            PatchMethod(harmony, type, typeof(ItemStackRangedStatsPatch), "FromItemStack");
         }
 
         [HarmonyPostfix]

@@ -1,7 +1,4 @@
-﻿using CombatOverhaul.Armor;
-using CombatOverhaul.DamageSystems;
-using CombatOverhaul.RangedSystems;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using Vintagestory.API.Client;
@@ -30,7 +27,7 @@ namespace XSkills
         protected TemporalAdaptation temporalAdaptation;
         protected float xp;
         protected EntityPlayer lastAttacker;
-        public float XP { get =>  xp; }
+        public float XP { get => xp; }
 
         public override string PropertyName() => "XSkillsEntity";
 
@@ -162,35 +159,37 @@ namespace XSkills
             return null;
         }
 
-        //calculates an armor tier for combat overhaul armor sets
+        // Combat Overhaul fix
         private static float COProtectionTier(InventoryCharacter inv)
         {
-            int filled = 0;
-            int open = 0;
-            int stacks = 0;
+            int pieces = 0;
             float protectionTier = 0.0f;
-            for (int ii = (int)EnumCharacterDressType.ArmorLegs + 1; ii < inv.Count; ++ii)
-            {
-                ArmorSlot armorSlot = (inv[ii] as ArmorSlot);
-                if (armorSlot == null) continue;
-                if (armorSlot.Available) ++open;
-                else ++filled;
-                if (armorSlot.Itemstack != null) ++stacks;
 
-                protectionTier += (
-                    inv[ii].Itemstack?.
-                    Collectible.GetBehavior<ArmorBehavior>())?.
-                    Resists.Resists[EnumDamageType.SlashingAttack] ?? 0.0f;
+            for (int ii = (int)EnumCharacterDressType.ArmorHead; ii < inv.Count; ++ii)
+            {
+                ItemSlot slot = inv[ii];
+                ItemStack itemstack = slot?.Itemstack;
+                if (itemstack == null) continue;
+
+                float tier = itemstack.Collectible?
+                    .GetCollectibleInterface<IWearableStatsSupplier>()?
+                    .GetProtectionModifiers(slot)?
+                    .ProtectionTier ?? 0.0f;
+
+                if (tier <= 0.0f) continue;
+
+                protectionTier += tier;
+                ++pieces;
             }
-            if (stacks == 0) return 0;
-            protectionTier = (protectionTier * filled / stacks) / (filled + open);
-            protectionTier *= 0.55f;
-            return protectionTier;
+
+            if (pieces == 0) return 0.0f;
+
+            return (protectionTier / pieces) * 0.55f;
         }
 
         public virtual float OnDamage(float damage, DamageSource dmgSource)
         {
-            EntityPlayer byPlayer = 
+            EntityPlayer byPlayer =
                 dmgSource.SourceEntity as EntityPlayer ??
                 dmgSource.CauseEntity as EntityPlayer ??
                 (dmgSource.SourceEntity as EntityThrownStone)?.FiredBy as EntityPlayer;
@@ -206,7 +205,7 @@ namespace XSkills
             PlayerSkill playerSkill = playerSkillSet?[this.combat.Id];
             if (playerSkill == null) return damage;
 
-            EnumTool? tool = null; 
+            EnumTool? tool = null;
             if (dmgSource.SourceEntity != null)
             {
                 EntityProjectile projectile = dmgSource.SourceEntity as EntityProjectile;
@@ -219,7 +218,7 @@ namespace XSkills
                         collectible = COProjectiles(dmgSource);
                     }
                     catch (System.IO.FileNotFoundException)
-                    {}
+                    { }
                 }
 
                 if (collectible != null)
@@ -397,7 +396,7 @@ namespace XSkills
             base.OnEntityReceiveDamage(damageSource, ref damage);
             if (this.entity.Api.Side == EnumAppSide.Server)
             {
-                EntityPlayer byPlayer = 
+                EntityPlayer byPlayer =
                     damageSource.SourceEntity as EntityPlayer ??
                     damageSource.CauseEntity as EntityPlayer;
                 if (this.combat == null || byPlayer == null) return;
