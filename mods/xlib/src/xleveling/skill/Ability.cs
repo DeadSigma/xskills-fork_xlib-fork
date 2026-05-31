@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Vintagestory.API.Common;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace XLib.XLeveling
 {
@@ -95,6 +97,11 @@ namespace XLib.XLeveling
                 }
             }
         }
+
+        /// <summary>
+        /// Gets or sets the raw config requirements to preserve them during save cycles.
+        /// </summary>
+        public JArray RawConfigRequirements { get; set; }
 
         /// <summary>
         /// Gets how many values per tier exists.
@@ -376,6 +383,43 @@ namespace XLib.XLeveling
                 }
             }
             this.Enabled = config.enabled;
+
+            if (config.Requirements != null)
+            {
+                // Сохраняем сырой JSON, чтобы потом записать обратно в файл
+                this.RawConfigRequirements = config.Requirements;
+
+                // Очищаем старые требования конфига (чтобы они не дублировались при перезагрузке)
+                this.Requirements.RemoveAll(r => r is ClassRequirement || r is KnowledgeRequirement);
+
+                // Превращаем текст в реальные ограничения для игры
+                foreach (JToken token in this.RawConfigRequirements)
+                {
+                    string type = token["type"]?.ToString();
+
+                    // общие параметры для любого требования
+                    int minTier = token["minimumTier"]?.ToObject<int>() ?? 1;
+                    bool hide = token["hideUntilFulfilled"]?.ToObject<bool>() ?? false;
+
+                    if (type == "class")
+                    {
+                        string reqClass = token["class"]?.ToString();
+                        if (reqClass != null)
+                        {
+                            this.AddRequirement(new ClassRequirement(new string[] { reqClass }, minTier, hide));
+                        }
+                    }
+                    else if (type == "knowledge")
+                    {
+                        string reqName = token["name"]?.ToString();
+                        int reqLevel = token["level"]?.ToObject<int>() ?? 1;
+                        if (reqName != null)
+                        {
+                            this.AddRequirement(new KnowledgeRequirement(reqName, reqLevel, minTier, hide));
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -456,6 +500,25 @@ namespace XLib.XLeveling
         public int[] values;
 
         /// <summary>
+        /// The JSON array containing custom requirements like class or knowledge.
+        /// </summary>
+        [ProtoIgnore]
+        [JsonProperty("requirements", NullValueHandling = NullValueHandling.Ignore)]
+        public JArray Requirements { get; set; }
+
+        /// <summary>
+        /// A serialized string representation of the requirements for network synchronization.
+        /// This property is used by ProtoBuf to send the JSON array over the network to the client.
+        /// </summary>
+        [ProtoMember(7)]
+        [JsonIgnore]
+        public string RequirementsNetworkString
+        {
+            get { return Requirements?.ToString(Formatting.None); }
+            set { Requirements = value != null ? JArray.Parse(value) : null; }
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="AbilityConfig"/> class.
         /// </summary>
         public AbilityConfig()
@@ -466,6 +529,7 @@ namespace XLib.XLeveling
             this.minLevel = 1;
             this.enabled = true;
             this.values = new int[0];
+            this.Requirements = null;
         }
 
         /// <summary>
@@ -480,6 +544,7 @@ namespace XLib.XLeveling
             this.minLevel = ability.MinLevel;
             this.enabled = ability.Enabled;
             this.values = ability.Values;
+            this.Requirements = ability.RawConfigRequirements;
         }
     }//!class AbilityConfig
 }//!namespace XLib.XLeveling

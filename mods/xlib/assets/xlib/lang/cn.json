@@ -1,4 +1,6 @@
 ﻿{
+  "skillbook-studied": "<font color=\"#ff9999\">已学习</font>",
   "xleveling:hardcore-death-message": "你死了。你积累的所有经验和技能都已永久丢失。",
-  "skillbook-studied": "<font color=\"#ff9999\">已学习</font>"
+  "xleveling:requirement-class": "所需职业：{0}",
+  "xleveling:requirement-knowledge": "所需知识 {0}：{1}/{2}"
 }

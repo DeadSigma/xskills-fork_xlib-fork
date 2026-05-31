@@ -48,6 +48,21 @@ namespace XLib.XLeveling
         }
 
         /// <summary>
+        /// Initializes a new instance of the <see cref="KnowledgeRequirement" /> class.
+        /// </summary>
+        /// <param name="knowledgeName">Name of the knowledge.</param>
+        /// <param name="knowledgeLevel">The required knowledge level.</param>
+        /// <param name="minimumTier">The minimum tier this requirement is required for.</param>
+        /// <param name="hideAbilityUntilFulfilled">if set to <c>true</c> the ability is hidden until this requirement is fulfilled.</param>
+        public KnowledgeRequirement(string knowledgeName, int knowledgeLevel, int minimumTier, bool hideAbilityUntilFulfilled) : base()
+        {
+            this.KnowledgeName = knowledgeName ?? "";
+            this.KnowledgeLevel = knowledgeLevel;
+            this.MinimumTier = minimumTier;
+            this.HideAbilityUntilFulfilled = hideAbilityUntilFulfilled;
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="KnowledgeRequirement"/> class.
         /// </summary>
         /// <param name="knowledgeName">Name of the knowledge.</param>
@@ -117,7 +132,8 @@ namespace XLib.XLeveling
         public override string ShortDescription(PlayerAbility playerAbility)
         {
             playerAbility.PlayerSkill.PlayerSkillSet.Knowledge.TryGetValue(this.KnowledgeName, out int level);
-            return Lang.Get(KnowledgeName) + ": " + level + "/" + KnowledgeLevel;
+
+            return Lang.Get("xleveling:requirement-knowledge", Lang.Get(this.KnowledgeName), level, this.KnowledgeLevel);
         }
 
         /// <summary>

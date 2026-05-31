@@ -22,6 +22,7 @@
   "skill": "Dovednost",
   "skillbook-dsc": "Dává vám {1} zkušenosti pro {0} dovednost.",
   "skillbook-dsc2": "Grants you knowledge of {0}.",
+  "skillbook-studied": "<font color=\"#ff9999\">Naučeno</font>",
   "skills": "Dovednosti",
   "skills-desc": "<strong>Dovednosti</strong><br><br><strong>Dovednost</strong><br>Dovednost je soubor vašich znalostí a schopností v určité oblasti. Každá z vašich dovednosti má určitou úroveň. Tuto úroveň můžete zvýšit sbíráním zkušeností při činnostech souvisejících s touto dovedností. S každou úrovní získáte také bod schopností za tuto dovednost. Chcete-li zobrazit přehled svých dovedností a schopností, stiskněte klávesu [O] (výchozí nastavení můžete změnit v nabídce nastavení.<br><br><strong>Schopnost</strong><br>Schopnost vám poskytuje konkrétní výhodu pro konkrétní činnost související s dovedností). Jedna úroveň schopnosti poskytuje více výhod. Ke zvýšení úrovně schopnosti potřebujete jeden bod schopnosti, ke kterému můžete kliknout na schopnost v dialogu dovednosti také snížit úroveň schopnosti. Chcete-li tak učinit, musíte přepnout režim na režim odučení kliknutím na tlačítko odučení. Nyní můžete kliknout na možnost snížit úroveň schopnosti. Nezapomeňte znovu přepnout tlačítko odučení, abyste deaktivovali režim odučení. Všimněte si, že ke snížení úrovně schopnosti potřebujete body odnaučení. Když snížíte úroveň schopnosti, získáte zpět bod schopnosti, který jste použili. Zatímco body schopností jsou vázány na konkrétní dovednost, body za odnaučení jsou sdíleny napříč všemi dovednostmi. Body za odučení můžete získat za konzumaci konkrétních předmětů. Tyto položky lze nalézt v příručce.",
   "sparring-desc": "<strong>Sparring</strong><br>If two players have sparring mode enabled and kill each other, neither of them will loose experience points upon dying.",
@@ -34,6 +35,7 @@
   "unlearnpoints": "Body odnaučení",
   "wrongtime": "Není ten správný čas.",
   "xleveling:hardcore-death-message": "Zemřeli jste. Veškeré vaše nasbírané zkušenosti a dovednosti byly nenávratně ztraceny.",
-  "skillbook-studied": "<font color=\"#ff9999\">Naučeno</font>",
+  "xleveling:requirement-class": "Požadovaná třída: {0}",
+  "xleveling:requirement-knowledge": "Požadované znalosti {0}: {1}/{2}",
   "you receive": "Dostanete"
 }

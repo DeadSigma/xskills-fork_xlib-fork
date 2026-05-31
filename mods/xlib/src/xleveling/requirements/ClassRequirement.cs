@@ -132,7 +132,15 @@ namespace XLib.XLeveling
         {
             PlayerSkillSet playerSkillSet = playerAbility?.PlayerSkill?.PlayerSkillSet;
             if (playerSkillSet == null) return "";
-            return "class: " + string.Join(", ", this.Classes);
+
+            // Переводим сами названия классов (hunter -> Охотник)
+            List<string> localizedClasses = new List<string>();
+            foreach (string c in this.Classes)
+            {
+                localizedClasses.Add(Lang.Get("characterclass-" + c));
+            }
+
+            return Lang.Get("xleveling:requirement-class", string.Join(", ", localizedClasses));
         }
 
         /// <summary>

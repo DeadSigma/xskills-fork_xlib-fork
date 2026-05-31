@@ -22,6 +22,7 @@
   "skill": "Fertigkeit",
   "skillbook-dsc": "Gewährt dir {1} Erfahrung für die {0} Fertigkeit.",
   "skillbook-dsc2": "Gewährt dir Wissen über {0}.",
+  "skillbook-studied": "<font color=\"#ff9999\">Erlernt</font>",
   "skills": "Fertigkeiten",
   "skills-desc": "<strong>Fertigkeiten</strong><br><br><strong>Fertigkeit</strong><br>Eine Fertigkeit ist eine Sammlung deines Wissens und deiner Fähigkeiten in einem bestimmten Bereich. Jede deiner Fertigkeiten hat ein bestimmtes Level. Du kannst dieses Level erhöhen, indem du Erfahrungen mit Aktivitäten sammelst, die mit dieser Fähigkeit zusammenhängen. Mit jedem Level erhältst du auch einen Fähigkeitspunkt für diese Fertigkeit. Um einen Überblick über deine Fähigkeiten und Fertigkeiten zu erhalten, drücke die Taste [O] (Standard). Du kannst diese Taste im Einstellungsmenü ändern.<br><br><strong>Fähigkeit</strong><br>Eine Fähigkeit bietet Ihnen einen bestimmten Vorteil für eine bestimmte Fertigkeitsaktivität. Die meisten Fähigkeiten haben mehr als eine Stufe. Höhere Stufen einer Fähigkeit bieten mehr Vorteile. Um die Stufe einer Fähigkeit zu erhöhen, benötigst du einen Fähigkeitspunkt der Fertigkeit, zu der die Fähigkeit gehört. Dann kannst du im Fähigkeitsdialog auf die Fähigkeit klicken, um die Stufe zu erhöhen. Du kannst auch die Stufe einer Fähigkeit verringern. Dazu musst du den Modus in den Verlernen-Modus umschalten, indem du auf die Schaltfläche zum Verlernen klickst. Jetzt kannst du auf die Fähigkeit klicken, um die Stufe der Fähigkeit zu verringern. Denke daran, die Schaltfläche zum Verlernen erneut umzuschalten, um den Verlernen-Modus zu deaktivieren. Beachte, dass du Verlernpunkte benötigst, um die Stufe einer Fähigkeit zu verringern. Wenn du die Stufe einer Fähigkeit verringerst, erhälst du den verwendeten Fähigkeitspunkt zurück. Während Fähigkeitspunkte an eine bestimmte Fähigkeit gebunden sind, werden Verlernpunkte auf alle Fähigkeiten verteilt. Du kannst Verlernpunkte  erhalten, wenn du bestimmte Gegenstände konsumierst. Diese Gegenstände kannst du im Handbuch finden.",
   "sparring-desc": "<strong>Sparring</strong><br>Wenn zwei Spieler den Sparringsmodus aktiviert haben und sich gegenseitig töten, verliert keiner von beiden beim Sterben Erfahrungspunkte.",
@@ -34,6 +35,7 @@
   "unlearnpoints": "Verlernpunkte",
   "wrongtime": "Es ist gerade die richtige Zeit.",
   "xleveling:hardcore-death-message": "Ihr seid gestorben. Eure gesamte gesammelte Erfahrung und alle Fähigkeiten gingen unwiederbringlich verloren.",
-  "skillbook-studied": "<font color=\"#ff9999\">Erlernt</font>",
+  "xleveling:requirement-class": "Erforderliche Klasse: {0}",
+  "xleveling:requirement-knowledge": "Erforderliches Wissen {0}: {1}/{2}",
   "you receive": "Du erhälst"
 }
