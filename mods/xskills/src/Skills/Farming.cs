@@ -773,43 +773,60 @@ namespace XSkills
             this.farming = XLeveling.Instance(api)?.GetSkill("farming") as Farming;
         }
 
-        public override ItemStack[] GetDrops(IWorldAccessor world, BlockPos pos, IPlayer byPlayer, ref float dropChanceMultiplier, ref EnumHandling handling)
+        public override void OnBlockBroken(IWorldAccessor world, BlockPos pos, IPlayer byPlayer, float dropQuantityMultiplier, ref EnumHandling handling)
         {
-            //recycler
-            if (this.farming == null) return new ItemStack[] { };
+            if (this.farming == null) return;
             PlayerSkill playerSkill = byPlayer?.Entity.GetBehavior<PlayerSkillSet>()?[this.farming.Id];
             PlayerAbility playerAbility = playerSkill?[farming.RecyclerId];
-            if (playerAbility == null) return new ItemStack[] { };
-            if (playerAbility.Tier <= 0) return new ItemStack[] { };
+
+            if (playerAbility == null || playerAbility.Tier <= 0) return;
 
             IFarmlandBlockEntity farmlandBlock = world.BlockAccessor.GetBlockEntity(pos) as IFarmlandBlockEntity;
-            if (farmlandBlock == null) return new ItemStack[] { };
+            if (farmlandBlock == null) return;
 
+            // Определяем потолок плодородности
             float maxNutrients = Math.Max(playerAbility.Value(0), farmlandBlock.OriginalFertility.Min());
             float minNutrients = farmlandBlock.Nutrients.Min();
+
+            // Ограничиваем текущие нутриенты потолком
             minNutrients = Math.Min(minNutrients, maxNutrients);
 
-            AssetLocation assetLocation = null;
-            handling = EnumHandling.PreventDefault;
+            string blockName = "verylow"; // По умолчанию самая плохая
+            float bestDiff = float.MaxValue;
 
-            IEnumerator<KeyValuePair<string, float>> pairs = BlockEntityFarmland.Fertilities.GetEnumerator();
-            float blockNutrient = 0.0f;
-            string blockName = null;
-            while (pairs.MoveNext())
+            // Ищем ближайшую по значению почву
+            foreach (var pair in BlockEntityFarmland.Fertilities)
             {
-                if (minNutrients >= pairs.Current.Value - 0.1f && blockNutrient < pairs.Current.Value)
+                // Добавлена микро-погрешность +0.1f
+                if (pair.Value > maxNutrients + 0.1f) continue;
+
+                // Считаем разницу между текущей плодородностью и базой этой почвы
+                float diff = Math.Abs(pair.Value - minNutrients);
+
+                // Если эта почва ближе по значениям, выбираем её
+                if (diff < bestDiff)
                 {
-                    blockNutrient = pairs.Current.Value;
-                    blockName = pairs.Current.Key;
+                    bestDiff = diff;
+                    blockName = pair.Key;
                 }
             }
 
-            if (blockName != null) assetLocation = new AssetLocation("game", "soil-" + blockName + "-none");
-            else assetLocation = new AssetLocation("game", "soil-verylow-none");
-
+            // Формируем предмет для дропа
+            AssetLocation assetLocation = new AssetLocation("game", "soil-" + blockName + "-none");
             Block block = world.GetBlock(assetLocation);
-            if (block == null) return new ItemStack[] { };
-            return new ItemStack[] { new ItemStack(block, 1) };
+
+            if (block == null) return;
+
+            // Спавним лут и убираем блок
+            bool isCreative = byPlayer?.WorldData.CurrentGameMode == EnumGameMode.Creative;
+            if (world.Side == EnumAppSide.Server && !isCreative)
+            {
+                ItemStack drop = new ItemStack(block, 1);
+                world.SpawnItemEntity(drop, pos.ToVec3d().Add(0.5, 0.5, 0.5));
+            }
+
+            world.BlockAccessor.SetBlock(0, pos);
+            handling = EnumHandling.PreventDefault;
         }
     }//!class XSkillsFarmlandBehavior
 

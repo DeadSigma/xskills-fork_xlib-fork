@@ -160,7 +160,19 @@ namespace XSkills
             if (count > 0 && useQuality)
             {
                 quality /= count;
-                if (quality > 0.05f) outputSlot.Itemstack.Attributes.SetFloat("quality", quality);
+                if (quality > 0.05f)
+                {
+                    outputSlot.Itemstack.Attributes.SetFloat("quality", quality);
+
+                    // ФИКС СОВМЕСТИМОСТИ С TOOLSMITH
+                    int newMax = outputSlot.Itemstack.Collectible.GetMaxDurability(outputSlot.Itemstack);
+
+                    // Удаляем ванильный урон, чтобы предмет считался абсолютно новым
+                    outputSlot.Itemstack.Attributes.RemoveAttribute("damage");
+
+                    // Синхронизируем кастомный атрибут прочности, на который опираются другие перки XSkills
+                    outputSlot.Itemstack.Attributes.SetInt("durability", newMax);
+                }
             }
         }
 

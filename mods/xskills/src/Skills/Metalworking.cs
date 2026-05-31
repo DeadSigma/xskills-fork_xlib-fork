@@ -175,7 +175,7 @@ namespace XSkills
                 10, 1, new int[] { 1 }));
 
             // Шанс спасти заготовку при неудачной закалке
-            // 0: шанс в процентах (например, 100%)
+            // 0: шанс в процентах 
             SafeQuenchingId = this.AddAbility(new Ability(
                 "safequenching",
                 "xskills:ability-safequenching",

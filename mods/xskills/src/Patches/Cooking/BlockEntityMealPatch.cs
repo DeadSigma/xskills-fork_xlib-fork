@@ -13,6 +13,7 @@ namespace XSkills
     [HarmonyPatch(typeof(BlockEntityMeal))]
     public class BlockEntityMealPatch
     {
+
         /// <summary>
         /// Postfix for the constructor.
         /// Increases inventory size.
@@ -25,6 +26,7 @@ namespace XSkills
             ___inventory = new InventoryGeneric(size, null, null);
         }
 
+        /*
         /// <summary>
         /// Postfix for the GetBlockInfo method.
         /// </summary>
@@ -36,6 +38,7 @@ namespace XSkills
         {
             QualityUtil.AddQualityString(__instance.Inventory[0], dsc);
         }
+        */
 
         /// <summary>
         /// Postfix for the OnBlockPlaced method.

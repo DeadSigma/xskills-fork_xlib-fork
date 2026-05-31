@@ -123,10 +123,10 @@ namespace XSkills
             // 1: value per level
             // 2: max value
             HappyMealId = this.AddAbility(new Ability(
-                "happymeal",
-                "xskills:ability-happymeal",
-                "xskills:abilitydesc-happymeal",
-                5, 3, new int[] { 10, 1, 20, 20, 2, 40, 20, 2, 60 }));
+                  "happymeal",
+                  "xskills:ability-happymeal",
+                  "xskills:abilitydesc-happymeal",
+                  5, 4, new int[] { 10, 1, 20, 20, 2, 40, 20, 2, 60, 20, 2, 80 }));
 
             // Increases the amount of juice for every fruit
             // 0: increased amount
@@ -413,13 +413,15 @@ namespace XSkills
                 }
             }
 
-            //dilution
+            // dilution
             playerAbility = skill[this.DilutionId];
             float scaledCooked = servings;
             int totalCooked = (int)cookedAmount;
+
             if (playerAbility?.Tier > 0 && firstStage && !outputStack.Collectible.Code.Path.Equals("glueportion-pitch-hot"))
             {
                 scaledCooked = servings * (1.0f + playerAbility.SkillDependentFValue());
+
                 if (liquidContainer != null)
                 {
                     float mult = 1.0f + playerAbility.SkillDependentFValue();
@@ -430,16 +432,20 @@ namespace XSkills
                     }
                 }
                 else if (mealContainer == null || mealContainer is BlockPie)
-
+                {   
                     if (outputStack.Collectible.NutritionProps != null)
                     {
-                    float rel = scaledCooked - (int)scaledCooked;
-                    totalCooked = (int)scaledCooked + (world.Rand.NextDouble() < rel ? 1 : 0);
-                    if (outputStack.StackSize > cookedAmount) outputStack.StackSize += totalCooked - (int)(cookedAmount + 0.25f);
-                    else outputStack.StackSize = totalCooked;
-                }
+                        float rel = scaledCooked - (int)scaledCooked;
+                        totalCooked = (int)scaledCooked + (world.Rand.NextDouble() < rel ? 1 : 0);
+                        if (outputStack.StackSize > cookedAmount)
+                            outputStack.StackSize += totalCooked - (int)(cookedAmount + 0.25f);
+                        else
+                            outputStack.StackSize = totalCooked;
+                    }
+                }   
                 else
                 {
+                    // Теперь этот код сработает корректно для горшков/котлов (mealContainer)
                     mealContainer.SetQuantityServings(world, outputStack, scaledCooked);
                 }
             }
@@ -533,11 +539,16 @@ namespace XSkills
                     CookingRecipe recipe = (mealContainer as BlockCookedContainer)?.GetCookingRecipe(world, outputStack) ?? (mealContainer as BlockMeal)?.GetCookingRecipe(world, outputStack);
                     if (recipe != null)
                     {
-                        ItemStack stack = GetMissingIngredient(contentStacks, recipe, world, true);
-                        stack.StackSize = size;
-                        if (attr != null) stack.Attributes["transitionstate"] = attr;
+                        // Если уровень 4, то allowBad = false
+                        bool allowBad = playerAbility.Tier < 4;
+
+                        ItemStack stack = GetMissingIngredient(contentStacks, recipe, world, allowBad);
+
+                        // Проверяем, что ингредиент нашелся, и только потом работаем с ним
                         if (stack != null)
                         {
+                            stack.StackSize = size;
+                            if (attr != null) stack.Attributes["transitionstate"] = attr;
                             newStacks[ii] = stack;
                             mealContainer.SetContents(recipe.Code, outputStack, newStacks, mealContainer.GetQuantityServings(world, outputStack));
                         }

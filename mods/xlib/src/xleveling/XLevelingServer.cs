@@ -267,10 +267,8 @@ namespace XLib.XLeveling
         /// </summary>
         private void LoadConfiguration()
         {
-            // =========================================================================
             // ВЕРСИЯ КОНФИГА МОДА:
-            // =========================================================================
-            int CURRENT_CONFIG_VERSION = 6;
+            int CURRENT_CONFIG_VERSION = 7;
 
             bool forceConfigReset = false;
 
@@ -312,16 +310,14 @@ namespace XLib.XLeveling
                 }
             }
 
-            // --- ЖЕСТКИЙ СБРОС ФАЙЛОВ ---
+            // ЖЕСТКИЙ СБРОС ФАЙЛОВ
             if (forceConfigReset)
             {
                 string configDir = Path.Combine(Vintagestory.API.Config.GamePaths.ModConfig, "XLeveling");
                 if (Directory.Exists(configDir))
                 {
-                    // Впишите сюда названия навыков, конфиги которых нужно сбросить.
-                    // Если хотите сбросить вообще ВСЕ конфиги, просто добавьте "all".
                     List<string> skillsToReset = new List<string> {
-            "survival" 
+            "cooking" 
             // "combat", 
             // "farming",
             // "all" 
@@ -331,7 +327,6 @@ namespace XLib.XLeveling
 
                     foreach (Skill skill in this.XLeveling.SkillSetTemplate.Skills)
                     {
-                        // Проверяем: если сбрасываем всё ИЛИ текущий навык есть в нашем списке
                         if (resetAll || skillsToReset.Contains(skill.Name))
                         {
                             string fullPath = Path.Combine(configDir, skill.Name + ".json");

@@ -12,6 +12,7 @@ namespace XSkills
     [HarmonyPatch(typeof(BlockCookedContainer))]
     public class BlockCookedContainerPatch
     {
+        /*
         /// <summary>
         /// Postfix for the GetHeldItemInfo method.
         /// </summary>
@@ -23,6 +24,7 @@ namespace XSkills
         {
             QualityUtil.AddQualityString(inSlot, dsc);
         }
+        */
 
         /// <summary>
         /// Postfix for the OnPickBlock method.

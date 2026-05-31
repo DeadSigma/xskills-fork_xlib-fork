@@ -13,6 +13,7 @@ namespace XSkills
     [HarmonyPatch(typeof(BlockMeal))]
     public class BlockMealPatch
     {
+        /*
         /// <summary>
         /// Postfix for the GetHeldItemInfo method.
         /// </summary>
@@ -25,6 +26,7 @@ namespace XSkills
             float quality = inSlot?.Itemstack?.Attributes.TryGetFloat("quality") ?? 0.0f;
             QualityUtil.AddQualityString(quality, dsc);
         }
+        */
 
         /// <summary>
         /// Postfix for the OnPickBlock method.

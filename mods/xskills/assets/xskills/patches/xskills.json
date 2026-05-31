@@ -1,18 +1,337 @@
 [
-  {
-    "file": "game:entities/humanoid/player",
-    "op": "add",
-    "path": "/client/behaviors/-",
-    "value": {
-      "code": "XSkillsPlayer"
+    {
+        "file": "game:entities/humanoid/player",
+        "op": "add",
+        "path": "/client/behaviors/-",
+        "value": {
+            "code": "XSkillsPlayer"
+        }
+    },
+    {
+        "file": "game:entities/humanoid/player",
+        "op": "add",
+        "path": "/server/behaviors/-",
+        "value": {
+            "code": "XSkillsPlayer"
+        }
+    },
+    {
+        "file": "xskills:skills/survival",
+        "op": "addmerge",
+        "path": "/classexpmult",
+        "value": {
+            "alchemyst": 0,
+            "artisan": 0.0,
+            "chef": 0.0,
+            "homesteader": 0.0,
+            "lumberjack": 0.05,
+            "mason": 0,
+            "merchant": 0.25,
+            "mystic": 0.10,
+            "smith": 0,
+            "alchemist": 0,
+            "blackguardgloo": 0.10,
+            "clockmakergloo": 0,
+            "commonergloo": 0.40,
+            "huntergloo": 0.2,
+            "malefactorgloo": 0.05,
+            "miner": 0,
+            "oathkeeper": 0.15,
+            "tailorgloo": 0,
+            "rustmage": 0
+        }
+    },
+    {
+        "file": "xskills:skills/combat",
+        "op": "addmerge",
+        "path": "/classexpmult",
+        "value": {
+            "alchemyst": -0.15,
+            "artisan": -0.15,
+            "chef": -0.15,
+            "homesteader": -0.15,
+            "lumberjack": -0.10,
+            "mason": -0.15,
+            "merchant": -0.10,
+            "mystic": -0.15,
+            "smith": -0.10,
+            "alchemist": -0.10,
+            "blackguardgloo": 0.2,
+            "clockmakergloo": -0.15,
+            "commonergloo": 0.1,
+            "huntergloo": 0.15,
+            "malefactorgloo": 0.10,
+            "miner": -0.15,
+            "oathkeeper": 0.15,
+            "tailorgloo": -0.15,
+            "rustmage": -0.15
+        }
+    },
+    {
+        "file": "xskills:skills/temporaladaptation",
+        "op": "addmerge",
+        "path": "/classexpmult",
+        "value": {
+            "alchemyst": -0.15,
+            "artisan": -0.15,
+            "chef": -0.10,
+            "homesteader": -0.20,
+            "lumberjack": -0.05,
+            "mason": -0.10,
+            "merchant": -0.10,
+            "mystic": 0.10,
+            "smith": -0.10,
+            "medic": 0,
+            "alchemist": -0.15,
+            "blackguardgloo": 0.15,
+            "clockmakergloo": -0.05,
+            "commonergloo": -0.10,
+            "huntergloo": -0.10,
+            "malefactorgloo": 0.15,
+            "miner": -0.10,
+            "oathkeeper": 0.20,
+            "tailorgloo": -0.15,
+            "rustmage": 0.50
+        }
+    },
+    {
+        "file": "xskills:skills/farming",
+        "op": "addmerge",
+        "path": "/classexpmult",
+        "value": {
+            "alchemyst": -0.10,
+            "artisan": -0.2,
+            "chef": -0.15,
+            "homesteader": 0.5,
+            "lumberjack": -0.1,
+            "mason": -0.2,
+            "merchant": -0.2,
+            "mystic": -0.2,
+            "smith": -0.2,
+            "alchemist": -0.05,
+            "blackguardgloo": -0.2,
+            "clockmakergloo": -0.2,
+            "commonergloo": 0,
+            "huntergloo": -0.2,
+            "malefactorgloo": -0.2,
+            "miner": -0.2,
+            "oathkeeper": -0.2,
+            "tailorgloo": 0.1,
+            "rustmage": -0.2
+        }
+    },
+    {
+        "file": "xskills:skills/digging",
+        "op": "addmerge",
+        "path": "/classexpmult",
+        "value": {
+            "alchemyst": -0.2,
+            "artisan": 0.1,
+            "chef": -0.2,
+            "homesteader": 0,
+            "lumberjack": -0.2,
+            "mason": 0.25,
+            "merchant": -0.2,
+            "mystic": -0.2,
+            "smith": -0.2,
+            "medic": -0.2,
+            "alchemist": -0.2,
+            "blackguardgloo": -0.2,
+            "clockmakergloo": -0.2,
+            "commonergloo": 0.0,
+            "huntergloo": -0.2,
+            "malefactorgloo": -0.2,
+            "miner": 0.1,
+            "oathkeeper": -0.2,
+            "tailorgloo": -0.2,
+            "rustmage": -0.2
+        }
+    },
+    {
+        "file": "xskills:skills/forestry",
+        "op": "addmerge",
+        "path": "/classexpmult",
+        "value": {
+            "alchemyst": -0.2,
+            "artisan": -0.2,
+            "chef": -0.2,
+            "homesteader": -0.05,
+            "lumberjack": 0.5,
+            "mason": -0.2,
+            "merchant": -0.2,
+            "mystic": -0.2,
+            "smith": -0.1,
+            "medic": -0.2,
+            "alchemist": -0.2,
+            "blackguardgloo": -0.05,
+            "clockmakergloo": -0.1,
+            "commonergloo": 0,
+            "huntergloo": 0,
+            "malefactorgloo": -0.05,
+            "miner": -0.05,
+            "oathkeeper": -0.05,
+            "tailorgloo": -0.05,
+            "rustmage": -0.05
+        }
+    },
+    {
+        "file": "xskills:skills/mining",
+        "op": "addmerge",
+        "path": "/classexpmult",
+        "value": {
+            "alchemyst": -0.2,
+            "artisan": -0.2,
+            "chef": -0.2,
+            "homesteader": -0.2,
+            "lumberjack": -0.2,
+            "mason": 0,
+            "merchant": -0.2,
+            "mystic": -0.2,
+            "smith": 0,
+            "medic": 0,
+            "alchemist": -0.2,
+            "blackguardgloo": 0,
+            "clockmakergloo": -0.1,
+            "commonergloo": 0,
+            "huntergloo": -0.2,
+            "malefactorgloo": -0.1,
+            "miner": 0.5,
+            "oathkeeper": -0.2,
+            "tailorgloo": -0.2,
+            "rustmage": -0.2
+        }
+    },
+    {
+        "file": "xskills:skills/husbandry",
+        "op": "addmerge",
+        "path": "/classexpmult",
+        "value": {
+            "alchemyst": -0.2,
+            "artisan": -0.2,
+            "chef": 0.5,
+            "homesteader": 0.35,
+            "lumberjack": -0.2,
+            "mason": -0.2,
+            "merchant": -0.2,
+            "mystic": -0.2,
+            "smith": -0.2,
+            "medic": 0.10,
+            "alchemist": -0.2,
+            "blackguardgloo": -0.2,
+            "clockmakergloo": -0.2,
+            "commonergloo": 0,
+            "huntergloo": 0.25,
+            "malefactorgloo": -0.1,
+            "miner": -0.2,
+            "oathkeeper": -0.2,
+            "tailorgloo": 0,
+            "rustmage": -0.2
+        }
+    },
+    {
+        "file": "xskills:skills/metalworking",
+        "op": "addmerge",
+        "path": "/classexpmult",
+        "value": {
+            "alchemyst": -0.2,
+            "artisan": -0.1,
+            "chef": -0.2,
+            "homesteader": -0.2,
+            "lumberjack": -0.2,
+            "mason": -0.1,
+            "merchant": -0.2,
+            "mystic": -0.2,
+            "smith": 0.5,
+            "medic": -0.2,
+            "alchemist": -0.2,
+            "blackguardgloo": 0,
+            "clockmakergloo": 0,
+            "commonergloo": 0,
+            "huntergloo": -0.1,
+            "malefactorgloo": -0.1,
+            "miner": 0,
+            "oathkeeper": 0,
+            "tailorgloo": -0.2,
+            "rustmage": -0.2
+        }
+    },
+    {
+        "file": "xskills:skills/pottery",
+        "op": "addmerge",
+        "path": "/classexpmult",
+        "value": {
+            "alchemyst": -0.2,
+            "artisan": 0.5,
+            "chef": -0.2,
+            "homesteader": 0.10,
+            "lumberjack": -0.2,
+            "mason": 0.5,
+            "merchant": 0.05,
+            "mystic": -0.2,
+            "smith": -0.2,
+            "medic": -0.2,
+            "alchemist": -0.2,
+            "blackguardgloo": -0.2,
+            "clockmakergloo": -0.05,
+            "commonergloo": 0.1,
+            "huntergloo": -0.2,
+            "malefactorgloo": -0.2,
+            "miner": -0.2,
+            "oathkeeper": -0.2,
+            "tailorgloo": 0,
+            "rustmage": -0.2
+        }
+    },
+    {
+        "file": "xskills:skills/cooking",
+        "op": "addmerge",
+        "path": "/classexpmult",
+        "value": {
+            "alchemyst": -0.1,
+            "artisan": -0.2,
+            "chef": 0.5,
+            "homesteader": 0.15,
+            "lumberjack": -0.2,
+            "mason": -0.2,
+            "merchant": 0,
+            "mystic": -0.2,
+            "smith": -0.2,
+            "medic": -0.2,
+            "alchemist": -0.2,
+            "blackguardgloo": -0.2,
+            "clockmakergloo": -0.2,
+            "commonergloo": 0,
+            "huntergloo": 0,
+            "malefactorgloo": -0.05,
+            "miner": -0.2,
+            "oathkeeper": -0.2,
+            "tailorgloo": 0,
+            "rustmage": -0.2
+        }
+    },
+    {
+        "file": "xskills:skills/combat",
+        "op": "replace",
+        "path": "/bloodlust/requirements/1/classes",
+        "value": [
+            "malefactorgloo",
+            "blackguardgloo"
+        ]
+    },
+    {
+        "file": "xskills:skills/metalworking",
+        "op": "replace",
+        "path": "/salvager/requirements/0/requirements/1/classes",
+        "value": [
+            "clockmakergloo"
+        ]
+    },
+    {
+        "file": "xskills:skills/metalworking",
+        "op": "replace",
+        "path": "/salvager/requirements/2/classes",
+        "value": [
+            "clockmakergloo"
+        ]
     }
-  },
-  {
-    "file": "game:entities/humanoid/player",
-    "op": "add",
-    "path": "/server/behaviors/-",
-    "value": {
-      "code": "XSkillsPlayer"
-    }
-  }
 ]
