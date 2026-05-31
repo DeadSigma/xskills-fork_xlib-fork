@@ -14,5 +14,8 @@
     "ability-safequenching": "Tempra sicura",
     "abilitydesc-safequenching": "Con questo talento, i tuoi strumenti non verranno più ridotti in atomi durante la tempra. Se la tempra fallisce, l'oggetto verrà semplicemente danneggiato.",
     "abilitydesc-happymeal": "Con una probabilità del {0}%, più un ulteriore {1}% per ogni livello dell'abilità di cucina, un ingrediente casuale aggiuntivo può essere aggiunto al pasto. La probabilità massima è del {2}%. Al livello 4, gli ingredienti velenosi non finiranno più nel tuo cibo.",
-    "abilitydesc-heavyhits": "Permette di rimuovere le scorie da un pezzo in lavorazione con normali colpi pesanti di martello."
+    "abilitydesc-heavyhits": "Permette di rimuovere le scorie da un pezzo in lavorazione con normali colpi pesanti di martello.",
+    "ability-heavyarmorexpert": "Esperto di armature pesanti",
+    "abilitydesc-heavyarmorexpert": "Riduce alcune penalità dell'armatura del {0}%, ma aumenta altre penalità dell'armatura del {1}%.\nPenalità ridotte: {2}\nPenalità aumentate: {3}",
+    "abilitydesc-lightarmorexpert": "Finché non indossi armature che riducono la velocità di movimento, le seguenti statistiche sono migliorate del {0}%:\n{1}"
 }

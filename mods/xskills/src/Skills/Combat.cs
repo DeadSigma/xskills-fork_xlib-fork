@@ -299,14 +299,27 @@ namespace XSkills
                     float value = temp?.Value ?? 0.0f;
                     stat.ValuesByKey.TryGetValue("CombatOverhaul:Armor", out temp);
                     value += temp?.Value ?? 0.0f;
-                    value = value >= 0.0f ? playerAbility.FValue(0) : 0.0f;
+
+                    // Значение бонуса если нет штрафа к скорости
+                    float bonusValue = value >= 0.0f ? playerAbility.FValue(0) : 0.0f;
+
                     foreach (string statName in (playerAbility.Ability as ArmorAbility)?.BonusTraits)
                     {
                         try
                         {
                             stat = stats[statName];
                             if (stat == null) continue;
-                            stat.Set("ability-armorexpert", value);
+
+                            // Инвертируем значение для скорости голодания, 
+                            // чтобы бонус замедлял голод, а не ускорял его
+                            if (statName == "hungerrate")
+                            {
+                                stat.Set("ability-armorexpert", -bonusValue);
+                            }
+                            else
+                            {
+                                stat.Set("ability-armorexpert", bonusValue);
+                            }
                         }
                         catch (KeyNotFoundException) { }
                     }

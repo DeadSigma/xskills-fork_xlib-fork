@@ -118,7 +118,7 @@ namespace XSkills
                 {"rangedWeaponsAcc", "game:Ranged Accuracy"},
                 {"rangedWeaponsSpeed", "game:Ranged Charge Speed"},
                 {"steadyAim", "combatoverhaul:stat-steadyAim"},
-                {"walkspeed", "game:Walkspeed"}
+                {"walkspeed", "game:Walk speed"}
             };
         }
     }
@@ -142,7 +142,7 @@ namespace XSkills
             MalusTraits = new List<string>();
             TraitTranslations = new Dictionary<string, string>()
             {
-                {"walkspeed", "game:Walkspeed"},
+                {"walkspeed", "game:Walk speed"},
             };
         }
     }
