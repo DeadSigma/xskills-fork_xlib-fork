@@ -66,6 +66,10 @@ namespace XLib.XLeveling
         /// <returns></returns>
         public override string GetHeldItemName(ItemStack itemStack)
         {
+            if (itemStack?.Attributes == null)
+            {
+                return Lang.Get("game:item-" + this.Code?.Path?.Replace("skill", ""));
+            }
             string skillName = itemStack.Attributes.GetString("skill");
             float exp = (float)itemStack.Attributes.GetDecimal("experience");
             string knowledge = itemStack.Attributes.GetString("knowledge");
@@ -97,6 +101,8 @@ namespace XLib.XLeveling
         public override void GetHeldItemInfo(ItemSlot inSlot, StringBuilder dsc, IWorldAccessor world, bool withDebugInfo)
         {
             base.GetHeldItemInfo(inSlot, dsc, world, withDebugInfo);
+
+            if (inSlot.Itemstack?.Attributes == null) return;
 
             string skillName = inSlot.Itemstack.Attributes.GetString("skill");
             float exp = (float)inSlot.Itemstack.Attributes.GetDecimal("experience");
@@ -136,7 +142,7 @@ namespace XLib.XLeveling
 
             if (slot.Empty || !firstEvent) return;
 
-            if (slot.Itemstack.Attributes.GetBool("studied", false))
+            if (slot.Itemstack.Attributes?.GetBool("studied", false) == true)
             {
                 return;
             }

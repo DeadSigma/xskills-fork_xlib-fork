@@ -37,7 +37,5 @@
   "xleveling:hardcore-death-message": "You died. All your accumulated experience and skills were permanently lost.",
   "xleveling:requirement-class": "Required class: {0}",
   "xleveling:requirement-knowledge": "Required knowledge {0}: {1}/{2}",
-  "xskills:fishing-currentchance": "Current chance: {0}% (Base {1}% + {2}% from level test)",
-  "xskills:fishing-maxbonus": "Current maximum bonus: {0} fillets test",
   "you receive": "You receive"
 }

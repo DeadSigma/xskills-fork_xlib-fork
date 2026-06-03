@@ -37,7 +37,5 @@
   "xleveling:hardcore-death-message": "Вы памерлі. Увесь ваш назапашаны досвед і навыкі былі незваротна страчаны.",
   "xleveling:requirement-class": "Патрабаваны клас: {0}",
   "xleveling:requirement-knowledge": "Патрабуюцца веды {0}: {1}/{2}",
-  "xskills:fishing-currentchance": "Бягучы шанец: {0}% (Базавы {1}% + {2}% ад праверкі ўзроўню)",
-  "xskills:fishing-maxbonus": "Бягучы максімальны бонус: {0} філе",
   "you receive": "Вы атрымліваеце"
 }
