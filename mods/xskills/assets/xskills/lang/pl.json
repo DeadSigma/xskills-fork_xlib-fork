@@ -442,6 +442,9 @@
   "ability-perfectionist": "Perfekcjonista",
   "abilitydesc-perfectionist": "Podczas dodawania pojedynczych wokseli nie możesz dodać niewłaściwego woksela.",
 
+  "ability-perfectquenching": "Boskie hartowanie",
+  "abilitydesc-perfectquenching": "Dzięki tej umiejętności możesz hartować narzędzia bez ograniczeń, tworząc narzędzia boskiej jakości.",
+
   "ability-photosynthesis": "Fotosynteza",
   "abilitydesc-photosynthesis": "Zwiększa regenerację zdrowia w świetle słonecznym do {0}% ale zmniejsza regenerację zdrowia w ciemności do {1}%.",
 

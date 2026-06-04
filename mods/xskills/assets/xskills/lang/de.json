@@ -442,6 +442,9 @@
   "ability-perfectionist": "Perfektionist",
   "abilitydesc-perfectionist": "Wenn du einzelne Voxel hinzufügst, kannst du keine falschen Voxel hinzufügen.",
 
+  "ability-perfectquenching": "Göttliches Härten",
+  "abilitydesc-perfectquenching": "Mit dieser Fähigkeit könnt ihr Werkzeuge unbegrenzt härten und so Werkzeuge von göttlicher Qualität erschaffen.",
+
   "ability-photosynthesis": "Photosynthese",
   "abilitydesc-photosynthesis": "Erhöht deine Regenerationsrate im Sonnenlicht um bis zu {0}%, verringert aber deine Regenerationsrate im Dunkeln um bis zu {1}%.",
 

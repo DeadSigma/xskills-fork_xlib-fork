@@ -442,6 +442,9 @@
   "ability-perfectionist": "Perfeicionista",
   "abilitydesc-perfectionist": "Quando você adicionar voxels individuais, você não pode adicionar um voxel errado.",
 
+  "ability-perfectquenching": "Têmpera divina",
+  "abilitydesc-perfectquenching": "Com esta habilidade, você pode temperar ferramentas infinitamente, criando ferramentas de qualidade divina.",
+
   "ability-photosynthesis": "Fotossíntese",
   "abilitydesc-photosynthesis": "Aumenta sua geração de saúde na luz solar em até {0}% mas reduz a geração de saúde no escuro em até {1}%.",
 

@@ -35,6 +35,9 @@
   "ability-heavyarmorexpert": "Esperto di armature pesanti",
   "abilitydesc-heavyarmorexpert": "Riduce alcune penalità dell'armatura del {0}%, ma aumenta altre penalità dell'armatura del {1}%.\nPenalità ridotte: {2}\nPenalità aumentate: {3}",
 
+  "ability-perfectquenching": "Tempra divina",
+  "abilitydesc-perfectquenching": "Con questa abilità puoi temprare gli strumenti all'infinito, creando strumenti di qualità divina.",
+
   "ability-safequenching": "Tempra sicura",
   "abilitydesc-safequenching": "Con questo talento, i tuoi strumenti non verranno più ridotti in atomi durante la tempra. Se la tempra fallisce, l'oggetto verrà semplicemente danneggiato.",
 

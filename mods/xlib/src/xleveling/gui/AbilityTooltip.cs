@@ -64,6 +64,12 @@ namespace XLib.XLeveling
             this.abilityNameText.SetNewText(playerAbility.Ability.DisplayName);
             StringBuilder sb = new StringBuilder();
 
+            // Выводим описание текущего уровня, если перк уже вкачан хотя бы на 1 пункт
+            if (playerAbility.Tier > 0)
+            {
+                sb.Append(playerAbility.Ability.FormattedDescription(playerAbility.Tier));
+            }
+
             double[] green = { 0.0, 0.7, 0.0 };
             double[] red = { 0.8, 0.0, 0.0 };
             double[] gray = { 0.5, 0.5, 0.5 };

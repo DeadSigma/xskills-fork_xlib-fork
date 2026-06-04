@@ -442,6 +442,9 @@
   "ability-perfectionist": "Перфекцыяніст",
   "abilitydesc-perfectionist": "Пры даданні адзінкавых вокселяў вы не зможаце дадаць памылковы воксель.",
 
+  "ability-perfectquenching": "Боская загартоўка",
+  "abilitydesc-perfectquenching": "З гэтай здольнасцю вы можаце бясконца загартоўваць інструменты, ствараючы інструменты боскай якасці.",
+
   "ability-photosynthesis": "Фотасінтэз",
   "abilitydesc-photosynthesis": "Павялічвае рэгенерацыю здароўя на сонцы да {0}%, але зніжае яе ў цемры да {1}%.",
 

@@ -442,6 +442,9 @@
   "ability-perfectionist": "Perfeccionista",
   "abilitydesc-perfectionist": "Cuando agregas vóxeles individuales, no puedes agregar un vóxel incorrecto.",
 
+  "ability-perfectquenching": "Templado divino",
+  "abilitydesc-perfectquenching": "Con esta habilidad, puedes templar herramientas indefinidamente, creando herramientas de calidad divina.",
+
   "ability-photosynthesis": "Fotosintesis",
   "abilitydesc-photosynthesis": "Incrementa tu regeneracion de vida al estar expuesto a luz solar en {0}%, pero reduce tu regeneración de vida en la oscuridad en {1}%.",
 

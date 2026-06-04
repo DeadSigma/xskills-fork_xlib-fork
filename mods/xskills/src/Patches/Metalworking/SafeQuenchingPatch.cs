@@ -27,7 +27,7 @@ namespace XSkills
                 IPlayer player = null;
                 Vec3d pos = null;
 
-                // 1. Ищем, где находится предмет ДО того, как он пропадет
+                // щем, где находится предмет ДО того, как он пропадет
                 if (slot.Inventory is InventoryBasePlayer invPlayer)
                 {
                     player = invPlayer.Player;
@@ -59,13 +59,29 @@ namespace XSkills
                         }
                     }
 
-                    // 2. Если нашли позицию - ищем игрока в радиусе 15 блоков
+                    // Если нашли позицию - ищем игрока в радиусе 15 блоков
                     if (pos != null)
                     {
                         IPlayer nearest = world.NearestPlayer(pos.X, pos.Y, pos.Z);
                         if (nearest != null && nearest.Entity.Pos.DistanceTo(pos) <= 15.0)
                         {
                             player = nearest;
+                        }
+                    }
+                }
+
+                if (player != null)
+                {
+                    Metalworking metalworking = XLeveling.Instance(world.Api)?.GetSkill("metalworking") as Metalworking;
+                    if (metalworking != null)
+                    {
+                        PlayerAbility perfectQuench = player.Entity?.GetBehavior<PlayerSkillSet>()?[metalworking.Id]?[metalworking.PerfectQuenchingId];
+
+                        // Если читерский перк включен в конфигах и изучен игроком
+                        if (perfectQuench != null && perfectQuench.Tier > 0)
+                        {
+                            slot.Itemstack.TempAttributes.SetBool("willbreak", false);
+                            return; // Прерываем Prefix. В Postfix предмет не уйдет, так как останется целым.
                         }
                     }
                 }

@@ -442,6 +442,9 @@
   "ability-perfectionist": "完璧主義者",
   "abilitydesc-perfectionist": "単一ボクセルを追加する場合、間違ったボクセルを追加することは出来ません。",
 
+  "ability-perfectquenching": "神聖なる焼入れ",
+  "abilitydesc-perfectquenching": "この能力により、道具を無制限に焼入れし、神聖級の品質を持つ道具を作成できます。",
+
   "ability-photosynthesis": "光合成",
   "abilitydesc-photosynthesis": "日光の下でのHP生成量を最大{0}%増加するが、暗闇でのHP生成量を最大{1}%減少します。",
 

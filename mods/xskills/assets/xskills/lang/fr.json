@@ -442,6 +442,9 @@
   "ability-perfectionist": "Perfectionniste",
   "abilitydesc-perfectionist": "Quand vous ajoutez un voxel, vous ne povez pas l'ajouter au mauvais endroit.",
 
+  "ability-perfectquenching": "Trempe divine",
+  "abilitydesc-perfectquenching": "Grâce à cette compétence, vous pouvez tremper vos outils à l'infini et créer des outils de qualité divine.",
+
   "ability-photosynthesis": "Photosynthèse",
   "abilitydesc-photosynthesis": "Augmente la régénération de votre santé de {0}% à la lumière du jour, mais réduit la régénération de {1}% quand vous êtes dans un endroit sombre.",
 

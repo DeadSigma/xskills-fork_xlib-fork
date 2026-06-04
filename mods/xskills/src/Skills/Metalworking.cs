@@ -35,8 +35,8 @@ namespace XSkills
         public int MachineLearningId { get; private set; }
         public int BloomeryExpertId { get; private set; }
         public int AutomatedSmithingId { get; private set; }
-
         public int SafeQuenchingId { get; private set; }
+        public int PerfectQuenchingId { get; private set; }
         public int BitForgingId { get; private set; }
 
         private List<SmithingRecipe> duplicatable;
@@ -182,6 +182,16 @@ namespace XSkills
                 "xskills:ability-safequenching",
                 "xskills:abilitydesc-safequenching",
                 5, 1, new int[] { 100 }));
+
+            // Читерская идеальная закалка без поломок вообще (отключена по умолчанию)
+            Ability perfectQuenchingAbility = new Ability(
+                "perfectquenching",
+                "xskills:ability-perfectquenching",
+                "xskills:abilitydesc-perfectquenching",
+                5, 1, new int[] { 100 }); // Можно вернуть maxTier 1, так как перк выключен целиком
+
+            perfectQuenchingAbility.Enabled = false;
+            PerfectQuenchingId = this.AddAbility(perfectQuenchingAbility);
 
             // позволяет ковать заготовки из кусочков металла
             BitForgingId = this.AddAbility(new Ability(

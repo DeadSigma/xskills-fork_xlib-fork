@@ -75,15 +75,38 @@ namespace XSkills
         /// </summary>
         private static string ResolveForgeMetal(ItemStack stack)
         {
-            string metal = stack.Collectible.Variant["metal"];
+            string metal = null;
+
+            // Пытаемся безопасно получить металл из словаря вариантов
+            if (stack?.Collectible?.Variant != null && stack.Collectible.Variant.ContainsKey("metal"))
+            {
+                metal = stack.Collectible.Variant["metal"];
+            }
+
+            // Резервный вариант: извлекаем название металла из пути кода предмета
+            if (string.IsNullOrEmpty(metal) && stack?.Collectible?.Code != null)
+            {
+                string path = stack.Collectible.Code.Path;
+                if (path.StartsWith("metalbit-"))
+                {
+                    metal = path.Substring(9); 
+                }
+                else
+                {
+                    metal = stack.Collectible.Code.EndVariant(); // Последний запасной вариант
+                }
+            }
+
             if (metal == "blistersteel") return "steel";
-            return metal;
+
+            //Возвращаем пустую строку вместо null, чтобы предотвратить ArgumentNullException ниже по коду
+            return metal ?? string.Empty;
         }
 
         /// <summary>
         /// Сколько вокселей добавляет один кусок. По умолчанию выводится из bitsForIngot
         /// (21 -> round(42/21) = 2 вокселя на кусок), что соответствует ванильной экономике.
-        /// Чтобы сделать «1 кусок = целый слиток», верните ItemIngot.VoxelCount.
+        /// Чтобы сделать «1 кусок = целый слиток», вернуть ItemIngot.VoxelCount.
         /// </summary>
         private int VoxelsPerBit
         {
@@ -99,7 +122,7 @@ namespace XSkills
             }
         }
 
-        // === IAnvilWorkable ===
+        // IAnvilWorkable
 
         public int GetRequiredAnvilTier(ItemStack stack)
         {

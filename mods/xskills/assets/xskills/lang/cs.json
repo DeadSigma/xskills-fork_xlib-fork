@@ -442,6 +442,9 @@
   "ability-perfectionist": "Perfekcionista",
   "abilitydesc-perfectionist": "Když přidáte jednotlivé voxely, nemůžete přidat špatný voxel.",
 
+  "ability-perfectquenching": "Božské kalení",
+  "abilitydesc-perfectquenching": "S touto schopností můžete nástroje kalit neomezeně a vytvářet tak nástroje božské úrovně.",
+
   "ability-photosynthesis": "Fotosyntéza",
   "abilitydesc-photosynthesis": "Zvyšuje léčení na slunci až o {0} %, ale snižuje léčení ve tmě až o {1}%.",
 

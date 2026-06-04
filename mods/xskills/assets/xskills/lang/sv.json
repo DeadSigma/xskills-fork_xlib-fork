@@ -442,6 +442,9 @@
   "ability-perfectionist": "Perfectionist",
   "abilitydesc-perfectionist": "When you add single voxels you can't add a wrong voxel.",
 
+  "ability-perfectquenching": "Gudomlig härdning",
+  "abilitydesc-perfectquenching": "Med denna förmåga kan du härda verktyg obegränsat och skapa verktyg av gudomlig kvalitet.",
+
   "ability-photosynthesis": "Photosynthesis",
   "abilitydesc-photosynthesis": "Increases your health generation in the sunlight up to {0}% but reduces the health generation in the dark up to {1}%.",
 

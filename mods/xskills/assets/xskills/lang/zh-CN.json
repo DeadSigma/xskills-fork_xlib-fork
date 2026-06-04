@@ -442,6 +442,9 @@
   "ability-perfectionist": "完美主义者",
   "abilitydesc-perfectionist": "当你添加单个体素时，不能\n添加错误的体素。",
 
+  "ability-perfectquenching": "神圣淬火",
+  "abilitydesc-perfectquenching": "拥有此技能后，你可以无限次淬火工具，打造神圣品质的工具。",
+
   "ability-photosynthesis": "光合作用",
   "abilitydesc-photosynthesis": "将你在阳光下的生命值恢复量\n提高{0}%，但在黑暗中将生命\n值恢复量降低{1}%。",
 

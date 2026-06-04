@@ -5,8 +5,8 @@
   "authors": [ "Xandu", "El_Neuman" ],
   "description": "Adds skills to the game.",
   "website": "https://www.vintagestory.at/forums/topic/1720-xlib-and-xskills/",
-  "version": "1.0.51",
+  "version": "1.0.52",
   "dependencies": {
-    "xlibfork": "1.0.14"
+    "xlibfork": "1.0.15"
   }
 }

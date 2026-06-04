@@ -442,6 +442,9 @@
   "ability-perfectionist": "Perfectionist",
   "abilitydesc-perfectionist": "When you add single voxels you can't add a wrong voxel.",
 
+  "ability-perfectquenching": "Divine Quenching",
+  "abilitydesc-perfectquenching": "With this perk, you can quench tools indefinitely, creating tools of divine quality.",
+
   "ability-photosynthesis": "Photosynthesis",
   "abilitydesc-photosynthesis": "Increases your health generation in the sunlight up to {0}% but reduces the health generation in the dark up to {1}%.",
 

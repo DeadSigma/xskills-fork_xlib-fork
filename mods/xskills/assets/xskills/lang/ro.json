@@ -442,6 +442,9 @@
   "ability-perfectionist": "Perfectionist",
   "abilitydesc-perfectionist": "When you add single voxels you can't add a wrong voxel.",
 
+  "ability-perfectquenching": "Călire divină",
+  "abilitydesc-perfectquenching": "Cu această abilitate, poți căli uneltele la nesfârșit, creând unelte de calitate divină.",
+
   "ability-photosynthesis": "Photosynthesis",
   "abilitydesc-photosynthesis": "Increases your health generation in the sunlight up to {0}% but reduces the health generation in the dark up to {1}%.",
 
