@@ -60,6 +60,9 @@ namespace XSkills
                 type = api.ClassRegistry.GetBlockEntity("OvenBakingTop");
                 if (type != null) BlockEntityOvenPatch.Apply(harmony, type, xskills);
 
+                type = api.ClassRegistry.GetBlockEntity("OvenCookingTop");
+                if (type != null) BlockEntityOvenCookingTopPatch.Apply(harmony, type, xskills);
+
                 type = api.ClassRegistry.GetBlockEntity("MixingBowl");
                 if (type != null) BlockEntityMixingBowlPatch.Apply(harmony, type, xskills);
 
