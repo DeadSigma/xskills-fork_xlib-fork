@@ -418,6 +418,14 @@ namespace XLib.XLeveling
                             this.AddRequirement(new KnowledgeRequirement(reqName, reqLevel, minTier, hide));
                         }
                     }
+                    else if (type == "trait")
+                    {
+                        string reqTrait = token["trait"]?.ToString();
+                        if (reqTrait != null)
+                        {
+                            this.AddRequirement(new TraitRequirement(new string[] { reqTrait }, minTier, hide));
+                        }
+                    }
                 }
             }
         }

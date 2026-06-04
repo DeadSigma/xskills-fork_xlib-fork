@@ -729,7 +729,28 @@ namespace XSkills
             if (!(this.Config as SurvivalSkillConfig).allowCatEyesToggle) return;
 #endif
 
-            capi.Input.RegisterHotKey("cateyestoggle", Lang.Get("xskills:hotkey-cateyestoggle"), GlKeys.P, HotkeyType.CharacterControls);
+            // --- НОВАЯ КНОПКА: Просто Вкл/Выкл ---
+            capi.Input.RegisterHotKey("cateyesonoff", Lang.Get("xskills:hotkey-cateyesonoff"), GlKeys.P, HotkeyType.CharacterControls);
+            capi.Input.SetHotKeyHandler("cateyesonoff", (KeyCombination key) =>
+            {
+                if ((nightVisionRenderer.Mode & EnumNightVisionMode.Deactivated) == 0)
+                {
+                    nightVisionRenderer.Mode |= EnumNightVisionMode.Deactivated;
+                    // Выводим уведомление на экран
+                    capi.TriggerIngameError(this, "cateyes", Lang.Get("xskills:cateyes-off"));
+                }
+                else
+                {
+                    nightVisionRenderer.Mode &= ~EnumNightVisionMode.Deactivated;
+                    // Выводим уведомление на экран
+                    capi.TriggerIngameError(this, "cateyes", Lang.Get("xskills:cateyes-on"));
+                }
+                LoadShader();
+                return true;
+            });
+
+            // --- СТАРАЯ КНОПКА: Переключение фильтров ---
+            capi.Input.RegisterHotKey("cateyestoggle", Lang.Get("xskills:hotkey-cateyestoggle"), GlKeys.L, HotkeyType.CharacterControls);
             capi.Input.SetHotKeyHandler("cateyestoggle", (KeyCombination key) =>
             {
                 if (capi.World.Player.Entity.Controls.Sneak)
@@ -737,12 +758,12 @@ namespace XSkills
                     if ((nightVisionRenderer.Mode & EnumNightVisionMode.Compress) == 0)
                     {
                         nightVisionRenderer.Mode |= EnumNightVisionMode.Compress;
-                        capi.ShowChatMessage("Compress: on");
+                        capi.TriggerIngameError(this, "cateyes", Lang.Get("xskills:cateyes-compress-on"));
                     }
                     else
                     {
                         nightVisionRenderer.Mode &= ~EnumNightVisionMode.Compress;
-                        capi.ShowChatMessage("Compress: off");
+                        capi.TriggerIngameError(this, "cateyes", Lang.Get("xskills:cateyes-compress-off"));
                     }
                 }
                 else
@@ -751,31 +772,31 @@ namespace XSkills
                     {
                         case EnumNightVisionMode.FilterNone:
                             nightVisionRenderer.Mode = nightVisionRenderer.Mode & ~EnumNightVisionMode.Filter | EnumNightVisionMode.FilterGray;
-                            capi.ShowChatMessage("Filter: Gray");
+                            capi.TriggerIngameError(this, "cateyes", Lang.Get("xskills:cateyes-filter-gray"));
                             break;
                         case EnumNightVisionMode.FilterGray:
                             nightVisionRenderer.Mode = nightVisionRenderer.Mode & ~EnumNightVisionMode.Filter | EnumNightVisionMode.FilterSepia;
-                            capi.ShowChatMessage("Filter: Sepia");
+                            capi.TriggerIngameError(this, "cateyes", Lang.Get("xskills:cateyes-filter-sepia"));
                             break;
                         case EnumNightVisionMode.FilterSepia:
                             nightVisionRenderer.Mode = nightVisionRenderer.Mode & ~EnumNightVisionMode.Filter | EnumNightVisionMode.FilterGreen;
-                            capi.ShowChatMessage("Filter: Green");
+                            capi.TriggerIngameError(this, "cateyes", Lang.Get("xskills:cateyes-filter-green"));
                             break;
                         case EnumNightVisionMode.FilterGreen:
                             nightVisionRenderer.Mode = nightVisionRenderer.Mode & ~EnumNightVisionMode.Filter | EnumNightVisionMode.FilterBlue;
-                            capi.ShowChatMessage("Filter: Blue");
+                            capi.TriggerIngameError(this, "cateyes", Lang.Get("xskills:cateyes-filter-blue"));
                             break;
                         case EnumNightVisionMode.FilterBlue:
                             nightVisionRenderer.Mode = nightVisionRenderer.Mode & ~EnumNightVisionMode.Filter | EnumNightVisionMode.FilterRed;
-                            capi.ShowChatMessage("Filter: Red");
+                            capi.TriggerIngameError(this, "cateyes", Lang.Get("xskills:cateyes-filter-red"));
                             break;
                         case EnumNightVisionMode.FilterRed:
                             nightVisionRenderer.Mode = nightVisionRenderer.Mode & ~EnumNightVisionMode.Filter | EnumNightVisionMode.Deactivated;
-                            capi.ShowChatMessage("Filter: Deactivated");
+                            capi.TriggerIngameError(this, "cateyes", Lang.Get("xskills:cateyes-filter-deactivated"));
                             break;
                         case EnumNightVisionMode.Deactivated:
                             nightVisionRenderer.Mode = nightVisionRenderer.Mode & ~EnumNightVisionMode.Filter | EnumNightVisionMode.FilterNone;
-                            capi.ShowChatMessage("Filter: None");
+                            capi.TriggerIngameError(this, "cateyes", Lang.Get("xskills:cateyes-filter-none"));
                             break;
                     }
                 }

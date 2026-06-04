@@ -37,6 +37,7 @@ namespace XSkills
         public int AutomatedSmithingId { get; private set; }
 
         public int SafeQuenchingId { get; private set; }
+        public int BitForgingId { get; private set; }
 
         private List<SmithingRecipe> duplicatable;
 
@@ -180,12 +181,20 @@ namespace XSkills
                 "safequenching",
                 "xskills:ability-safequenching",
                 "xskills:abilitydesc-safequenching",
-                5, 1, new int[] { 100 })); 
+                5, 1, new int[] { 100 }));
+
+            // позволяет ковать заготовки из кусочков металла
+            BitForgingId = this.AddAbility(new Ability(
+                "bitforging",
+                "xskills:ability-bitforging",
+                "xskills:abilitydesc-bitforging",
+                3, 1));
 
 
             //behaviors
             api.RegisterEntityBehaviorClass("disassemblable", typeof(EntityBehaviorDisassemblable));
             api.RegisterBlockBehaviorClass("XSkillsBloomery", typeof(XSkillsBloomeryBehavior));
+            api.RegisterCollectibleBehaviorClass("XSkillsMetalBitWorkable", typeof(MetalBitAnvilBehavior));
 
             ICoreServerAPI sapi = api as ICoreServerAPI;
             ICoreClientAPI capi = api as ICoreClientAPI;
@@ -219,6 +228,8 @@ namespace XSkills
             foreach (Item item in this.XLeveling.Api.World.Items)
             {
                 if (item == null || item.Code == null) continue;
+                if (!item.Code.Path.StartsWith("metalbit")) continue;
+                MetalBitAnvilBehavior.TryAddTo(item, this.XLeveling.Api);
             }
 
             float recipeRatio = (Config as MetalworkingConfig)?.chiselRecipesRatio ?? 1.0f;

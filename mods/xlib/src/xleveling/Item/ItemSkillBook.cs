@@ -78,9 +78,9 @@ namespace XLib.XLeveling
             {
                 string[] strings = knowledge.Split(':');
                 string name;
-                if (strings.Length == 2) 
+                if (strings.Length == 2)
                     name = Lang.GetIfExists(strings[0] + ":book-" + strings[1]);
-                else 
+                else
                     name = Lang.GetIfExists("book-" + knowledge);
                 if (name != null) return name;
             }
@@ -180,9 +180,13 @@ namespace XLib.XLeveling
 
                 readBook.Attributes.SetBool("studied", true);
 
-                if (!player.InventoryManager.TryGiveItemstack(readBook))
+                bool consume = (system?.IXLevelingAPI as XLevelingServer)?.Config?.consumeSkillBookOnStudy ?? false;
+                if (!consume)
                 {
-                    byEntity.World.SpawnItemEntity(readBook, byEntity.Pos.XYZ);
+                    if (!player.InventoryManager.TryGiveItemstack(readBook))
+                    {
+                        byEntity.World.SpawnItemEntity(readBook, byEntity.Pos.XYZ);
+                    }
                 }
 
                 slot.MarkDirty();

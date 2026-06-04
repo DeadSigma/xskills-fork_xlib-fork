@@ -118,6 +118,18 @@ namespace XLib.XLeveling
         /// </summary>
         /// 
 
+        /// <summary>
+        /// Если true, книга навыков (skillbook) исчезает после изучения,
+        /// вместо того чтобы вернуться игроку с пометкой "studied".
+        /// </summary>
+        [ProtoMember(13)]
+        [DefaultValue(false)]
+        public bool consumeSkillBookOnStudy;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Config"/> class.
+        /// </summary>
+        /// 
+
 
         public Config()
         {
@@ -133,6 +145,7 @@ namespace XLib.XLeveling
             this.trackExpGain = false;
             this.configVersion = 6;
             this.disableAllClassRequirements = false;
+            this.consumeSkillBookOnStudy = false;
         }
     }//!class Config
 }

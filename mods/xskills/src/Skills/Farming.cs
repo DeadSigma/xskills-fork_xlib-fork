@@ -1087,11 +1087,13 @@ namespace XSkills
 
                 //beekeeper
                 PlayerAbility playerAbility = playerSkill[farming.BeekeeperId];
-                if (playerAbility != null)
+                // Добавляем проверку на то, что HarvestedStack (соты) существует
+                if (playerAbility != null && this.HarvestedStack?.ResolvedItemstack != null)
                 {
                     for (int value = playerAbility.Value(0); value > 0; value--)
                     {
-                        world.SpawnItemEntity(new ItemStack(this.block.Drops[0].ResolvedItemstack.Item), pos.ToVec3d().Add(0.5, 0.5, 0.5));
+                        // Спавним предмет из HarvestedStack (соты) вместо Drops[0] (пустой улей)
+                        world.SpawnItemEntity(new ItemStack(this.HarvestedStack.ResolvedItemstack.Item), pos.ToVec3d().Add(0.5, 0.5, 0.5));
                     }
                 }
             }

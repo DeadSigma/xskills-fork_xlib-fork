@@ -170,8 +170,7 @@ namespace XSkills
                     // Удаляем ванильный урон, чтобы предмет считался абсолютно новым
                     outputSlot.Itemstack.Attributes.RemoveAttribute("damage");
 
-                    // Синхронизируем кастомный атрибут прочности, на который опираются другие перки XSkills
-                    outputSlot.Itemstack.Attributes.SetInt("durability", newMax);
+                    //outputSlot.Itemstack.Attributes.SetInt("durability", newMax);
                 }
             }
         }
