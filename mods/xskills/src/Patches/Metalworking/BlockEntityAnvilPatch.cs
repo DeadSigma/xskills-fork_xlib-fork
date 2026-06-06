@@ -133,6 +133,44 @@ namespace XSkills
     {
         public const int MAXFORGED = 200;
 
+        // Сколько реальных секунд заготовка не остывает после нагрева
+        public const double ForgeCooldownDelaySeconds = 15.0;
+
+        // Задержка остывания, которую выставляет горн/кузница при нагреве (ванильные 0.5 игрового часа).
+        private const double VanillaForgeGraceHours = 0.5;
+
+        // Выставляет 15-секундный таймер ОДИН РАЗ — когда заготовка приходит с нагрева. Дальше таймер
+        private static void ApplyForgeCooldownDelay(IWorldAccessor world, ItemStack stack, double prevLastUpdate)
+        {
+            if (stack == null) return;
+
+            // SetTemperature(..., false) уже создал поддерево "temperature", так что оно есть.
+            ITreeAttribute tempTree = stack.Attributes?.GetTreeAttribute("temperature");
+            if (tempTree == null) return;
+
+            // Игровых секунд за одну реальную: по умолчанию SpeedOfTime(60) * CalendarSpeedMul(0.5) = 30.
+            double gameSecondsPerRealSecond = world.Calendar.SpeedOfTime * world.Calendar.CalendarSpeedMul;
+            if (gameSecondsPerRealSecond <= 0.0) return; // защита от остановленного/нулевого времени
+
+            double now = world.Calendar.TotalHours;
+            double delayHours = ForgeCooldownDelaySeconds * gameSecondsPerRealSecond / 3600.0;
+
+            // Порог между нашим коротким таймером и ванильной задержкой горна (~0.5ч).
+            double reheatThreshold = (delayHours + VanillaForgeGraceHours) * 0.5;
+
+            if (prevLastUpdate - now >= reheatThreshold)
+            {
+                // Запускаем 15-секундный таймер. Делаем это один раз на каждый нагрев.
+                tempTree.SetDouble("temperatureLastUpdate", now + delayHours);
+            }
+            else if (prevLastUpdate > now)
+            {
+                tempTree.SetDouble("temperatureLastUpdate", prevLastUpdate);
+            }
+            // else: таймер истёк (или его не было). НЕ продлеваем — пусть остывает.
+            // SetTemperature(..., false) уже выставил метку на "сейчас", больше ничего не трогаем.
+        }
+
         public static void Apply(Harmony harmony, Type anvilType)
         {
             Type patch = typeof(BlockEntityAnvilPatch);
@@ -158,6 +196,12 @@ namespace XSkills
                 if (metalworking == null) return true;
 
                 PlayerAbility ability = byPlayer?.Entity?.GetBehavior<PlayerSkillSet>()?[metalworking.Id]?[metalworking.BitForgingId];
+
+                if (ability != null && !ability.Ability.Enabled)
+                {
+                    return true;
+                }
+
                 if (ability == null || ability.Tier <= 0)
                 {
                     if (__instance.Api.Side == EnumAppSide.Client)
@@ -182,7 +226,11 @@ namespace XSkills
             if (__instance.WorkItemStack != null)
             {
                 float currentTemp = __instance.WorkItemStack.Collectible.GetTemperature(__instance.Api.World, __instance.WorkItemStack);
+                // Метку остывания запоминаем ДО SetTemperature (она перезапишет её на "сейчас").
+                double prevLastUpdate = __instance.WorkItemStack.Attributes?.GetTreeAttribute("temperature")?.GetDouble("temperatureLastUpdate") ?? double.MinValue;
                 __instance.WorkItemStack.Collectible.SetTemperature(__instance.Api.World, __instance.WorkItemStack, currentTemp, false);
+                // 15-секундная задержка остывания (вместо ванильных ~50 сек), без сброса по ударам - чтобы клиент совпадал с сервером
+                ApplyForgeCooldownDelay(__instance.Api.World, __instance.WorkItemStack, prevLastUpdate);
             }
         }
 
@@ -275,6 +323,7 @@ namespace XSkills
 
         public static bool CheckIfFinishedPrefix(BlockEntityAnvil __instance, out AnvilState __state, IPlayer byPlayer)
         {
+
             __state = new AnvilState(__instance);
             if (__state.recipe == null) return true;
 
@@ -374,8 +423,10 @@ namespace XSkills
                     temperature += heatBonus;
                 }
             }
-            // Явно передаем false, чтобы отменить читерские 50 секунд после каждого удара
+            // Метку остывания запоминаем ДО SetTemperature (она перезапишет её на "сейчас")
+            double prevLastUpdate = __state.workItemStack.Attributes?.GetTreeAttribute("temperature")?.GetDouble("temperatureLastUpdate") ?? double.MinValue;
             collectible.SetTemperature(world, __state.workItemStack, temperature, false);
+            ApplyForgeCooldownDelay(world, __state.workItemStack, prevLastUpdate);
 
             //blacksmith
             collectible = __state.recipe.Output.ResolvedItemstack.Collectible;
@@ -383,10 +434,10 @@ namespace XSkills
             string type = QualityUtil.GetQualityType(collectible);
 
             if (playerAbility?.Tier > 0 &&
-                !(__state.wasPlate && collectible is ItemMetalPlate) && 
-                (type != null || 
-                collectible.Tool != null || 
-                collectible.Code.Path.Contains("head") || 
+                !(__state.wasPlate && collectible is ItemMetalPlate) &&
+                (type != null ||
+                collectible.Tool != null ||
+                collectible.Code.Path.Contains("head") ||
                 collectible.GetMaxDurability(__state.recipe.Output.ResolvedItemstack) > 1))
             {
                 int forged = type != null ?
@@ -601,7 +652,7 @@ namespace XSkills
                 {
                     for (int zz = 0; zz < voxels.GetLength(2) && search; zz++)
                     {
-                        if(voxels[xx,yy,zz])
+                        if (voxels[xx, yy, zz])
                         {
                             search = false;
                             if (yy >= ymax) return;
