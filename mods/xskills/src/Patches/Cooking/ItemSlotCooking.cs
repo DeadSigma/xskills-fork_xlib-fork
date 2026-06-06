@@ -54,7 +54,9 @@ namespace XSkills
         {
             BlockEntity blockEntity = Inventory?.Api.World.BlockAccessor.GetBlockEntity(inventory.Pos);
             BlockEntityBehaviorOwnable ownable = blockEntity?.GetBehavior<BlockEntityBehaviorOwnable>();
-            if (op.ActingPlayer != null && ownable != null) ownable.Owner = op.ActingPlayer;
+            if (op.ActingPlayer != null && ownable != null &&
+                 !(ownable.Owner != null && CookingUtil.IsCooking(blockEntity)))
+                ownable.Owner = op.ActingPlayer;
             this.capacityLitres = MaxSlotStackSize;
             base.ActivateSlot(sourceSlot, ref op);
         }
@@ -108,7 +110,9 @@ namespace XSkills
         {
             BlockEntity blockEntity = Inventory?.Api.World.BlockAccessor.GetBlockEntity(Inventory.Pos);
             BlockEntityBehaviorOwnable ownable = blockEntity?.GetBehavior<BlockEntityBehaviorOwnable>();
-            if (op.ActingPlayer != null && ownable != null) ownable.Owner = op.ActingPlayer;
+            if (op.ActingPlayer != null && ownable != null &&
+                  !(ownable.Owner != null && CookingUtil.IsCooking(blockEntity)))
+                ownable.Owner = op.ActingPlayer;
 
             base.ActivateSlot(sourceSlot, ref op);
         }

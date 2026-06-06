@@ -259,5 +259,16 @@
                 "name": "XskillsOwnable"
             }
         ]
-    }
+    },
+{
+    "dependsOn": [ { "modid": "artofgrowingpatch" } ],
+    "file": "artofgrowing:blocktypes/wood/firepit",
+    "op": "addmerge",
+    "path": "/entityBehaviors",
+    "value": [
+        {
+            "name": "XskillsOwnable"
+        }
+    ]
+}
 ]

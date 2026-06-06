@@ -78,5 +78,13 @@ namespace XSkills
 
             return mult1 * mult2;
         }
+        /// <summary>
+        /// Готовит ли костёр прямо сейчас.
+        /// Используется, чтобы не переназначать владельца посреди готовки.
+        /// </summary>
+        public static bool IsCooking(BlockEntity entity)
+        {
+            return entity is BlockEntityFirepit firepit && firepit.inputStackCookingTime > 0f;
+        }
     }//!class CookingUtil
 }//!namespace XSkills

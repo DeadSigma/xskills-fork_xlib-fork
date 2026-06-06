@@ -83,6 +83,10 @@ namespace XSkills
             BlockEntity blockEntity = inventory.Api.World.BlockAccessor.GetBlockEntity(inventory.Pos);
             BlockEntityBehaviorOwnable ownable = blockEntity?.GetBehavior<BlockEntityBehaviorOwnable>();
             if (ownable == null) return;
+
+            // Не переназначаем владельца, пока костёр уже готовит иначе готовка зациклится
+            if (ownable.Owner != null && CookingUtil.IsCooking(blockEntity)) return;
+
             ownable.Owner = player;
             //SetSlotStackSize(inventory, player, api);
         }
