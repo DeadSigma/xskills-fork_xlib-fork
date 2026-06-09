@@ -91,6 +91,9 @@
   "skill-pottery": "Pottery",
   "skill-survival": "Survival",
   "skill-temporaladaptation": "Temporal Adaptation",
+  "skillbook-damaged": "Den här boken skadades under läsningen.",
+  "skillbook-preserved": "Den här boken hanterades varsamt och kan läsas igen.",
+  "skillbook-studied-by": "Studerad av: {0}",
   "steeplechaser-off": "Stegvandrare: Av",
   "steeplechaser-on": "Stegvandrare: På",
   "sunrise-at": "Soluppgång kl. {0}",
@@ -189,6 +192,9 @@
 
   "ability-carefulminer": "Careful Miner",
   "abilitydesc-carefulminer": "Mining a stone or ore with a pickaxe has a chance of {0}% and additional {1}% for each level at the mining skill to not reduce the durability of the pickaxe. The chance is capped at {2}%.",
+
+  "ability-carefulreader": "Omsorgsfull läsare",
+  "abilitydesc-carefulreader": "När du studerar en färdighetsbok finns det {0}% chans att du inte skadar den. Detta gör att den kan läsas igen.",
 
   "ability-catcher": "Catcher",
   "abilitydesc-catcher": "Allows you to craft cages and use them to catch small animals.",

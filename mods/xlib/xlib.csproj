@@ -75,7 +75,6 @@
     <Content Include="assets\xeffects\lang\uk.json" />
     <Content Include="assets\xlib\lang\zh-CN.json" />
     <Content Include="assets\xlib\lang\es-es.json" />
-    <Content Include="assets\xlib\lang\nl.json" />
     <Content Include="assets\xlib\lang\ro.json" />
     <Content Include="assets\xlib\lang\sv.json" />
     <Content Include="assets\xlib\lang\pl.json" />

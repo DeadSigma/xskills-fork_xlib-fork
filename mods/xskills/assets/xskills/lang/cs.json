@@ -91,6 +91,9 @@
   "skill-pottery": "Hrnčířství",
   "skill-survival": "Jak přežít",
   "skill-temporaladaptation": "Časová Adaptace",
+  "skillbook-damaged": "Tato kniha byla při čtení poškozena.",
+  "skillbook-preserved": "S touto knihou bylo zacházeno opatrně, lze ji přečíst znovu.",
+  "skillbook-studied-by": "Naučeno: {0}",
   "steeplechaser-off": "Krokolezec: Vypnuto",
   "steeplechaser-on": "Krokolezec: Zapnuto",
   "sunrise-at": "Východ slunce v {0}",
@@ -189,6 +192,9 @@
 
   "ability-carefulminer": "Opatrný horník",
   "abilitydesc-carefulminer": "Těžba kamene nebo rudy krumpáčem má šanci {0}% a dalších {1}% pro každou úroveň Těžby, že nesníží životmost krumpáče. Šance je omezena na {2}%.",
+
+  "ability-carefulreader": "Pečlivý čtenář",
+  "abilitydesc-carefulreader": "Při studiu knihy dovedností máte {0}% šanci, že ji nepoškodíte. To umožní její opětovné přečtení.",
 
   "ability-catcher": "Lapač zvěře",
   "abilitydesc-catcher": "Odemkne ti možnost craftění klecí které ti umožní chytat malé zvířata.",

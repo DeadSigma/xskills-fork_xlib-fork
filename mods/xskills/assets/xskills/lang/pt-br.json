@@ -91,6 +91,9 @@
   "skill-pottery": "Cerâmica",
   "skill-survival": "Sobrevivência",
   "skill-temporaladaptation": "Adaptação temporal",
+  "skillbook-damaged": "Este livro foi danificado durante a leitura.",
+  "skillbook-preserved": "Este livro foi manuseado com cuidado e pode ser lido novamente.",
+  "skillbook-studied-by": "Estudado por: {0}",
   "steeplechaser-off": "Passolargo: Desligado",
   "steeplechaser-on": "Passolargo: Ligado",
   "sunrise-at": "Nascer do sol às {0}",
@@ -189,6 +192,9 @@
 
   "ability-carefulminer": "Mineiro Cuidadoso",
   "abilitydesc-carefulminer": "Minerar uma pedra ou minério com uma picareta tem uma chance de {0}% e adicionalmente {1}% para cada nível na habilidade de mineração de não reduzir a durabilidade da picareta. A chance é limitada a {2}%.",
+
+  "ability-carefulreader": "Leitor cuidadoso",
+  "abilitydesc-carefulreader": "Ao estudar um livro de habilidades, há {0}% de chance de não danificá-lo. Isso permitirá que ele seja lido novamente.",
 
   "ability-catcher": "Caçador",
   "abilitydesc-catcher": "Permite que você crie gaiolas e as use para capturar pequenos animais.",

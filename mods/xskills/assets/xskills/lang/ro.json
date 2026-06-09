@@ -91,6 +91,9 @@
   "skill-pottery": "Pottery",
   "skill-survival": "Survival",
   "skill-temporaladaptation": "Temporal Adaptation",
+  "skillbook-damaged": "Această carte a fost deteriorată în timpul lecturii.",
+  "skillbook-preserved": "Această carte a fost manipulată cu grijă și poate fi citită din nou.",
+  "skillbook-studied-by": "Studiat de: {0}",
   "steeplechaser-off": "Mergător: Dezactivat",
   "steeplechaser-on": "Mergător: Activat",
   "sunrise-at": "Răsărit la {0}",
@@ -189,6 +192,9 @@
 
   "ability-carefulminer": "Careful Miner",
   "abilitydesc-carefulminer": "Mining a stone or ore with a pickaxe has a chance of {0}% and additional {1}% for each level at the mining skill to not reduce the durability of the pickaxe. The chance is capped at {2}%.",
+
+  "ability-carefulreader": "Cititor atent",
+  "abilitydesc-carefulreader": "La studierea unei cărți de abilități există o șansă de {0}% să nu o deteriorezi. Acest lucru îi va permite să fie citită din nou.",
 
   "ability-catcher": "Catcher",
   "abilitydesc-catcher": "Allows you to craft cages and use them to catch small animals.",

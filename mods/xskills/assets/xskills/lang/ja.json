@@ -91,6 +91,9 @@
   "skill-pottery": "陶業",
   "skill-survival": "生存",
   "skill-temporaladaptation": "時間適応性",
+  "skillbook-damaged": "この本は読む際に損傷しました。",
+  "skillbook-preserved": "この本は丁寧に扱われたため、もう一度読むことができます。",
+  "skillbook-studied-by": "学習済み: {0}",
   "steeplechaser-off": "ステップウォーカー: オフ",
   "steeplechaser-on": "ステップウォーカー: オン",
   "sunrise-at": "{0} に日の出",
@@ -189,6 +192,9 @@
 
   "ability-carefulminer": "慎重な採掘者",
   "abilitydesc-carefulminer": "ツルハシで石や鉱石を採掘すると、{0}%の確率で、さらに採掘スキルのレベル毎に{1}%で、ツルハシの耐久度を減らないようになります。確率の上限は{2}%です。",
+
+  "ability-carefulreader": "丁寧な読者",
+  "abilitydesc-carefulreader": "スキルブックを読む際、{0}%の確率で本を傷めずに済みます。これにより再度読むことができます。",
 
   "ability-catcher": "捕手",
   "abilitydesc-catcher": "檻を作り、小動物を捕まえることが出来るようになります。",

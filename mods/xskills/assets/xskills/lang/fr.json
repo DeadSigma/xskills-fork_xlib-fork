@@ -91,6 +91,9 @@
   "skill-pottery": "Poterie",
   "skill-survival": "Survie",
   "skill-temporaladaptation": "Adaptation temporelle",
+  "skillbook-damaged": "Ce livre a été endommagé lors de sa lecture.",
+  "skillbook-preserved": "Ce livre a été manipulé avec soin et peut être lu à nouveau.",
+  "skillbook-studied-by": "Étudié par : {0}",
   "steeplechaser-off": "Marcheur : Désactivé",
   "steeplechaser-on": "Marcheur : Activé",
   "sunrise-at": "Lever du soleil à {0}",
@@ -189,6 +192,9 @@
 
   "ability-carefulminer": "Mineur attentif",
   "abilitydesc-carefulminer": "Miner une roche ou un minéral avec une pioche a une chance de {0}% et {1}% additionnel pour chaque niveau de votre compétence de Minage de ne pas réduire la durabilité de votre pioche. La probabilité est plafonnée à {2}%.",
+
+  "ability-carefulreader": "Lecteur soigneux",
+  "abilitydesc-carefulreader": "Lors de l'étude d'un livre de compétences, vous avez {0}% de chances de ne pas l'endommager. Cela permettra de le relire.",
 
   "ability-catcher": "Attrapeur",
   "abilitydesc-catcher": "Vous permet de fabriquer des cages pour attraper des petits animaux.",

@@ -91,6 +91,9 @@
   "skill-pottery": "Cerámica",
   "skill-survival": "Supervivencia",
   "skill-temporaladaptation": "Adaptación Temporal",
+  "skillbook-damaged": "Este libro fue dañado durante su lectura.",
+  "skillbook-preserved": "Este libro fue tratado con cuidado y puede leerse de nuevo.",
+  "skillbook-studied-by": "Estudiado por: {0}",
   "steeplechaser-off": "Zancador: Desactivado",
   "steeplechaser-on": "Zancador: Activado",
   "sunrise-at": "Amanecer a las {0}",
@@ -189,6 +192,9 @@
 
   "ability-carefulminer": "Minero cuidadoso",
   "abilitydesc-carefulminer": "Extraer una piedra o un mineral con un pico tiene una probabilidad del {0}% de no reducir la durabilidad del pico, con un {1}% adicional por cada nivel de Minería. La probabilidad tiene un límite de {2}%.",
+
+  "ability-carefulreader": "Lector cuidadoso",
+  "abilitydesc-carefulreader": "Al estudiar un libro de habilidades, existe un {0}% de probabilidad de no dañarlo. Esto permitirá volver a leerlo.",
 
   "ability-catcher": "¡Atrápalos ya!",
   "abilitydesc-catcher": "Te permite fabricar jaulas y usarlas para atrapar animales pequeños.",

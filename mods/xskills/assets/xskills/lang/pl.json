@@ -91,6 +91,9 @@
   "skill-pottery": "Garncarstwo",
   "skill-survival": "Przetrwanie",
   "skill-temporaladaptation": "Adaptacja temporalna",
+  "skillbook-damaged": "Ta książka została uszkodzona podczas czytania.",
+  "skillbook-preserved": "Z tą książką obchodzono się ostrożnie, można ją przeczytać ponownie.",
+  "skillbook-studied-by": "Poznano przez: {0}",
   "steeplechaser-off": "Kroczący: Wyłączono",
   "steeplechaser-on": "Kroczący: Włączono",
   "sunrise-at": "Wschód słońca o {0}",
@@ -189,6 +192,9 @@
 
   "ability-carefulminer": "Ostrożny górnik",
   "abilitydesc-carefulminer": "Wydobywanie kamienia lub rudy kilofem ma szansę {0}% i dodatkowe {1}% za każdy poziom umiejętności górnictwo na niezmniejszenie trwałości kilofa. Szansa ta jest ograniczona do {2}%.",
+
+  "ability-carefulreader": "Uważny czytelnik",
+  "abilitydesc-carefulreader": "Podczas studiowania księgi umiejętności istnieje {0}% szans, że jej nie uszkodzisz. Pozwoli to przeczytać ją ponownie.",
 
   "ability-catcher": "Łapacz",
   "abilitydesc-catcher": "Pozwala ci wytwarzać klatki i używać ich do łapania małych zwierząt.",

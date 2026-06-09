@@ -43,6 +43,7 @@ namespace XSkills
         public int CatEyesId { get; private set; }
         public int MeteorologistId { get; private set; }
         public int LastStandId { get; private set; }
+        public int CarefulReaderId { get; private set; }
 
         private ICoreClientAPI capi;
         private NightVisionRenderer nightVisionRenderer;
@@ -258,6 +259,17 @@ namespace XSkills
                 "xskills:ability-laststand",
                 "xskills:abilitydesc-laststand",
                 10, 1, new int[] { 200 }));
+           
+            // аккуратный чтец (Careful Reader)
+            // (3) минимальный уровень
+            // (3)  макс тир
+            // { 5, 8, 16 } значения процентов шанса для 1, 2 и 3 уровня.
+            CarefulReaderId = this.AddAbility(new Ability(
+                "carefulreader",
+                "xskills:ability-carefulreader",
+                "xskills:abilitydesc-carefulreader",
+                3, 3, new int[] { 5, 8, 16 }));
+            
 
             this[LongLifeId].OnPlayerAbilityTierChanged += OnLongLife;
             this[HugeStomachId].OnPlayerAbilityTierChanged += OnHugeStomach;
@@ -723,7 +735,7 @@ namespace XSkills
             capi.Event.ReloadShader += LoadShader;
             LoadShader();
             nightVisionRenderer = new NightVisionRenderer(capi, nightVisionShaderProg);
-            capi.Event.RegisterRenderer(nightVisionRenderer, EnumRenderStage.Ortho);
+            capi.Event.RegisterRenderer(nightVisionRenderer, EnumRenderStage.AfterFinalComposition);
 
 #if !DEBUG
             if (!(this.Config as SurvivalSkillConfig).allowCatEyesToggle) return;
@@ -973,7 +985,7 @@ namespace XSkills
 
         public IShaderProgram Shader { get; internal set; }
 
-        public double RenderOrder => 0.85;
+        public double RenderOrder => -1.0;
         public int RenderRange => 1;
 
         PlayerAbility ability;

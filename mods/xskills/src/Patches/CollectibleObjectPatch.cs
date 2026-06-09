@@ -110,9 +110,9 @@ namespace XSkills
 
         [HarmonyPostfix]
         [HarmonyPatch("GetAttackPower")]
-        public static void Postfix1(ref float __result, ItemStack itemStack) // <- Изменения здесь
+        public static void Postfix1(ref float __result, ItemStack itemStack) 
         {
-            float quality = itemStack?.Attributes.TryGetFloat("quality") ?? 0.0f; // <- И здесь
+            float quality = itemStack?.Attributes.TryGetFloat("quality") ?? 0.0f; 
             if (quality > 0.0f && __result > 0.5f) __result = (float)(__result * (1.0f + quality * 0.02f));
         }
 

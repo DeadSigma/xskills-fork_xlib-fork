@@ -91,6 +91,9 @@
   "skill-pottery": "Töpfern",
   "skill-survival": "Überleben",
   "skill-temporaladaptation": "Temporale Anpassung",
+  "skillbook-damaged": "Dieses Buch wurde beim Lesen beschädigt.",
+  "skillbook-preserved": "Mit diesem Buch wurde sorgfältig umgegangen, es kann erneut gelesen werden.",
+  "skillbook-studied-by": "Erlernt von: {0}",
   "steeplechaser-off": "Schrittläufer: Aus",
   "steeplechaser-on": "Schrittläufer: Ein",
   "sunrise-at": "Sonnenaufgang um {0}",
@@ -189,6 +192,9 @@
 
   "ability-carefulminer": "Vorsichtiger Bergmann",
   "abilitydesc-carefulminer": "Das Abbauen von Steinen und Erzen mit einer Spitzhacke hat eine Chance von {0}% und zusätzlich {1}% für jede Stufe der Bergbaufertigkeit keine Haltbarkeit der Spitzhacke zu verbrauchen. Die Chance ist begrenzt auf {2}%.",
+
+  "ability-carefulreader": "Sorgfältiger Leser",
+  "abilitydesc-carefulreader": "Beim Studieren eines Fertigkeitsbuches máte {0}% Chance, es nicht zu beschädigen. Dadurch kann es erneut gelesen werden.",
 
   "ability-catcher": "Tierfänger",
   "abilitydesc-catcher": "Ermöglicht es dir, Käfige herzustellen und sie zum Fangen kleiner Tiere zu verwenden.",

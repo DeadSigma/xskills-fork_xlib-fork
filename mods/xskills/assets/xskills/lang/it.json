@@ -18,6 +18,9 @@
   "hotkey-steeplechasertoggle": "xSkills: Camminatore On/Off",
   "hotkey-xskillshotbarswitch": "xSkills: Cambia barra rapida",
   "ingameerror-bitforging": "Per lavorare frammenti metallici sull'incudine è necessaria l'abilità «Riforgiatura».",
+  "skillbook-damaged": "Questo libro è stato danneggiato durante la lettura.",
+  "skillbook-preserved": "Questo libro è stato trattato con cura e può essere letto di nuovo.",
+  "skillbook-studied-by": "Studiato da: {0}",
   "steeplechaser-off": "Camminatore: Disattivo",
   "steeplechaser-on": "Camminatore: Attivo",
   "xleveling:requirement-trait": "Tratto richiesto: {0}",
@@ -25,6 +28,9 @@
 
   "ability-bitforging": "Riforgiatura",
   "abilitydesc-bitforging": "Permette di forgiare oggetti direttamente da frammenti metallici quando raggiungono la temperatura di lavorazione. Ogni frammento aggiunge una piccola quantità di materiale al pezzo.",
+
+  "ability-carefulreader": "Lettore attento",
+  "abilitydesc-carefulreader": "Quando studi un libro delle abilità, c'è una probabilità del {0}% di non danneggiarlo. Ciò permetterà di leggerlo nuovamente.",
 
   "ability-desalinate": "Desalinizzazione",
   "abilitydesc-desalinate": "Permette di evaporare acqua salata in un calderone per estrarre minerali. Quando tutti e 4 gli slot di cottura sono completamente riempiti d'acqua salata, il processo di evaporazione produce {0} unità di sale e {1} unità di calce.",

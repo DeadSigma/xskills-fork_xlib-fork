@@ -432,8 +432,8 @@ namespace XSkills
                     }
                 }
                 else if (mealContainer == null || mealContainer is BlockPie)
-                {   
-                    if (outputStack.Collectible.NutritionProps != null)
+                {
+                    if (outputStack.Collectible.NutritionProps != null || mealContainer is BlockPie)
                     {
                         float rel = scaledCooked - (int)scaledCooked;
                         totalCooked = (int)scaledCooked + (world.Rand.NextDouble() < rel ? 1 : 0);

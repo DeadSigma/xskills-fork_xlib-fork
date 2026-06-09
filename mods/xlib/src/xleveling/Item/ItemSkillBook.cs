@@ -108,8 +108,9 @@ namespace XLib.XLeveling
             float exp = (float)inSlot.Itemstack.Attributes.GetDecimal("experience");
             string knowledge = inSlot.Itemstack.Attributes.GetString("knowledge");
 
-            // Проверяем, есть ли флаг прочитанной книги
             bool isStudied = inSlot.Itemstack.Attributes.GetBool("studied", false);
+            bool isPreserved = inSlot.Itemstack.Attributes.GetBool("preserved", false);
+            string readBy = inSlot.Itemstack.Attributes.GetString("readBy");
 
             Skill skill = system.GetSkill(skillName);
 
@@ -118,9 +119,26 @@ namespace XLib.XLeveling
             if (knowledge != null)
                 dsc.AppendLine(Lang.Get("xlib:skillbook-dsc2", Lang.Get(knowledge)));
 
-            if (isStudied)
+            // Показываем ники ВСЕХ, кто читал книгу (если такие есть)
+            if (!string.IsNullOrEmpty(readBy))
+            {
+                dsc.AppendLine("<font color=\"#ff9999\">" + Lang.Get("xlib:skillbook-studied-by", readBy) + "</font>");
+            }
+            else if (isStudied) // Фоллбэк для старых книг без ников
             {
                 dsc.AppendLine("<font color=\"#ff9999\">" + Lang.Get("xlib:skillbook-studied") + "</font>");
+            }
+
+            // Показываем состояние самой книги
+            if (isStudied)
+            {
+                // Текст о том, что книга ветхая и повреждена
+                dsc.AppendLine("<font color=\"#ff9999\">" + Lang.Get("xlib:skillbook-damaged") + "</font>");
+            }
+            else if (isPreserved)
+            {
+                // Текст о том, что с книгой обращались аккуратно (зелёным цветом)
+                dsc.AppendLine("<font color=\"#99ff99\">" + Lang.Get("xlib:skillbook-preserved") + "</font>");
             }
         }
 
@@ -149,7 +167,6 @@ namespace XLib.XLeveling
 
             handling = EnumHandHandling.PreventDefault;
 
-            // 1. Сначала получаем объект игрока (работает и на клиенте, и на сервере)
             IPlayer player = (byEntity as EntityPlayer)?.Player;
 
             byEntity.World.PlaySoundAt(new AssetLocation("xlib:sounds/knowledge_consuming"), byEntity, player, true, 16, 1f);
@@ -178,7 +195,75 @@ namespace XLib.XLeveling
                     (XLeveling.Instance(api)?.IXLevelingAPI as XLevelingServer)?.SetPlayerKnowledge(player, knowledge, value + 1);
                 }
 
-                readBook.Attributes.SetBool("studied", true);
+                bool shouldMarkStudied = true;
+                bool perkTriggered = false;
+
+                // Проверяем навык выживания на наличие перка "Аккуратный чтец"
+                Skill survivalSkill = system?.GetSkill("survival");
+                if (survivalSkill != null)
+                {
+                    PlayerSkill playerSurvival = skillSet[survivalSkill.Id];
+
+                    Ability carefulReaderAbilityInfo = null;
+                    if (survivalSkill.Abilities != null)
+                    {
+                        foreach (Ability ability in survivalSkill.Abilities)
+                        {
+                            if (ability.Name.EndsWith("carefulreader"))
+                            {
+                                carefulReaderAbilityInfo = ability;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (carefulReaderAbilityInfo != null && playerSurvival != null)
+                    {
+                        PlayerAbility carefulReader = playerSurvival[carefulReaderAbilityInfo.Id];
+
+                        if (carefulReader != null && carefulReader.Tier > 0)
+                        {
+                            float saveChance = carefulReader.Value(0) * 0.01f;
+
+                            if (byEntity.World.Rand.NextDouble() < saveChance)
+                            {
+                                shouldMarkStudied = false;
+                                perkTriggered = true;
+                            }
+                        }
+                    }
+                }
+
+                // --- ЛОГИКА СОХРАНЕНИЯ НИКОВ ---
+                string existingReaders = readBook.Attributes.GetString("readBy");
+
+                if (string.IsNullOrEmpty(existingReaders))
+                {
+                    // Если книгу еще никто не читал
+                    readBook.Attributes.SetString("readBy", player.PlayerName);
+                }
+                else
+                {
+                    // Разбиваем строку на массив ников
+                    string[] readers = existingReaders.Split(new string[] { ", " }, StringSplitOptions.None);
+
+                    // Ищем ник текущего игрока. Если его там нет (вернулся -1) — добавляем
+                    if (Array.IndexOf(readers, player.PlayerName) == -1)
+                    {
+                        readBook.Attributes.SetString("readBy", existingReaders + ", " + player.PlayerName);
+                    }
+                }
+
+                // --- ЛОГИКА СОХРАНЕНИЯ СОСТОЯНИЯ КНИГИ ---
+                if (shouldMarkStudied)
+                {
+                    readBook.Attributes.SetBool("studied", true);
+                    readBook.Attributes.RemoveAttribute("preserved"); // Убираем статус сохранённой, если она в итоге сломалась
+                }
+                else if (perkTriggered)
+                {
+                    readBook.Attributes.SetBool("preserved", true);
+                }
 
                 bool consume = (system?.IXLevelingAPI as XLevelingServer)?.Config?.consumeSkillBookOnStudy ?? false;
                 if (!consume)

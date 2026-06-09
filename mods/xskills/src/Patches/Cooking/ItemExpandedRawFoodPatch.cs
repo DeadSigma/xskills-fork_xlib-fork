@@ -28,7 +28,7 @@ namespace XSkills
             if (!(cooking?.Enabled ?? false)) return;
             Type patch = typeof(ItemExpandedRawFoodPatch);
 
-            PatchMethod(harmony, type, patch, "GetHeldItemInfo");
+           // PatchMethod(harmony, type, patch, "GetHeldItemInfo");
 
             if (
                 cooking[cooking.CanteenCookId].Enabled ||
