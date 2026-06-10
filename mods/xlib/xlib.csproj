@@ -96,7 +96,7 @@
 			<ZipOutDir>..\..\..\releases\$(ModName)</ZipOutDir>
 
 			<!-- Папка живой версии -->
-			<DevOutDir>..\..\..\releases\$(ModName)\dev</DevOutDir>
+			<DevOutDir>..\..\..\releases\$(ModName)\dev $(ModName)</DevOutDir>
 
 		</PropertyGroup>
 
@@ -136,6 +136,8 @@
 		<ZipDirectory SourceDirectory="$(ZipTempDir)" DestinationFile="$(ZipOutDir)\$(ModName) v$(ModVersion).zip" Overwrite="true" />
 
 		<RemoveDir Directories="$(ZipTempDir)" />
+
+		<Exec Command="py &quot;C:\sourcecode\копирует xlib в папку с модами.py&quot;" />
 
 	</Target>
   <ProjectExtensions>

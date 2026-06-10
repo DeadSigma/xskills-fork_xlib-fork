@@ -170,7 +170,8 @@ namespace XSkills
                     // Удаляем ванильный урон, чтобы предмет считался абсолютно новым
                     outputSlot.Itemstack.Attributes.RemoveAttribute("damage");
 
-                    //outputSlot.Itemstack.Attributes.SetInt("durability", newMax);
+                    //я зачем-то комментировал эту строку, не помню зачем, но это сломало совместимость, так что возвращаю
+                    outputSlot.Itemstack.Attributes.SetInt("durability", newMax);
                 }
             }
         }

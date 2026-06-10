@@ -406,7 +406,7 @@ namespace XLib.XLeveling
         {
             if (requirements == null || remove == null || remove.Count == 0) return;
 
-            // 1. Умная очистка вашего конфига от мусора (убираем "class:" и пробелы)
+            // Очистка вашего конфига от мусора (убираем "class:" и пробелы)
             List<string> cleanRemove = new List<string>();
             foreach (string r in remove)
             {
@@ -416,7 +416,7 @@ namespace XLib.XLeveling
                 }
             }
 
-            // 2. Идем вглубь: AndRequirement и исправленный нами OrRequirement
+            // AndRequirement и исправленный OrRequirement
             foreach (Requirement requirement in requirements)
             {
                 if (requirement is AndRequirement andRequirement)
@@ -433,14 +433,24 @@ namespace XLib.XLeveling
             requirements.RemoveAll((Requirement requirement) => (requirement as AndRequirement)?.Requirements.Count == 0);
             requirements.RemoveAll((Requirement requirement) => (requirement as OrRequirement)?.Requirements.Count == 0);
 
-            // 3. Безжалостное удаление
+            // Удаление
             requirements.RemoveAll(
                 (Requirement requirement) =>
                 {
                     // Глобальный рубильник на всякий случай
-                    if (remove.Contains("DISABLE_ALL_CLASSES") && requirement.GetType().Name.Contains("ClassRequirement"))
+                    if (remove.Contains("DISABLE_ALL_CLASSES"))
                     {
-                        return true;
+                        // Если это напрямую ClassRequirement
+                        if (requirement.GetType().Name.Contains("ClassRequirement"))
+                        {
+                            return true;
+                        }
+
+                        // Если это NotRequirement, внутри которого лежит ClassRequirement
+                        if (requirement is NotRequirement notReq && notReq.Requirement?.GetType().Name.Contains("ClassRequirement") == true)
+                        {
+                            return true;
+                        }
                     }
 
                     // Чистим имя самого требования внутри игры

@@ -257,5 +257,46 @@ namespace XSkills
             }
             return added;
         }
+        public override void OnCreatedByCrafting(ItemSlot[] allInputslots, ItemSlot outputSlot, IRecipeBase byRecipe, ref EnumHandling handled)
+        {
+            // Обязательно вызываем базовый метод, передавая ему ref handled
+            base.OnCreatedByCrafting(allInputslots, outputSlot, byRecipe, ref handled);
+
+            // Ищем workitem (нашу недокованную заготовку) среди ингредиентов в сетке крафта
+            ItemSlot workItemSlot = allInputslots.FirstOrDefault(s => s.Itemstack?.Collectible is ItemWorkItem);
+
+            if (workItemSlot != null && workItemSlot.Itemstack != null)
+            {
+                // Достаём NBT-массив вокселей из заготовки
+                byte[] voxels = workItemSlot.Itemstack.Attributes.GetBytes("voxels");
+
+                if (voxels != null)
+                {
+                    int metalVoxelCount = 0;
+
+                    // Считаем все металлические воксели. 
+                    // В ванили значение 1 соответствует EnumVoxelMaterial.Metal
+                    for (int i = 0; i < voxels.Length; i++)
+                    {
+                        if (voxels[i] == 1)
+                        {
+                            metalVoxelCount++;
+                        }
+                    }
+
+                    // Вычисляем справедливое количество кусочков, используя твою логику
+                    int expectedBits = (int)Math.Floor((float)metalVoxelCount / VoxelsPerBit);
+
+                    // Защита от багов: выдаем минимум 1 кусок, но не больше максимального стака предмета
+                    expectedBits = Math.Max(1, Math.Min(expectedBits, outputSlot.Itemstack.Collectible.MaxStackSize));
+
+                    // Динамически переопределяем количество в слоте вывода
+                    outputSlot.Itemstack.StackSize = expectedBits;
+
+                    // Указываем движку, что мы вмешались в процесс, но разрешаем и ванильному коду отработать
+                    handled = EnumHandling.PassThrough;
+                }
+            }
+        }
     }//!class MetalBitAnvilBehavior
 }//!namespace XSkills

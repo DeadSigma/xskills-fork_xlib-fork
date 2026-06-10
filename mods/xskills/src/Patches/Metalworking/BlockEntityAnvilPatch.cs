@@ -398,35 +398,36 @@ namespace XSkills
                 }
             }
 
-            //heating hits
-            playerAbility = playerSkill?[__state.metalworking.HeatingHitsId];
-            float meltingpoint =
-                __state.anvilItemStack != null ?
-                collectible.GetMeltingPoint(world, null, new DummySlot(__state.anvilItemStack.GetBaseMaterial(__state.workItemStack))) :
-                0.0f;
-
-            // Оборачиваем всё в проверку на null, чтобы избежать вылета игры, если перк не прокачан
-            if (playerAbility != null)
+            //heating hits — пишем температуру ТОЛЬКО на сервере.
+            //Иначе клиентский OnHelveHammerHit из рендера затирает синканное значение и сбрасывает таймер.
+            if (world.Side == EnumAppSide.Server)
             {
-                // Возвращаем 1.0 и 2.0 градуса за удар
-                float heatBonus = playerAbility.Value(0);
+                playerAbility = playerSkill?[__state.metalworking.HeatingHitsId];
+                float meltingpoint =
+                    __state.anvilItemStack != null ?
+                    collectible.GetMeltingPoint(world, null, new DummySlot(__state.anvilItemStack.GetBaseMaterial(__state.workItemStack))) :
+                    0.0f;
 
-                if (meltingpoint > 0.0f)
+                if (playerAbility != null)
                 {
-                    if (temperature < meltingpoint)
+                    float heatBonus = playerAbility.Value(0);
+                    if (meltingpoint > 0.0f)
                     {
-                        temperature = Math.Min(temperature + heatBonus, meltingpoint);
+                        if (temperature < meltingpoint)
+                        {
+                            temperature = Math.Min(temperature + heatBonus, meltingpoint);
+                        }
+                    }
+                    else
+                    {
+                        temperature += heatBonus;
                     }
                 }
-                else
-                {
-                    temperature += heatBonus;
-                }
+
+                double prevLastUpdate = __state.workItemStack.Attributes?.GetTreeAttribute("temperature")?.GetDouble("temperatureLastUpdate") ?? double.MinValue;
+                collectible.SetTemperature(world, __state.workItemStack, temperature, false);
+                ApplyForgeCooldownDelay(world, __state.workItemStack, prevLastUpdate);
             }
-            // Метку остывания запоминаем ДО SetTemperature (она перезапишет её на "сейчас")
-            double prevLastUpdate = __state.workItemStack.Attributes?.GetTreeAttribute("temperature")?.GetDouble("temperatureLastUpdate") ?? double.MinValue;
-            collectible.SetTemperature(world, __state.workItemStack, temperature, false);
-            ApplyForgeCooldownDelay(world, __state.workItemStack, prevLastUpdate);
 
             //blacksmith
             collectible = __state.recipe.Output.ResolvedItemstack.Collectible;

@@ -173,7 +173,7 @@ namespace XSkills
                 "automatedsmithing",
                 "xskills:ability-automatedsmithing",
                 "xskills:abilitydesc-automatedsmithing",
-                10, 1, new int[] { 1 }));
+                10, 6, new int[] { 1, 2, 3, 4, 5, 6 }));
 
             // Шанс спасти заготовку при неудачной закалке
             // 0: шанс в процентах 

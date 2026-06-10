@@ -196,14 +196,13 @@ namespace XSkills
                 6, 2, new int[] { 5, 10, 10, 20 }));
 
             // increased health generation in the sunlight
-            // 0: walkspeed increase
-            // 1: healing increase
-            AbundanceAdaptationId = this.AddAbility(new StatsAbility(
+            // 0: healing increase
+            // 1: hungerrate decrease
+            AbundanceAdaptationId = this.AddAbility(new Ability(
                 "abundanceadaptation",
-                new string[] { "healingeffectivness", "hungerrate" },
                 "xskills:ability-abundanceadaptation",
                 "xskills:abilitydesc-abundanceadaptation",
-                6, 2, new int[] { 5, 10, 10, 20 }));
+                6, 2, new int[] { 5, 10, 10, 20 })); 
 
             //increase block selection range
             //0: value
@@ -278,6 +277,7 @@ namespace XSkills
             this[SteeplechaserId].OnPlayerAbilityTierChanged += OnSteeplechaser;
             //this[LongArmsId].OnPlayerAbilityTierChanged += OnLongArms;
             this[LuminiferousId].OnPlayerAbilityTierChanged += OnLuminiferous;
+            this[AbundanceAdaptationId].OnPlayerAbilityTierChanged += OnAbundanceAdaptation;
 
             ClassRegistry registry = (api as ServerCoreAPI)?.ClassRegistryNative ?? (api as ClientCoreAPI)?.ClassRegistryNative;
             if (registry != null)
@@ -442,6 +442,22 @@ namespace XSkills
             }
             inv.SetSize(playerAbility.Value(0));
             inv.SwitchCD = (Config as SurvivalSkillConfig).invSwitchCD;
+        }
+
+        //AbundanceAdaptation
+        public void OnAbundanceAdaptation(PlayerAbility playerAbility, int oldTier)
+        {
+            // Получаем сущность игрока
+            Vintagestory.API.Common.Entities.Entity entity = playerAbility?.PlayerSkill?.PlayerSkillSet?.Player?.Entity;
+            if (entity == null) return;
+
+            // Если навык вкачан (Tier > 0), берем значения, иначе ставим 0
+            float healingBonus = playerAbility.Tier > 0 ? playerAbility.FValue(0) : 0f;
+            float hungerBonus = playerAbility.Tier > 0 ? playerAbility.FValue(1) : 0f;
+
+            // Применяем! Для голода ЖЕСТКО ставим минус
+            entity.Stats.Set("healingeffectivness", "ability-abundanceadaptation", healingBonus, false);
+            entity.Stats.Set("hungerrate", "ability-abundanceadaptation", -hungerBonus, false);
         }
 
         //nudist

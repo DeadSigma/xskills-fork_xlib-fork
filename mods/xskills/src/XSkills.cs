@@ -1,19 +1,20 @@
-﻿using HarmonyLib;
+﻿using CombatOverhaul.Implementations;
+using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Config;
+using Vintagestory.API.Datastructures;
 using Vintagestory.API.Server;
 using Vintagestory.Client.NoObf;
 using Vintagestory.Common;
 using Vintagestory.Server;
 using XLib.XLeveling;
-using Vintagestory.API.Datastructures;
-using CombatOverhaul.Implementations;
 
 namespace XSkills
 {
@@ -231,6 +232,8 @@ namespace XSkills
         {
             base.AssetsLoaded(api);
             PatchEntities();
+            TryPatchToolsmith(harmony, api);
+
 
             Survival survival = (this.Skills["survival"] as Survival);
             LimitationRequirement specialisations = this.XLeveling.Limitations["specialisations"];
@@ -403,5 +406,35 @@ namespace XSkills
         //        }
         //    }
         //}
+
+        private void TryPatchToolsmith(Harmony harmony, ICoreAPI api)
+        {
+            // Теперь используем нормальный синтаксис LINQ
+            Type toolsmithNuggetType = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(a => a.GetTypes())
+                .FirstOrDefault(t => t.FullName == "Toolsmith.ToolTinkering.Items.ItemWorkableNugget");
+
+            if (toolsmithNuggetType != null)
+            {
+
+                // Вспомогательная функция
+                void PatchMethod(string methodName)
+                {
+                    MethodInfo original = toolsmithNuggetType.GetMethod(methodName, BindingFlags.Public | BindingFlags.Instance);
+                    MethodInfo prefix = typeof(ToolsmithConflictResolver).GetMethod(methodName + "_Prefix", BindingFlags.Public | BindingFlags.Static);
+
+                    if (original != null && prefix != null)
+                    {
+                        harmony.Patch(original, prefix: new HarmonyMethod(prefix));
+                    }
+                }
+
+                // Перехватываем все ключевые методы ковки
+                PatchMethod("TryPlaceOn");
+                PatchMethod("GetMatchingRecipes");
+                PatchMethod("GetRequiredAnvilTier");
+                PatchMethod("CanWork");
+            }
+        }
     }//!class XSkills
 }//!namespace XSkills
