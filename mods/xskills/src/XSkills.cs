@@ -232,7 +232,7 @@ namespace XSkills
         {
             base.AssetsLoaded(api);
             PatchEntities();
-            TryPatchToolsmith(harmony, api);
+            TryPatchToolsmith(api);
 
 
             Survival survival = (this.Skills["survival"] as Survival);
@@ -407,9 +407,8 @@ namespace XSkills
         //    }
         //}
 
-        private void TryPatchToolsmith(Harmony harmony, ICoreAPI api)
+        private void TryPatchToolsmith(ICoreAPI api) // Убрали harmony из аргументов
         {
-            // Теперь используем нормальный синтаксис LINQ
             Type toolsmithNuggetType = AppDomain.CurrentDomain.GetAssemblies()
                 .SelectMany(a => a.GetTypes())
                 .FirstOrDefault(t => t.FullName == "Toolsmith.ToolTinkering.Items.ItemWorkableNugget");
@@ -417,7 +416,9 @@ namespace XSkills
             if (toolsmithNuggetType != null)
             {
 
-                // Вспомогательная функция
+                // Создаем собственный экземпляр Harmony специально для этого фикса
+                Harmony toolsmithHarmony = new Harmony("com.xskills.toolsmithpatch");
+
                 void PatchMethod(string methodName)
                 {
                     MethodInfo original = toolsmithNuggetType.GetMethod(methodName, BindingFlags.Public | BindingFlags.Instance);
@@ -425,15 +426,17 @@ namespace XSkills
 
                     if (original != null && prefix != null)
                     {
-                        harmony.Patch(original, prefix: new HarmonyMethod(prefix));
+                        // Используем наш гарантированно существующий toolsmithHarmony
+                        toolsmithHarmony.Patch(original, prefix: new HarmonyMethod(prefix));
                     }
+                   
                 }
 
-                // Перехватываем все ключевые методы ковки
                 PatchMethod("TryPlaceOn");
                 PatchMethod("GetMatchingRecipes");
                 PatchMethod("GetRequiredAnvilTier");
                 PatchMethod("CanWork");
+
             }
         }
     }//!class XSkills
