@@ -162,16 +162,26 @@ namespace XSkills
                 quality /= count;
                 if (quality > 0.05f)
                 {
+                    // Запоминаем максимальную прочность ДО применения качества XSkills
+                    int oldMax = outputSlot.Itemstack.Collectible.GetMaxDurability(outputSlot.Itemstack);
+
+                    // Применяем качество
                     outputSlot.Itemstack.Attributes.SetFloat("quality", quality);
 
-                    // ФИКС СОВМЕСТИМОСТИ С TOOLSMITH
+                    // Вычисляем новую максимальную прочность ПОСЛЕ применения качества
                     int newMax = outputSlot.Itemstack.Collectible.GetMaxDurability(outputSlot.Itemstack);
 
                     // Удаляем ванильный урон, чтобы предмет считался абсолютно новым
                     outputSlot.Itemstack.Attributes.RemoveAttribute("damage");
 
-                    //я зачем-то комментировал эту строку, не помню зачем, но это сломало совместимость, так что возвращаю
-                    outputSlot.Itemstack.Attributes.SetInt("durability", newMax);
+                    // ФИКС СОВМЕСТИМОСТИ (Toolsmith + Item Rarity)
+                    // Проверяем, использует ли предмет жесткий атрибут "durability" (как делает Toolsmith)
+                    if (outputSlot.Itemstack.Attributes.HasAttribute("durability"))
+                    {
+                        // Берем текущее значение и добавляем только ту разницу, которую дал XSkills
+                        int currentDurability = outputSlot.Itemstack.Attributes.GetInt("durability");
+                        outputSlot.Itemstack.Attributes.SetInt("durability", currentDurability + (newMax - oldMax));
+                    }
                 }
             }
         }

@@ -133,6 +133,8 @@ namespace XSkills
             base.Dispose();
             harmony?.UnpatchAll("XSkillsPatch");
             harmony = null;
+            new Harmony("com.xskills.toolsmithpatch").UnpatchAll("com.xskills.toolsmithpatch");
+            toolsmithPatched = false;
         }
 
         public override void StartPre(ICoreAPI api)
@@ -407,37 +409,52 @@ namespace XSkills
         //    }
         //}
 
-        private void TryPatchToolsmith(ICoreAPI api) // Убрали harmony из аргументов
+        private static bool toolsmithPatched = false;
+
+        private void TryPatchToolsmith(ICoreAPI api)
         {
-            Type toolsmithNuggetType = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(a => a.GetTypes())
-                .FirstOrDefault(t => t.FullName == "Toolsmith.ToolTinkering.Items.ItemWorkableNugget");
+            // В одиночной игре AssetsLoaded вызывается и для клиента, и для сервера —
+            // защищаемся от повторного патча
+            if (toolsmithPatched) return;
 
-            if (toolsmithNuggetType != null)
+            // Ищем тип по имени, НЕ перечисляя все типы каждой сборки.
+            // Иначе падаем на сборках с неразрешимыми зависимостями (OpenTK.Graphics / csogg на сервере)
+            Type toolsmithNuggetType = null;
+            foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
             {
-
-                // Создаем собственный экземпляр Harmony специально для этого фикса
-                Harmony toolsmithHarmony = new Harmony("com.xskills.toolsmithpatch");
-
-                void PatchMethod(string methodName)
+                try
                 {
-                    MethodInfo original = toolsmithNuggetType.GetMethod(methodName, BindingFlags.Public | BindingFlags.Instance);
-                    MethodInfo prefix = typeof(ToolsmithConflictResolver).GetMethod(methodName + "_Prefix", BindingFlags.Public | BindingFlags.Static);
-
-                    if (original != null && prefix != null)
+                    Type t = asm.GetType("Toolsmith.ToolTinkering.Items.ItemWorkableNugget", false);
+                    if (t != null)
                     {
-                        // Используем наш гарантированно существующий toolsmithHarmony
-                        toolsmithHarmony.Patch(original, prefix: new HarmonyMethod(prefix));
+                        toolsmithNuggetType = t;
+                        break;
                     }
-                   
                 }
-
-                PatchMethod("TryPlaceOn");
-                PatchMethod("GetMatchingRecipes");
-                PatchMethod("GetRequiredAnvilTier");
-                PatchMethod("CanWork");
-
+                catch
+                {
+                    // Сборка не смогла резолвить тип — просто пропускаем её
+                }
             }
+
+            if (toolsmithNuggetType == null) return;
+
+            Harmony toolsmithHarmony = new Harmony("com.xskills.toolsmithpatch");
+
+            void PatchMethod(string methodName)
+            {
+                MethodInfo original = toolsmithNuggetType.GetMethod(methodName, BindingFlags.Public | BindingFlags.Instance);
+                MethodInfo prefix = typeof(ToolsmithConflictResolver).GetMethod(methodName + "_Prefix", BindingFlags.Public | BindingFlags.Static);
+                if (original != null && prefix != null)
+                    toolsmithHarmony.Patch(original, prefix: new HarmonyMethod(prefix));
+            }
+
+            PatchMethod("TryPlaceOn");
+            PatchMethod("GetMatchingRecipes");
+            PatchMethod("GetRequiredAnvilTier");
+            PatchMethod("CanWork");
+
+            toolsmithPatched = true;
         }
     }//!class XSkills
 }//!namespace XSkills
