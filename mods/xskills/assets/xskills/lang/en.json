@@ -106,7 +106,7 @@
     "xleveling:requirement-trait": "Required trait: {0}",
     "xlib:skillbook-studied": "<font color=\"#ff9999\">Studied</font>",
     "ability-abundanceadaptation": "Abundance Adaptation",
-    "abilitydesc-abundanceadaptation": "Increases healing effectiveness by {0}% and reduces hunger rate by {1}%.",
+    "abilitydesc-abundanceadaptation": "Increases healing effectiveness by {0}%, but food is consumed {1}% faster as a result.",
     "ability-adrenalinerush": "Adrenaline Rush",
     "abilitydesc-adrenalinerush": "If your health falls below {0}% of your maximum health you will receive the adrenaline rush effect which increases your movement speed by {1}% and reduces the incoming damage by {2}% for {3} seconds. When this effects ends you will be exhausted for {4} seconds.",
     "ability-afforestation": "Afforestation",

@@ -103,7 +103,7 @@
     "xleveling:requirement-trait": "所需特质：{0}",
     "xlib:skillbook-studied": "<font color=\"#ff9999\">已学习</font>",
     "ability-abundanceadaptation": "丰度适应性",
-    "abilitydesc-abundanceadaptation": "提高 {0}% 的治疗效果，并降低 {1}% 的饥饿增长速度。",
+    "abilitydesc-abundanceadaptation": "提高 {0}% 的治疗效果，但食物消耗速度也会提高 {1}%。",
     "ability-adrenalinerush": "肾上腺素激增",
     "abilitydesc-adrenalinerush": "如果你的生命值低于最大\n生命值的{0}%，你将获得\n肾上腺素激增效果，使你的移动\n速度提高{1}%，并在{3}秒内减\n少{2}%的伤害。当这个效果\n结束时你将在{4}秒内\n筋疲力尽。",
     "ability-afforestation": "植树造林",

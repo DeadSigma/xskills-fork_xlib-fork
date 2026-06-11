@@ -106,7 +106,7 @@
     "xleveling:requirement-trait": "Rasgo requerido: {0}",
     "xlib:skillbook-studied": "<font color=\"#ff9999\">Estudiado</font>",
     "ability-abundanceadaptation": "Adaptado a lo bueno",
-    "abilitydesc-abundanceadaptation": "Aumenta la eficacia de la curación en un {0}% y reduce la velocidad a la que aparece el hambre en un {1}%.",
+    "abilitydesc-abundanceadaptation": "Aumenta la eficacia de la curación en un {0}%, pero la comida se consume un {1}% más rápido.",
     "ability-adrenalinerush": "Adrenalina",
     "abilitydesc-adrenalinerush": "Si tu salud cae por debajo del {0}% de tu salud máxima, recibirás el efecto de adrenalina que aumenta tu velocidad de movimiento en un {1}% y reduce el daño que recibes en un {2}% durante {3} segundos. Cuando termine este efecto, estarás exhausto durante {4} segundos.",
     "ability-afforestation": "Reforestación",

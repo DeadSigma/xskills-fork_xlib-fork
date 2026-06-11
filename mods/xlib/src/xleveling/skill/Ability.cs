@@ -336,6 +336,7 @@ namespace XLib.XLeveling
             return this.Requirements.Remove(requirement);
         }
 
+
         /// <summary>
         /// Determines whether the specified player ability is visible.
         /// </summary>
@@ -390,7 +391,9 @@ namespace XLib.XLeveling
                 this.RawConfigRequirements = config.Requirements;
 
                 // Очищаем старые требования конфига (чтобы они не дублировались при перезагрузке)
-                this.Requirements.RemoveAll(r => r is ClassRequirement || r is KnowledgeRequirement);
+                this.Requirements.RemoveAll(r => r is ClassRequirement || r is KnowledgeRequirement || r is TraitRequirement || r is AbilityRequirement);
+
+
 
                 // Превращаем текст в реальные ограничения для игры
                 foreach (JToken token in this.RawConfigRequirements)
@@ -409,6 +412,29 @@ namespace XLib.XLeveling
                             this.AddRequirement(new ClassRequirement(new string[] { reqClass }, minTier, hide));
                         }
                     }
+
+                    else if (type == "ability")
+                    {
+                        string reqSkill = token["skill"]?.ToString();
+                        string reqAbility = token["ability"]?.ToString();
+                        int reqTier = token["requiredTier"]?.ToObject<int>() ?? 1;
+
+                        if (reqSkill != null && reqAbility != null)
+                        {
+                            // Ищем требуемый перк в системе XLeveling
+                            Ability targetAbility = this.Skill.XLeveling.GetSkill(reqSkill)?.FindAbility(reqAbility);
+
+                            if (targetAbility != null)
+                            {
+                                this.AddRequirement(new AbilityRequirement(targetAbility, reqTier, minTier, hide));
+                            }
+                            else
+                            {
+                                this.Skill.XLeveling.Api.Logger.Warning($"AbilityRequirement: Could not find ability '{reqAbility}' in skill '{reqSkill}' for requirement parsing.");
+                            }
+                        }
+                    }
+
                     else if (type == "knowledge")
                     {
                         string reqName = token["name"]?.ToString();

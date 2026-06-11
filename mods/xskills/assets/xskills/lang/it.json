@@ -43,5 +43,5 @@
     "abilitydesc-heavyhits": "Permette di rimuovere le scorie da un pezzo in lavorazione con normali colpi pesanti di martello.",
     "abilitydesc-lightarmorexpert": "Finché non indossi armature che riducono la velocità di movimento, le seguenti statistiche sono migliorate del {0}%:\n{1}",
     "abilitydesc-salvager": "Usando un martello e tenendo premuto il tasto destro del mouse, puoi smontare l'acrid per ottenere frammenti di metallo. La probabilità di ottenere materiali è del {0}%, più un ulteriore {1}% per ogni livello dell'abilità di lavorazione dei metalli. La probabilità massima è del {2}%.",
-    "abilitydesc-abundanceadaptation": "Aumenta l'efficacia delle cure del {0}% e riduce la velocità della fame del {1}%."
+    "abilitydesc-abundanceadaptation": "Aumenta l'efficacia delle cure del {0}%, ma il cibo viene consumato il {1}% più velocemente."
 }

@@ -78,7 +78,7 @@ namespace XSkills
                 "wellrested",
                 "xskills:ability-wellrested",
                 "xskills:abilitydesc-wellrested",
-                1, 2, new int[] { 6, 1440, 12, 1920}));
+                1, 2, new int[] { 6, 1440, 12, 1920 }));
 
             // boni for not wearing clothes
             // 0: walkspeed boni, 1: walkspeed mali
@@ -196,13 +196,14 @@ namespace XSkills
                 6, 2, new int[] { 5, 10, 10, 20 }));
 
             // increased health generation in the sunlight
-            // 0: healing increase
-            // 1: hungerrate decrease
-            AbundanceAdaptationId = this.AddAbility(new Ability(
+            // 0: walkspeed increase
+            // 1: healing increase
+            AbundanceAdaptationId = this.AddAbility(new StatsAbility(
                 "abundanceadaptation",
+                new string[] { "healingeffectivness", "hungerrate" },
                 "xskills:ability-abundanceadaptation",
                 "xskills:abilitydesc-abundanceadaptation",
-                6, 2, new int[] { 5, 10, 10, 20 })); 
+                6, 2, new int[] { 5, 10, 10, 20 }));
 
             //increase block selection range
             //0: value
@@ -258,7 +259,7 @@ namespace XSkills
                 "xskills:ability-laststand",
                 "xskills:abilitydesc-laststand",
                 10, 1, new int[] { 200 }));
-           
+
             // аккуратный чтец (Careful Reader)
             // (3) минимальный уровень
             // (3)  макс тир
@@ -268,7 +269,7 @@ namespace XSkills
                 "xskills:ability-carefulreader",
                 "xskills:abilitydesc-carefulreader",
                 3, 3, new int[] { 5, 8, 16 }));
-            
+
 
             this[LongLifeId].OnPlayerAbilityTierChanged += OnLongLife;
             this[HugeStomachId].OnPlayerAbilityTierChanged += OnHugeStomach;
@@ -277,7 +278,6 @@ namespace XSkills
             this[SteeplechaserId].OnPlayerAbilityTierChanged += OnSteeplechaser;
             //this[LongArmsId].OnPlayerAbilityTierChanged += OnLongArms;
             this[LuminiferousId].OnPlayerAbilityTierChanged += OnLuminiferous;
-            this[AbundanceAdaptationId].OnPlayerAbilityTierChanged += OnAbundanceAdaptation;
 
             ClassRegistry registry = (api as ServerCoreAPI)?.ClassRegistryNative ?? (api as ClientCoreAPI)?.ClassRegistryNative;
             if (registry != null)
@@ -444,29 +444,13 @@ namespace XSkills
             inv.SwitchCD = (Config as SurvivalSkillConfig).invSwitchCD;
         }
 
-        //AbundanceAdaptation
-        public void OnAbundanceAdaptation(PlayerAbility playerAbility, int oldTier)
-        {
-            // Получаем сущность игрока
-            Vintagestory.API.Common.Entities.Entity entity = playerAbility?.PlayerSkill?.PlayerSkillSet?.Player?.Entity;
-            if (entity == null) return;
-
-            // Если навык вкачан (Tier > 0), берем значения, иначе ставим 0
-            float healingBonus = playerAbility.Tier > 0 ? playerAbility.FValue(0) : 0f;
-            float hungerBonus = playerAbility.Tier > 0 ? playerAbility.FValue(1) : 0f;
-
-            // Применяем! Для голода ЖЕСТКО ставим минус
-            entity.Stats.Set("healingeffectivness", "ability-abundanceadaptation", healingBonus, false);
-            entity.Stats.Set("hungerrate", "ability-abundanceadaptation", -hungerBonus, false);
-        }
-
         //nudist
         public void OnNudist(PlayerAbility playerAbility, int oldTier)
         {
             IPlayer player = playerAbility.PlayerSkill.PlayerSkillSet?.Player;
             if (player == null) return;
 
-            InventoryCharacter inv = 
+            InventoryCharacter inv =
                 player.InventoryManager?.
                 GetOwnInventory(GlobalConstants.characterInvClassName) as InventoryCharacter;
             if (inv == null) return;
@@ -508,7 +492,7 @@ namespace XSkills
             if (inv[(int)EnumCharacterDressType.ArmorBody].Itemstack != null) clothCounter += 2.0f; //armorbody
             if (inv[(int)EnumCharacterDressType.ArmorLegs].Itemstack != null) clothCounter += 2.0f; //armorlegs
 
-            for (int ii = (int)EnumCharacterDressType.ArmorLegs + 1; ii < inv.Count ; ++ii)
+            for (int ii = (int)EnumCharacterDressType.ArmorLegs + 1; ii < inv.Count; ++ii)
             {
                 if (inv[ii].Itemstack != null) clothCounter += 1.5f;
             }
@@ -595,17 +579,17 @@ namespace XSkills
                 float yearRel = calendar.YearRel + (float)ii / calendar.DaysPerYear;
                 if (yearRel > 1.0f) { yearRel -= 1.0f; }
 
-                minTemperature[ii] =  100.0f;
+                minTemperature[ii] = 100.0f;
                 maxTemperature[ii] = -100.0f;
 
-                minRainfall[ii] =  1.0f;
+                minRainfall[ii] = 1.0f;
                 maxRainfall[ii] = -1.0f;
 
-                minCloudness[ii] =  1.0f;
+                minCloudness[ii] = 1.0f;
                 maxCloudness[ii] = -1.0f;
 
                 sunrise[ii] = 1.0f;
-                sunset[ii]  = 0.0f;
+                sunset[ii] = 0.0f;
 
                 for (int jj = 0; jj < 4; ++jj)
                 {
@@ -715,9 +699,9 @@ namespace XSkills
             SystemTemporalStability temporal = api.ModLoader.GetModSystem<SystemTemporalStability>();
             if (temporal != null)
             {
-                if(temporal.StormData.nextStormTotalDays <= days)
+                if (temporal.StormData.nextStormTotalDays <= days)
                 {
-                    switch(temporal.StormData.nextStormStrength)
+                    switch (temporal.StormData.nextStormStrength)
                     {
                         case EnumTempStormStrength.Light:
                             builder.AppendLine(Lang.Get("A light temporal storm is approaching"));
@@ -1050,7 +1034,7 @@ namespace XSkills
             IPlayer[] players = capi.World.GetPlayersAround(player.Pos.XYZ, 32.0f, 32.0f);
             foreach (IPlayer player1 in players)
             {
-                int playerBrightness = Math.Clamp(player1.Entity?.LightHsv?[2] ?? 0, (byte) 0, (byte) 32);
+                int playerBrightness = Math.Clamp(player1.Entity?.LightHsv?[2] ?? 0, (byte)0, (byte)32);
                 if (playerBrightness == 0) continue;
                 int distance = (int)player1.Entity.Pos.DistanceTo(player.Pos);
 

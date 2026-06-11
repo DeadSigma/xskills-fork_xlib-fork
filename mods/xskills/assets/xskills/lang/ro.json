@@ -106,7 +106,7 @@
     "xleveling:requirement-trait": "Trăsătură necesară: {0}",
     "xlib:skillbook-studied": "<font color=\"#ff9999\">Studiat</font>",
     "ability-abundanceadaptation": "Abundance Adaptation",
-    "abilitydesc-abundanceadaptation": "Crește eficiența vindecării cu {0}% și reduce rata de înfometare cu {1}%.",
+    "abilitydesc-abundanceadaptation": "Crește eficiența vindecării cu {0}%, dar hrana este consumată cu {1}% mai repede.",
     "ability-adrenalinerush": "Adrenaline Rush",
     "abilitydesc-adrenalinerush": "If your health falls below {0}% of your maximum health you will receive the adrenaline rush effect which increases your movement speed by {1}% and reduces the incoming damage by {2}% for {3} seconds. When this effects ends you will be exhausted for {4} seconds.",
     "ability-afforestation": "Afforestation",

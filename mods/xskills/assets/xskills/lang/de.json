@@ -106,7 +106,7 @@
     "xleveling:requirement-trait": "Erforderliche Eigenschaft: {0}",
     "xlib:skillbook-studied": "<font color=\"#ff9999\">Erlernt</font>",
     "ability-abundanceadaptation": "Überflussanpassung",
-    "abilitydesc-abundanceadaptation": "Erhöht die Heilungseffizienz um {0}% und verringert die Geschwindigkeit des Hungerns um {1}%.",
+    "abilitydesc-abundanceadaptation": "Erhöht die Heilungseffizienz um {0} %, dafür wird Nahrung jedoch um {1} % schneller verbraucht.",
     "ability-adrenalinerush": "Adrenalinrausch",
     "abilitydesc-adrenalinerush": "Wenn deine Gesundheit unter {0}% deiner maximalen Gesundheit fällt, erhältst du den Adrenalinschub-Effekt, der deine Bewegungsgeschwindigkeit um {1}% erhöht und den ankommenden Schaden für {3} Sekunden um {2}% verringert. Wenn dieser Effekt endet, bist du für {4} Sekunden erschöpft.",
     "ability-afforestation": "Aufforstung",

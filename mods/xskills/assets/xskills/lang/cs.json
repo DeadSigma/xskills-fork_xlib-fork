@@ -106,7 +106,7 @@
     "xleveling:requirement-trait": "Požadovaná vlastnost: {0}",
     "xlib:skillbook-studied": "<font color=\"#ff9999\">Naučeno</font>",
     "ability-abundanceadaptation": "Adaptace hojnosti",
-    "abilitydesc-abundanceadaptation": "Zvyšuje účinnost léčení o {0}% a snižuje rychlost hladovění o {1}%.",
+    "abilitydesc-abundanceadaptation": "Zvyšuje účinnost léčení o {0} %, ale kvůli tomu se jídlo spotřebovává o {1} % rychleji.",
     "ability-adrenalinerush": "Adrenalinové zatmění",
     "abilitydesc-adrenalinerush": "Pokud vaše zdraví klesne pod {0} % vašeho maximálního zdraví, dostanete adrenalinový efekt, který zvýší vaši rychlost pohybu o {1} % a sníží příchozí poškození o {2} % za {3 } sekund. Po skončení těchto efektů budete vyčerpáni na {4} sekund.",
     "ability-afforestation": "Zalesňování",

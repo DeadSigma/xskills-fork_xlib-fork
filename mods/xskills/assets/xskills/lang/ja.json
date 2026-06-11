@@ -106,7 +106,7 @@
     "xleveling:requirement-trait": "必要な特性: {0}",
     "xlib:skillbook-studied": "<font color=\"#ff9999\">習得済み</font>",
     "ability-abundanceadaptation": "高適応力",
-    "abilitydesc-abundanceadaptation": "回復効果を{0}%向上させ、空腹の進行速度を{1}%減少させます。",
+    "abilitydesc-abundanceadaptation": "回復効果が{0}%向上しますが、その代わり食料の消費速度が{1}%速くなります。",
     "ability-adrenalinerush": "アドレナリンラッシュ",
     "abilitydesc-adrenalinerush": "HPが最大体力の{0}%以下になると、{3}秒間移動速度が{1}%増加し、被ダメージが{2}%減少するアドレナリンラッシュの効果を得ることが出来ます。この効果が終了すると{4}秒間疲弊状態になります。",
     "ability-afforestation": "植林",

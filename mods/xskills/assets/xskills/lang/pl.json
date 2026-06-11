@@ -106,7 +106,7 @@
     "xleveling:requirement-trait": "Wymagana cecha: {0}",
     "xlib:skillbook-studied": "<font color=\"#ff9999\">Poznano</font>",
     "ability-abundanceadaptation": "Adaptacja obfitości",
-    "abilitydesc-abundanceadaptation": "Zwiększa skuteczność leczenia o {0}% i zmniejsza tempo narastania głodu o {1}%.",
+    "abilitydesc-abundanceadaptation": "Zwiększa skuteczność leczenia o {0}%, ale żywność jest zużywana o {1}% szybciej.",
     "ability-adrenalinerush": "Przypływ adrenaliny",
     "abilitydesc-adrenalinerush": "Jeśli zdrowie spadnie poniżej {0}% maksymalnego zdrowia, otrzymasz efekt przypływu adrenaliny, który zwiększa twoją szybkość ruchu o {1}% i zmniejsza otrzymywane obrażenia o {2}% przez {3} sekund. Kiedy ten efekt się skończy, będziesz wyczerpany przez {4} sekund.",
     "ability-afforestation": "Zalesianie",

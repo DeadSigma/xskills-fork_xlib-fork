@@ -106,7 +106,7 @@
     "xleveling:requirement-trait": "Traço necessário: {0}",
     "xlib:skillbook-studied": "<font color=\"#ff9999\">Estudado</font>",
     "ability-abundanceadaptation": "Adaptação à Abundância",
-    "abilitydesc-abundanceadaptation": "Aumenta a eficácia da cura em {0}% e reduz a taxa de fome em {1}%.",
+    "abilitydesc-abundanceadaptation": "Aumenta a eficácia da cura em {0}%, mas a comida é consumida {1}% mais rápido.",
     "ability-adrenalinerush": "Adrenalina",
     "abilitydesc-adrenalinerush": "Se sua saúde cair abaixo de {0}% de sua saúde máxima, você receberá o efeito de adrenalina que aumenta sua velocidade de movimento em {1}% e reduz o dano recebido em {2}% por {3} segundos. Quando esse efeito terminar, você ficará exausto por {4} segundos.",
     "ability-afforestation": "Afloramento",
