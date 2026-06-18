@@ -29,6 +29,9 @@
     <Reference Include="ACulinaryArtillery">
       <HintPath>..\..\..\vshelper\dependencies\ACulinaryArtillery.dll</HintPath>
     </Reference>
+	  <Reference Include="ElectricalProgressive-QOL">
+		  <HintPath>..\..\..\vshelper\dependenciesElectricalProgressive-QOL.dll</HintPath>
+	  </Reference>
     <Reference Include="cairo-sharp">
       <HintPath>$(VINTAGE_STORY)\Lib\cairo-sharp.dll</HintPath>
     </Reference>

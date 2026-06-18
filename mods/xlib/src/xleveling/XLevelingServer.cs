@@ -317,7 +317,7 @@ namespace XLib.XLeveling
                 if (Directory.Exists(configDir))
                 {
                     List<string> skillsToReset = new List<string> {
-            "metalworking" 
+            "combat" 
             // "combat", 
             // "farming",
             // "all" 

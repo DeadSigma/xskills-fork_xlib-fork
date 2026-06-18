@@ -76,9 +76,7 @@ namespace XSkills
         {
             if (__instance.Api.Side != EnumAppSide.Server) return;
 
-            // Owner на миске часто не проставлен — берём того, кто реально крутит миску.
             IPlayer byPlayer = ResolvePlayer(__instance);
-
             if (byPlayer?.Entity == null) return;
 
             Cooking cooking = byPlayer.Entity.Api.ModLoader.GetModSystem<XLeveling>()?.GetSkill("cooking") as Cooking;
@@ -89,29 +87,28 @@ namespace XSkills
             int cooked = (outputStack?.StackSize ?? 0) - __state.outputStackSize;
             if (cooked <= 0) return;
 
-            bool isMeal = outputStack.Collectible is IBlockMealContainer;
+            bool isContainer = outputStack.Collectible is IBlockMealContainer
+                               || outputStack.Collectible is BlockLiquidContainerBase;
 
-            // качество / свежесть / опыт / порции для блюд-контейнеров
+            // качество/свежесть/опыт; для контейнеров (суп/жидкость) тут же растут порции/объём
             cooking.ApplyAbilities(outputSlot, byPlayer, __state.quality, cooked, __state.stacks);
 
-            // для контейнеров-блюд порции уже увеличены внутри ApplyAbilities
-            if (isMeal || outputSlot.Itemstack == null) return;
+            // контейнеры обрабатываются внутри ApplyAbilities на месте — стак не трогаем
+            if (isContainer || outputSlot.Itemstack == null) return;
 
-            // штучные предметы (тесто и т.п.): считаем бонус сами и дропаем его
+            // штучные предметы / тесто: считаем бонус сами и кладём прямо в слот
             PlayerAbility dilution = byPlayer.Entity.GetBehavior<PlayerSkillSet>()?[cooking.Id]?[cooking.DilutionId];
             if (dilution == null || dilution.Tier <= 0) return;
 
-            // держим базовое количество в слоте (откатываем возможное раздувание стака)
-            outputSlot.Itemstack.StackSize = __state.outputStackSize + cooked;
-            outputSlot.MarkDirty();
-
+            int baseTotal = __state.outputStackSize + cooked;
             float bonusF = cooked * dilution.SkillDependentFValue();
             int bonus = (int)bonusF + (__instance.Api.World.Rand.NextDouble() < (bonusF - (int)bonusF) ? 1 : 0);
-            if (bonus <= 0) return;
 
-            ItemStack dropStack = outputSlot.Itemstack.Clone();
-            dropStack.StackSize = bonus;
-            __instance.Api.World.SpawnItemEntity(dropStack, __instance.Pos.ToVec3d().Add(0.5, 1.0, 0.5));
+            int target = baseTotal + bonus;
+            if (outputSlot.MaxSlotStackSize < target) outputSlot.MaxSlotStackSize = target;
+            outputSlot.Itemstack.StackSize = target;
+            outputSlot.MarkDirty();
+
         }
 
         /// <summary>
@@ -141,7 +138,7 @@ namespace XSkills
                 foreach (var uid in opened)
                 {
                     IPlayer plr = be.Api.World.PlayerByUid(uid);
-                    if (plr?.Entity != null) {  return plr; }
+                    if (plr?.Entity != null) { return plr; }
                 }
 
             return null;

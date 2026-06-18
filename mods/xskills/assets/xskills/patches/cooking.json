@@ -30,6 +30,13 @@
         ]
     },
     {
+        "dependsOn": [ { "modid": "electricalprogressiveqol" } ],
+        "op": "addmerge",
+        "path": "/entityBehaviors",
+        "file": "electricalprogressiveqol:blocktypes/efruitpress",
+        "value": [ { "name": "XskillsOwnable" } ]
+    },
+    {
         "dependsOn": [ { "modid": "chiseltools" } ],
         "file": "chiseltools:blocktypes/chiseledfirepit",
         "op": "addmerge",

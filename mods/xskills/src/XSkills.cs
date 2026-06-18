@@ -92,6 +92,11 @@ namespace XSkills
                 {
                     ApplyCOPatch(xskills);
                 }
+
+                if (api.ModLoader.IsModEnabled("electricalprogressiveqol"))
+                {
+                    BlockEntityEFruitPressPatch.Apply(harmony);
+                }
             }
         }
 

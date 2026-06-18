@@ -35,6 +35,7 @@ namespace XSkills
         public int BurningRageId { get; private set; }
         public int BloodlustId { get; private set; }
         public int MonsterExpertId { get; private set; }
+        public int SwiftSpearId { get; private set; }
         public Combat(ICoreAPI api) : base("combat", "xskills:skill-combat", "xskills:group-survival")
         {
             (XLeveling.Instance(api))?.RegisterSkill(this);
@@ -68,6 +69,14 @@ namespace XSkills
                 "xskills:ability-spearman",
                 "xskills:abilitydesc-spearman",
                 1, 3, new int[] { 10, 1, 20, 20, 2, 40, 20, 2, 60 }));
+
+            // Уменьшает время прицеливания копьем
+            // 0: процент ускорения прицеливания
+            SwiftSpearId = this.AddAbility(new Ability(
+                "swiftspear",
+                "xskills:ability-swiftspear",
+                "xskills:abilitydesc-swiftspear",
+                5, 3, new int[] { 15, 25, 35 })); // 5 - требуемый уровень навыка, 3 - макс. тир
 
             // increases damage absorbed by shields
             // 0: base value
