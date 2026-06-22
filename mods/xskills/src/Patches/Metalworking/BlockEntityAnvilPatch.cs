@@ -373,14 +373,20 @@ namespace XSkills
             //metal recovery
             playerAbility = playerSkill?[__state.metalworking.MetalRecoveryId];
             int divideBy = playerAbility?.Value(0) ?? 0;
-            if (divideBy > 0 && !__state.wasIronBloom)
+
+            // Убрали проверку !__state.wasIronBloom, так как шлак и так не учитывается в splitCount
+            if (divideBy > 0)
             {
                 int bitsCount = __state.splitCount / divideBy;
                 if (bitsCount > 0)
                 {
                     string domain = config.useVanillaBits ? "game" : "xskills";
                     string baseMaterial = __state.anvilItemStack.GetBaseMaterial(__state.workItemStack).Collectible.LastCodePart();
+
                     if (baseMaterial == "steel" && !__instance.Api.ModLoader.IsModEnabled("smithingplus")) baseMaterial = "blistersteel";
+
+                    // Подстраховка: если материал крицы определился как ironbloom, приводим его к обычному железу
+                    if (baseMaterial == "ironbloom") baseMaterial = "iron";
 
                     AssetLocation MetalBitsCode = new AssetLocation(domain, "metalbit" + "-" + baseMaterial);
                     Item metalBitsItem = world.GetItem(MetalBitsCode);

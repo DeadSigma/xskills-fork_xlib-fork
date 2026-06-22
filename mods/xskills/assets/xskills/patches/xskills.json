@@ -16,6 +16,22 @@
         }
     },
     {
+        "file": "game:entities/humanoid/player",
+        "op": "add",
+        "path": "/client/behaviors/-",
+        "value": {
+            "code": "XSkillsEntity"
+        }
+    },
+    {
+        "file": "game:entities/humanoid/player",
+        "op": "add",
+        "path": "/server/behaviors/-",
+        "value": {
+            "code": "XSkillsEntity"
+        }
+    },
+    {
         "file": "xskills:skills/survival",
         "op": "addmerge",
         "path": "/classexpmult",
