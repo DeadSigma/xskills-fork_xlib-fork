@@ -143,7 +143,7 @@
   "abilitydesc-bitforging": "Pozwala wykuwać przedmioty bezpośrednio z metalowych fragmentów po osiągnięciu przez nie temperatury roboczej. Każdy fragment dodaje niewielką ilość materiału do obrabianego przedmiotu.",
 
   "ability-blacksmith": "Kowal",
-  "abilitydesc-blacksmith": "Przedmioty, które wykuwasz na kowadle, mogą teraz posiadać jakość z bazową wartością {0} i maksymalną wartością {1}. Tworzenie narzędzi lub zbroi z częściami o określonej jakości stworzy przedmioty z jakością. Zbroje i narzędzia z jakością będą miały zwiększone statystyki. Możesz hartować przedmioty, aby zwiększyć ich jakość.",
+  "abilitydesc-blacksmith": "Ustawia parametr jakości dla wykutych przez ciebie przedmiotów.\nJakość zwiększa statystyki przedmiotu i zależy od twojej umiejętności obróbki metalu, doświadczenia w kuciu przedmiotów określonego typu oraz szczęścia.\n\n- Maksymalna jakość po wykuciu: 3 > 8\n- Maksymalny całkowity limit jakości: {1}\n\nJakość bazowa zależy od:\n- Poziomu obróbki metalu: 0.1 jakości za każdy poziom (do poziomu 25).\n- Doświadczenia w kuciu: 0.01 jakości za każdy wytworzony przedmiot tej samej kategorii — narzędzia, pancerze lub broń (maksymalnie liczy się 200 przedmiotów w każdej kategorii).\n\nAby osiągnąć maksymalny limit, część musi zostać zahartowana",
 
   "ability-blaster": "Górnik strzałowy",
   "abilitydesc-blaster": "Twoje umiejętności Kamieniołamacz, Kamieniarza, Górnika rud i Górnik klejnotów są również stosowane, jeśli wysadzisz skałę lub rudy bombami.",

@@ -150,7 +150,7 @@ namespace XLib.XLeveling
             if (unlearnToggle == null)
             {
                 unlearnToggle = new GuiElementToggleButton(
-                    this.capi, null, 
+                   this.capi, "",
                     Lang.GetUnformatted("xlib:unlearn"), 
                     CairoFont.WhiteDetailText(), 
                     (bool state) => { if (state) { unlearnAbilityToggle.On = false; } }, 
@@ -164,7 +164,7 @@ namespace XLib.XLeveling
             if (unlearnAbilityToggle == null)
             {
                 unlearnAbilityToggle = new GuiElementToggleButton(
-                    this.capi, null, 
+                   this.capi, "",
                     Lang.GetUnformatted("xlib:unlearnAbility"), 
                     CairoFont.WhiteDetailText(),
                     (bool state) => { if (state) { unlearnToggle.On = false; } },
@@ -177,7 +177,7 @@ namespace XLib.XLeveling
 
             if (sparringToggle == null)
             {
-                sparringToggle = new GuiElementToggleButton(this.capi, null, Lang.GetUnformatted("xlib:sparringmode"), CairoFont.WhiteDetailText(), OnSparringToggle, sparringButton, true);
+                sparringToggle = new GuiElementToggleButton(this.capi, "", Lang.GetUnformatted("xlib:sparringmode"), CairoFont.WhiteDetailText(), OnSparringToggle, sparringButton, true);
             }
             else
             {

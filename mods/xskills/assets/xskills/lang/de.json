@@ -143,7 +143,7 @@
   "abilitydesc-bitforging": "Ermöglicht das Schmieden von Gegenständen direkt aus Metallstücken, sobald diese Arbeitstemperatur erreicht haben. Jedes Metallstück fügt dem Werkstück eine kleine Menge Material hinzu.",
 
   "ability-blacksmith": "Schmied",
-  "abilitydesc-blacksmith": "Gegenstände, die du auf einem Amboss schmiedest, können jetzt Qualität mit einem Grundwert von {0} und einem Höchstwert von {1} Qualität haben. Wenn du Werkzeuge oder Rüstungen aus Teilen mit Qualität herstellst, werden auch die Gegenstände mit Qualität hergestellt. Rüstungen und Werkzeuge mit Qualität haben erhöhte Werte. Du kannst Gegenstände abschrecken, um deren Qualität zu verbessern.",
+  "abilitydesc-blacksmith": "Legt den Qualitätswert für von euch geschmiedete Gegenstände fest.\nQualität verbessert die Werte eines Gegenstands und hängt von eurer Metallverarbeitungs-Fertigkeit, eurer Schmiedeerfahrung mit Gegenständen eines bestimmten Typs und eurem Glück ab.\n\n- Maximale Qualität nach dem Schmieden: 3 > 8\n- Maximale Gesamtqualitätsgrenze: {1}\n\nDie Grundqualität hängt ab von:\n- Metallverarbeitungsstufe: 0,1 Qualität pro Stufe (bis Stufe 25).\n- Schmiedeerfahrung: 0,01 Qualität pro hergestelltem Gegenstand derselben Kategorie — Werkzeuge, Rüstung oder Waffen (maximal 200 Gegenstände pro Kategorie werden berücksichtigt).\n\nUm die maximale Grenze zu erreichen, muss das Werkstück gehärtet werden",
 
   "ability-blaster": "Sprengmeister",
   "abilitydesc-blaster": "Deine Fähigkeiten 'Steinbrecher', 'Steinmetz', 'Erzschürfer' und 'Edelsteinschürfer' werden auch angewendet, wenn du Steine oder Erze mit Bomben in die Luft jagst.",

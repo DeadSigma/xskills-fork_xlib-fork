@@ -143,7 +143,7 @@
   "abilitydesc-bitforging": "Permite forjarea obiectelor direct din fragmente metalice odată ce acestea ating temperatura de lucru. Fiecare fragment adaugă o cantitate mică de material piesei.",
 
   "ability-blacksmith": "Blacksmith",
-  "abilitydesc-blacksmith": "Items you forge on an anvil can now have quality with a base value of {0} and a maximum value of {1} quality. Creating tools or armor with quality parts will also create items with quality. Armor and tools with quality will have increased stats. You can quench items to increase their quality.",
+  "abilitydesc-blacksmith": "Setează parametrul de calitate pentru obiectele forjate de tine.\nCalitatea îmbunătățește statisticile obiectului și depinde de abilitatea ta de prelucrare a metalului, de experiența ta în forjarea obiectelor de un anumit tip și de noroc.\n\n- Calitatea maximă după forjare: 3 > 8\n- Pragul maxim total de calitate: {1}\n\nCalitatea de bază depinde de:\n- Nivelul de prelucrare a metalului: 0.1 calitate pentru fiecare nivel (până la nivelul 25).\n- Experiența de forjare: 0.01 calitate pentru fiecare obiect creat din aceeași categorie — unelte, armuri sau arme (sunt luate în calcul maximum 200 de obiecte din fiecare categorie).\n\nPentru a atinge pragul maxim, piesa trebuie călită",
 
   "ability-blaster": "Blaster",
   "abilitydesc-blaster": "Your Stonebreaker, Stonecutter, ore miner and gemstone miner abilities are also applied if you blow up rock or ores with bombs.",

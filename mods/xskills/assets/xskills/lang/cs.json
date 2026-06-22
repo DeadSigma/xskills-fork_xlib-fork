@@ -143,7 +143,7 @@
   "abilitydesc-bitforging": "Umožňuje kovat předměty přímo z kovových úlomků, jakmile dosáhnou pracovní teploty. Každý úlomek přidá malé množství materiálu k polotovaru.",
 
   "ability-blacksmith": "Kovář",
-  "abilitydesc-blacksmith": "Předměty, které vykováte na kovadlině, mohou mít nyní kvalitu se základní hodnotou {0} a maximální hodnotou kvality {1}. Vytváření nástrojů nebo brnění s kvalitními součástmi vytvoří také kvalitní předměty. Brnění a nástroje s kvalitou budou mít zvýšené statistiky.",
+  "abilitydesc-blacksmith": "Určuje parametr kvality pro předměty, které ukováte.\nKvalita zvyšuje vlastnosti předmětu a závisí na vaší dovednosti zpracování kovů, zkušenostech s kováním předmětů konkrétního typu a štěstí.\n\n- Maximální kvalita po vykování: 3 > 8\n- Maximální celkový limit kvality: {1}\n\nZákladní kvalita závisí na:\n- Úrovni zpracování kovů: 0.1 bodu kvality za každou úroveň (až do 25. úrovně).\n- Zkušenostech s kováním: 0.01 bodu kvality za každý vyrobený předmět stejné kategorie — nástroje, zbroj nebo zbraně (maximálně se započítává 200 předmětů v každé kategorii).\n\nPro dosažení maximálního limitu je nutné součást zakalit",
 
   "ability-blaster": "Bouchač",
   "abilitydesc-blaster": "Vaše schopnosti lamače kamene, kameníka, těžaře rud a těžaře drahokamů se také uplatní, pokud bombami vyhodíte do povětří kámen nebo rudy.",

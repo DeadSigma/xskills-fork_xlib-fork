@@ -143,7 +143,7 @@
   "abilitydesc-bitforging": "Gör det möjligt att smida föremål direkt från metallbitar när de når arbetstemperatur. Varje bit tillför en liten mängd material till arbetsstycket.",
 
   "ability-blacksmith": "Blacksmith",
-  "abilitydesc-blacksmith": "Items you forge on an anvil can now have quality with a base value of {0} and a maximum value of {1} quality. Creating tools or armor with quality parts will also create items with quality. Armor and tools with quality will have increased stats. You can quench items to increase their quality.",
+  "abilitydesc-blacksmith": "Anger kvalitetsparametern för föremål som du smider.\nKvalitet förbättrar föremålets egenskaper och beror på din metallbearbetningsfärdighet, din smideserfarenhet med föremål av en viss typ och tur.\n\n- Maximal kvalitet efter smide: 3 > 8\n- Maximal total kvalitetsgräns: {1}\n\nGrundkvaliteten beror på:\n- Metallbearbetningsnivå: 0.1 kvalitet per nivå (upp till nivå 25).\n- Smideserfarenhet: 0.01 kvalitet per tillverkat föremål i samma kategori — verktyg, rustningar eller vapen (högst 200 föremål i varje kategori räknas).\n\nFör att nå den maximala gränsen måste delen härdas",
 
   "ability-blaster": "Blaster",
   "abilitydesc-blaster": "Your Stonebreaker, Stonecutter, ore miner and gemstone miner abilities are also applied if you blow up rock or ores with bombs.",

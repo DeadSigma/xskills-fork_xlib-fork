@@ -143,7 +143,7 @@
   "abilitydesc-bitforging": "Permite forjar objetos directamente a partir de fragmentos metálicos cuando alcanzan la temperatura de trabajo. Cada fragmento añade una pequeña cantidad de material a la pieza.",
 
   "ability-blacksmith": "Marca registrada",
-  "abilitydesc-blacksmith": "Los artículos que forjas en un yunque ahora pueden tener calidad con un valor base de {0} y un valor máximo de calidad {1}. Crear herramientas o armaduras con piezas de calidad les otorgará estadísticas mejoradas. Puedes templar objetos para aumentar su calidad.",
+  "abilitydesc-blacksmith": "Establece el parámetro de calidad para los objetos forjados por ti.\nLa calidad mejora las estadísticas del objeto y depende de tu habilidad de Metalurgia, tu experiencia forjando objetos de un tipo concreto y la suerte.\n\n- Calidad máxima tras la forja: 3 > 8\n- Límite máximo total de calidad: {1}\n\nLa calidad base depende de:\n- Nivel de Metalurgia: 0.1 de calidad por cada nivel (hasta el nivel 25).\n- Experiencia de forja: 0.01 de calidad por cada objeto fabricado de la misma categoría — herramientas, armaduras o armas (se cuentan como máximo 200 objetos por categoría).\n\nPara alcanzar el límite máximo, la pieza debe templarse",
 
   "ability-blaster": "Detonador experimentado",
   "abilitydesc-blaster": "Tus habilidades Romperrocas, Cortarrocas, Minero de menas y Minero de gemas también se aplican si explotas rocas o minerales con bombas.",

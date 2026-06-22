@@ -39,8 +39,10 @@ namespace XLib.XLeveling
         {
             ElementBounds dialogBounds = ElementStdBounds.AutosizedMainDialog.WithParent(parentBounds).WithAlignment(EnumDialogArea.RightMiddle).WithFixedOffset(240, 0);
             ElementBounds bgBounds = ElementBounds.Fill.WithFixedPadding(GuiStyle.ElementToDialogPadding);
-            ElementBounds nameBounds = ElementBounds.Fixed(0, 0, 200, 24);
-            ElementBounds infoBounds = ElementBounds.Fixed(0, 28, 200, 200);
+
+            // Увеличиваем ширину с 200 до 400 
+            ElementBounds nameBounds = ElementBounds.Fixed(0, 0, 400, 24);
+            ElementBounds infoBounds = ElementBounds.Fixed(0, 28, 400, 200);
 
             bgBounds.BothSizing = ElementSizing.FitToChildren;
             bgBounds.WithChildren(nameBounds, infoBounds);

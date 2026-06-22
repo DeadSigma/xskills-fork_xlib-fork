@@ -143,7 +143,7 @@
   "abilitydesc-bitforging": "Allows forging items directly from metal bits once they reach working temperature. Each bit adds a small amount of material to the work item.",
 
   "ability-blacksmith": "Blacksmith",
-  "abilitydesc-blacksmith": "Items you forge on an anvil can now have quality with a base value of {0} and a maximum value of {1} quality. Creating tools or armor with quality parts will also create items with quality. Armor and tools with quality will have increased stats. You can quench items to increase their quality.",
+  "abilitydesc-blacksmith": "Sets the quality parameter for items forged by you.\nQuality improves an item's stats and depends on your Metalworking skill, your forging experience with items of a specific type, and luck.\n\n- Maximum quality after forging: 3 > 8\n- Maximum overall quality cap: {1}\n\nBase quality depends on:\n- Metalworking level: 0.1 quality per level (up to level 25).\n- Forging experience: 0.01 quality per crafted item of the same category — tools, armor, or weapons (up to 200 items in each category are counted).\n\nTo reach the maximum cap, the part must be quenched",
 
   "ability-blaster": "Blaster",
   "abilitydesc-blaster": "Your Stonebreaker, Stonecutter, ore miner and gemstone miner abilities are also applied if you blow up rock or ores with bombs.",
