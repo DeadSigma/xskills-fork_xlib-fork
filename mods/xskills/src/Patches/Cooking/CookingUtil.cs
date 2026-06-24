@@ -47,7 +47,7 @@ namespace XSkills
             IPlayer player = GetOwnerFromInventory(cookingSlotsProvider as InventoryBase);
             if (player?.Entity == null) return old;
 
-            Cooking cooking = player.Entity.Api.ModLoader.GetModSystem<XLeveling>()?.GetSkill("cooking") as Cooking;
+            Cooking cooking = player.Entity.Api?.ModLoader?.GetModSystem<XLeveling>()?.GetSkill("cooking") as Cooking;
             if (cooking == null) return old;
 
             //canteen cook
@@ -65,7 +65,7 @@ namespace XSkills
         public static float GetCookingTimeMultiplier(BlockEntity entity)
         {
             IPlayer byPlayer = entity.GetBehavior<BlockEntityBehaviorOwnable>()?.Owner;
-            Cooking cooking = byPlayer?.Entity?.Api.ModLoader.GetModSystem<XLeveling>()?.GetSkill("cooking") as Cooking;
+            Cooking cooking = byPlayer?.Entity?.Api?.ModLoader?.GetModSystem<XLeveling>()?.GetSkill("cooking") as Cooking;
             if (cooking == null) return 1.0f;
             PlayerSkill skill = byPlayer.Entity.GetBehavior<PlayerSkillSet>()?[cooking.Id];
             if (skill == null) return 1.0f;
