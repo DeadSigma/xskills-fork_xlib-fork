@@ -152,7 +152,7 @@
   "abilitydesc-bloodlust": "Toda vez que você matar um inimigo, você ganhará uma pilha do efeito de sede de sangue. Isso aumenta o dano causado por {0}% por pilha e o dano recebido por {1}% por pilha. Esse efeito pode acumular até {3} vezes e dura {2} segundos.",
 
   "ability-bloomeryexpert": "Especialista em Bloomery",
-  "abilitydesc-bloomeryexpert": "Você pode retirar resultados de fusão de uma bloomery sem destruí-la.",
+  "abilitydesc-bloomeryexpert": "Permite retirar os produtos prontos da fornalha de redução sem destruí-la e, no nível 2 da habilidade, fundir quaisquer pedaços de metal diretamente em lingotes.",
 
   "ability-bomberman": "Bombardeiro",
   "abilitydesc-bomberman": "Se você explodir rocha ou minérios com uma bomba, há {0}% menos penalidades de queda.",

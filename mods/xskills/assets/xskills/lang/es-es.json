@@ -152,7 +152,7 @@
   "abilitydesc-bloodlust": "Cada vez que elimines a un enemigo obtendrás una carga del efecto 'Sed de sangre'. Aumenta tu daño causado en un {0}% por carga y tu daño recibido en un {1}% por carga. Este efecto puede acumularse hasta {3} veces y dura {2} segundos.",
 
   "ability-bloomeryexpert": "Experto en hornos",
-  "abilitydesc-bloomeryexpert": "Puedes obtener los materiales de fundición de un horno bajo sin destruirlo.",
+  "abilitydesc-bloomeryexpert": "Permite sacar los productos terminados del horno de reducción sin destruirlo y, en el nivel 2 de la ventaja, fundir directamente cualquier fragmento de metal en lingotes.",
 
   "ability-bomberman": "Bomberman",
   "abilitydesc-bomberman": "Si explotas rocas o minerales con una bomba, hay un {0}% menos de pérdida de minerales por la explosión.",

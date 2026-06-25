@@ -268,7 +268,7 @@ namespace XLib.XLeveling
         private void LoadConfiguration()
         {
             // ВЕРСИЯ КОНФИГА МОДА:
-            int CURRENT_CONFIG_VERSION = 8;
+            int CURRENT_CONFIG_VERSION = 9;
 
             bool forceConfigReset = false;
 
@@ -317,7 +317,7 @@ namespace XLib.XLeveling
                 if (Directory.Exists(configDir))
                 {
                     List<string> skillsToReset = new List<string> {
-            "combat" 
+            "metalworking" 
             // "combat", 
             // "farming",
             // "all" 

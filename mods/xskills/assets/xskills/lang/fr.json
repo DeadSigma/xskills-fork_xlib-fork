@@ -152,7 +152,7 @@
   "abilitydesc-bloodlust": "Chaque fois que vous tuez un ennemi, vous récupérerez un point de soif de sang. Cela augmente vos dégats de {0}% par point et vous subirez {1}% de dégats suppolémentaires par point. Cet effet peut se cumuler jusqu'à {3} fois et dure {2} secondes.",
 
   "ability-bloomeryexpert": "Expert du bas fourneau",
-  "abilitydesc-bloomeryexpert": "Vous pouvez prendre les produits fondus sans casser le bas fourneau.",
+  "abilitydesc-bloomeryexpert": "Permet de retirer les produits finis du bas fourneau sans le détruire et, au niveau 2 de l'aptitude, de fondre directement n'importe quels morceaux de métal en lingots.",
 
   "ability-bomberman": "Bomberman",
   "abilitydesc-bomberman": "Si vous explosez des roches ou des minéraux avec une bombe, vous avez {0}% de chances d'avoir moins de pertes.",

@@ -51,6 +51,8 @@
 
   "abilitydesc-blacksmith": "Imposta il parametro di qualità per gli oggetti forgiati da te.\nLa qualità migliora le statistiche dell'oggetto e dipende dalla tua abilità di Lavorazione dei Metalli, dalla tua esperienza nella forgiatura di oggetti di un tipo specifico e dalla fortuna.\n\n- Qualità massima dopo la forgiatura: 3 > 8\n- Limite massimo complessivo di qualità: {1}\n\nLa qualità base dipende da:\n- Livello di Lavorazione dei Metalli: 0.1 qualità per ogni livello (fino al livello 25).\n- Esperienza di forgiatura: 0.01 qualità per ogni oggetto creato della stessa categoria — strumenti, armature o armi (vengono conteggiati al massimo 200 oggetti per categoria).\n\nPer raggiungere il limite massimo, il pezzo deve essere temprato",
 
+  "abilitydesc-bloomeryexpert": "Permette di estrarre i prodotti finiti dalla fornace bloomery senza distruggerla e, al livello 2 del perk, di fondere direttamente qualsiasi frammento di metallo in lingotti.",
+
   "abilitydesc-happymeal": "Con una probabilità del {0}%, più un ulteriore {1}% per ogni livello dell'abilità di cucina, un ingrediente casuale aggiuntivo può essere aggiunto al pasto. La probabilità massima è del {2}%. Al livello 4, gli ingredienti velenosi non finiranno più nel tuo cibo.",
 
   "abilitydesc-heavyhits": "Permette di rimuovere le scorie da un pezzo in lavorazione con normali colpi pesanti di martello.",

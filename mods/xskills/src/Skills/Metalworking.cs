@@ -161,12 +161,12 @@ namespace XSkills
                 "xskills:abilitydesc-machinelearning",
                 8, 1, new int[] {}));
 
-            // can take items out of bloomeries
+            // can take items out of bloomeries (Tier 1) and smelt any metal bits (Tier 2)
             BloomeryExpertId = this.AddAbility(new Ability(
                 "bloomeryexpert",
                 "xskills:ability-bloomeryexpert",
                 "xskills:abilitydesc-bloomeryexpert",
-                8, 1, new int[] { }));
+                8, 2, new int[] { 1, 2 })); // 8 - мин уровень, 2 - количество уровней перка
 
             // helve hammers can smith advanced recipes
             AutomatedSmithingId = this.AddAbility(new Ability(
@@ -424,7 +424,7 @@ namespace XSkills
 
         [ProtoMember(5)]
         [DefaultValue(21)]
-        public int bitsForIngot = 21;
+        public int bitsForIngot = 20;
 
         [ProtoMember(6)]
         [DefaultValue(0.5f)]
@@ -590,6 +590,8 @@ namespace XSkills
             if (blockSel == null || byPlayer == null) return false;
             if (!world.Claims.TryAccess(byPlayer, blockSel.Position, EnumBlockAccessFlags.Use)) return false;
 
+            if (!byPlayer.InventoryManager.ActiveHotbarSlot.Empty) return false;
+
             Metalworking metalworking = XLeveling.Instance(world.Api)?.GetSkill("metalworking") as Metalworking;
             if (metalworking == null) return false;
             PlayerAbility playerAbility = byPlayer.Entity?.GetBehavior<PlayerSkillSet>()?[metalworking.Id]?[metalworking.BloomeryExpertId];
@@ -607,6 +609,127 @@ namespace XSkills
             handling = EnumHandling.PreventDefault;
             slot.Itemstack = null;
             return true;
+        }
+
+        //Патч переплавки всего в сыродутной печи
+        [HarmonyPatch(typeof(BlockEntityBloomery), "TryAdd")]
+        public class BlockEntityBloomery_TryAdd_Patch
+        {
+            [HarmonyPrefix]
+            public static bool Prefix(BlockEntityBloomery __instance, IPlayer byPlayer, int quantity, ref bool __result)
+            {
+                // 1. Проверяем наличие 2 уровня перка BloomeryExpert
+                if (byPlayer?.Entity == null) return true;
+                Metalworking metalworking = XLeveling.Instance(byPlayer.Entity.Api)?.GetSkill("metalworking") as Metalworking;
+                if (metalworking == null) return true;
+
+                PlayerSkill playerSkill = byPlayer.Entity.GetBehavior<PlayerSkillSet>()?.PlayerSkills[metalworking.Id];
+                if (playerSkill == null) return true;
+
+                PlayerAbility ability = playerSkill.PlayerAbilities[metalworking.BloomeryExpertId];
+                if (ability.Tier < 2) return true; // Если уровень меньше 2, работает стандартная логика печи
+
+                // 2. Получаем предмет из активного слота
+                ItemSlot sourceSlot = byPlayer.InventoryManager.ActiveHotbarSlot;
+                if (sourceSlot.Empty || sourceSlot.Itemstack == null) return true;
+
+                string path = sourceSlot.Itemstack.Collectible.Code.Path;
+
+                // 3. Если это не кусочек металла, отдаем управление ванильной логике
+                if (!path.StartsWith("metalbit") && !path.StartsWith("nugget")) return true;
+
+                // 4. Реализуем логику добавления
+                if (__instance.IsBurning) return true;
+
+                ItemSlot outSlot = (ItemSlot)AccessTools.Property(typeof(BlockEntityBloomery), "OutSlot").GetValue(__instance);
+                if (outSlot.StackSize > 0) return true;
+
+                ItemSlot oreSlot = (ItemSlot)AccessTools.Property(typeof(BlockEntityBloomery), "OreSlot").GetValue(__instance);
+                int oreCapacity = (int)AccessTools.Property(typeof(BlockEntityBloomery), "OreCapacity").GetValue(__instance);
+
+                // Проверяем, есть ли место и совпадает ли предмет с тем, что уже лежит
+                if (oreSlot.StackSize + quantity <= oreCapacity &&
+                   (oreSlot.Empty || oreSlot.Itemstack.Equals(__instance.Api.World, sourceSlot.Itemstack, GlobalConstants.IgnoredStackAttributes)))
+                {
+                    int moved = sourceSlot.TryPutInto(__instance.Api.World, oreSlot, Math.Min(oreCapacity - oreSlot.StackSize, quantity));
+                    if (moved > 0)
+                    {
+                        __instance.MarkDirty(false, null);
+                        AssetLocation sound = (AssetLocation)AccessTools.Property(typeof(BlockEntityBloomery), "OreSoundLocation").GetValue(__instance);
+                        __instance.Api.World.PlaySoundAt(sound, __instance.Pos, 0.0, byPlayer, true, 32f, 1f);
+
+                        __result = true; // Успешно добавлено
+                        return false;    // Отменяем вызов оригинального метода TryAdd, так как мы всё сделали сами
+                    }
+                }
+
+                return true;
+            }
+        }
+        [HarmonyPatch(typeof(BlockEntityBloomery), "DoSmelt")]
+        public class BlockEntityBloomery_DoSmelt_Patch
+        {
+            [HarmonyPrefix]
+            public static bool Prefix(BlockEntityBloomery __instance)
+            {
+                ItemSlot oreSlot = (ItemSlot)AccessTools.Property(typeof(BlockEntityBloomery), "OreSlot").GetValue(__instance);
+                if (oreSlot == null || oreSlot.Empty) return true;
+
+                string path = oreSlot.Itemstack.Collectible.Code.Path;
+                if (!path.StartsWith("metalbit") && !path.StartsWith("nugget")) return true;
+
+                // 1. Узнаем тип металла (например, из "metalbit-silver" получаем "silver")
+                string metalType = path.Replace("metalbit-", "").Replace("nugget-", "");
+
+                // Получаем кол-во кусочков для 1 слитка (используем конфиг твоего мода или 20 по умолчанию)
+                int bitsForIngot = 20;
+                Metalworking metalworking = XLeveling.Instance(__instance.Api)?.GetSkill("metalworking") as Metalworking;
+                if (metalworking != null)
+                {
+                    bitsForIngot = (metalworking.Config as MetalworkingConfig)?.bitsForIngot ?? 20;
+                }
+
+                // 2. Ищем слиток этого металла (поддерживаем предметы из других модов)
+                AssetLocation ingotDomainLoc = new AssetLocation(oreSlot.Itemstack.Collectible.Code.Domain, "ingot-" + metalType);
+                Item ingotItem = __instance.Api.World.GetItem(ingotDomainLoc);
+
+                if (ingotItem == null)
+                {
+                    // На всякий случай ищем в ванильном домене game
+                    ingotItem = __instance.Api.World.GetItem(new AssetLocation("game", "ingot-" + metalType));
+                }
+
+                if (ingotItem == null) return true; // Если слитка вообще не существует в игре, пусть разбирается ванилла
+
+                // 3. Высчитываем количество слитков
+                int totalBits = oreSlot.StackSize;
+                int ingotsCount = totalBits / bitsForIngot;
+
+                ItemSlot fuelSlot = (ItemSlot)AccessTools.Property(typeof(BlockEntityBloomery), "FuelSlot").GetValue(__instance);
+                ItemSlot outSlot = (ItemSlot)AccessTools.Property(typeof(BlockEntityBloomery), "OutSlot").GetValue(__instance);
+
+                if (ingotsCount > 0)
+                {
+                    // Создаем и кладем слитки в слот результата
+                    ItemStack ingotStack = new ItemStack(ingotItem, ingotsCount);
+                    outSlot.Itemstack = ingotStack;
+                    // Делаем их горячими (900 градусов)
+                    ingotItem.SetTemperature(__instance.Api.World, outSlot.Itemstack, 900f, true);
+
+                    // Забираем потраченные кусочки
+                    oreSlot.TakeOut(ingotsCount * bitsForIngot);
+                }
+
+                // 4. Сбрасываем состояние печи
+                if (oreSlot.StackSize == 0) oreSlot.Itemstack = null;
+                fuelSlot.Itemstack = null; // Топливо сгорает
+
+                AccessTools.Field(typeof(BlockEntityBloomery), "burning").SetValue(__instance, false);
+                AccessTools.Field(typeof(BlockEntityBloomery), "burningUntilTotalDays").SetValue(__instance, 0.0);
+                __instance.MarkDirty(false, null);
+
+                return false; // Отменяем вызов ванильного DoSmelt
+            }
         }
     }//!class XSkillsBloomeryBehavior
 }//!namespace XSkills
