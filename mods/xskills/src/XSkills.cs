@@ -97,6 +97,70 @@ namespace XSkills
                 {
                     BlockEntityEFruitPressPatch.Apply(harmony);
                 }
+
+                if (api.ModLoader.IsModEnabled("ithaniacannedgoods"))
+                {
+                    // Пытаемся получить класс стола из реестра игры
+                    Type benchType = api.ClassRegistry.GetBlockEntity("CanningBench");
+
+                    // Если мод зарегистрировал его под другим именем, ищем жестко через рефлексию
+                    if (benchType == null)
+                    {
+                        foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
+                        {
+                            Type t = asm.GetType("IthaniaCannedGoods.BlockEntities.BlockEntityCanningBench", false);
+                            if (t != null)
+                            {
+                                benchType = t;
+                                break;
+                            }
+
+                        }
+                    }
+
+                    if (benchType != null)
+
+
+                    {
+                        BlockEntityCanningBenchPatch.Apply(harmony, benchType);
+                    }
+                    Type pressType = api.ClassRegistry.GetBlockEntity("CanPress");
+                    if (pressType == null)
+                    {
+                        foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
+                        {
+                            Type t = asm.GetType("IthaniaCannedGoods.BlockEntities.BlockEntityCanPress", false);
+                            if (t != null)
+                            {
+                                pressType = t;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (pressType != null)
+                    {
+                        BlockEntityCanPressPatch.Apply(harmony, pressType);
+                    }
+                    Type cookerType = api.ClassRegistry.GetBlockEntity("PressureCooker");
+                    if (cookerType == null)
+                    {
+                        foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
+                        {
+                            Type t = asm.GetType("IthaniaCannedGoods.BlockEntities.BlockEntityPressureCooker", false);
+                            if (t != null)
+                            {
+                                cookerType = t;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (cookerType != null)
+                    {
+                        BlockEntityPressureCookerPatch.Apply(harmony, cookerType);
+                    }
+                }
             }
         }
 

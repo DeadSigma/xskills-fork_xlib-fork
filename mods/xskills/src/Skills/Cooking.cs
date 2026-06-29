@@ -211,6 +211,24 @@ namespace XSkills
             ItemStack[] contentStacks;
             IBlockMealContainer mealContainer = (itemStack.Collectible as IBlockMealContainer);
             ItemStack liquidStack = (itemStack.Collectible as BlockLiquidContainerBase)?.GetContent(itemStack);
+
+            ITreeAttribute contentsAttr = itemStack.Attributes?.GetTreeAttribute("contents");
+            if (contentsAttr != null)
+            {
+                List<ItemStack> stacks = new List<ItemStack>();
+                foreach (var kvp in contentsAttr)
+                {
+                    ItemstackAttribute attr = kvp.Value as ItemstackAttribute;
+                    if (attr != null && attr.value != null)
+                    {
+                        ItemStack stack = attr.value;
+                        if (stack.Collectible == null) stack.ResolveBlockOrItem(world);
+                        stacks.Add(stack);
+                    }
+                }
+                if (stacks.Count > 0) return stacks.ToArray();
+            }
+
             if (mealContainer != null)
             {
                 contentStacks = mealContainer.GetContents(world, itemStack);

@@ -275,5 +275,89 @@
                 "name": "XskillsOwnable"
             }
         ]
+    },
+    {
+        "dependsOn": [ { "modid": "ithaniacannedgoods" } ],
+        "op": "addmerge",
+        "path": "/entityBehaviors",
+        "file": "ithaniacannedgoods:blocktypes/machines/canningbench/canningbench",
+        "value": [ { "name": "XskillsOwnable" } ]
+    },
+    {
+        "dependsOn": [ { "modid": "ithaniacannedgoods" } ],
+        "op": "addmerge",
+        "path": "/entityBehaviors",
+        "file": "ithaniacannedgoods:blocktypes/machines/canningbench/canningbench-can",
+        "value": [ { "name": "XskillsOwnable" } ]
+    },
+    {
+        "dependsOn": [ { "modid": "ithaniacannedgoods" } ],
+        "op": "addmerge",
+        "path": "/entityBehaviors",
+        "file": "ithaniacannedgoods:blocktypes/machines/canningbench/canningbench-can-woodtypes",
+        "value": [ { "name": "XskillsOwnable" } ]
+    },
+    {
+        "dependsOn": [ { "modid": "ithaniacannedgoods" } ],
+        "op": "addmerge",
+        "path": "/entityBehaviors",
+        "file": "ithaniacannedgoods:blocktypes/machines/canningbench/canningbench-filled",
+        "value": [ { "name": "XskillsOwnable" } ]
+    },
+    {
+        "dependsOn": [ { "modid": "ithaniacannedgoods" } ],
+        "op": "addmerge",
+        "path": "/entityBehaviors",
+        "file": "ithaniacannedgoods:blocktypes/machines/canningbench/canningbench-filled-woodtypes",
+        "value": [ { "name": "XskillsOwnable" } ]
+    },
+    {
+        "dependsOn": [ { "modid": "ithaniacannedgoods" } ],
+        "op": "addmerge",
+        "path": "/entityBehaviors",
+        "file": "ithaniacannedgoods:blocktypes/machines/canningbench/canningbench-jar",
+        "value": [ { "name": "XskillsOwnable" } ]
+    },
+    {
+        "dependsOn": [ { "modid": "ithaniacannedgoods" } ],
+        "op": "addmerge",
+        "path": "/entityBehaviors",
+        "file": "ithaniacannedgoods:blocktypes/machines/canningbench/canningbench-jarfilled",
+        "value": [ { "name": "XskillsOwnable" } ]
+    },
+    {
+        "dependsOn": [ { "modid": "ithaniacannedgoods" } ],
+        "op": "addmerge",
+        "path": "/entityBehaviors",
+        "file": "ithaniacannedgoods:blocktypes/machines/canningbench/canningbench-jarfilled-woodtypes",
+        "value": [ { "name": "XskillsOwnable" } ]
+    },
+    {
+        "dependsOn": [ { "modid": "ithaniacannedgoods" } ],
+        "op": "addmerge",
+        "path": "/entityBehaviors",
+        "file": "ithaniacannedgoods:blocktypes/machines/canningbench/canningbench-jar-woodtypes",
+        "value": [ { "name": "XskillsOwnable" } ]
+    },
+    {
+        "dependsOn": [ { "modid": "ithaniacannedgoods" } ],
+        "op": "addmerge",
+        "path": "/entityBehaviors",
+        "file": "ithaniacannedgoods:blocktypes/machines/canningbench/canningbench-woodtypes",
+        "value": [ { "name": "XskillsOwnable" } ]
+    },
+    {
+        "dependsOn": [ { "modid": "ithaniacannedgoods" } ],
+        "op": "addmerge",
+        "path": "/entityBehaviors",
+        "file": "ithaniacannedgoods:blocktypes/machines/canpress/canpress",
+        "value": [ { "name": "XskillsOwnable" } ]
+    },
+    {
+        "dependsOn": [ { "modid": "ithaniacannedgoods" } ],
+        "op": "addmerge",
+        "path": "/entityBehaviors",
+        "file": "ithaniacannedgoods:blocktypes/machines/canpress/canpress-woodtypes",
+        "value": [ { "name": "XskillsOwnable" } ]
     }
 ]
