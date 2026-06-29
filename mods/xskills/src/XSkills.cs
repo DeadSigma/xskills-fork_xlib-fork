@@ -49,6 +49,8 @@ namespace XSkills
                 KnapsterIntegration.ApplyPatches(harmony, api);
                 // Фикс лепки из глины
                 KnapsterClayIntegration.ApplyPatches(harmony, api);
+                // Фикс лепки на круге
+                SimplePotteryWheelIntegration.ApplyPatches(harmony, api);
 
                 Type type;
 
