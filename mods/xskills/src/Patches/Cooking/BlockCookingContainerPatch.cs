@@ -132,16 +132,27 @@ namespace XSkills
         [HarmonyPatch("DoSmelt")]
         public static void DoSmeltPostfix(BlockCookingContainer __instance, int __state, ISlotProvider cookingSlotsProvider, ItemSlot outputSlot)
         {
-            __instance.MaxServingSize = __state; 
+            __instance.MaxServingSize = __state;
             IPlayer player = CookingUtil.GetOwnerFromInventory(cookingSlotsProvider as InventoryBase);
             if (player?.Entity == null) return;
 
             Cooking cooking = player.Entity.Api.ModLoader.GetModSystem<XLeveling>()?.GetSkill("cooking") as Cooking;
             if (cooking == null) return;
-            if (outputSlot?.Itemstack != null) 
-                cooking.ApplyAbilities(outputSlot, player, 0.0f);
-            else if (cookingSlotsProvider?.Slots?[0].Itemstack != null) 
-                cooking.ApplyAbilities(cookingSlotsProvider.Slots[0], player, 0.0f, cookingSlotsProvider.Slots[0]?.StackSize ?? 1.0f);
+
+            //  Собираем массив исходных ингредиентов
+            ItemStack[] sourceStacks = __instance.GetCookingStacks(cookingSlotsProvider, false);
+
+            // Вызываем ApplyAbilities с полным набором из 6 аргументов
+            if (outputSlot?.Itemstack != null)
+            {
+                float cookedAmount = outputSlot.Itemstack.StackSize;
+                cooking.ApplyAbilities(outputSlot, player, 0.0f, cookedAmount, sourceStacks, 1.0f);
+            }
+            else if (cookingSlotsProvider?.Slots?[0].Itemstack != null)
+            {
+                float cookedAmount = cookingSlotsProvider.Slots[0]?.StackSize ?? 1.0f;
+                cooking.ApplyAbilities(cookingSlotsProvider.Slots[0], player, 0.0f, cookedAmount, sourceStacks, 1.0f);
+            }
         }
 
         /// <summary>
