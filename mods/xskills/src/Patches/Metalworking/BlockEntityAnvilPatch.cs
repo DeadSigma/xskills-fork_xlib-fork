@@ -167,7 +167,7 @@ namespace XSkills
             {
                 tempTree.SetDouble("temperatureLastUpdate", prevLastUpdate);
             }
-            // else: таймер истёк (или его не было). НЕ продлеваем — пусть остывает.
+            // else: таймер истёк (или его не было). НЕ продлеваем - пусть остывает.
             // SetTemperature(..., false) уже выставил метку на "сейчас", больше ничего не трогаем.
         }
 
@@ -319,6 +319,60 @@ namespace XSkills
             {
                 __instance.SetSplitCount(__instance.GetSplitCount() + 1);
             }
+
+            // ЛОГИКА HEATING HITS ДЛЯ АВТО-МОЛОТА
+            if (__instance.Api.Side == EnumAppSide.Server)
+            {
+                IPlayer player = __instance.GetUsedByPlayer();
+                if (player != null)
+                {
+                    Metalworking metalworking = __instance.Api.ModLoader.GetModSystem<XLeveling>()?.GetSkill("metalworking") as Metalworking;
+                    if (metalworking == null) return; // Если скилл не найден, просто выходим
+
+                    // Теперь берем строгий int
+                    PlayerSkill playerSkill = player.Entity?.GetBehavior<PlayerSkillSet>()?[metalworking.Id];
+
+                    // Жесткое условие: проверяем Machine Learning
+                    if (playerSkill != null && playerSkill[metalworking.MachineLearningId]?.Tier > 0)
+                    {
+                        PlayerAbility heatingAbility = playerSkill[metalworking.HeatingHitsId];
+                        if (heatingAbility != null && heatingAbility.Tier > 0)
+                        {
+                            ItemStack workItem = __instance.WorkItemStack;
+                            if (workItem != null)
+                            {
+                                CollectibleObject collectible = workItem.Collectible;
+                                float currentTemp = collectible.GetTemperature(__instance.Api.World, workItem);
+
+                                IAnvilWorkable anvilWorkable = collectible as IAnvilWorkable;
+                                float meltingpoint = anvilWorkable != null ?
+                                    collectible.GetMeltingPoint(__instance.Api.World, null, new DummySlot(anvilWorkable.GetBaseMaterial(workItem))) :
+                                    0.0f;
+
+                                float heatBonus = heatingAbility.Value(0);
+                                if (meltingpoint > 0.0f)
+                                {
+                                    if (currentTemp < meltingpoint)
+                                    {
+                                        currentTemp = Math.Min(currentTemp + heatBonus, meltingpoint);
+                                    }
+                                }
+                                else
+                                {
+                                    currentTemp += heatBonus;
+                                }
+
+                                double prevLastUpdate = workItem.Attributes?.GetTreeAttribute("temperature")?.GetDouble("temperatureLastUpdate") ?? double.MinValue;
+                                collectible.SetTemperature(__instance.Api.World, workItem, currentTemp, false);
+                                ApplyForgeCooldownDelay(__instance.Api.World, workItem, prevLastUpdate);
+
+                                // Принудительно отправляем обновленную температуру клиенту, чтобы избежать затирания
+                                __instance.MarkDirty(true);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public static bool CheckIfFinishedPrefix(BlockEntityAnvil __instance, out AnvilState __state, IPlayer byPlayer)
@@ -406,7 +460,7 @@ namespace XSkills
 
             //heating hits — пишем температуру ТОЛЬКО на сервере.
             //Иначе клиентский OnHelveHammerHit из рендера затирает синканное значение и сбрасывает таймер.
-            if (world.Side == EnumAppSide.Server)
+            if (world.Side == EnumAppSide.Server && !helveHammer)
             {
                 playerAbility = playerSkill?[__state.metalworking.HeatingHitsId];
                 float meltingpoint =
