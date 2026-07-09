@@ -36,8 +36,14 @@ public class ModIdSpoofSystem : ModSystem
         ModIdSpoofPatches.Spoofed.Add(canonicalId);
 
         string harmonyId = "modidspoof:" + canonicalId;
+        // ВАЖНО: патчим ТОЛЬКО класс ModIdSpoofPatches, а не всю сборку.
+        // PatchAll(Assembly) подхватил бы ВСЕ [HarmonyPatch]-классы форка
+        // (InventoryPlayerBackpacksPatch, BlockEntityClayFormPatch и т.д.) и навесил
+        // бы их второй раз под id "modidspoof:xskills" — параллельно с "XSkillsPatch".
+        // Двойное применение раздувает InventoryPlayerBackpacks.Count вдвое и дублирует
+        // транспайлеры (→ вылеты слот-грида и InvalidProgramException на глиноформовке).
         if (!Harmony.HasAnyPatches(harmonyId))
-            new Harmony(harmonyId).PatchAll(typeof(ModIdSpoofPatches).Assembly);
+            new Harmony(harmonyId).CreateClassProcessor(typeof(ModIdSpoofPatches)).Patch();
     }
 
     /// <summary>
