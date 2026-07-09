@@ -43,7 +43,7 @@ namespace XSkills
                 XSkills xskills = api.ModLoader.GetModSystem<XSkills>();
 
                 harmony = new Harmony("XSkillsPatch");
-                harmony.PatchAll(Assembly.GetExecutingAssembly());
+                PatchAllResilient(harmony, api);
 
                 // Фикс наковальни
                 KnapsterIntegration.ApplyPatches(harmony, api);
@@ -526,6 +526,41 @@ namespace XSkills
             PatchMethod("CanWork");
 
             toolsmithPatched = true;
+        }
+
+        /// <summary>
+        /// Аналог harmony.PatchAll, но патчит каждый класс отдельно в try/catch.
+        /// Если один патч кидает исключение (например InvalidProgramException в UpdateWrapper),
+        /// оно логируется, а остальные патчи всё равно применяются — клиент не падает целиком
+        /// при обработке SkillConfig в сетевом хендлере.
+        /// </summary>
+        private static void PatchAllResilient(Harmony harmony, ICoreAPI api)
+        {
+            Type[] types;
+            try
+            {
+                types = Assembly.GetExecutingAssembly().GetTypes();
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                types = ex.Types.Where(t => t != null).ToArray();
+            }
+
+            foreach (Type type in types)
+            {
+                if (type == null) continue;
+
+                if (typeof(ManualPatch).IsAssignableFrom(type)) continue;
+
+                try
+                {
+                    harmony.CreateClassProcessor(type).Patch();
+                }
+                catch (Exception e)
+                {
+                    api.Logger.Error("[XSkills] Патч класса {0} не применён: {1}", type.FullName, e);
+                }
+            }
         }
     }//!class XSkills
 }//!namespace XSkills

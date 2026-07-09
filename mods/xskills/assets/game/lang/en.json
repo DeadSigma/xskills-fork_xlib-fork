@@ -1,4 +1,5 @@
-{
+﻿{
+  "block-mushroom-*-harvested": "Mushroom stump with intact mycelium",
   "item-handbooktext-lime": "Requires desalinate ability to be created with cooking.",
   "item-handbooktext-salt": "Requires desalinate ability to be created with cooking."
 }

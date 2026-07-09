@@ -1031,14 +1031,19 @@ namespace XSkills
             deltaTime = Math.Min(deltaTime, adaptationTime);
             int light = capi.World.BlockAccessor.GetLightLevel(player.Pos.AsBlockPos, EnumLightLevelType.MaxTimeOfDayLight);
 
-            IPlayer[] players = capi.World.GetPlayersAround(player.Pos.XYZ, 32.0f, 32.0f);
-            foreach (IPlayer player1 in players)
-            {
-                int playerBrightness = Math.Clamp(player1.Entity?.LightHsv?[2] ?? 0, (byte)0, (byte)32);
-                if (playerBrightness == 0) continue;
-                int distance = (int)player1.Entity.Pos.DistanceTo(player.Pos);
+            // Учитываем ЛЮБЫЕ светящиеся сущности: игроков, животных с фонарями, светящихся мобов.
+            // Раньше здесь был GetPlayersAround, из-за чего фонарь на животном
+            // не учитывался в адаптации и постоянно слепил.
+            Entity[] entities = capi.World.GetEntitiesAround(player.Pos.XYZ, 32.0f, 32.0f,
+                (e) => (e.LightHsv?[2] ?? 0) > 0);
 
-                light = Math.Max(light, playerBrightness - distance * 2);
+            foreach (Entity entity in entities)
+            {
+                int entityBrightness = Math.Clamp(entity.LightHsv?[2] ?? 0, (byte)0, (byte)32);
+                if (entityBrightness == 0) continue;
+                int distance = (int)entity.Pos.DistanceTo(player.Pos);
+
+                light = Math.Max(light, entityBrightness - distance * 2);
             }
 
             float mult = light == 0 ? 1.6f : 1.0f;

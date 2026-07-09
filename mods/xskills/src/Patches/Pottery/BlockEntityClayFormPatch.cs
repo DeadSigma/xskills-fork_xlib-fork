@@ -26,7 +26,7 @@ namespace XSkills
         {
             XSkills xSkills = XSkills.Instance;
             if (xSkills == null) return false;
-            Skill skill; 
+            Skill skill;
             xSkills.Skills.TryGetValue("pottery", out skill);
             Pottery pottery = skill as Pottery;
 
@@ -55,55 +55,74 @@ namespace XSkills
         [HarmonyPatch("OnUseOver", new Type[] { typeof(IPlayer), typeof(Vec3i), typeof(BlockFacing), typeof(bool) })]
         public static IEnumerable<CodeInstruction> OnUseOverTranspiler(IEnumerable<CodeInstruction> instructions)
         {
-            var code = new List<CodeInstruction>(instructions);
-
-            int onCopyLayer = -1;
-            int onRemove = -1;
-            int onAdd = -1;
-
-            for (int ii = 0; ii < code.Count; ++ii)
-            {
-                if (code[ii].opcode == OpCodes.Call)
-                {
-                    MethodInfo info = code[ii].operand as MethodInfo;
-                    if (info.Name == "OnCopyLayer")
-                    {
-                        onCopyLayer = ii;
-                    }
-                    else if (info.Name == "OnAdd")
-                    {
-                        onAdd = ii;
-                    }
-                    else if (info.Name == "OnRemove")
-                    {
-                        onRemove = ii;
-                    }
-                }
-            }
-
+            List<CodeInstruction> code = new List<CodeInstruction>(instructions);
             Type patchType = typeof(BlockEntityClayFormPatch);
+            Type beType = typeof(BlockEntityClayForm);
 
-            //Replaces the original methods and adds the player as last argument.
-            if (onRemove >= 0)
-            {
-                code.Insert(onRemove, new CodeInstruction(OpCodes.Ldarg_1));
-                code[onRemove + 1] = new CodeInstruction(OpCodes.Call, patchType.GetMethod("OnRemove"));
+            // Резолвим методы-замены заранее. Если хоть один не найден - ничего не трогаем,
+            // иначе получим Call по null MethodInfo - InvalidProgramException в UpdateWrapper.
+            MethodInfo replCopyLayer = patchType.GetMethod("OnCopyLayer",
+                new Type[] { typeof(BlockEntityClayForm), typeof(int), typeof(IPlayer) });
+            MethodInfo replRemove = patchType.GetMethod("OnRemove",
+                new Type[] { typeof(BlockEntityClayForm), typeof(int), typeof(Vec3i), typeof(BlockFacing), typeof(int), typeof(IPlayer) });
+            MethodInfo replAdd = patchType.GetMethod("OnAdd",
+                new Type[] { typeof(BlockEntityClayForm), typeof(int), typeof(Vec3i), typeof(BlockFacing), typeof(int), typeof(IPlayer) });
 
-                if (onAdd > onRemove) onAdd++;
-                if (onCopyLayer > onRemove) onCopyLayer++;
-            }
-            if (onAdd >= 0)
-            {
-                code.Insert(onAdd, new CodeInstruction(OpCodes.Ldarg_1));
-                code[onAdd + 1] = new CodeInstruction(OpCodes.Call, patchType.GetMethod("OnAdd", new Type[] { typeof(BlockEntityClayForm), typeof(int), typeof(Vec3i), typeof(BlockFacing), typeof(int), typeof(IPlayer) }));
+            ILogger logger = XSkills.Instance?.Api?.Logger;
 
-                if (onCopyLayer > onAdd) onCopyLayer++;
-            }
-            if (onCopyLayer >= 0)
+            if (replCopyLayer == null || replRemove == null || replAdd == null)
             {
-                code.Insert(onCopyLayer, new CodeInstruction(OpCodes.Ldarg_1));
-                code[onCopyLayer + 1] = new CodeInstruction(OpCodes.Call, patchType.GetMethod("OnCopyLayer"));
+                logger?.Warning("[XSkills] BlockEntityClayFormPatch: методы-замены не найдены, транспайлер OnUseOver пропущен.");
+                return code;
             }
+
+            int replaced = 0;
+
+            for (int i = 0; i < code.Count; i++)
+            {
+                CodeInstruction ins = code[i];
+
+                if (ins.opcode != OpCodes.Call && ins.opcode != OpCodes.Callvirt) continue;
+
+                MethodInfo target = ins.operand as MethodInfo;
+                if (target == null) continue;
+
+                // Патчим только оригинальные методы самого BlockEntityClayForm.
+                // Если другой мод уже перенаправил вызов на свой тип - не трогаем
+                // (иначе вставим второй ldarg.1 в уже 6-аргументный вызов -> перекос стека -> InvalidProgramException).
+                if (target.DeclaringType != beType) continue;
+
+                MethodInfo replacement;
+                int expectedArgs;
+                switch (target.Name)
+                {
+                    case "OnCopyLayer": replacement = replCopyLayer; expectedArgs = 1; break;
+                    case "OnRemove": replacement = replRemove; expectedArgs = 4; break;
+                    case "OnAdd": replacement = replAdd; expectedArgs = 4; break;
+                    default: continue;
+                }
+
+                // Проверяем перегрузку по числу аргументов, чтобы не зацепить чужую/внутреннюю.
+                if (target.GetParameters().Length != expectedArgs) continue;
+
+                // Меняем вызов на статическую замену прямо на месте -
+                // labels и exception-blocks исходной инструкции при этом сохраняются.
+                ins.opcode = OpCodes.Call;
+                ins.operand = replacement;
+
+                // Добавляем игрока (byPlayer = arg1) последним аргументом перед вызовом.
+                // Новая ldarg.1 намеренно без labels/blocks - они остаются на инструкции call.
+                code.Insert(i, new CodeInstruction(OpCodes.Ldarg_1));
+                i++;
+
+                replaced++;
+            }
+
+            if (replaced == 0)
+            {
+                logger?.Warning("[XSkills] BlockEntityClayFormPatch: в OnUseOver не найдено вызовов OnAdd/OnRemove/OnCopyLayer - шо произошло?");
+            }
+
             return code;
         }
 

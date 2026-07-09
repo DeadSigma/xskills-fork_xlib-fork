@@ -1,4 +1,5 @@
-{
-    "item-handbooktext-lime": "調理で作成するには淡水化能力が必要です。",
-    "item-handbooktext-salt": "調理で作成するには淡水化能力が必要です。"
+﻿{
+  "block-mushroom-*-harvested": "菌糸が無傷のキノコの切り株",
+  "item-handbooktext-lime": "調理で作成するには淡水化能力が必要です。",
+  "item-handbooktext-salt": "調理で作成するには淡水化能力が必要です。"
 }

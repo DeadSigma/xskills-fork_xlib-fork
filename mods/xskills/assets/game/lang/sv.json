@@ -1,4 +1,5 @@
-{
-    "item-handbooktext-lime": "Kräver avsaltningsförmåga för att skapas vid matlagning.",
-    "item-handbooktext-salt": "Kräver avsaltningsförmåga för att skapas vid matlagning."
+﻿{
+  "block-mushroom-*-harvested": "Svampstubbe med intakt mycel",
+  "item-handbooktext-lime": "Kräver avsaltningsförmåga för att skapas vid matlagning.",
+  "item-handbooktext-salt": "Kräver avsaltningsförmåga för att skapas vid matlagning."
 }

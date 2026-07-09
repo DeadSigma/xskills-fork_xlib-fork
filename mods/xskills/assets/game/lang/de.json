@@ -1,4 +1,5 @@
-{
-    "item-handbooktext-lime": "Erfordert die Entsalzungsfähigkeit, um durch Kochen hergestellt zu werden.",
-    "item-handbooktext-salt": "Erfordert die Entsalzungsfähigkeit, um durch Kochen hergestellt zu werden."
+﻿{
+  "block-mushroom-*-harvested": "Pilzstumpf mit unbeschädigtem Myzel",
+  "item-handbooktext-lime": "Erfordert die Entsalzungsfähigkeit, um durch Kochen hergestellt zu werden.",
+  "item-handbooktext-salt": "Erfordert die Entsalzungsfähigkeit, um durch Kochen hergestellt zu werden."
 }

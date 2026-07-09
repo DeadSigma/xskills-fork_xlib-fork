@@ -47,7 +47,7 @@
                 "invert": true
             }
         ],
-        "file": "aculinaryartillery:blocktypes/glassbottle",
+        "file": "aculinaryartillery:blocktypes/bottles/glassbottle",
         "op": "addmerge",
         "path": "/behaviors",
         "value": [
@@ -66,7 +66,7 @@
                 "invert": true
             }
         ],
-        "file": "aculinaryartillery:blocktypes/claybottle-fired",
+        "file": "aculinaryartillery:blocktypes/bottles/claybottle-fired",
         "op": "addmerge",
         "path": "/behaviors",
         "value": [
