@@ -30,7 +30,8 @@ namespace XSkills
         /// The instance.
         /// </value>
         public static XSkills Instance { get; private set; }
-
+        private IClientNetworkChannel fixToggleClientChannel;
+        private IServerNetworkChannel serverFixChannel;
         public Dictionary<string, Skill> Skills { get; set; }
 
         public ICoreAPI Api { get; private set; }
@@ -289,16 +290,39 @@ namespace XSkills
             base.StartClientSide(api);
             this.XLeveling.CreateDescriptionFile();
 
-            string hotkeyDescription = Lang.Get("xskills:hotkey-xskillshotbarswitch");
+            string slotLockDescription = Lang.Get("xskills:hotkey-xskillsslotlock");
+            api.Input.RegisterHotKey("xskillsslotlock", slotLockDescription, GlKeys.Y);
+            api.Input.SetHotKeyHandler("xskillsslotlock", OnSlotLockToggle);
 
+            string hotkeyDescription = Lang.Get("xskills:hotkey-xskillshotbarswitch");
             api.Input.RegisterHotKey("xskillshotbarswitch", hotkeyDescription, GlKeys.R);
             api.Input.SetHotKeyHandler("xskillshotbarswitch", OnHotbarSwitch);
+
+
+            fixToggleClientChannel = api.Network
+             .RegisterChannel("xskillsfixtoggle")
+             .RegisterMessageType<XSkillsFixTogglePacket>()
+             .RegisterMessageType<XSkillsFixRequestPacket>()
+             .SetMessageHandler<XSkillsFixTogglePacket>(OnFixStateFromServer);
+
+            if (api.ModLoader.IsModEnabled("playerinventorylib"))
+            {
+                PlayerInventoryLibCompat.ApplyPatch(api);
+            }
         }
 
         public override void StartServerSide(ICoreServerAPI api)
         {
             base.StartServerSide(api);
             DoHarmonyPatch(api);
+
+            StorageTweaksCompat.ApplyPatch(api);
+            serverFixChannel = api.Network
+             .RegisterChannel("xskillsfixtoggle")
+             .RegisterMessageType<XSkillsFixTogglePacket>()
+             .RegisterMessageType<XSkillsFixRequestPacket>()
+             .SetMessageHandler<XSkillsFixTogglePacket>(OnFixTogglePacket)
+             .SetMessageHandler<XSkillsFixRequestPacket>(OnFixRequestPacket);
         }
 
         public override void AssetsLoaded(ICoreAPI api)
@@ -561,6 +585,53 @@ namespace XSkills
                     api.Logger.Error("[XSkills] Патч класса {0} не применён: {1}", type.FullName, e);
                 }
             }
+        }
+        private void OnFixTogglePacket(IServerPlayer fromPlayer, XSkillsFixTogglePacket packet)
+        {
+            XSkillsPlayerInventory inv = fromPlayer.InventoryManager.GetOwnInventory("xskillshotbar") as XSkillsPlayerInventory;
+            // Авторитетно на сервере: теперь SortPrefix/SortPostfix/прокси видят верное состояние,
+            // и оно сохранится в дереве при следующем сейве
+            inv?.SetFixedState(packet.Fixed);
+        }
+        // Клиент: применяет состояние, присланное сервером при заходе
+        private void OnFixStateFromServer(XSkillsFixTogglePacket packet)
+        {
+            ICoreClientAPI capi = this.Api as ICoreClientAPI;
+            XSkillsPlayerInventory inv = capi?.World.Player?.InventoryManager.GetOwnInventory("xskillshotbar") as XSkillsPlayerInventory;
+            inv?.SetFixedState(packet.Fixed);
+        }
+
+        // Сервер: отвечает клиенту текущим сохранённым состоянием
+        private void OnFixRequestPacket(IServerPlayer fromPlayer, XSkillsFixRequestPacket packet)
+        {
+            XSkillsPlayerInventory inv = fromPlayer.InventoryManager.GetOwnInventory("xskillshotbar") as XSkillsPlayerInventory;
+            if (inv == null) return;
+            serverFixChannel.SendPacket(new XSkillsFixTogglePacket { Fixed = inv.IsFixed }, fromPlayer);
+        }
+
+        // Клиент: запросить состояние у сервера (зовётся из OnStrongBack)
+        public void RequestSlotFixState()
+        {
+            fixToggleClientChannel?.SendPacket(new XSkillsFixRequestPacket());
+        }
+        public bool OnSlotLockToggle(KeyCombination keys)
+        {
+            ICoreClientAPI capi = this.Api as ICoreClientAPI;
+            IPlayer player = capi?.World.Player;
+            if (player == null) return false;
+
+            XSkillsPlayerInventory inv = player.InventoryManager.GetOwnInventory("xskillshotbar") as XSkillsPlayerInventory;
+            if (inv == null) return false;
+
+            bool newState = !inv.IsFixed;
+            inv.SetFixedState(newState);                                            // мгновенный визуал на клиенте
+            fixToggleClientChannel?.SendPacket(new XSkillsFixTogglePacket { Fixed = newState }); // авторитет на сервер
+
+            string stateKey = newState ? "xskills:slots-fixed" : "xskills:slots-freed";
+            string stateMsg = Lang.Get(stateKey);
+            capi.ShowChatMessage(Lang.Get("xskills:slots-strongback-status", stateMsg));
+
+            return true;
         }
     }//!class XSkills
 }//!namespace XSkills

@@ -442,6 +442,12 @@ namespace XSkills
             }
             inv.SetSize(playerAbility.Value(0));
             inv.SwitchCD = (Config as SurvivalSkillConfig).invSwitchCD;
+
+            // Клиент только что создал слоты - просит у сервера сохранённое состояние фиксации
+            if (player.Entity?.Api.Side == EnumAppSide.Client)
+            {
+                player.Entity.Api.ModLoader.GetModSystem<XSkills>()?.RequestSlotFixState();
+            }
         }
 
         //nudist

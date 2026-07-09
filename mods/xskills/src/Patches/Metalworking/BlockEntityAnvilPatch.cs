@@ -577,7 +577,10 @@ namespace XSkills
 
             //duplicator
             float temperature = __state.workItemStack.Collectible.GetTemperature(world, __state.workItemStack);
-            if ((resolvedStack?.Collectible.CombustibleProps == null || __state.metalworking.IsDuplicatable(__state.recipe)) && !__state.wasPlate)
+
+            bool fromSafeQuenching = __state.workItemStack.Attributes.GetBool("fromSafeQuenching", false);
+
+            if ((resolvedStack?.Collectible.CombustibleProps == null || __state.metalworking.IsDuplicatable(__state.recipe)) && !__state.wasPlate && !fromSafeQuenching)
             {
                 playerAbility = playerSkill[__state.metalworking.DuplicatorId];
                 if (playerAbility == null) return;

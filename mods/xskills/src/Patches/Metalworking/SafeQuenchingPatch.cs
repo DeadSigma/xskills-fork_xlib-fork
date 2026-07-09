@@ -164,6 +164,9 @@ namespace XSkills
                                         {
                                             workItemStack.Attributes.SetBytes("voxels", voxelData);
                                             workItemStack.Attributes.SetInt("selectedRecipeId", shatteredRecipe.RecipeId);
+
+                                            // Помечаем заготовку как спасенную после неудачной закалки
+                                            workItemStack.Attributes.SetBool("fromSafeQuenching", true);
                                         }
                                     }
                                 }

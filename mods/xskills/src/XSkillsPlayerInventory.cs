@@ -12,6 +12,7 @@ namespace XSkills
     public class XSkillsPlayerInventory : InventoryBasePlayer
     {
         public static string BackgroundColor { get; set; } = "#BEBEBE";
+        public static string FreeColor { get; set; } = "#8A9A8A";
         protected Cooking cooking;
 
         ItemSlot[] slots;
@@ -26,6 +27,9 @@ namespace XSkills
 
         public double LastSwitch { get; set; }
 
+        // По умолчанию слоты НЕ зафиксированы - участвуют в сортировке StorageTweaks. Фиксация ставится игроком на горячую клавишу (SetFixedState + сетевой синк). Значение персистится в дереве (ToTreeAttributes/FromTreeAttributes), поэтому переживает перезаход, а на сервере оно всегда актуально для SortPrefix/SortPostfix.
+        public bool IsFixed { get; set; } = false;
+
         public override int Count
         {
             get => slots.Length;
@@ -38,7 +42,7 @@ namespace XSkills
                 if (slotId < 0) return null;
                 if (slotId >= Count)
                 {
-                    if(buffer.Length <= slotId) SetBufferSize(slotId + 1);
+                    if (buffer.Length <= slotId) SetBufferSize(slotId + 1);
                     return buffer[slotId];
                 }
                 return slots[slotId];
@@ -66,7 +70,7 @@ namespace XSkills
             for (int ii = 0; ii < Count; ii++)
             {
                 this.slots[ii] = new ItemSlot(this);
-                this.slots[ii].HexBackgroundColor = BackgroundColor;
+                this.slots[ii].HexBackgroundColor = CurrentColor;
             }
         }
 
@@ -86,9 +90,12 @@ namespace XSkills
             for (int ii = 0; ii < Count; ii++)
             {
                 this.slots[ii] = new ItemSlot(this);
-                this.slots[ii].HexBackgroundColor = BackgroundColor;
+                this.slots[ii].HexBackgroundColor = CurrentColor;
             }
         }
+
+        // Цвет слотов в зависимости от состояния фиксации.
+        private string CurrentColor => IsFixed ? BackgroundColor : FreeColor;
 
         public override void DidModifyItemSlot(ItemSlot slot, ItemStack extractedStack = null)
         {
@@ -108,7 +115,7 @@ namespace XSkills
             for (int ii = 0; ii < Count; ii++)
             {
                 this.slots[ii] = new ItemSlot(this);
-                this.slots[ii].HexBackgroundColor = BackgroundColor;
+                this.slots[ii].HexBackgroundColor = CurrentColor;
 
                 if (ii < old.Length)
                 {
@@ -133,7 +140,7 @@ namespace XSkills
 
             for (int jj = 0; jj < buffer.Length; jj++)
             {
-                if(buffer[jj].Itemstack != null)
+                if (buffer[jj].Itemstack != null)
                 {
                     if (jj >= Count || slots[jj].Itemstack != null)
                     {
@@ -155,7 +162,7 @@ namespace XSkills
             for (int ii = 0; ii < buffer.Length; ii++)
             {
                 this.buffer[ii] = new ItemSlot(this);
-                this.buffer[ii].HexBackgroundColor = BackgroundColor;
+                this.buffer[ii].HexBackgroundColor = CurrentColor;
 
                 if (ii < old.Length)
                 {
@@ -181,9 +188,10 @@ namespace XSkills
         public void SwitchInventories()
         {
             if (this.Api.World == null) return;
-            double totalHours = this.Api.World.Calendar.TotalHours;
-            if ((this.LastSwitch + SwitchCD / 360.0) > totalHours) return;
-            this.LastSwitch = totalHours;
+            // Кулдаун в реавльных секундах
+            double now = this.Api.World.ElapsedMilliseconds;
+            if (now < this.LastSwitch + SwitchCD * 1000.0) return;
+            this.LastSwitch = now;
 
             IPlayer player = this.Api.World.PlayerByUid(this.playerUID);
             if (player?.Entity == null) return;
@@ -259,16 +267,61 @@ namespace XSkills
             buffer = SlotsFromTreeAttributes(tree, buffer);
             if (this.slots == null) this.slots = new ItemSlot[0];
             if (this.buffer == null) this.buffer = new ItemSlot[0];
-            for (int ii = 0; ii < buffer.Length; ii++)
-            {
-                buffer[ii].HexBackgroundColor = BackgroundColor;
-            }
+
+            // Читаем состояние фиксации ДО перекраски. Дефолт false = слоты сортируются.
+            IsFixed = tree.GetBool("xskillsFixed", false);
+
+            RefreshSlotColors();
         }
 
         public override void ToTreeAttributes(ITreeAttribute tree)
         {
-            if(slots.Length <= 0 && buffer.Length > 0) SlotsToTreeAttributes(buffer, tree);
+            if (slots.Length <= 0 && buffer.Length > 0) SlotsToTreeAttributes(buffer, tree);
             else SlotsToTreeAttributes(slots, tree);
+
+            // Персистим состояние фиксации, чтобы оно переживало перезаход и синхронизировалось на клиент вместе с обычной сериализацией инвентаря.
+            tree.SetBool("xskillsFixed", IsFixed);
+        }
+
+        // Перекрашивает слоты под текущее состояние. Без MarkDirty - безопасно звать при загрузке.
+        private void RefreshSlotColors()
+        {
+            string color = CurrentColor;
+            if (this.slots != null)
+            {
+                for (int ii = 0; ii < this.slots.Length; ii++)
+                {
+                    if (this.slots[ii] != null) this.slots[ii].HexBackgroundColor = color;
+                }
+            }
+            if (this.buffer != null)
+            {
+                for (int ii = 0; ii < this.buffer.Length; ii++)
+                {
+                    if (this.buffer[ii] != null) this.buffer[ii].HexBackgroundColor = color;
+                }
+            }
+        }
+
+        // Авторитетно выставляет состояние фиксации. Зовётся:
+        //   - на СЕРВЕРЕ из обработчика сетевого пакета (влияет на сортировку StorageTweaks);
+        //   - на КЛИЕНТЕ из хоткея для мгновенного визуала.
+        public void SetFixedState(bool fixedState)
+        {
+            IsFixed = fixedState;
+            RefreshSlotColors();
+            if (this.slots != null)
+            {
+                for (int ii = 0; ii < this.slots.Length; ii++)
+                {
+                    this.slots[ii]?.MarkDirty();
+                }
+            }
+        }
+
+        public void ToggleFixedState()
+        {
+            SetFixedState(!IsFixed);
         }
     }//!class XSkillsPlayerInventory
 }//!namespace XSkills
