@@ -39,6 +39,9 @@ namespace XSkills
         public int JuicerId { get; private set; }
         public int EggTimerId { get; private set; }
 
+        /// <summary>Базовое насыщение на литр для жидкостей без nutritionPropsPerLitre (вода, рассол).</summary>
+        private const float LiquidBaseSatiety = 50.0f;
+
         protected Dictionary<CookingRecipeStack, List<CookingRecipeStack>> resolvedRecipeStacks = new();
         public Cooking(ICoreAPI api) : base("cooking", "xskills:skill-cooking", "xskills:group-processing")
         {
@@ -384,6 +387,29 @@ namespace XSkills
             bool expandedFood = outputStack.Attributes.HasAttribute("madeWith");
             IBlockMealContainer mealContainer = (outputStack.Collectible as IBlockMealContainer);
             BlockLiquidContainerBase liquidContainer = (outputStack.Collectible as BlockLiquidContainerBase);
+
+            // Берём насыщение из nutritionPropsPerLitre содержимого, а порции - из литража
+            if (liquidContainer != null)
+            {
+                float litres = liquidContainer.GetCurrentLitres(outputStack);
+                if (litres > 0.0f) servings = litres;
+
+                if (satiety <= 0.0f)
+                {
+                    foreach (ItemStack contentStack in contentStacks)
+                    {
+                        if (contentStack == null) continue;
+                        WaterTightContainableProps wprops = BlockLiquidContainerBase.GetContainableProps(contentStack);
+                        float contentSatiety = wprops?.NutritionPropsPerLitre?.Satiety
+                                               ?? contentStack.Collectible?.NutritionProps?.Satiety ?? 0.0f;
+                        if (contentSatiety > satiety) satiety = contentSatiety;
+                    }
+                }
+
+                // Вода/морская вода не имеют насыщения вовсе — без floor'а выварка соли
+                // и кипячение воды так и останутся без опыта.
+                if (satiety <= 0.0f) satiety = LiquidBaseSatiety;
+            }
 
             //experience
             float exp = expMult * (Config as CookingSkillConfig).expBase;

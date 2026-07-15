@@ -359,5 +359,23 @@
         "path": "/entityBehaviors",
         "file": "ithaniacannedgoods:blocktypes/machines/canpress/canpress-woodtypes",
         "value": [ { "name": "XskillsOwnable" } ]
+    },
+    {
+        "dependsOn": [ { "modid": "aculinaryartillery" } ],
+        "file": "aculinaryartillery:blocktypes/cauldronmini",
+        "op": "add",
+        "path": "/entityBehaviors",
+        "value": [
+            { "name": "XskillsOwnable" }
+        ]
+    },
+    {
+        "dependsOn": [ { "modid": "aculinaryartillery" } ],
+        "file": "aculinaryartillery:blocktypes/cauldron",
+        "op": "add",
+        "path": "/entityBehaviors",
+        "value": [
+            { "name": "XskillsOwnable" }
+        ]
     }
 ]
