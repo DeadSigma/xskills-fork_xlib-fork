@@ -247,7 +247,7 @@ namespace XLib.XLeveling
                     // Разбиваем строку на массив ников
                     string[] readers = existingReaders.Split(new string[] { ", " }, StringSplitOptions.None);
 
-                    // Ищем ник текущего игрока. Если его там нет (вернулся -1) — добавляем
+                    // Ищем ник текущего игрока. Если его там нет (вернулся -1) - добавляем
                     if (Array.IndexOf(readers, player.PlayerName) == -1)
                     {
                         readBook.Attributes.SetString("readBy", existingReaders + ", " + player.PlayerName);

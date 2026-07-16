@@ -103,7 +103,7 @@ namespace XSkills
                 cropBlock = byEntity.World.GetBlock(CodeWithPath("crop-" + lastCodePart + "-1"));
             }
 
-            // 4. Если вообще ничего не сработало — отдаем управление оригинальной игре
+            // 4. Если вообще ничего не сработало - отдаем управление оригинальной игре
             if (cropBlock == null)
             {
                 base.OnHeldInteractStart(itemslot, byEntity, blockSel, entitySel, firstEvent, ref handHandling);

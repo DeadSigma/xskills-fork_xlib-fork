@@ -508,7 +508,7 @@ namespace XSkills
 
         private void TryPatchToolsmith(ICoreAPI api)
         {
-            // В одиночной игре AssetsLoaded вызывается и для клиента, и для сервера —
+            // В одиночной игре AssetsLoaded вызывается и для клиента, и для сервера -
             // защищаемся от повторного патча
             if (toolsmithPatched) return;
 
@@ -528,7 +528,7 @@ namespace XSkills
                 }
                 catch
                 {
-                    // Сборка не смогла резолвить тип — просто пропускаем её
+                    // Сборка не смогла резолвить тип - просто пропускаем её
                 }
             }
 
@@ -555,7 +555,7 @@ namespace XSkills
         /// <summary>
         /// Аналог harmony.PatchAll, но патчит каждый класс отдельно в try/catch.
         /// Если один патч кидает исключение (например InvalidProgramException в UpdateWrapper),
-        /// оно логируется, а остальные патчи всё равно применяются — клиент не падает целиком
+        /// оно логируется, а остальные патчи всё равно применяются - клиент не падает целиком
         /// при обработке SkillConfig в сетевом хендлере.
         /// </summary>
         private static void PatchAllResilient(Harmony harmony, ICoreAPI api)

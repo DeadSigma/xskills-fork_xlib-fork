@@ -132,7 +132,7 @@ namespace XSkills
                 metalRemoved = 1;
             }
 
-            // Если удалили шлак (или вообще ничего) — выходим
+            // Если удалили шлак (или вообще ничего) - выходим
             if (metalRemoved <= 0) return;
 
             Metalworking metalworking = XLeveling.Instance(anvil.Api)?.GetSkill("metalworking") as Metalworking;

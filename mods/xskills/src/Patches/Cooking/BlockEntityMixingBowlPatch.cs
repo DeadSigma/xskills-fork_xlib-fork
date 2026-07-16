@@ -93,7 +93,7 @@ namespace XSkills
             // качество/свежесть/опыт; для контейнеров (суп/жидкость) тут же растут порции/объём
             cooking.ApplyAbilities(outputSlot, byPlayer, __state.quality, cooked, __state.stacks);
 
-            // контейнеры обрабатываются внутри ApplyAbilities на месте — стак не трогаем
+            // контейнеры обрабатываются внутри ApplyAbilities на месте - стак не трогаем
             if (isContainer || outputSlot.Itemstack == null) return;
 
             // штучные предметы / тесто: считаем бонус сами и кладём прямо в слот

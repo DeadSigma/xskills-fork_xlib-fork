@@ -465,7 +465,7 @@ namespace XLib.XLeveling
                         return cleanRemove.Contains(notReqName);
                     }
 
-                    // Если очищенное имя из игры совпало с очищенным именем из конфига — УДАЛЯЕМ!
+                    // Если очищенное имя из игры совпало с очищенным именем из конфига - УДАЛЯЕМ!
                     return cleanRemove.Contains(reqName);
                 });
         }

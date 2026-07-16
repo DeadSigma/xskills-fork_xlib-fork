@@ -227,7 +227,7 @@ namespace XSkills
 
             bool isFishing = slot?.Itemstack?.Attributes.GetBool("fishing", false) ?? false;
 
-            // Если это новый заброс (рыбалка еще не начата) — ломаем удочку на 1 ед.
+            // Если это новый заброс (рыбалка еще не начата) - ломаем удочку на 1 ед.
             if (slot?.Itemstack != null && !isFishing)
             {
                 __instance.DamageItem(byEntity.World, byEntity, slot, 1);

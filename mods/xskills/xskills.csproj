@@ -61,6 +61,10 @@
       <HintPath>$(VINTAGE_STORY)\Mods\VSEssentials.dll</HintPath>
       <Private>False</Private>
     </Reference>
+	  <Reference Include="cairo-sharp">
+		  <HintPath>$(VINTAGE_STORY)/Lib/cairo-sharp.dll</HintPath>
+		  <Private>False</Private>
+	  </Reference>
     <Reference Include="VSCreativeMod">
       <HintPath>$(VINTAGE_STORY)\Mods\VSCreativeMod.dll</HintPath>
       <Private>False</Private>

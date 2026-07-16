@@ -29,7 +29,7 @@ namespace XSkills
         {
             if (cookerType == null)
             {
-                Console.WriteLine("[XSkills/PressureCooker] Apply: cookerType == null — патч НЕ применён (нет вызова в XSkills.cs?)");
+                Console.WriteLine("[XSkills/PressureCooker] Apply: cookerType == null - патч НЕ применён (нет вызова в XSkills.cs?)");
                 return;
             }
             Console.WriteLine("[XSkills/PressureCooker] Apply для типа: " + cookerType.FullName);
@@ -173,7 +173,7 @@ namespace XSkills
 
             if (cooking != null && skill != null)
             {
-                //  WELLDONE: продлеваем срок годности (как в XSkills — только freshHours)
+                //  WELLDONE: продлеваем срок годности (как в XSkills - только freshHours)
                 PlayerAbility wellDone = skill[cooking.WellDoneId];
                 if (wellDone != null && wellDone.Tier > 0)
                     ApplyWelldoneToTransition(api, preserved, 1.0f + wellDone.SkillDependentFValue());

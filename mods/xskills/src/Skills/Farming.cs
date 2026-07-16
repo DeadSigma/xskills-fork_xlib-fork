@@ -412,7 +412,7 @@ namespace XSkills
             be.ToTreeAttributes(treeAfter);
             string stateAfter = treeAfter.ToJsonToken();
 
-            // Если за этот "тик" память изменилась — значит, таймер сбора дошел до конца и ягоды упали!
+            // Если за этот "тик" память изменилась - значит, таймер сбора дошел до конца и ягоды упали!
             if (__state != stateAfter)
             {
                 Farming farming = XLeveling.Instance(world.Api)?.GetSkill("farming") as Farming;

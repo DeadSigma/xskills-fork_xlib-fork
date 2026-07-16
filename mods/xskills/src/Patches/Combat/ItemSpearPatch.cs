@@ -20,7 +20,7 @@ namespace XSkills.Patches
         public static void OnGameTickPostfix(EntityBehaviorAimingAccuracy __instance)
         {
             // entity лежит в базовом EntityBehavior как protected-поле -> берём через Traverse.
-            // Если эффекта не будет вообще — проверь имя поля в декомпиле EntityBehavior.
+            // Если эффекта не будет вообще - проверь имя поля в декомпиле EntityBehavior.
             Entity entity = Traverse.Create(__instance).Field("entity").GetValue<Entity>();
             if (entity is not EntityPlayer player) return;
 

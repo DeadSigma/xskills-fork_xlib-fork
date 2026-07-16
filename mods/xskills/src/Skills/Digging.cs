@@ -461,7 +461,6 @@ namespace XSkills
             {
                 PlayerSkill playerSkill = byEntity.GetBehavior<PlayerSkillSet>()?[digging.Id];
 
-                //  ГАРАНТИРОВАННЫЙ ОПЫТ ===
                 // Выдаем опыт на сервере за сам факт промывки одного слоя (даже если ничего не нашли)
                 if (byEntity.Api.Side == EnumAppSide.Server)
                 {
@@ -515,7 +514,8 @@ namespace XSkills
                     if (digging != null && byEntity.Api.Side == EnumAppSide.Server)
                     {
                         PlayerSkill playerSkill = byEntity.GetBehavior<PlayerSkillSet>()?[digging.Id];
-                        playerSkill?.AddExperience(stack.StackSize * 1.5f); // Дополнительная награда
+
+                        playerSkill?.AddExperience(stack.StackSize * 0.2f);
                     }
 
                     // Выдача предметов (строго на сервере, чтобы избежать глитчей в мультиплеере)

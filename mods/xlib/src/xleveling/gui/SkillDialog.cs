@@ -131,7 +131,7 @@ namespace XLib.XLeveling
             int skillTabsActive = skillBar != null ? skillBar.activeElement : 0;
             if (groupTabsActive >= this.groups.Count) groupTabsActive = 0;
 
-            ElementBounds dialogBounds = ElementStdBounds.AutosizedMainDialog.WithAlignment(EnumDialogArea.CenterMiddle);
+            ElementBounds dialogBounds = ElementStdBounds.AutosizedMainDialog.WithAlignment(EnumDialogArea.LeftMiddle);
             ElementBounds bgBounds = ElementBounds.Fill.WithFixedPadding(GuiStyle.ElementToDialogPadding);
             ElementBounds groupTabBounds = ElementBounds.FixedPos(EnumDialogArea.LeftTop, 0, yy).WithFixedHeight(24).WithFixedWidth(this.Width);
             yy += 28;

@@ -105,7 +105,7 @@ namespace XSkills.Compatibility
                             MomentumStacks[key] = 0;
                         }
 
-                        // Блок успешно разрушен — выдаем 1 стак Импульса!
+                        // Блок успешно разрушен - выдаем 1 стак Импульса!
                         if (MomentumStacks[key] < maxStacks)
                         {
                             MomentumStacks[key]++;

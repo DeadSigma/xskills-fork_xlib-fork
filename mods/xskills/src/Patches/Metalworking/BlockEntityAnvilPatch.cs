@@ -139,7 +139,7 @@ namespace XSkills
         // Задержка остывания, которую выставляет горн/кузница при нагреве (ванильные 0.5 игрового часа).
         private const double VanillaForgeGraceHours = 0.5;
 
-        // Выставляет 15-секундный таймер ОДИН РАЗ — когда заготовка приходит с нагрева. Дальше таймер
+        // Выставляет 15-секундный таймер ОДИН РАЗ - когда заготовка приходит с нагрева. Дальше таймер
         private static void ApplyForgeCooldownDelay(IWorldAccessor world, ItemStack stack, double prevLastUpdate)
         {
             if (stack == null) return;
@@ -458,7 +458,7 @@ namespace XSkills
                 }
             }
 
-            //heating hits — пишем температуру ТОЛЬКО на сервере.
+            //heating hits - пишем температуру ТОЛЬКО на сервере.
             //Иначе клиентский OnHelveHammerHit из рендера затирает синканное значение и сбрасывает таймер.
             if (world.Side == EnumAppSide.Server && !helveHammer)
             {

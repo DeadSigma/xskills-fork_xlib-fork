@@ -67,9 +67,9 @@ namespace XSkills
         ///
         /// XSkills MetalRecovery превращает осколки стали в metalbit-blistersteel
         /// (Metalworking.cs: baseMaterial "steel" -> "blistersteel" без smithingplus).
-        /// Blistersteel — промежуточный металл: у него один рецепт (складывание в сталь),
+        /// Blistersteel - промежуточный металл: у него один рецепт (складывание в сталь),
         /// а его workitem помечен isBlisterSteel и не принимает докидывание вокселей.
-        /// Поэтому такие куски куём как сталь — это совпадает и с ванильной металлургией,
+        /// Поэтому такие куски куём как сталь - это совпадает и с ванильной металлургией,
         /// и с ожиданием игрока (осколки от стальной заготовки -> снова сталь).
         /// Для обычных металлов это тождество.
         /// </summary>
@@ -188,7 +188,7 @@ namespace XSkills
             }
             else
             {
-                // добавляем к уже лежащей заготовке — логика как у слитков
+                // добавляем к уже лежащей заготовке - логика как у слитков
                 if (beAnvil.WorkItemStack.Collectible is ItemWorkItem wi && wi.isBlisterSteel)
                 {
                     return null;

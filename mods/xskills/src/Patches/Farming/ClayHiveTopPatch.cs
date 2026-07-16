@@ -60,7 +60,7 @@ namespace XSkills
 
         private static void ProcessHarvest(IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel, Block __state)
         {
-            // Если до тика блок не был готов к сбору — выходим
+            // Если до тика блок не был готов к сбору - выходим
             if (__state == null || world.Api.Side != EnumAppSide.Server || blockSel == null || byPlayer == null) return;
 
             // 1. Проверяем, изменился ли блок (завершился ли процесс сбора именно в этот тик)
