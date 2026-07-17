@@ -362,20 +362,35 @@ namespace XLib.XLeveling
         /// </summary>
         /// <param name="playerSkillSet">The player skill set of a player.</param>
         /// <param name="includeGlobalModifiers">Decides whether global modifiers should be included.</param>
-        /// <returns>the experience multiplier for a specific player; returns 0.0f if playerSkillSet is null</returns>
+        /// <returns>the experience multiplier for a specific player; returns 0.0f if playerSkillSet is null
+        /// или сущность игрока ещё не была создана.</returns>
+        /// <remarks>
+        /// Вызывается из PlayerSkill.AddExperience на каждом игровом тике, включая первые тики после подключения игрока.
+        /// В этот момент сущность игрока и её синхронизируемые атрибуты (watched attributes) могут быть ещё не синхронизированы.
+        /// </remarks>
         virtual public float GetExperienceMultiplier(PlayerSkillSet playerSkillSet, bool includeGlobalModifiers = true)
         {
             if (playerSkillSet == null) return 0.0f;
+
+            // Отсутствие сущности означает, что неоткуда считывать множители. Без этой проверки оператор null-propagation ниже просто перенесёт падение на строку дальше - к Entity.Stats.
+            var entity = playerSkillSet.Player?.Entity;
+            if (entity == null) return 0.0f;
+
             float value = 1.0f;
             float mult = 0.0f;
-            ClassExpMultipliers.TryGetValue(playerSkillSet.Player.Entity?.WatchedAttributes.GetString("characterClass"), out mult);
+
+            // GetString возвращает null, если атрибут отсутствует, а Dictionary.TryGetValue выбрасывает исключение, если ключ равен null.
+            // Атрибут отсутствует сразу после подключения игрока, а также если класс персонажа ещё не был выбран
+            string characterClass = entity.WatchedAttributes?.GetString("characterClass");
+            if (!string.IsNullOrEmpty(characterClass)) ClassExpMultipliers.TryGetValue(characterClass, out mult);
 
             if (includeGlobalModifiers) value *= XLeveling.Config.expMult;
             if (SpecialisationID >= 0)
             {
-                mult += playerSkillSet[Id][SpecialisationID].FValue(0);
+                PlayerAbility specialisation = playerSkillSet[Id]?[SpecialisationID];
+                if (specialisation != null) mult += specialisation.FValue(0);
             }
-            mult += playerSkillSet.Player.Entity.Stats.GetBlended("expMult");
+            mult += entity.Stats.GetBlended("expMult");
             return value * mult;
         }
 
@@ -383,7 +398,7 @@ namespace XLib.XLeveling
         /// This function is called after the skill configuration for this skill have been received from a server.
         /// </summary>
         virtual public void OnConfigReceived()
-        {}
+        { }
 
         /// <summary>
         /// Called when the player dies.
@@ -399,7 +414,7 @@ namespace XLib.XLeveling
             PlayerSkill playerSkill = playerSkillSet?[Id];
             if (playerSkill == null) return;
 
-            float loss = ExpLossOnDeath <= 1.0f ? 
+            float loss = ExpLossOnDeath <= 1.0f ?
                 playerSkill.Experience * ExpLossOnDeath :
                 Math.Min(playerSkill.Experience, playerSkill.RequiredExperience * ExpLossOnDeath * 0.01f);
 
@@ -451,7 +466,7 @@ namespace XLib.XLeveling
             if (config.ClassExpMultipliers != null)
             {
                 Dictionary<string, float>.Enumerator pairs = config.ClassExpMultipliers.GetEnumerator();
-                while(pairs.MoveNext())
+                while (pairs.MoveNext())
                 {
                     this.ClassExpMultipliers[pairs.Current.Key] = pairs.Current.Value;
                 }
@@ -487,7 +502,7 @@ namespace XLib.XLeveling
         /// </returns>
         public int QuadraticEquation(float expBase, float expMult, float expEquationValue, int level)
         {
-            level-= (MinLevel + 1);
+            level -= (MinLevel + 1);
             return (int)(expEquationValue * level * level + level * expMult + expBase);
         }
     }//!class Skill
