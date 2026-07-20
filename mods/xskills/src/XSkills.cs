@@ -32,6 +32,7 @@ namespace XSkills
         public static XSkills Instance { get; private set; }
         private IClientNetworkChannel fixToggleClientChannel;
         private IServerNetworkChannel serverFixChannel;
+        private bool slotFixRequestPending;
         public Dictionary<string, Skill> Skills { get; set; }
 
         public ICoreAPI Api { get; private set; }
@@ -612,7 +613,26 @@ namespace XSkills
         // Клиент: запросить состояние у сервера (зовётся из OnStrongBack)
         public void RequestSlotFixState()
         {
-            fixToggleClientChannel?.SendPacket(new XSkillsFixRequestPacket());
+            if (fixToggleClientChannel == null) return;
+
+            // Канал подключён - шлём сразу
+            if (fixToggleClientChannel.Connected)
+            {
+                slotFixRequestPending = false;
+                fixToggleClientChannel.SendPacket(new XSkillsFixRequestPacket());
+                return;
+            }
+
+            // Иначе канал ещё не завершил хендшейк: при заходе тиры способностей
+            // приезжают по каналу xleveling раньше, чем подключается xskillsfixtoggle
+            // Оператор ?. спасает только от null, но не от "не подключён", поэтому
+            if (slotFixRequestPending) return;
+            slotFixRequestPending = true;
+            (this.Api as ICoreClientAPI)?.Event.RegisterCallback(_ =>
+            {
+                slotFixRequestPending = false;
+                RequestSlotFixState();
+            }, 200);
         }
         public bool OnSlotLockToggle(KeyCombination keys)
         {
