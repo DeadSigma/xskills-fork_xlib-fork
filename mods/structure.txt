@@ -13,6 +13,7 @@ mods/
                 effects/
                     effects.json
                 lang/
+                    be.json
                     cn.json
                     cs.json
                     de.json
@@ -24,7 +25,7 @@ mods/
                     pl.json
                     ru.json
                     uk.json
-                    zn-CN.json
+                    zh-CN.json
                 patches/
                     entities.json
                 shaders/
@@ -42,6 +43,8 @@ mods/
                 itemtypes/
                     skillbook.json
                 lang/
+                    be.json
+                    cn.json
                     cs.json
                     de.json
                     en.json
@@ -50,14 +53,15 @@ mods/
                     fr.json
                     it.json
                     ja.json
-                    nl.json
                     pl.json
                     pt-br.json
                     ro.json
                     ru.json
                     sv.json
                     uk.json
-                    zn-CN.json
+                    zh-CN.json
+                sounds/
+                    knowledge_consuming.ogg
         src/
             xeffects/
                 AffectedEntityBehavior.cs
@@ -96,6 +100,7 @@ mods/
                     InfectiousEntityBehavior.cs
             xleveling/
                 Config.cs
+                ModidSpoofSystem.cs
                 Networkpackages.cs
                 XLeveling.cs
                 XLevelingClient.cs
@@ -104,6 +109,12 @@ mods/
                     AbilityButton.cs
                     AbilityTooltip.cs
                     SkillDialog.cs
+                    xpdrop/
+                        GildedLayoutBridge.cs
+                        PandaXPDropsSystem.cs
+                        XpDropManager.cs
+                        XpDropsEditDialog.cs
+                        XpDropsHud.cs
                 Item/
                     ItemSkillBook.cs
                 requirements/
@@ -129,6 +140,7 @@ mods/
                     StatAbility.cs
                     StatsAbility.cs
                     TraitAbility.cs
+                    TraitRequirement.cs
     xskills/
         .ignore
         modicon.png
@@ -139,6 +151,8 @@ mods/
         assets/
             game/
                 lang/
+                    be.json
+                    cn.json
                     cs.json
                     de.json
                     en.json
@@ -148,6 +162,8 @@ mods/
                     it.json
                     ja.json
                     pl.json
+                    pt-br.json
+                    ro.json
                     ru.json
                     sv.json
                     uk.json
@@ -162,9 +178,8 @@ mods/
                     saturated.json
                 itemtypes/
                     everlastingcharcoal.json
-                    metalbits/
-                        metalbit.json
                 lang/
+                    be.json
                     cn.json
                     cs.json
                     de.json
@@ -172,6 +187,7 @@ mods/
                     es-419.json
                     es-es.json
                     fr.json
+                    it.json
                     ja.json
                     pl.json
                     pt-br.json
@@ -179,8 +195,9 @@ mods/
                     ru.json
                     sv.json
                     uk.json
-                    zn-CN.json
+                    zh-CN.json
                 patches/
+                    coalpile_fix.json
                     container.json
                     cooking.json
                     digging.json
@@ -228,11 +245,8 @@ mods/
                         salt.json
                     grid/
                         cage.json
-                        ingot-blistersteel.json
                 shapes/
                     item/
-                        bits/
-                            metalbit.json
                 skills/
                     combat.json
                     cooking.json
@@ -249,6 +263,7 @@ mods/
         src/
             BlockEntityBehaviorOwnable.cs
             BlockEntityBehaviorValue.cs
+            ModidSpoofSystem.cs
             QualityUtil.cs
             XSkills.cs
             XSkillsPlayerInventory.cs
@@ -272,6 +287,7 @@ mods/
                 BlockBombPatch.cs
                 BlockEntityGroundStoragePatch.cs
                 BlockFullCoatingPatch.cs
+                BlockLiquidContainerBasePatch .cs
                 BlockLootVesselPatch.cs
                 CollectibleObjectPatch.cs
                 EntityPlayerPatch.cs
@@ -281,8 +297,21 @@ mods/
                 ManualPatch.cs
                 TradeItemPatch.cs
                 Combat/
+                    ItemSpearPatch.cs
                     ItemStackMeleeWeaponStatsPatch.cs
                     ModSystemWearableStatsPatch.cs
+                compatabillity/
+                    BlockEntityCanningBenchPatch.cs
+                    BlockEntityCanPressPatch.cs
+                    BlockEntityEFruitPressPatch.cs
+                    BlockEntityOvenCookingTopPatch.cs
+                    BlockEntityPressureCookerPatch.cs
+                    ImmersiveMining.cs
+                    PlayerInventoryLibCompat.cs
+                    SimplePotteryWheelIntegration.cs
+                    StorageTweaksCompat.cs
+                    ToolsmithConflictResolver.cs
+                    XSkillsFixTogglePacket.cs
                 Cooking/
                     BlockCookedContainerBasePatch.cs
                     BlockCookedContainerPatch.cs
@@ -313,10 +342,11 @@ mods/
                     BlockReedsPatch.cs
                     BlockWateringCanPatch.cs
                     ClayHiveTopPatch.cs
-                    CropAutoPatchSystem.cs
+                    FarmingAutoPatchSystem.cs
                     HoeUtil.cs
                     ItemPlantableSeedPatch.cs
                     ItemShearsPatch.cs
+                    OrekiWoofsBeehivesPatch.cs
                     XSkillsItemHoe.cs
                     XSkillsItemHoePrimitive.cs
                     XskillsPlantableSeed.cs
@@ -327,7 +357,6 @@ mods/
                 Husbandry/
                     AiTaskSeekFoodAndEatPatch.cs
                     BehaviorCollectFromNestboxPatch.cs
-                    BlockBehaviorBlockEntityInteractPatch.cs
                     BlockEntityButcherWorkstationPatch.cs
                     BlockEntityTroughPatch.cs
                     EntityBehaviorHarvestablePatch.cs
@@ -337,11 +366,15 @@ mods/
                     BlockEntityAnvilPatch.cs
                     BlockEntityToolMoldPatch.cs
                     BlockSmeltingContainerPatch.cs
+                    KnapsterIntegration.cs
+                    MetalBitAnvilBehavior.cs
+                    SafeQuenchingPatch.cs
                 Pottery/
                     BlockEntityBeeHiveKilnPatch.cs
                     BlockEntityClayFormPatch.cs
                     BlockEntityPitKilnPatch.cs
                     ItemClayPatch.cs
+                    KnapsterClayIntegration.cs
                     PotteryUtil.cs
                 Survival/
                     AiTaskJealousSeekEntityPatch.cs
@@ -367,5 +400,6 @@ mods/
         vshelper/
             dependencies/
                 ACulinaryArtillery.dll
+                ElectricalProgressive-QOL.dll
                 Overhaullib.dll
                 primitivesurvival.dll

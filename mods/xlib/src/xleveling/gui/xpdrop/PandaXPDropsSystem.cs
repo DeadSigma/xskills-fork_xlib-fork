@@ -84,6 +84,9 @@ namespace PandaXPDrops
         private XpDropsHud hud;
         private XpDropsEditDialog editDialog;
 
+        /// <summary>Необязательная связь с окном xSkills Gilded, <c>null</c>, если тот мод не установлен</summary>
+        private GildedLayoutBridge gilded;
+
         /// <summary>Только для клиента - ничего из этого не должно загружаться на выделенном сервере</summary>
         /// <param name="forSide">Сторона, для которой загрузчик модов в данный момент выполняет загрузку</param>
         /// <returns><c>true</c> на стороне клиента</returns>
@@ -105,6 +108,7 @@ namespace PandaXPDrops
             DropManager = new XpDropManager(api, Config);
             hud = new XpDropsHud(api, DropManager);
             editDialog = new XpDropsEditDialog(api, DropManager, SaveConfig);
+            gilded = GildedLayoutBridge.TryCreate(api);
 
             // Для компоновки HUD требуется загруженный мир и сущность игрока
             api.Event.LevelFinalize += hud.ComposeAndOpen;
@@ -152,11 +156,23 @@ namespace PandaXPDrops
             return true;
         }
 
-        /// <summary>Открывает/закрывает диалог редактирования макета. Закрытие сохраняет конфигурацию</summary>
+        /// <summary>
+        /// Распределяет горячую клавишу редактирования: пока окно xSkills Gilded открыто, оно забирает её себе,
+        /// иначе правится макет выпадений опыта.
+        /// </summary>
         /// <param name="comb">Комбинация клавиш, вызвавшая срабатывание горячей клавиши</param>
         /// <returns><c>true</c> - клавиша всегда поглощается</returns>
+        /// <remarks>
+        /// Gilded - окно ImGui: подвинуть себя может только оно само и только пока видимо. Когда оно закрыто -
+        /// или мод вообще не установлен - для собственного редактора этого мода ничего не меняется.
+        /// </remarks>
         private bool ToggleEditMode(KeyCombination comb)
         {
+            if (gilded != null && gilded.IsWindowOpen && gilded.TryToggleLayoutEdit(HotkeyName(XpDropsEditDialog.HotkeyCode)))
+            {
+                return true;
+            }
+
             if (editDialog == null) return false;
 
             if (editDialog.IsOpened()) editDialog.TryClose();
@@ -164,6 +180,12 @@ namespace PandaXPDrops
 
             return true;
         }
+
+        /// <summary>Текущая привязка горячей клавиши, для подстановки в сообщения</summary>
+        /// <param name="code">Код горячей клавиши</param>
+        /// <returns>Комбинация клавиш текстом, либо сам код, если клавиша не зарегистрирована</returns>
+        private string HotkeyName(string code)
+            => capi?.Input.GetHotKeyByCode(code)?.CurrentMapping?.ToString() ?? code;
 
         /// <summary>Записывает текущую конфигурацию обратно на диск</summary>
         private void SaveConfig()
@@ -206,6 +228,8 @@ namespace PandaXPDrops
         /// <summary>Удаляет перехватчик, оба диалога и каждую текстуру GPU. Выполняется при выходе из мира</summary>
         public override void Dispose()
         {
+            gilded = null;
+
             editDialog?.TryClose();
             editDialog?.Dispose();
             editDialog = null;

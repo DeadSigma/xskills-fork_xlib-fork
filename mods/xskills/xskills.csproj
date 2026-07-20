@@ -122,6 +122,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="assets\xskills\shapes\item\" />
+    <Folder Include="src\Debug\" />
   </ItemGroup>
   <PropertyGroup>
     <BaseOutputPath>./bin</BaseOutputPath>
