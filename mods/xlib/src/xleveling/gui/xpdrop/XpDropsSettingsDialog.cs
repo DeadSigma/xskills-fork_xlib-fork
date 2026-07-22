@@ -5,15 +5,14 @@ using Vintagestory.API.Client;
 namespace PandaXPDrops
 {
     /// <summary>
-    /// Диалоговое окно настроек для HUD выпадения опыта.
-    /// Позволяет изменять все параметры конфигурации.
+    /// Диалоговое окно настроек для HUD выпадения опыта
+    /// Позволяет изменять все параметры конфигурации
     /// </summary>
     public class XpDropsSettingsDialog : GuiDialog
     {
         private readonly XpDropConfig config;
         private readonly Action onSave;
 
-        // Ключи полей, которые соответствуют свойствам конфига. По ним же ищем переводы в Lang.
         private readonly string[] keys = new string[] {
             "Enabled", "BarRightMargin", "BarTopMargin", "BarScale", "MinBarWidth", "BarHeight", "Padding", "TextGap",
             "TextSpawnBelowBar", "TextSpawnOffsetX", "DropScale", "DropSpacing", "BarIdleTimeout", "BarFadeDuration", "DropLifetime", "FadeStartPct",
@@ -26,7 +25,7 @@ namespace PandaXPDrops
         /// <summary>Порядок отрисовки. Поверх режима редактирования.</summary>
         public override double DrawOrder => 0.98;
 
-        /// <summary>Инициализирует окно настроек.</summary>
+        /// <summary>Инициализирует окно настроек</summary>
         public XpDropsSettingsDialog(ICoreClientAPI capi, XpDropConfig config, Action onSave) : base(capi)
         {
             this.config = config;
@@ -66,7 +65,6 @@ namespace PandaXPDrops
 
             for (int i = 0; i < keys.Length; i++)
             {
-                // Загружаем перевод названия из lang файла
                 string localizedLabel = XpDropsLang.Get("setting-" + keys[i].ToLowerInvariant()); 
                 compo.AddStaticText(localizedLabel, CairoFont.WhiteSmallText(), tb[i]);
 
@@ -98,7 +96,7 @@ namespace PandaXPDrops
             PopulateUI(this.config);
         }
 
-        /// <summary>Заполняет текстовые поля значениями из переданного конфига.</summary>
+        /// <summary>Заполняет текстовые поля значениями из переданного конфига</summary>
         private void PopulateUI(XpDropConfig src)
         {
             SingleComposer.GetSwitch("Enabled").On = src.Enabled;
