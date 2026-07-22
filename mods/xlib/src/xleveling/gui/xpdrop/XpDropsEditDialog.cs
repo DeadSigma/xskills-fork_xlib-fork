@@ -84,7 +84,6 @@ namespace PandaXPDrops
 
                 SingleComposer = capi.Gui
                     .CreateCompo("pandaxpdrops-edit", rootBounds)
-                    // Используем локализацию
                     .AddButton(XpDropsLang.Get("settings-btn-open"), OnSettingsClicked, buttonBounds)
                     .Compose();
             }
@@ -125,7 +124,7 @@ namespace PandaXPDrops
         /// <param name="deltaTime">Дельта кадра в секундах</param>
         public override void OnRenderGUI(float deltaTime)
         {
-            // КРИТИЧЕСКИ ВАЖНО: Вызов базового метода отрисовывает элементы интерфейса (нашу кнопку)
+            // Вызов базового метода отрисовывает элементы интерфейса
             base.OnRenderGUI(deltaTime);
 
             EnsureWhiteTexture();
