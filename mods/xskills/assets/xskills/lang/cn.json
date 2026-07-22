@@ -476,6 +476,9 @@
   "ability-recycler": "回收商",
   "abilitydesc-recycler": "破坏农田现在会根据剩余\n的肥力掉落土壤。可以将土\n壤改良至基础肥力{0}。",
 
+  "ability-refineddilution": "改良稀释",
+  "abilitydesc-refineddilution": "使“稀释”技能也能提高蜡烛、皮革等非食物产品的产量。",
+
   "ability-repotting": "换盆",
   "abilitydesc-repotting": "收获未成熟的作物总是会\n掉落种子。",
 

@@ -476,6 +476,9 @@
   "ability-recycler": "Recycler",
   "abilitydesc-recycler": "Breaking farmland now drops soil depending on the remaining fertility. Can improve the soil up to a base fertility of {0}.",
 
+  "ability-refineddilution": "Diluare Îmbunătățită",
+  "abilitydesc-refineddilution": "Permite ca abilitatea „Diluare” să mărească și randamentul produselor necomestibile, cum ar fi lumânările, pielea și altele.",
+
   "ability-repotting": "Repotting",
   "abilitydesc-repotting": "Harvesting non-matured crops drops always the seeds.",
 

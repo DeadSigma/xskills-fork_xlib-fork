@@ -476,6 +476,9 @@
   "ability-recycler": "Reciclador",
   "abilitydesc-recycler": "Quebrar terra arável agora gera solo dependendo da fertilidade restante. Pode melhorar o solo até uma fertilidade base de {0}.",
 
+  "ability-refineddilution": "Diluição Aprimorada",
+  "abilitydesc-refineddilution": "Permite que a habilidade «Diluição» também aumente o rendimento de produtos não comestíveis, como velas, couro e muito mais.",
+
   "ability-repotting": "Replantio",
   "abilitydesc-repotting": "Colher culturas não maduras sempre gera sementes.",
 

@@ -24,7 +24,11 @@ namespace XSkills
         {
             CollectibleObject input = firepit.inputSlot?.Itemstack?.Collectible;
             if (input == null) return false;
-            bool isFood = input is BlockCookingContainer || input is BlockBucket;
+
+            // BlockCookingContainer - ванильный горшок, BlockBucket - ведро/бак
+            // Саспан/котёл ACA наследуются от BlockLiquidContainerBase, но не от BlockBucket, поэтому раньше выпадали из проверки и Fast Food/Well Done для них не работали
+            // BlockLiquidContainerBase покрывает и саспан, и вёдра-бутылки - а еда там или нет, всё равно доуточняется по варочным слотам ниже
+            bool isFood = input is BlockCookingContainer || input is BlockBucket || input is BlockLiquidContainerBase;
 
             if (!isFood)
             {

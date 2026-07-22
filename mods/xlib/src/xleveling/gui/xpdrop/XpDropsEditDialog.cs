@@ -75,16 +75,39 @@ namespace PandaXPDrops
         {
             base.OnGuiOpened();
 
-            // Пустой компоновщик - он нужен GuiDialog, все рисуется вручную в OnRenderGUI
             if (SingleComposer == null)
             {
+                ElementBounds rootBounds = ElementBounds.Fixed(10, 10, 200, 40).WithAlignment(EnumDialogArea.LeftTop);
+                ElementBounds buttonBounds = ElementBounds.Fixed(0, 0, 160, 30);
+
+                rootBounds.WithChild(buttonBounds);
+
                 SingleComposer = capi.Gui
-                    .CreateCompo("pandaxpdrops-edit", ElementBounds.Fixed(0, 0, 0, 0))
+                    .CreateCompo("pandaxpdrops-edit", rootBounds)
+                    // Используем локализацию
+                    .AddButton(XpDropsLang.Get("settings-btn-open"), OnSettingsClicked, buttonBounds)
                     .Compose();
             }
 
             manager.EditPreview = true;
             capi.ShowChatMessage(XpDropsLang.Get("editmode-hint", HotkeyName(HotkeyCode)));
+        }
+
+        // Переменная для хранения ссылки на открытое окно настроек
+        private XpDropsSettingsDialog settingsDialog;
+
+        /// <summary>Открывает меню настроек мода, предотвращая появление дубликатов</summary>
+        /// <returns>Возвращает true, подтверждая перехват клика</returns>
+        private bool OnSettingsClicked()
+        {
+            if (settingsDialog != null && settingsDialog.IsOpened())
+            {
+                return true;
+            }
+
+            settingsDialog = new XpDropsSettingsDialog(capi, manager.Config, onSave);
+            settingsDialog.TryOpen();
+            return true;
         }
 
         /// <summary>Выходит из режима предпросмотра и сохраняет макет</summary>
@@ -98,10 +121,13 @@ namespace PandaXPDrops
             base.OnGuiClosed();
         }
 
-        /// <summary>Рисует рамку вокруг каждого элемента, выделяя тот, что под курсором</summary>
-        /// <param name="deltaTime">Дельта кадра в секундах. Не используется - менеджер получает тики от HUD</param>
+        /// <summary>Рисует рамки вокруг каждого элемента и сам пользовательский интерфейс</summary>
+        /// <param name="deltaTime">Дельта кадра в секундах</param>
         public override void OnRenderGUI(float deltaTime)
         {
+            // КРИТИЧЕСКИ ВАЖНО: Вызов базового метода отрисовывает элементы интерфейса (нашу кнопку)
+            base.OnRenderGUI(deltaTime);
+
             EnsureWhiteTexture();
 
             EnumXpDropsElement hovered = dragging != EnumXpDropsElement.None

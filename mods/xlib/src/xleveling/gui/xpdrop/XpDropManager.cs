@@ -752,7 +752,7 @@ namespace PandaXPDrops
         {
             double scale = RuntimeEnv.GUIScale * config.DropScale;
             double fontSize = config.FontSize * scale * 0.85;
-            string xpText = "+" + drop.XpAmount.ToString("N1", CultureInfo.InvariantCulture);
+            string xpText = "+" + drop.XpAmount.ToString("0.0#", CultureInfo.InvariantCulture);
 
             int textW, textH;
             using (ImageSurface measure = new ImageSurface(Format.Argb32, 1, 1))

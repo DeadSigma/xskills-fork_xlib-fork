@@ -32,6 +32,7 @@ namespace XSkills
         public int WellDoneId { get; private set; }
         public int PreserverId { get; private set; }
         public int DilutionId { get; private set; }
+        public int RefinedDilutionId { get; private set; }
         public int DesalinateId { get; private set; }
         public int SaltyBackpackId { get; private set; }
         public int GourmetId { get; private set; }
@@ -145,6 +146,13 @@ namespace XSkills
                 "xskills:ability-eggtimer",
                 "xskills:abilitydesc-eggtimer",
                 8));
+
+           //Позволяет перку Dilution распространяться на несъедобные продукты
+            RefinedDilutionId = this.AddAbility(new Ability(
+                "refineddilution",
+                "xskills:ability-refineddilution",
+                "xskills:abilitydesc-refineddilution",
+                5));
 
             this[SaltyBackpackId].OnPlayerAbilityTierChanged += OnSaltyBackpack;
 
@@ -477,7 +485,8 @@ namespace XSkills
                 }
                 else if (mealContainer == null || mealContainer is BlockPie)
                 {
-                    if (outputStack.Collectible.NutritionProps != null || mealContainer is BlockPie)
+                    if (outputStack.Collectible.NutritionProps != null || mealContainer is BlockPie ||
+                          (skill[this.RefinedDilutionId]?.Tier ?? 0) > 0)
                     {
                         float rel = scaledCooked - (int)scaledCooked;
                         totalCooked = (int)scaledCooked + (world.Rand.NextDouble() < rel ? 1 : 0);
@@ -604,7 +613,16 @@ namespace XSkills
             playerAbility = skill[this.WellDoneId];
             foreach (ItemStack stack in contentStacks)
             {
-                ITreeAttribute attr = (stack?.Attributes as TreeAttribute)?.GetTreeAttribute("transitionstate");
+                if (stack == null) continue;
+                ITreeAttribute attr = (stack.Attributes as TreeAttribute)?.GetTreeAttribute("transitionstate");
+
+                // Продукт котла синтезируется из шаблона рецепта и не имеет transitionstate, поэтому Well Done ниже нечего продлевать. Инициализируем состояние здесь, как это сделала бы игра на следующем тике
+                if (attr == null && (stack.Collectible?.TransitionableProps?.Length ?? 0) > 0)
+                {
+                    stack.Collectible.UpdateAndGetTransitionStates(world, new DummySlot(stack));
+                    attr = (stack.Attributes as TreeAttribute)?.GetTreeAttribute("transitionstate");
+                }
+
                 if (attr != null)
                 {
                     FloatArrayAttribute freshHoursAttribute = attr["freshHours"] as FloatArrayAttribute;

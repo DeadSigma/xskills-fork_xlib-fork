@@ -15,10 +15,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="bin\**" />
+    <Compile Remove="src\Debug\**" />
     <Compile Remove="src\Patches\Mining\**" />
     <EmbeddedResource Remove="bin\**" />
+    <EmbeddedResource Remove="src\Debug\**" />
     <EmbeddedResource Remove="src\Patches\Mining\**" />
     <None Remove="bin\**" />
+    <None Remove="src\Debug\**" />
     <None Remove="src\Patches\Mining\**" />
   </ItemGroup>
   <ItemGroup>
@@ -122,7 +125,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="assets\xskills\shapes\item\" />
-    <Folder Include="src\Debug\" />
   </ItemGroup>
   <PropertyGroup>
     <BaseOutputPath>./bin</BaseOutputPath>
