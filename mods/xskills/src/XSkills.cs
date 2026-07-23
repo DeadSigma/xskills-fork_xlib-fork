@@ -92,6 +92,27 @@ namespace XSkills
                 type = api.ClassRegistry.GetBlockEntity("BlockNestbox");
                 if (type != null) BlockEntityNestBoxPatch.Apply(harmony, type, xskills);
 
+                if (api.ModLoader.IsModEnabled("blushandbins"))
+                {
+                    Type chefsCounterType = api.ClassRegistry.GetBlockEntity("BlockEntityChefsCounter");
+                    if (chefsCounterType == null)
+                    {
+                        foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
+                        {
+                            Type t = asm.GetType("BlushAndBins.Features.ChefsCounter.BlockEntityChefsCounter", false);
+                            if (t != null)
+                            {
+                                chefsCounterType = t;
+                                break;
+                            }
+                        }
+                    }
+                    if (chefsCounterType != null)
+                    {
+                        BlockEntityChefsCounterPatch.Apply(harmony, chefsCounterType, xskills);
+                    }
+                }
+
                 if (api.ModLoader.IsModSystemEnabled("overhaullib"))
                 {
                     ApplyCOPatch(xskills);

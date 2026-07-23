@@ -377,5 +377,14 @@
         "value": [
             { "name": "XskillsOwnable" }
         ]
+    },
+    {
+        "dependsOn": [ { "modid": "blushandbins" } ],
+        "file": "blushandbins:blocktypes/foodstorage/chefscounter",
+        "op": "addmerge",
+        "path": "/entityBehaviors",
+        "value": [
+            { "name": "XskillsOwnable" }
+        ]
     }
 ]
