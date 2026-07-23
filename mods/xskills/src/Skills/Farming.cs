@@ -421,9 +421,8 @@ namespace XSkills
                 PlayerSkill playerSkill = byPlayer.Entity.GetBehavior<PlayerSkillSet>()?.PlayerSkills[farming.Id];
                 if (playerSkill == null) return;
 
-                // 1. ВЫДАЧА ОПЫТА (оставил 1.33f для теста)
+                // 1. ВЫДАЧА ОПЫТА 
                 playerSkill.AddExperience(0.33f);
-                world.Logger.Event("-> УСПЕХ: Ягоды собраны, опыт начислен!");
 
                 // 2. Логика навыка Gatherer (дополнительный дроп)
                 PlayerAbility playerAbility = playerSkill.PlayerAbilities[farming.GathererId];
