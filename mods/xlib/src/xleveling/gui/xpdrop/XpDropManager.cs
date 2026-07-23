@@ -209,8 +209,8 @@ namespace PandaXPDrops
         /// <summary>ID навыка меток предпросмотра. Отрицательный, поэтому он никогда не сможет объединиться с реальным получением</summary>
         private const int PreviewSkillId = -1;
 
-        /// <summary>Семейство шрифтов Cairo, используемое для любого текста в HUD</summary>
-        private const string FontFace = "Sans";
+        /// <summary>Динамический шрифт</summary>
+        private static string FontFace => GuiStyle.StandardFontName;
 
         private readonly ICoreClientAPI capi;
         private readonly XpDropConfig config;

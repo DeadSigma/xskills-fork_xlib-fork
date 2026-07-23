@@ -67,7 +67,6 @@
     <Content Include="assets\xlib\lang\de.json" />
     <Content Include="assets\xlib\lang\en.json" />
     <Content Include="assets\xlib\lang\fr.json" />
-    <Content Include="assets\xlib\lang\it.json" />
     <Content Include="assets\xlib\lang\pt-br.json" />
     <Content Include="assets\xlib\lang\ru.json" />
     <Content Include="modinfo.json" />
@@ -92,7 +91,7 @@
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
   <PropertyGroup />
-	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	<Target Name="PostRebuild" AfterTargets="Rebuild">
 		<PropertyGroup>
 			<ModName>$([System.Text.RegularExpressions.Regex]::Match('$([System.IO.File]::ReadAllText("$(ProjectDir)modinfo.json"))', '"name"\s*:\s*"([^"]+)"').Groups[1].Value)</ModName>
 			<ModVersion>$([System.Text.RegularExpressions.Regex]::Match('$([System.IO.File]::ReadAllText("$(ProjectDir)modinfo.json"))', '"version"\s*:\s*"([^"]+)"').Groups[1].Value)</ModVersion>
@@ -143,7 +142,6 @@
 		<RemoveDir Directories="$(ZipTempDir)" />
 
 		<Exec Command="py &quot;C:\sourcecode\копирует xlib в папку с модами.py&quot;" />
-
 	</Target>
   <ProjectExtensions>
 	  <VisualStudio>
