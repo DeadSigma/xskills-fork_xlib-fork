@@ -183,7 +183,7 @@ namespace XSkills
                 "hunterbag",
                 "xskills:ability-hunterbag",
                 "xskills:abilitydesc-hunterbag",
-                2, 1, new int[] { 1 })); 
+                1, 1, new int[] { 1 })); 
 
             //behaviors
             api.RegisterEntityBehaviorClass("XSkillsAnimal", typeof(XSkillsAnimalBehavior));
