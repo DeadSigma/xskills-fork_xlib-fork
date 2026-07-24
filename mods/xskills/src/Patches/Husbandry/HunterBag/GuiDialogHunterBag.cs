@@ -11,6 +11,9 @@ namespace xskills.src.Patches.Husbandry.HunterBag
     {
         public double X { get; set; }
         public double Y { get; set; }
+        public double Scale { get; set; } = 1.0;          
+        public bool Enabled { get; set; } = true;        
+        public bool HideWhenInvClosed { get; set; } = false; 
         public bool HasValue { get; set; }
     }
 
@@ -38,8 +41,12 @@ namespace xskills.src.Patches.Husbandry.HunterBag
         public override EnumDialogType DialogType => EnumDialogType.HUD;
         public override bool PrefersUngrabbedMouse => false;
 
-        // HUD должен получать события мыши, чтобы работали наведение (разворот) и клики по слоту
-        public override bool ShouldReceiveMouseEvents() => IsOpened();
+        /// <summary>
+        /// Определяет, должен ли HUD получать события мыши.
+        /// Блокируем клики, если слот сейчас визуально скрыт настройками, чтобы невидимый слот не перехватывал курсор.
+        /// </summary>
+        /// <returns><c>true</c>, если окно открыто и должно обрабатывать клики.</returns>
+        public override bool ShouldReceiveMouseEvents() => IsOpened() && CanRenderThisFrame();
 
         public GuiDialogHunterBag(ICoreClientAPI capi, IInventory inventory) : base(capi)
         {
@@ -150,7 +157,6 @@ namespace xskills.src.Patches.Husbandry.HunterBag
         }
 
         // Интеграция с F6-редактором PandaXPDrops
-
         public override void OnGuiOpened()
         {
             base.OnGuiOpened();
@@ -158,11 +164,11 @@ namespace xskills.src.Patches.Husbandry.HunterBag
             if (editToken == null)
             {
                 editToken = HunterBagLayoutBridge.Register(
-                    Lang.Get("xskills:ability-hunterbagperk"),
-                    GetScreenRect,      // Func<double[]> -> [x,y,w,h] в реальных пикселях
-                    SetTopLeft,         // Action<double,double> -> экранные пиксели
-                    null,               // масштаб не поддерживаем
-                    CommitLayout);      // сохранение при закрытии редактора
+                    Lang.Get("xskills:ability-hunterbag"),
+                    GetScreenRect,
+                    SetTopLeft,
+                    null,               // Передаем null, так как кастомный масштаб для слотов ломает клики
+                    CommitLayout);
             }
         }
 
@@ -235,10 +241,26 @@ namespace xskills.src.Patches.Husbandry.HunterBag
             catch { }
         }
 
-        // Рендер (без пересборки, не трогаем SingleComposer)
-
+        /// <summary>
+        /// Проверяет, должен ли HUD отрисовываться в текущем кадре.
+        /// Учитывает настройки отключения и автоматического скрытия.
+        /// </summary>
+        /// <returns><c>true</c>, если HUD нужно нарисовать, иначе <c>false</c>.</returns>
         private bool CanRenderThisFrame()
         {
+            // 1. Полное отключение слота (если убрали галочку Enabled)
+            if (layout == null || !layout.Enabled) return false;
+
+            // 2. Скрытие, когда закрыт инвентарь (если стоит галочка HideWhenInvClosed)
+            if (layout.HideWhenInvClosed)
+            {
+                // Надежный способ: ищем любое открытое окно меню (инвентарь, сундук, крафт).
+                // HUD-интерфейсы имеют тип HUD, а обычные диалоговые окна (инвентари) - Dialog.
+                bool isAnyMenuOpen = capi.Gui.OpenedGuis.Exists(dlg => dlg.DialogType == EnumDialogType.Dialog);
+                if (!isAnyMenuOpen) return false;
+            }
+
+            // 3. Стандартная проверка наличия слотов
             return SingleComposer != null
                 && composedSlotCount > 0
                 && inventory != null
@@ -301,6 +323,17 @@ namespace xskills.src.Patches.Husbandry.HunterBag
         private void SendInvPacket(object packet)
         {
             capi.Network.SendPacketClient(packet);
+        }
+        private void SetScale(float newScale)
+        {
+            // Ограничиваем масштаб, чтобы слот не стал слишком мелким или огромным
+            layout.Scale = Math.Max(0.5, Math.Min((double)newScale, 2.0));
+            ComposeDialog(); // Пересобираем UI с новым размером
+        }
+        public void ReloadSettings()
+        {
+            LoadLayout();
+            ComposeDialog();
         }
     }
 }

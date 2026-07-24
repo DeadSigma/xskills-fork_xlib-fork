@@ -27,7 +27,7 @@ namespace XSkills
         public int CatcherId { get; private set; }
         public int BreederId { get; private set; }
         public int MassHusbandryId { get; private set; }
-        public int HunterBagPerkId { get; private set; }
+        public int HunterBagId { get; private set; }
 
 
         public Husbandry(ICoreAPI api) : base("husbandry", "xskills:skill-husbandry", "xskills:group-collecting")
@@ -176,11 +176,14 @@ namespace XSkills
 
 
             // Добавляет дополнительный слот для сумки из Butchery
-            HunterBagPerkId = this.AddAbility(new Ability(
-                "hunterbagperk",
-                "xskills:ability-hunterbagperk",
-                "xskills:abilitydesc-hunterbagperk",
-                5, 1, new int[] { 1 })); // Тир 5, 1 максимальный уровень, дает 1 слот
+            // 0: Уровень на котором доступен перк
+            // 1: Сколько уровней у перка
+            // 2: Кол-во слотов
+            HunterBagId = this.AddAbility(new Ability(
+                "hunterbag",
+                "xskills:ability-hunterbag",
+                "xskills:abilitydesc-hunterbag",
+                2, 1, new int[] { 1 })); 
 
             //behaviors
             api.RegisterEntityBehaviorClass("XSkillsAnimal", typeof(XSkillsAnimalBehavior));
@@ -193,11 +196,11 @@ namespace XSkills
             this.ExpBase = 100;
             this.ExpMult = 50.0f;
             this.ExpEquationValue = 4.0f;
-            this[HunterBagPerkId].OnPlayerAbilityTierChanged += OnHunterBagPerk;
+            this[HunterBagId].OnPlayerAbilityTierChanged += OnHunterBag;
         }
 
         //Охотничий слот
-        public void OnHunterBagPerk(PlayerAbility playerAbility, int oldTier)
+        public void OnHunterBag(PlayerAbility playerAbility, int oldTier)
         {
             IPlayer player = playerAbility.PlayerSkill.PlayerSkillSet.Player;
             if (player?.Entity?.Api == null) return;

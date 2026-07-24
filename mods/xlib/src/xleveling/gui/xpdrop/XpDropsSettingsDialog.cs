@@ -5,18 +5,49 @@ using Vintagestory.API.Client;
 namespace PandaXPDrops
 {
     /// <summary>
-    /// Диалоговое окно настроек для HUD выпадения опыта
-    /// Позволяет изменять все параметры конфигурации
+    /// Класс-двойник для конфигурации сумки. 
+    /// Позволяет библиотеке xlib читать и сохранять настройки из файла сумки (xskills), не создавая прямую ссылку на саму модификацию.
+    /// </summary>
+    public class BagConfigProxy
+    {
+        /// <summary>Позиция слота по оси X на экране.</summary>
+        public double X { get; set; }
+
+        /// <summary>Позиция слота по оси Y на экране.</summary>
+        public double Y { get; set; }
+
+        /// <summary>Масштаб слота (временно не поддерживается движком для интерактивных слотов).</summary>
+        public double Scale { get; set; } = 1.0;
+
+        /// <summary>Включен ли визуальный интерфейс слота для сумки.</summary>
+        public bool Enabled { get; set; } = true;
+
+        /// <summary>Скрывать ли слот с экрана, когда все меню и инвентари закрыты.</summary>
+        public bool HideWhenInvClosed { get; set; } = false;
+
+        /// <summary>Флаг, указывающий, была ли позиция изменена пользователем или используются значения по умолчанию.</summary>
+        public bool HasValue { get; set; }
+    }
+
+    /// <summary>
+    /// Диалоговое окно настроек для HUD выпадения опыта.
+    /// Интегрирует как настройки самого опыта, так и визуальные настройки слота сумки охотника.
     /// </summary>
     public class XpDropsSettingsDialog : GuiDialog
     {
         private readonly XpDropConfig config;
         private readonly Action onSave;
 
+        /// <summary>Прокси-конфигурация для хранения макета сумки</summary>
+        private BagConfigProxy hbLayout;
+
+        /// <summary>Массив ключей всех настроек, используемых для генерации элементов интерфейса</summary>
         private readonly string[] keys = new string[] {
             "Enabled", "BarRightMargin", "BarTopMargin", "BarScale", "MinBarWidth", "BarHeight", "Padding", "TextGap",
             "TextSpawnBelowBar", "TextSpawnOffsetX", "DropScale", "DropSpacing", "BarIdleTimeout", "BarFadeDuration", "DropLifetime", "FadeStartPct",
-            "AccumulationWindow", "SurvivalBatchInterval", "MinimumXp", "FloatSpeed", "FontSize", "IconSize", "IgnoredSkills"
+            "AccumulationWindow", "SurvivalBatchInterval", "MinimumXp", "FloatSpeed", "FontSize", "IconSize", "IgnoredSkills",
+            // Новые настройки для сумки (Скейл убран, так как не поддерживается движком для слотов)
+            "HunterBagEnabled", "HunterBagHideWhenClosed"
         };
 
         /// <summary>Код комбинации клавиш. Установлен в null.</summary>
@@ -25,14 +56,23 @@ namespace PandaXPDrops
         /// <summary>Порядок отрисовки. Поверх режима редактирования.</summary>
         public override double DrawOrder => 0.98;
 
-        /// <summary>Инициализирует окно настроек</summary>
+        /// <summary>
+        /// Инициализирует окно настроек, загружая основной конфиг и конфиг сумки.
+        /// </summary>
         public XpDropsSettingsDialog(ICoreClientAPI capi, XpDropConfig config, Action onSave) : base(capi)
         {
             this.config = config;
             this.onSave = onSave;
+
+            try { hbLayout = capi.LoadModConfig<BagConfigProxy>("xskills/hunterbagslotlayout.json") ?? new BagConfigProxy(); }
+            catch { hbLayout = new BagConfigProxy(); }
+
             SetupDialog();
         }
 
+        /// <summary>
+        /// Собирает графический интерфейс диалога настроек, размещая текстовые поля и переключатели по сетке.
+        /// </summary>
         private void SetupDialog()
         {
             ElementBounds dialogBounds = ElementStdBounds.AutosizedMainDialog.WithAlignment(EnumDialogArea.CenterMiddle);
@@ -42,19 +82,19 @@ namespace PandaXPDrops
             ElementBounds[] tb = new ElementBounds[keys.Length];
             ElementBounds[] ib = new ElementBounds[keys.Length];
 
+            // Всего 25 ключей, разбиваем на 3 колонки по 9 строк
             for (int i = 0; i < keys.Length; i++)
             {
-                int col = i / 8; // 3 колонки (0, 1, 2)
-                int row = i % 8; // 8 строк в колонке
+                int col = i / 9;
+                int row = i % 9;
 
                 tb[i] = ElementBounds.Fixed(col * 290, 40 + row * 40 + 5, 180, 30);
                 ib[i] = ElementBounds.Fixed(col * 290 + 180, 40 + row * 40, 90, 30);
                 bgBounds.WithChildren(tb[i], ib[i]);
             }
 
-            ElementBounds resetBtnBounds = ElementBounds.Fixed(0, 400, 270, 30);
-
-            ElementBounds saveBtnBounds = ElementBounds.Fixed(580, 400, 270, 30);
+            ElementBounds resetBtnBounds = ElementBounds.Fixed(0, 440, 270, 30);
+            ElementBounds saveBtnBounds = ElementBounds.Fixed(580, 440, 270, 30);
             bgBounds.WithChildren(resetBtnBounds, saveBtnBounds);
 
             dialogBounds.WithChild(bgBounds);
@@ -65,20 +105,17 @@ namespace PandaXPDrops
 
             for (int i = 0; i < keys.Length; i++)
             {
-                string localizedLabel = XpDropsLang.Get("setting-" + keys[i].ToLowerInvariant()); 
+                string localizedLabel = XpDropsLang.Get("setting-" + keys[i].ToLowerInvariant());
                 compo.AddStaticText(localizedLabel, CairoFont.WhiteSmallText(), tb[i]);
 
-                // Пытаемся получить описание
-                string hoverText = XpDropsLang.GetIfExists("setting-" + keys[i].ToLowerInvariant() + "-desc"); 
+                string hoverText = XpDropsLang.GetIfExists("setting-" + keys[i].ToLowerInvariant() + "-desc");
 
-                // Если перевод найден (не null и не пустой), добавляем зону наведения
                 if (!string.IsNullOrEmpty(hoverText))
                 {
-                    // 250 - это максимальная ширина подсказки в пикселях до переноса текста на новую строку
                     compo.AddHoverText(hoverText, CairoFont.WhiteDetailText(), 250, tb[i]);
                 }
 
-                if (keys[i] == "Enabled")
+                if (keys[i] == "Enabled" || keys[i] == "HunterBagEnabled" || keys[i] == "HunterBagHideWhenClosed")
                 {
                     compo.AddSwitch(OnEnableDummy, ib[i].FlatCopy().WithFixedWidth(50), keys[i]);
                 }
@@ -92,12 +129,13 @@ namespace PandaXPDrops
             compo.AddButton(XpDropsLang.Get("settings-btn-save"), OnSaveClicked, saveBtnBounds);
             SingleComposer = compo.Compose();
 
-            // Заполняем интерфейс текущими значениями
-            PopulateUI(this.config);
+            PopulateUI(this.config, this.hbLayout);
         }
 
-        /// <summary>Заполняет текстовые поля значениями из переданного конфига</summary>
-        private void PopulateUI(XpDropConfig src)
+        /// <summary>
+        /// Заполняет элементы интерфейса текущими значениями из конфигураций.
+        /// </summary>
+        private void PopulateUI(XpDropConfig src, BagConfigProxy hbSrc)
         {
             SingleComposer.GetSwitch("Enabled").On = src.Enabled;
             SetFieldValue("BarRightMargin", src.BarRightMargin);
@@ -124,24 +162,33 @@ namespace PandaXPDrops
 
             string ignoredStr = src.IgnoredSkills != null ? string.Join(", ", src.IgnoredSkills) : "";
             SingleComposer.GetTextInput("IgnoredSkills").SetValue(ignoredStr);
+
+            SingleComposer.GetSwitch("HunterBagEnabled").On = hbSrc.Enabled;
+            SingleComposer.GetSwitch("HunterBagHideWhenClosed").On = hbSrc.HideWhenInvClosed;
         }
 
         private void SetFieldValue(string key, float value) => SingleComposer.GetTextInput(key).SetValue(value.ToString("0.#####", CultureInfo.InvariantCulture));
         private void SetFieldValue(string key, double value) => SingleComposer.GetTextInput(key).SetValue(value.ToString("0.#####", CultureInfo.InvariantCulture));
 
-        private void OnEnableDummy(bool on) { /* Заглушка, сохранение пойдет через кнопку */ }
+        /// <summary>Заглушка для переключателей. Сохранение происходит только по нажатию кнопки.</summary>
+        private void OnEnableDummy(bool on) { }
 
+        /// <summary>
+        /// Сбрасывает все настройки до значений по умолчанию и обновляет поля ввода.
+        /// </summary>
         private bool OnResetClicked()
         {
-            // Берем абсолютно чистый конфиг со значениями по умолчанию и вставляем их в UI
-            PopulateUI(new XpDropConfig());
+            PopulateUI(new XpDropConfig(), new BagConfigProxy());
             return true;
         }
 
+        /// <summary>
+        /// Считывает значения из полей ввода, применяет их к конфигурациям и сохраняет на диск.
+        /// Также вызывает обновление макетов в реальном времени.
+        /// </summary>
         private bool OnSaveClicked()
         {
             config.Enabled = SingleComposer.GetSwitch("Enabled").On;
-
             config.BarRightMargin = ParseFloat("BarRightMargin", config.BarRightMargin);
             config.BarTopMargin = ParseFloat("BarTopMargin", config.BarTopMargin);
             config.BarScale = ParseFloat("BarScale", config.BarScale);
@@ -153,14 +200,12 @@ namespace PandaXPDrops
             config.TextSpawnOffsetX = ParseFloat("TextSpawnOffsetX", config.TextSpawnOffsetX);
             config.DropScale = ParseFloat("DropScale", config.DropScale);
             config.DropSpacing = ParseFloat("DropSpacing", config.DropSpacing);
-
             config.BarIdleTimeout = ParseDouble("BarIdleTimeout", config.BarIdleTimeout);
             config.BarFadeDuration = ParseDouble("BarFadeDuration", config.BarFadeDuration);
             config.DropLifetime = ParseDouble("DropLifetime", config.DropLifetime);
             config.FadeStartPct = ParseDouble("FadeStartPct", config.FadeStartPct);
             config.AccumulationWindow = ParseDouble("AccumulationWindow", config.AccumulationWindow);
             config.SurvivalBatchInterval = ParseDouble("SurvivalBatchInterval", config.SurvivalBatchInterval);
-
             config.MinimumXp = ParseFloat("MinimumXp", config.MinimumXp);
             config.FloatSpeed = ParseFloat("FloatSpeed", config.FloatSpeed);
             config.FontSize = ParseFloat("FontSize", config.FontSize);
@@ -181,6 +226,20 @@ namespace PandaXPDrops
             }
 
             config.Sanitize();
+
+            hbLayout.Enabled = SingleComposer.GetSwitch("HunterBagEnabled").On;
+            hbLayout.HideWhenInvClosed = SingleComposer.GetSwitch("HunterBagHideWhenClosed").On;
+
+            capi.StoreModConfig(hbLayout, "xskills/hunterbagslotlayout.json");
+
+            // Ищем открытое окно сумки (через рефлексию, чтобы xlib не зависел от xskills)
+            // и заставляем его применить настройки сразу же.
+            var bagDialog = capi.Gui.OpenedGuis.Find(dlg => dlg.GetType().Name.Contains("GuiDialogHunterBag"));
+            if (bagDialog != null)
+            {
+                System.Reflection.MethodInfo reloadMethod = bagDialog.GetType().GetMethod("ReloadSettings");
+                reloadMethod?.Invoke(bagDialog, null);
+            }
 
             onSave?.Invoke();
             PandaXPDropsSystem.DropManager?.InvalidateTextures();
