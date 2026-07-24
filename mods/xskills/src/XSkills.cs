@@ -15,6 +15,7 @@ using Vintagestory.Client.NoObf;
 using Vintagestory.Common;
 using Vintagestory.Server;
 using XLib.XLeveling;
+using xskills.src.Patches.Husbandry.HunterBag;
 
 namespace XSkills
 {
@@ -296,6 +297,8 @@ namespace XSkills
                 registry.blockEntityClassnameToTypeMapping["Sapling"] = typeof(XSkillsBlockEntitySapling);
                 registry.blockEntityTypeToClassnameMapping[typeof(XSkillsBlockEntitySapling)] = "Sapling";
 
+                registry.RegisterInventoryClass("hunterbaginv", typeof(HunterBagInventory));
+
                 if (Api.ModLoader.IsModEnabled("primitivesurvival"))
                     HoeUtil.RegisterItemHoePrimitive(registry);
                 HoeUtil.RegisterItemHoe(registry);
@@ -534,7 +537,7 @@ namespace XSkills
             // защищаемся от повторного патча
             if (toolsmithPatched) return;
 
-            // Ищем тип по имени, НЕ перечисляя все типы каждой сборки.
+            // Ищем тип по имени, не перечисляя все типы каждой сборки.
             // Иначе падаем на сборках с неразрешимыми зависимостями (OpenTK.Graphics / csogg на сервере)
             Type toolsmithNuggetType = null;
             foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())

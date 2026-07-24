@@ -1,10 +1,14 @@
 ﻿using HarmonyLib;
+using System;
+using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
+using Vintagestory.Common;
 using Vintagestory.GameContent;
 using XLib.XLeveling;
+using xskills.src.Patches.Husbandry.HunterBag;
 
 namespace XSkills
 {
@@ -23,6 +27,7 @@ namespace XSkills
         public int CatcherId { get; private set; }
         public int BreederId { get; private set; }
         public int MassHusbandryId { get; private set; }
+        public int HunterBagPerkId { get; private set; }
 
 
         public Husbandry(ICoreAPI api) : base("husbandry", "xskills:skill-husbandry", "xskills:group-collecting")
@@ -36,7 +41,7 @@ namespace XSkills
             HunterId = this.AddAbility(new TraitAbility(
                 "hunter", "bowyer",
                 "xskills:ability-hunter",
-                "xskills:abilitydesc-hunter", 
+                "xskills:abilitydesc-hunter",
                 1, 3, new int[] { 10, 0, 10, 10, 1, 20, 10, 1, 30 }));
 
             // more mob drops(flesh)
@@ -49,7 +54,7 @@ namespace XSkills
                 "butcher",
                 "xskills:ability-butcher",
                 "xskills:abilitydesc-butcher",
-                1, 3, new int[] { 5, 1, 15, 1, 10, 5, 2, 25, 1, 15, 5, 2, 45, 1, 20}));
+                1, 3, new int[] { 5, 1, 15, 1, 10, 5, 2, 25, 1, 15, 5, 2, 45, 1, 20 }));
 
             // more mob drops(hides)
             // 0: base value
@@ -93,7 +98,7 @@ namespace XSkills
                 "feeder",
                 "xskills:ability-feeder",
                 "xskills:abilitydesc-feeder",
-                3, 2, new int[] { 10, 1, 20, 1, 4, 20, 1, 40, 1, 8}));
+                3, 2, new int[] { 10, 1, 20, 1, 4, 20, 1, 40, 1, 8 }));
 
             // reduced animal seaking range
             // 0: base value
@@ -169,6 +174,14 @@ namespace XSkills
                 "xskills:abilitydesc-masshusbandry",
                 10, 1, new int[] { 0, 1, 1, 30 }));
 
+
+            // Добавляет дополнительный слот для сумки из Butchery
+            HunterBagPerkId = this.AddAbility(new Ability(
+                "hunterbagperk",
+                "xskills:ability-hunterbagperk",
+                "xskills:abilitydesc-hunterbagperk",
+                5, 1, new int[] { 1 })); // Тир 5, 1 максимальный уровень, дает 1 слот
+
             //behaviors
             api.RegisterEntityBehaviorClass("XSkillsAnimal", typeof(XSkillsAnimalBehavior));
             api.RegisterBlockBehaviorClass("XSkillsCarcass", typeof(XSkillsCarcassBehavior));
@@ -180,6 +193,69 @@ namespace XSkills
             this.ExpBase = 100;
             this.ExpMult = 50.0f;
             this.ExpEquationValue = 4.0f;
+            this[HunterBagPerkId].OnPlayerAbilityTierChanged += OnHunterBagPerk;
+        }
+
+        //Охотничий слот
+        public void OnHunterBagPerk(PlayerAbility playerAbility, int oldTier)
+        {
+            IPlayer player = playerAbility.PlayerSkill.PlayerSkillSet.Player;
+            if (player?.Entity?.Api == null) return;
+
+            if (!(player.InventoryManager is PlayerInventoryManager invMan)) return;
+
+            HunterBagInventory inv = invMan.GetOwnInventory("hunterbaginv") as HunterBagInventory;
+            if (inv == null)
+            {
+                try
+                {
+                    inv = new HunterBagInventory("hunterbaginv", player.PlayerUID, player.Entity.Api);
+                    invMan.Inventories[inv.InventoryID] = inv;
+                }
+                catch (Exception) { return; }
+            }
+
+            int slotsCount = playerAbility.Tier > 0 ? playerAbility.Value(0) : 0;
+            inv.SetSize(slotsCount);
+
+            // UI строится только на локальном клиенте и только для своего игрока
+            if (player.Entity.Api is ICoreClientAPI capi && player.PlayerUID == capi.World.Player?.PlayerUID)
+            {
+                UpdateHunterBagUI(capi, inv, playerAbility.Tier);
+            }
+        }
+
+        private GuiDialogHunterBag bagDialog;
+
+        // Только клиент (ICoreClientAPI)
+        private void UpdateHunterBagUI(ICoreClientAPI capi, HunterBagInventory inv, int tier)
+        {
+            bool shouldShow = tier > 0 && inv != null && inv.Count > 0;
+
+            if (shouldShow)
+            {
+                if (bagDialog == null)
+                {
+                    bagDialog = new GuiDialogHunterBag(capi, inv);
+                }
+                if (!bagDialog.IsOpened())
+                {
+                    bagDialog.TryOpen();
+                }
+            }
+            else
+            {
+                DisposeBagDialog();
+            }
+        }
+
+        private void DisposeBagDialog()
+        {
+            if (bagDialog == null) return;
+
+            if (bagDialog.IsOpened()) bagDialog.TryClose();
+            bagDialog.Dispose();
+            bagDialog = null;
         }
     }//!class Husbandry
 
@@ -210,5 +286,7 @@ namespace XSkills
 
             return null;
         }
+
     }//!class XSkillsCarcassBehavior
+
 }//!namespace XSkills
