@@ -7,6 +7,6 @@
   "website": "https://www.vintagestory.at/forums/topic/1720-xlib-and-xskills/",
   "version": "1.0.84",
     "dependencies": {
-        "xlibfork": "1.0.26"
+        "xlibfork": "1.0.27"
     }
 }

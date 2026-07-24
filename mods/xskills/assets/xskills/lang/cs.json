@@ -350,6 +350,9 @@
   "ability-hunter": "Lovec",
   "abilitydesc-hunter": "Zvýší poškození, které dáš zvířatm a zároveň sníží poškození od zvířat o {0}% a další {1}% pro každou úroveň chovatelství až do {2}%.",
 
+  "ability-hunterbag": "Lovecká brašna",
+  "abilitydesc-hunterbag": "Přidá hráči další slot určený pouze pro lovecké brašny z modu Butchering.",
+
   "ability-infallible": "Neomylný",
   "abilitydesc-infallible": "Zvyšuje rozsah vašich schopností dokonalého přizpůsobení a perfekcionismu o {0}. Úroveň 2 také ovlivňuje vrstvy.",
 

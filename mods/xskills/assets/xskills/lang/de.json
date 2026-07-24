@@ -350,6 +350,9 @@
   "ability-hunter": "Jäger",
   "abilitydesc-hunter": "Erhöht den Schaden, den du an Tieren verursachst, und reduziert den Schaden, den du von Tieren erhältst, um {0}% und zusätzlich {1}% für jedes Level in der Tierhaltungsfertigkeit bis zu einem Maximum von {2}%.",
 
+  "ability-hunterbag": "Jägertasche",
+  "abilitydesc-hunterbag": "Fügt dem Spieler einen zusätzlichen Slot hinzu, der ausschließlich für Jägertaschen aus dem Butchering-Mod vorgesehen ist.",
+
   "ability-infallible": "Unfehlbar",
   "abilitydesc-infallible": "Erhöht den Radius deiner Fähigkeiten 'Passt perfekt' und 'Perfektionist' um {0}. Tier 2 wirkt sich auch auf das Kopieren von Schichten aus.",
 

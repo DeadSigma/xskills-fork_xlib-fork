@@ -350,6 +350,9 @@
   "ability-hunter": "Łowca",
   "abilitydesc-hunter": "Zwiększa zadawane obrażenia zwierzętom i zmniejsza obrażenia zadawane tobie przez zwierzęta o {0}% i dodatkowe {1}% za każdy poziom umiejętności hodowli, aż do maksymalnej wartości {2}%.",
 
+  "ability-hunterbag": "Torba myśliwego",
+  "abilitydesc-hunterbag": "Dodaje graczowi dodatkowe miejsce przeznaczone wyłącznie na torby myśliwego z moda Butchering.",
+
   "ability-infallible": "Niezawodny",
   "abilitydesc-infallible": "Zwiększa promień zdolności Idealne dopasowanie i Perfekcjonista o {0}. Poziom 2 wpływa również na warstwy.",
 

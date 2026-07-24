@@ -350,6 +350,9 @@
   "ability-hunter": "猎人",
   "abilitydesc-hunter": "增加你对动物造成的伤害，\n并减少动物对你造成的伤害\n{0}%，畜牧技能每级额外增加\n{1}%，最高可达{2}%。",
 
+  "ability-hunterbag": "猎人背包",
+  "abilitydesc-hunterbag": "为玩家添加一个额外栏位，仅可放置 Butchering 模组中的猎人背包。",
+
   "ability-infallible": "万无一失",
   "abilitydesc-infallible": "将你的完美配合和完美主义\n能力的半径增加{0}。第2层\n也会影响。",
 

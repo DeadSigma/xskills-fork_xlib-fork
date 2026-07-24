@@ -350,6 +350,9 @@
   "ability-hunter": "Hunter",
   "abilitydesc-hunter": "Increases the damage you deal to animals and reduces the damage animals deal to you by {0}% and additional {1}% for each level at the husbandry skill up to a maximum of {2}%.",
 
+  "ability-hunterbag": "Jägarväska",
+  "abilitydesc-hunterbag": "Lägger till en extra plats för spelaren som endast kan användas för jägarväskor från modden Butchering.",
+
   "ability-infallible": "Infallible",
   "abilitydesc-infallible": "Increases the radius of your perfectfit and perfectionist abilities by {0}. Tier 2 also affects layers.",
 

@@ -350,6 +350,9 @@
   "ability-hunter": "Cazador",
   "abilitydesc-hunter": "Aumenta el daño que infliges a los animales y reduce el daño que ellos te infligen en un {0}%, con un {1}% adicional por cada nivel de Ganadería hasta un máximo de {2}%.",
 
+  "ability-hunterbag": "Bolsa de cazador",
+  "abilitydesc-hunterbag": "Añade al jugador una ranura adicional destinada únicamente a las bolsas de cazador del mod Butchering.",
+
   "ability-infallible": "Infalible",
   "abilitydesc-infallible": "Aumenta el radio de tus habilidades Perfeccionistas y de Ajuste perfecto en {0}. El nivel 2 también afecta a capas enteras.",
 

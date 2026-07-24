@@ -350,6 +350,9 @@
   "ability-hunter": "Chasseur",
   "abilitydesc-hunter": "Augmente les dégats que vous infligez aux animaux et réduit les dégats qu'ils vous font de {0}% et {1}% additionnel pour chaque niveau de votre compétence d'Élevage jusqu'a un maximum de {2}%.",
 
+  "ability-hunterbag": "Sac de chasseur",
+  "abilitydesc-hunterbag": "Ajoute au joueur un emplacement supplémentaire réservé uniquement aux sacs de chasseur du mod Butchering.",
+
   "ability-infallible": "Infaillible",
   "abilitydesc-infallible": "Augmente le rayon d'action de vos aptitudes Ajustement parfait et Perfectionniste de {0}. le grade 2 affecte également les couches.",
 

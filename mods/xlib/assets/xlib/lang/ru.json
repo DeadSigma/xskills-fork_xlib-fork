@@ -1,4 +1,4 @@
-﻿{
+{
     "abilitypoints": "Очки умений",
     "andrequirement": "Все из следующих: ",
     "clicktodecreasetier": "\n\nЛевый клик понижает ранг этого умения. Это требует {0} очков разучивания (доступно: {1}). Понизить ранг умения можно только раз в {2:N2} минут (осталось: {3:N2} минут).",
@@ -59,6 +59,8 @@
     "xlibfork:xpdrops-setting-fadestartpct": "Опыт: Начало затухания",
     "xlibfork:xpdrops-setting-floatspeed": "Опыт: Скорость полета",
     "xlibfork:xpdrops-setting-fontsize": "Общее: Размер шрифта",
+    "xlibfork:xpdrops-setting-hunterbagenabled": "Слот охотничьей сумки Вкл/Выкл",
+    "xlibfork:xpdrops-setting-hunterbaghidewhenclosed": "Показывать слот охотничьей сумки только при открытом инвентаре",
     "xlibfork:xpdrops-setting-iconsize": "Полоса: Размер предмета",
     "xlibfork:xpdrops-setting-ignoredskills": "Общее: Скрытые навыки (через запятую)",
     "xlibfork:xpdrops-setting-minbarwidth": "Полоса: Мин. ширина",
@@ -72,7 +74,7 @@
     "xlibfork:xpdrops-settings-btn-open": "Настройки",
     "xlibfork:xpdrops-settings-btn-reset": "Сброс до заводских",
     "xlibfork:xpdrops-settings-btn-save": "Сохранить",
-    "xlibfork:xpdrops-settings-title": "Настройки всплывающийх уведомлений",
+    "xlibfork:xpdrops-settings-title": "Настройки GUI xSkills",
     "xlibfork:xpdrops-skill-combat": "Бой",
     "xlibfork:xpdrops-skill-cooking": "Кулинария",
     "xlibfork:xpdrops-skill-digging": "Копание",
@@ -87,9 +89,5 @@
     "xlibfork:xpdrops-skill-temporaladaptation": "Т.Адаптация",
     "xlibfork:xpdrops-toggle-off": "Отображение опыта выключено.",
     "xlibfork:xpdrops-toggle-on": "Отображение опыта включено.",
-    "you receive": "Вы получаете",
-
-    "xlibfork:xpdrops-setting-hunterbagenabled": "Слот охотничьей сумки Вкл/Выкл",
-
-    "xlibfork:xpdrops-setting-hunterbaghidewhenclosed": "Показывать слот охотничьей сумки только при открытом инвентаре"
+    "you receive": "Вы получаете"
 }

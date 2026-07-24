@@ -350,6 +350,9 @@
   "ability-hunter": "狩人",
   "abilitydesc-hunter": "動物への与ダメージを{0}%増加させ、動物からの被ダメージを{1}%減少させ、畜産スキルのレベルに応じて追加で増加させ、最大{2}%まで上がります。",
 
+  "ability-hunterbag": "ハンターバッグ",
+  "abilitydesc-hunterbag": "Butchering MODのハンターバッグ専用の追加スロットをプレイヤーに付与します。",
+
   "ability-infallible": "完全無欠",
   "abilitydesc-infallible": "アビリティ「完全フィット」と「完璧主義者」の半径を{0}増加させます。ティア2はレイヤーにも影響を与えます。",
 

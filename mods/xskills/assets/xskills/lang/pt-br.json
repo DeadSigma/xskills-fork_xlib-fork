@@ -350,6 +350,9 @@
   "ability-hunter": "Caçador",
   "abilitydesc-hunter": "Aumenta o dano que você causa aos animais e reduz o dano que os animais causam a você em {0}% e adicionalmente {1}% para cada nível na habilidade de pastoreio, até um máximo de {2}%.",
 
+  "ability-hunterbag": "Bolsa de Caçador",
+  "abilitydesc-hunterbag": "Adiciona ao jogador um espaço extra destinado exclusivamente às Bolsas de Caçador do mod Butchering.",
+
   "ability-infallible": "Infalivel",
   "abilitydesc-infallible": "Aumenta o raio das suas habilidades de ajuste perfeito e perfeccionista em {0}. Nível 2 também afeta camadas.",
 
