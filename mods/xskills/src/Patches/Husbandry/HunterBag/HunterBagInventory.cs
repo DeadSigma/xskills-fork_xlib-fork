@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
+using Vintagestory.API.MathTools;
 
-namespace xskills.src.Patches.Husbandry.HunterBag
+namespace XSkills
 {
     // Кастомный слот: принимает только сумку мясника (butcherybag)
     public class ItemSlotHunterBag : ItemSlotSurvival
@@ -149,7 +150,7 @@ namespace xskills.src.Patches.Husbandry.HunterBag
                         for (int i = 0; i < created.Count; i++) contentSlots.Add(created[i]);
                     }
                 }
-                catch (Exception) { /* сумка без held-bag поведения или иная сигнатура - пропускается*/ }
+                catch (Exception) { /* сумка без held-bag поведения или иная сигнатура — пропускаем */ }
             }
 
             RebuildCombined();
@@ -171,11 +172,35 @@ namespace xskills.src.Patches.Husbandry.HunterBag
             // Реагируем только на изменение слота(ов) сумки, а не самого содержимого
             if (Array.IndexOf(bagSlots, slot) < 0) return;
 
+            // Сумку вынули/заменили - её содержимое осиротело:  оно живёт в слотах содержимого и в стек сумки не записывается, поэтому при простой пересборке пропало бы. Роняем его дропом (на сервере), чтобы не терялось
+            DropOrphanedContent();
+
             int before = slots.Length;
             RebuildContentSlots();
             if (slots.Length != before) SlotCountChanged?.Invoke();
         }
 
+        // Выбрасывает текущее содержимое слотов сумки предметами в мир (только на сервере).
+        private void DropOrphanedContent()
+        {
+            if (api == null || api.Side != EnumAppSide.Server) return;
+            if (contentSlots.Count == 0) return;
+
+            Vec3d pos = Player?.Entity?.Pos?.XYZ;
+            if (pos == null) return;
+            pos = pos.AddCopy(0.0, 0.5, 0.0);
+
+            foreach (ItemSlot slot in contentSlots)
+            {
+                if (slot?.Itemstack == null) continue;
+
+                api.World.SpawnItemEntity(slot.Itemstack.Clone(), pos);
+                slot.Itemstack = null;
+                slot.MarkDirty();
+            }
+        }
+
+        // Достаём held-bag поведение из стека без завязки на точное имя GetCollectibleInterface<>.
         private static IHeldBag GetHeldBag(ItemStack stack)
         {
             CollectibleObject coll = stack?.Collectible;
