@@ -13,7 +13,8 @@ namespace xskills.src.Patches.Husbandry.HunterBag
         public double Y { get; set; }
         public double Scale { get; set; } = 1.0;          
         public bool Enabled { get; set; } = true;        
-        public bool HideWhenInvClosed { get; set; } = false; 
+        public bool HideWhenInvClosed { get; set; } = false;
+        public bool AlwaysExpanded { get; set; } = false;
         public bool HasValue { get; set; }
     }
 
@@ -90,9 +91,10 @@ namespace xskills.src.Patches.Husbandry.HunterBag
             if (inventory == null || total == 0) { composedSlotCount = 0; return; }
 
             int bagCount = BagSlotCount();
+            bool isExpanded = expanded || (layout != null && layout.AlwaysExpanded);
 
-            // Свёрнуто рисуем только слот(ы) сумки; развёрнуто (при наведении) - все слоты
-            composedSlotCount = (expanded && total > bagCount) ? total : bagCount;
+            // Используем isExpanded
+            composedSlotCount = (isExpanded && total > bagCount) ? total : bagCount;
             if (composedSlotCount < 1) composedSlotCount = 1;
             if (composedSlotCount > total) composedSlotCount = total;
 
@@ -113,8 +115,8 @@ namespace xskills.src.Patches.Husbandry.HunterBag
 
             double anchorX = posX;
 
-            // Если развёрнуто и вправо сетка не помещается на экране - растём ВЛЕВО одной строкой, оставляя слот сумки на прежнем месте (он становится крайним справа), чтобы он не уезжал из-под курсора
-            bool growLeft = expanded && contentCount > 0 && (posX + slotBounds.fixedWidth > screenWUnscaled);
+            // Используем isExpanded вместо expanded
+            bool growLeft = isExpanded && contentCount > 0 && (posX + slotBounds.fixedWidth > screenWUnscaled);
             if (growLeft)
             {
                 cols = count;
@@ -299,6 +301,9 @@ namespace xskills.src.Patches.Husbandry.HunterBag
         // Разворачиваем HUD только пока курсор над ним; иначе сворачиваем до слота(ов) сумки
         private void UpdateHoverExpansion(double mouseX, double mouseY)
         {
+            // Если галочка включена, сразу выходим и ничего не сворачиваем
+            if (layout != null && layout.AlwaysExpanded) return;
+
             bool hasContent = (inventory?.Count ?? 0) > BagSlotCount();
 
             bool over = false;

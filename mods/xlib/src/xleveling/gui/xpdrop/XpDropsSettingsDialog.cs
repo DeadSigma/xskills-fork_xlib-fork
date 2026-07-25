@@ -24,6 +24,8 @@ namespace PandaXPDrops
 
         /// <summary>Скрывать ли слот с экрана, когда все меню и инвентари закрыты.</summary>
         public bool HideWhenInvClosed { get; set; } = false;
+        /// <summary>Позволяет слотам всегда быть видными</summary>
+        public bool AlwaysExpanded { get; set; } = false;
 
         /// <summary>Флаг, указывающий, была ли позиция изменена пользователем или используются значения по умолчанию.</summary>
         public bool HasValue { get; set; }
@@ -46,8 +48,7 @@ namespace PandaXPDrops
             "Enabled", "BarRightMargin", "BarTopMargin", "BarScale", "MinBarWidth", "BarHeight", "Padding", "TextGap",
             "TextSpawnBelowBar", "TextSpawnOffsetX", "DropScale", "DropSpacing", "BarIdleTimeout", "BarFadeDuration", "DropLifetime", "FadeStartPct",
             "AccumulationWindow", "SurvivalBatchInterval", "MinimumXp", "FloatSpeed", "FontSize", "IconSize", "IgnoredSkills",
-            // Новые настройки для сумки (Скейл убран, так как не поддерживается движком для слотов)
-            "HunterBagEnabled", "HunterBagHideWhenClosed"
+            "HunterBagEnabled", "HunterBagHideWhenClosed", "HunterBagAlwaysExpanded"
         };
 
         /// <summary>Код комбинации клавиш. Установлен в null.</summary>
@@ -115,7 +116,7 @@ namespace PandaXPDrops
                     compo.AddHoverText(hoverText, CairoFont.WhiteDetailText(), 250, tb[i]);
                 }
 
-                if (keys[i] == "Enabled" || keys[i] == "HunterBagEnabled" || keys[i] == "HunterBagHideWhenClosed")
+                if (keys[i] == "Enabled" || keys[i] == "HunterBagEnabled" || keys[i] == "HunterBagHideWhenClosed" || keys[i] == "HunterBagAlwaysExpanded")
                 {
                     compo.AddSwitch(OnEnableDummy, ib[i].FlatCopy().WithFixedWidth(50), keys[i]);
                 }
@@ -165,6 +166,7 @@ namespace PandaXPDrops
 
             SingleComposer.GetSwitch("HunterBagEnabled").On = hbSrc.Enabled;
             SingleComposer.GetSwitch("HunterBagHideWhenClosed").On = hbSrc.HideWhenInvClosed;
+            SingleComposer.GetSwitch("HunterBagAlwaysExpanded").On = hbSrc.AlwaysExpanded;
         }
 
         private void SetFieldValue(string key, float value) => SingleComposer.GetTextInput(key).SetValue(value.ToString("0.#####", CultureInfo.InvariantCulture));
@@ -229,6 +231,7 @@ namespace PandaXPDrops
 
             hbLayout.Enabled = SingleComposer.GetSwitch("HunterBagEnabled").On;
             hbLayout.HideWhenInvClosed = SingleComposer.GetSwitch("HunterBagHideWhenClosed").On;
+            hbLayout.AlwaysExpanded = SingleComposer.GetSwitch("HunterBagAlwaysExpanded").On;
 
             capi.StoreModConfig(hbLayout, "xskills/hunterbagslotlayout.json");
 
