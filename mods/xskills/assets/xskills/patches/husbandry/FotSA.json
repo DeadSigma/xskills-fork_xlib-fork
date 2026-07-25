@@ -1,0 +1,1178 @@
+[
+    {
+        "file": "chelonioidea:entities/water/chelonioidea-baby",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "chelonioidea:entities/water/chelonioidea-baby",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "thylacinidae:entities/land/dasyuridae-baby",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "thylacinidae:entities/land/dasyuridae-baby",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "iniidae:entities/water/iniidae-baby",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "iniidae:entities/water/iniidae-baby",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "cervinae:entities/land/cervini",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "cervinae:entities/land/cervini",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "viverridae:entities/land/nandiniidae",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "viverridae:entities/land/nandiniidae",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "viverridae:entities/land/viverridae",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "viverridae:entities/land/viverridae",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "meiolaniidae:entities/land/meiolaniidae",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "meiolaniidae:entities/land/meiolaniidae",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "manidae:entities/land/manidae",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "manidae:entities/land/manidae",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "bovinae:entities/animal/mammal/hooved/bovinae-baby",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "bovinae:entities/animal/mammal/hooved/bovinae-baby",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "vombatidae:entities/land/diprotodontidae-baby",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "vombatidae:entities/land/diprotodontidae-baby",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "vombatidae:entities/land/thylacoleonidae-baby",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "vombatidae:entities/land/thylacoleonidae-baby",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "vombatidae:entities/land/vombatidae-baby",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "vombatidae:entities/land/vombatidae-baby",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "elephantidae:entities/land/elephantidae",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "elephantidae:entities/land/elephantidae",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "felinae:entities/land/felinae",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "felinae:entities/land/felinae",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "spheniscidae:entities/land/spheniscidae",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "spheniscidae:entities/land/spheniscidae",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "dinornithidae:entities/land/acanthisittidae",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "dinornithidae:entities/land/acanthisittidae",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "dinornithidae:entities/land/aegothelidae",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "dinornithidae:entities/land/aegothelidae",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "dinornithidae:entities/land/anatidae",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "dinornithidae:entities/land/anatidae",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "dinornithidae:entities/land/apterygidae",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "dinornithidae:entities/land/apterygidae",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "dinornithidae:entities/land/aptornithidae",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "dinornithidae:entities/land/aptornithidae",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "dinornithidae:entities/land/dinornithidae",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "dinornithidae:entities/land/dinornithidae",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "dinornithidae:entities/land/emeidae",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "dinornithidae:entities/land/emeidae",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "dinornithidae:entities/land/megalapterygidae",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "dinornithidae:entities/land/megalapterygidae",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "dinornithidae:entities/land/rallidae",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "dinornithidae:entities/land/rallidae",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "dinornithidae:entities/land/strigopidae",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "dinornithidae:entities/land/strigopidae",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "manidae:entities/land/manidae",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "manidae:entities/land/manidae",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "rhinocerotidae:entities/land/rhinocerotidae",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "rhinocerotidae:entities/land/rhinocerotidae",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "casuariidae:entities/land/anatidae-baby",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "casuariidae:entities/land/anatidae-baby",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "casuariidae:entities/land/casuariidae-baby",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "casuariidae:entities/land/casuariidae-baby",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "casuariidae:entities/land/dromornithidae-baby",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "casuariidae:entities/land/dromornithidae-baby",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "casuariidae:entities/land/rallidae-baby",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "casuariidae:entities/land/rallidae-baby",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "sirenia:entities/water/sirenia",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "sirenia:entities/water/sirenia",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "machairodontinae:entities/land/machairodontinae-baby",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "machairodontinae:entities/animal/mammal/machairodontinae-baby",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "caninae:entities/animal/mammal/canina-baby",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "caninae:entities/animal/mammal/canina-baby",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "caninae:entities/animal/mammal/cerdocyonina-baby",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "caninae:entities/animal/mammal/cerdocyonina-baby",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "caninae:entities/animal/mammal/urocyonini-baby",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "caninae:entities/animal/mammal/urocyonini-baby",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "caninae:entities/animal/mammal/vulpini-baby",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "caninae:entities/animal/mammal/vulpini-baby",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "capreolinae:entities/animal/mammal/hooved/alceini-baby",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "capreolinae:entities/animal/mammal/hooved/alceini-baby",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "capreolinae:entities/animal/mammal/hooved/capreolini-baby",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "capreolinae:entities/animal/mammal/hooved/capreolini-baby",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "capreolinae:entities/animal/mammal/hooved/odocoileini-baby",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "capreolinae:entities/animal/mammal/hooved/odocoileini-baby",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "pantherinae:entities/animal/mammal/pantherinae-neofelis-baby",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "pantherinae:entities/animal/mammal/pantherinae-neofelis-baby",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "pantherinae:entities/animal/mammal/pantherinae-panthera-baby",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    },
+    {
+        "file": "pantherinae:entities/animal/mammal/pantherinae-panthera-baby",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "catchable": true
+            }
+        ]
+    }
+]

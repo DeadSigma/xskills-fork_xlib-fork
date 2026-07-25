@@ -1,0 +1,450 @@
+[
+    {
+        "file": "ornithomimosauria:entities/land/ornithomimosauria",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": "true"
+            }
+        ]
+    },
+    {
+        "file": "ornithomimosauria:entities/land/ornithomimosauria",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": "true"
+            }
+        ]
+    },
+    {
+        "file": "therizinosauridae:entities/land/therizinosauridae",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": "true"
+            }
+        ]
+    },
+    {
+        "file": "therizinosauridae:entities/land/therizinosauridae",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": "true"
+            }
+        ]
+    },
+    {
+        "file": "stegosauria:entities/land/stegosauria",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": "true"
+            }
+        ]
+    },
+    {
+        "file": "stegosauria:entities/land/stegosauria",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": "true"
+            }
+        ]
+    },
+    {
+        "file": "carcharodontosauridae:entities/land/carcharodontosauridae",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": "true"
+            }
+        ]
+    },
+    {
+        "file": "carcharodontosauridae:entities/land/carcharodontosauridae",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": "true"
+            }
+        ]
+    },
+    {
+        "file": "mosasauridae:entities/land/mosasauridae",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": "true"
+            }
+        ]
+    },
+    {
+        "file": "mosasauridae:entities/land/mosasauridae",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": "true"
+            }
+        ]
+    },
+    {
+        "file": "pachycephalosauria:entities/land/pachycephalosauria",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": "true"
+            }
+        ]
+    },
+    {
+        "file": "pachycephalosauria:entities/land/pachycephalosauria",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": "true"
+            }
+        ]
+    },
+    {
+        "file": "abelisauridae:entities/land/abelisauridae",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": "true"
+            }
+        ]
+    },
+    {
+        "file": "abelisauridae:entities/land/abelisauridae",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": "true"
+            }
+        ]
+    },
+    {
+        "file": "hadrosauroidea:entities/land/hadrosauroidea",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": "true"
+            }
+        ]
+    },
+    {
+        "file": "hadrosauroidea:entities/land/hadrosauroidea",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": "true"
+            }
+        ]
+    },
+    {
+        "file": "dromaeosauridae:entities/land/dromaeosauridae",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": "true"
+            }
+        ]
+    },
+    {
+        "file": "dromaeosauridae:entities/land/dromaeosauridae",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": "true"
+            }
+        ]
+    },
+    {
+        "file": "macronaria:entities/land/macronaria",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": "true"
+            }
+        ]
+    },
+    {
+        "file": "macronaria:entities/land/macronaria",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": "true"
+            }
+        ]
+    },
+    {
+        "file": "ankylosauria:entities/land/ankylosauria",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": "true"
+            }
+        ]
+    },
+    {
+        "file": "ankylosauria:entities/land/ankylosauria",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": "true"
+            }
+        ]
+    },
+    {
+        "file": "spinosauridae:entities/land/spinosauridae",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": "true"
+            }
+        ]
+    },
+    {
+        "file": "spinosauridae:entities/land/spinosauridae",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": "true"
+            }
+        ]
+    },
+    {
+        "file": "ceratopsidae:entities/land/ceratopsidae",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": "true"
+            }
+        ]
+    },
+    {
+        "file": "ceratopsidae:entities/land/ceratopsidae",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": "true"
+            }
+        ]
+    },
+    {
+        "file": "tyrannosauridae:entities/land/tyrannosauridae",
+        "op": "addmerge",
+        "path": "/client/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": "true"
+            }
+        ]
+    },
+    {
+        "file": "tyrannosauridae:entities/land/tyrannosauridae",
+        "op": "addmerge",
+        "path": "/server/behaviors",
+        "value": [
+            {
+                "code": "XSkillsAnimal",
+                "xp": 0.0,
+                "enabledByType": {
+                    "*-baby-*": true,
+                    "*-adult-*": false
+                },
+                "catchable": "true"
+            }
+        ]
+    }
+]
