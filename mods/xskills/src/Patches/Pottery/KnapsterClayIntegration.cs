@@ -59,7 +59,7 @@ namespace XSkills
 
                 if (playerSkill != null)
                 {
-                    // --- ЛОГИКА ПЕРКА "ЭКОНОМИЯ" (Thrift) ---
+                    // ЛОГИКА ПЕРКА "ЭКОНОМИЯ" (Thrift)
                     PlayerAbility thrift = playerSkill.PlayerAbilities[pottery.ThriftId];
                     if (thrift != null && thrift.Tier > 0)
                     {

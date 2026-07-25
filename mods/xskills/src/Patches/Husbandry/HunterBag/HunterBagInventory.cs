@@ -106,11 +106,35 @@ namespace XSkills
         {
             bagSlots = SlotsFromTreeAttributes(tree, bagSlots);
             RebuildContentSlots();
+
+            ITreeAttribute contentTree = tree.GetTreeAttribute("hunterbagcontent");
+            if (contentTree != null)
+            {
+                int n = contentTree.GetInt("count");
+                for (int i = 0; i < contentSlots.Count && i < n; i++)
+                {
+                    ItemStack st = contentTree.GetItemstack("s" + i);
+                    if (st == null) continue;
+                    if (api?.World != null) st.ResolveBlockOrItem(api.World);
+                    contentSlots[i].Itemstack = st;
+                }
+            }
+
+            UpdateWeightPenalty();
         }
 
         public override void ToTreeAttributes(ITreeAttribute tree)
         {
             SlotsToTreeAttributes(bagSlots, tree);
+
+            TreeAttribute contentTree = new TreeAttribute();
+            contentTree.SetInt("count", contentSlots.Count);
+            for (int i = 0; i < contentSlots.Count; i++)
+            {
+                ItemStack st = contentSlots[i]?.Itemstack;
+                if (st != null) contentTree.SetItemstack("s" + i, st.Clone());
+            }
+            tree["hunterbagcontent"] = contentTree;
         }
 
         // Меняем число слотов под сумки (перк). Слоты содержимого пересобираются следом
@@ -131,6 +155,9 @@ namespace XSkills
         // Пересобираем слоты содержимого из всех вложенных сумок
         private void RebuildContentSlots()
         {
+            List<ItemStack> preserved = new List<ItemStack>(contentSlots.Count);
+            for (int i = 0; i < contentSlots.Count; i++) preserved.Add(contentSlots[i]?.Itemstack);
+
             contentSlots.Clear();
 
             for (int b = 0; b < bagSlots.Length; b++)
@@ -150,7 +177,14 @@ namespace XSkills
                         for (int i = 0; i < created.Count; i++) contentSlots.Add(created[i]);
                     }
                 }
-                catch (Exception) { /* сумка без held-bag поведения или иная сигнатура — пропускаем */ }
+                catch (Exception) { /* сумка без held-bag поведения или иная сигнатура - пропускаем */ }
+            }
+
+            // Возвращаем сохранённое содержимое в совпадающие по индексу пустые слоты
+            for (int i = 0; i < contentSlots.Count && i < preserved.Count; i++)
+            {
+                if (preserved[i] != null && contentSlots[i].Itemstack == null)
+                    contentSlots[i].Itemstack = preserved[i];
             }
 
             RebuildCombined();
@@ -170,14 +204,18 @@ namespace XSkills
             base.OnItemSlotModified(slot);
 
             // Реагируем только на изменение слота(ов) сумки, а не самого содержимого
-            if (Array.IndexOf(bagSlots, slot) < 0) return;
-
+            if (Array.IndexOf(bagSlots, slot) >= 0)
+            {
             // Сумку вынули/заменили - её содержимое осиротело:  оно живёт в слотах содержимого и в стек сумки не записывается, поэтому при простой пересборке пропало бы. Роняем его дропом (на сервере), чтобы не терялось
-            DropOrphanedContent();
+                DropOrphanedContent();
 
-            int before = slots.Length;
-            RebuildContentSlots();
-            if (slots.Length != before) SlotCountChanged?.Invoke();
+                int before = slots.Length;
+                RebuildContentSlots();
+                if (slots.Length != before) SlotCountChanged?.Invoke();
+            }
+
+            // Любое изменение (сумка или содержимое) может изменить вес - пересчитываем штраф скорости
+            UpdateWeightPenalty();
         }
 
         // Выбрасывает текущее содержимое слотов сумки предметами в мир (только на сервере).
@@ -200,7 +238,67 @@ namespace XSkills
             }
         }
 
-        // Достаём held-bag поведение из стека без завязки на точное имя GetCollectibleInterface<>.
+        // Смерть игрока: роняем дропом всё, и убираем слоты содержимого
+        // Вызывается на сервере из обработчика смерти в Husbandry. Очистка содержимого до синхронизации не даёт клиенту получить обновление несуществующего слота (краш "slot 1 but max is 0")
+        public void DropAllAndClear(Vec3d pos)
+        {
+            if (api == null || api.Side != EnumAppSide.Server) return;
+
+            Vec3d at = pos ?? Player?.Entity?.Pos?.XYZ;
+            if (at == null) return;
+            at = at.AddCopy(0.0, 0.5, 0.0);
+
+            foreach (ItemSlot slot in slots) // сумки + содержимое
+            {
+                if (slot?.Itemstack == null) continue;
+
+                api.World.SpawnItemEntity(slot.Itemstack.Clone(), at);
+                slot.Itemstack = null;
+                slot.MarkDirty();
+            }
+
+            // Сумок больше нет - слоты содержимого убираются, размер инвентаря стабилизируется
+            RebuildContentSlots();
+            SlotCountChanged?.Invoke();
+            UpdateWeightPenalty();
+        }
+
+        // Штраф скорости передвижения за вес содержимого сумки Мод Butchering замедляет игрока, сканируя рюкзак, слот - отдельный инвентарь, поэтому вес его содержимого учитывается через стат "walkspeed"
+
+        private const string WalkSpeedStatCode = "hunterbagweight";
+
+        // Подброр: замедление за один предмет в сумке. 0.1 = -10% скорости за штуку
+        // Подбери под ощущение обычного слота Butchering (или замени на чтение веса из атрибутов туши)
+        private const float WalkSpeedPenaltyPerItem = 0.1f;
+
+        // Пересчитывает и применяет штраф скорости (только на сервере; клиенту стат синхронизируется)
+        public void UpdateWeightPenalty()
+        {
+            if (api == null || api.Side != EnumAppSide.Server) return;
+
+            var entity = Player?.Entity;
+            if (entity == null) return;
+
+            int itemCount = 0;
+            for (int i = 0; i < contentSlots.Count; i++)
+            {
+                ItemStack st = contentSlots[i]?.Itemstack;
+                if (st != null) itemCount += st.StackSize;
+            }
+
+            if (itemCount <= 0)
+            {
+                entity.Stats.Remove("walkspeed", WalkSpeedStatCode);
+                return;
+            }
+
+            float penalty = WalkSpeedPenaltyPerItem * itemCount;
+            if (penalty > 0.9f) penalty = 0.9f; // не даём остановить игрока полностью
+
+            entity.Stats.Set("walkspeed", WalkSpeedStatCode, -penalty, false);
+        }
+
+        // Достаём held-bag поведение из стека без завязки на точное имя GetCollectibleInterface<>
         private static IHeldBag GetHeldBag(ItemStack stack)
         {
             CollectibleObject coll = stack?.Collectible;

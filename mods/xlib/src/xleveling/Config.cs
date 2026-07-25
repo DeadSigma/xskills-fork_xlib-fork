@@ -82,7 +82,7 @@ namespace XLib.XLeveling
         /// </summary>
         public bool trackExpGain;
 
-        // --- ДОБАВЛЯЕМ ВЕРСИЮ КОНФИГА ---
+        // ДОБАВЛЯЕМ ВЕРСИЮ КОНФИГА
         /// <summary>
         /// The configuration version used for migrations and compatibility checks.
         /// Increment this value when changing the config layout.

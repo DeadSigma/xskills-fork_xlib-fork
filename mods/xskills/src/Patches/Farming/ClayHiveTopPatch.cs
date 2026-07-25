@@ -26,7 +26,7 @@ namespace XSkills
             }
         }
 
-        // --- Обработка OnBlockInteractStep ---
+        // Обработка OnBlockInteractStep
         public static void OnBlockInteractStepPrefix(IWorldAccessor world, BlockSelection blockSel, out Block __state)
         {
             __state = GetHarvestableBlock(world, blockSel);
@@ -37,7 +37,7 @@ namespace XSkills
             ProcessHarvest(world, byPlayer, blockSel, __state);
         }
 
-        // --- Обработка OnBlockInteractStop ---
+        // Обработка OnBlockInteractStop
         public static void OnBlockInteractStopPrefix(IWorldAccessor world, BlockSelection blockSel, out Block __state)
         {
             __state = GetHarvestableBlock(world, blockSel);
@@ -48,7 +48,7 @@ namespace XSkills
             ProcessHarvest(world, byPlayer, blockSel, __state);
         }
 
-        // --- Вспомогательные методы ---
+        // Вспомогательные методы
         private static Block GetHarvestableBlock(IWorldAccessor world, BlockSelection blockSel)
         {
             if (world?.Api.Side != EnumAppSide.Server || blockSel == null) return null;

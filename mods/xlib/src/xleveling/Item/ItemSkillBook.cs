@@ -234,7 +234,7 @@ namespace XLib.XLeveling
                     }
                 }
 
-                // --- ЛОГИКА СОХРАНЕНИЯ НИКОВ ---
+                // ЛОГИКА СОХРАНЕНИЯ НИКОВ
                 string existingReaders = readBook.Attributes.GetString("readBy");
 
                 if (string.IsNullOrEmpty(existingReaders))
@@ -254,7 +254,7 @@ namespace XLib.XLeveling
                     }
                 }
 
-                // --- ЛОГИКА СОХРАНЕНИЯ СОСТОЯНИЯ КНИГИ ---
+                // ЛОГИКА СОХРАНЕНИЯ СОСТОЯНИЯ КНИГИ
                 if (shouldMarkStudied)
                 {
                     readBook.Attributes.SetBool("studied", true);

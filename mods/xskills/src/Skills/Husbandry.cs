@@ -5,6 +5,7 @@ using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
+using Vintagestory.API.Server;
 using Vintagestory.Common;
 using Vintagestory.GameContent;
 using XLib.XLeveling;
@@ -197,6 +198,24 @@ namespace XSkills
             this.ExpMult = 50.0f;
             this.ExpEquationValue = 4.0f;
             this[HunterBagId].OnPlayerAbilityTierChanged += OnHunterBag;
+
+            // На сервере роняем сумку охотника (и её содержимое) при смерти игрока -  движок штатно дропает только свои инвентари, кастомный туда не входит
+            if (api is ICoreServerAPI sapi)
+            {
+                sapi.Event.PlayerDeath += OnPlayerDeath;
+            }
+        }
+
+        // Сервер: при смерти выбрасываем содержимое слота охотничьей сумки дропом и очищаем его
+        private void OnPlayerDeath(IServerPlayer player, DamageSource damageSource)
+        {
+            if (player?.Entity == null) return;
+            if (!(player.InventoryManager is PlayerInventoryManager invMan)) return;
+
+            if (invMan.GetOwnInventory("hunterbaginv") is HunterBagInventory inv)
+            {
+                inv.DropAllAndClear(player.Entity.Pos?.XYZ);
+            }
         }
 
         //Охотничий слот
@@ -221,7 +240,10 @@ namespace XSkills
             int slotsCount = playerAbility.Tier > 0 ? playerAbility.Value(0) : 0;
             inv.SetSize(slotsCount);
 
-            // UI строится только на локальном клиенте и только для своего игрока
+            // Сервер: применяем штраф скорости за вес содержимого (в т.ч. после захода в игру)
+            if (player.Entity.Api.Side == EnumAppSide.Server) inv.UpdateWeightPenalty();
+
+            // UI строим только на локальном клиенте и только для своего игрока
             if (player.Entity.Api is ICoreClientAPI capi && player.PlayerUID == capi.World.Player?.PlayerUID)
             {
                 UpdateHunterBagUI(capi, inv, playerAbility.Tier);

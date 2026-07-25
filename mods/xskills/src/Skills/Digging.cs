@@ -384,7 +384,7 @@ namespace XSkills
         }
     }//!class XSkillsSandBehavior
 
-    // --- ПАТЧИ ДЛЯ ЛОТКА (ПРОМЫВКА ПОЧВЫ И ЛУТ) ---
+    // ПАТЧИ ДЛЯ ЛОТКА (ПРОМЫВКА ПОЧВЫ И ЛУТ)
     [HarmonyPatch(typeof(Vintagestory.GameContent.BlockPan))]
     public class BlockPanPatches
     {
@@ -500,7 +500,7 @@ namespace XSkills
                 {
                     stack = stack.Clone();
 
-                    // --- УВЕЛИЧЕНИЕ ЛУТА ---
+                    // УВЕЛИЧЕНИЕ ЛУТА
                     float totalYield = stack.StackSize * yieldMultiplier;
                     int finalStackSize = (int)totalYield;
 

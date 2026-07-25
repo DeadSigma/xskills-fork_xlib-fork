@@ -747,7 +747,7 @@ namespace XSkills
             if (!(this.Config as SurvivalSkillConfig).allowCatEyesToggle) return;
 #endif
 
-            // --- НОВАЯ КНОПКА: Просто Вкл/Выкл ---
+            // НОВАЯ КНОПКА: Просто Вкл/Выкл
             capi.Input.RegisterHotKey("cateyesonoff", Lang.Get("xskills:hotkey-cateyesonoff"), GlKeys.P, HotkeyType.CharacterControls);
             capi.Input.SetHotKeyHandler("cateyesonoff", (KeyCombination key) =>
             {
@@ -767,7 +767,7 @@ namespace XSkills
                 return true;
             });
 
-            // --- СТАРАЯ КНОПКА: Переключение фильтров ---
+            // СТАРАЯ КНОПКА: Переключение фильтров
             capi.Input.RegisterHotKey("cateyestoggle", Lang.Get("xskills:hotkey-cateyestoggle"), GlKeys.L, HotkeyType.CharacterControls);
             capi.Input.SetHotKeyHandler("cateyestoggle", (KeyCombination key) =>
             {

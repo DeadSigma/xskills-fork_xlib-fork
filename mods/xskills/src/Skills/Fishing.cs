@@ -34,7 +34,7 @@ namespace XSkills
             this.ExpMult = 10.0f;
             this.ExpEquationValue = 0.8f;
 
-            // --- ПРОФЕССИЯ: Рыбак ---
+            // ПРОФЕССИЯ: Рыбак
             // 5 - уровень навыка для открытия
             // 1 - максимальный тир
             // 40 - бонусный опыт в процентах
@@ -133,7 +133,7 @@ namespace XSkills
         }
     }
 
-    // --- ПАТЧ 1: Выдача опыта за рыбу ---
+    // ПАТЧ 1: Выдача опыта за рыбу
     [HarmonyPatch(typeof(Vintagestory.GameContent.EntityBobber), "TryCatchFish")]
     public class BobberCatchPatch
     {
@@ -179,7 +179,7 @@ namespace XSkills
         }
     }
 
-    // --- ПАТЧ 2: Крепкая леска (защита от поломки) ---
+    // ПАТЧ 2: Крепкая леска (защита от поломки)
     [HarmonyPatch(typeof(Vintagestory.API.Common.CollectibleObject), "DamageItem")]
     public class FishingPoleDamagePatch
     {
@@ -201,7 +201,7 @@ namespace XSkills
             PlayerAbility ability = playerSkill[fishing.StrongLineId];
             if (ability != null && ability.Tier > 0)
             {
-                // --- НОВАЯ МАТЕМАТИКА ШАНСА ---
+                // НОВАЯ МАТЕМАТИКА ШАНСА
                 int currentChance = ability.SkillDependentValue();
                 float saveChance = currentChance / 100f;
 
@@ -216,7 +216,7 @@ namespace XSkills
         }
     }
 
-    // --- ПАТЧ 3: Принудительная поломка удочки при замахе ---
+    // ПАТЧ 3: Принудительная поломка удочки при замахе
     [HarmonyPatch(typeof(Vintagestory.GameContent.ItemFishingPole), "OnHeldInteractStart")]
     public class FishingPoleThrowPatch
     {
@@ -234,7 +234,7 @@ namespace XSkills
             }
         }
     }
-    // --- ПАТЧ 4: Опытный раздельщик (Сбалансированный рандомный бонус до +5 филе) ---
+    // ПАТЧ 4: Опытный раздельщик (Сбалансированный рандомный бонус до +5 филе)
     [HarmonyPatch(typeof(Vintagestory.GameContent.CollectibleBehaviorGroundStoredProcessable), "OnContainedInteractStop")]
     public class FishFilleterPatch
     {
@@ -260,7 +260,7 @@ namespace XSkills
             PlayerAbility ability = playerSkill[fishing.FishFilleterId];
             if (ability != null && ability.Tier > 0)
             {
-                // --- НОВАЯ МАТЕМАТИКА ШАНСА ---
+                // НОВАЯ МАТЕМАТИКА ШАНСА
                 int currentChance = ability.SkillDependentValue();
                 float bonusChance = currentChance / 100f;
 
@@ -317,7 +317,7 @@ namespace XSkills
             }
         }
     }
-    // --- ПАТЧ 5: Хорошая наживка ---
+    // ПАТЧ 5: Хорошая наживка
     [HarmonyPatch(typeof(Vintagestory.GameContent.EntityBobber), "onServertick")]
     public class GoodBaitPatch
     {
@@ -339,7 +339,7 @@ namespace XSkills
 
             if (ability != null && ability.Tier > 0)
             {
-                // --- НОВАЯ МАТЕМАТИКА ПРОЦЕНТА УСКОРЕНИЯ ---
+                // НОВАЯ МАТЕМАТИКА ПРОЦЕНТА УСКОРЕНИЯ
                 int bonusPercent = ability.SkillDependentValue();
                 float timeMultiplier = 1.0f + (bonusPercent / 100f);
 
@@ -357,7 +357,7 @@ namespace XSkills
             }
         }
     }
-    // --- ПАТЧ 6: Ловкие руки (Авто-наживка - ИСПРАВЛЕНО) ---
+    // ПАТЧ 6: Ловкие руки (Авто-наживка - ИСПРАВЛЕНО)
     [HarmonyPatch(typeof(Vintagestory.GameContent.ItemFishingPole), "OnHeldInteractStart")]
     public class AutoBaiterPatch
     {
@@ -366,12 +366,11 @@ namespace XSkills
         {
             if (byEntity.World.Side != EnumAppSide.Server) return;
 
-            // --- ВОТ НАШЕ СПАСЕНИЕ ---
             // Проверяем, закинута ли удочка прямо сейчас. 
             // Если да, значит этот клик - сматывание лески, и наживку вешать не нужно!
             if (slot.Itemstack?.Attributes?.GetBool("fishing", false) == true) return;
             if (slot.Itemstack?.Attributes?.GetLong("bobberEntityId", 0L) != 0L) return;
-            // --------------------------
+          
 
             IPlayer player = (byEntity as EntityPlayer)?.Player;
             if (player == null) return;
@@ -421,7 +420,7 @@ namespace XSkills
             }
         }
     }
-    // --- ПАТЧ 7: Мастер наживки (Шанс сохранить наживку) ---
+    // ПАТЧ 7: Мастер наживки (Шанс сохранить наживку)
     [HarmonyPatch(typeof(Vintagestory.GameContent.EntityBobber), "TryCatchFish")]
     public class BaitMasterPatch
     {
@@ -448,7 +447,7 @@ namespace XSkills
                 // Если наживки уже нет, спасать нечего
                 if (__instance.BaitStack == null) return;
 
-                // --- НОВАЯ МАТЕМАТИКА ШАНСА ---
+                // НОВАЯ МАТЕМАТИКА ШАНСА
                 int currentChance = ability.SkillDependentValue();
                 float saveChance = currentChance / 100f;
 
@@ -481,7 +480,7 @@ namespace XSkills
             }
         }
     }
-    // --- ПАТЧ 8: Двойной крючок (Шанс выловить вторую рыбу) ---
+    // ПАТЧ 8: Двойной крючок (Шанс выловить вторую рыбу)
     [HarmonyPatch(typeof(Vintagestory.GameContent.EntityBobber), "TryCatchFish")]
     public class DoubleHookPatch
     {
@@ -573,7 +572,7 @@ namespace XSkills
             }
         }
     }
-    // --- КЛАСС 9: Магнитный крючок (Класс Конфигурации) ---
+    // КЛАСС 9: Магнитный крючок (Класс Конфигурации)
     [ProtoContract]
     public class FishingSkillConfig : CustomSkillConfig
     {
@@ -631,7 +630,7 @@ namespace XSkills
             }
         }
     }
-    // --- ПАТЧ 9: Магнитный крючок (Шанс выловить предмет из воды) ---
+    // ПАТЧ 9: Магнитный крючок (Шанс выловить предмет из воды)
     [HarmonyPatch(typeof(Vintagestory.GameContent.EntityBobber), "TryCatchFish")]
     public class MagneticHookPatch
     {
@@ -663,7 +662,7 @@ namespace XSkills
 
             if (!hasCatch) return true;
 
-            // --- НОВАЯ МАТЕМАТИКА ШАНСА ---
+            // НОВАЯ МАТЕМАТИКА ШАНСА
             int baseChance = ability.Value(0);     // 4, 6 или 10
             int chancePerLevel = ability.Value(1); // 1
             int maxChance = ability.Value(2);      // 30

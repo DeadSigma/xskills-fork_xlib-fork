@@ -420,16 +420,5 @@
                 ]
             }
         ]
-    },
-    "monsterexpert": {
-        "requirements": [
-            {
-                "code": "knowledge",
-                "minimumTier": 1,
-                "hideUntilFulfilled": true,
-                "name": "xskills:monster",
-                "level": 1
-            }
-        ]
     }
 }

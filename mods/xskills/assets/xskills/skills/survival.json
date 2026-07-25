@@ -300,16 +300,5 @@
         "exclusiveTier": 1
       }
     ]
-  },
-  "meteorologist": {
-    "requirements": [
-      {
-        "code": "knowledge",
-        "minimumTier": 1,
-        "hideUntilFulfilled": true,
-        "name": "xskills:meteorology",
-        "level": 1
-      }
-    ]
   }
 }
