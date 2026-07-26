@@ -1,38 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
-	<Import Project="$(MSBuildProjectDirectory)\..\..\Local.Build.props.user"
-			Condition="Exists('$(MSBuildProjectDirectory)\..\..\Local.Build.props.user')" />
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
 		<OutputType>Library</OutputType>
 		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 		<NuGetAudit>false</NuGetAudit>
 	</PropertyGroup>
-
-	<PropertyGroup>
-		<!-- Repository defaults. Local values imported above override these values. -->
-		<VINTAGE_STORY Condition="'$(VINTAGE_STORY)' == ''">$(VINTAGE_STORY_HOME)</VINTAGE_STORY>
-		<LOCAL_DEPENDENCIES Condition="'$(LOCAL_DEPENDENCIES)' == ''">$(MSBuildProjectDirectory)\..\..\..\vshelper\dependencies</LOCAL_DEPENDENCIES>
-		<LOCAL_DEPLOY_SCRIPT Condition="'$(LOCAL_DEPLOY_SCRIPT)' == ''"></LOCAL_DEPLOY_SCRIPT>
-	</PropertyGroup>
-
-	<!--
-    Local, machine-specific values are loaded from Local.Build.props.user
-    at the repository root. That file must not be committed to Git.
-  -->
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<VINTAGE_STORY>C:\Users\Mrzub\AppData\Roaming\Vintagestory 1.22.2</VINTAGE_STORY>
 		<OutputPath>.\bin</OutputPath>
 		<IntermediateOutputPath>.\obj\Debug\xskills\</IntermediateOutputPath>
 	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
 		<OutputPath>.\bin</OutputPath>
 		<IntermediateOutputPath>.\obj\Release\xskills\</IntermediateOutputPath>
 	</PropertyGroup>
-
-	<PropertyGroup>
-		<BaseOutputPath>.\bin</BaseOutputPath>
-	</PropertyGroup>
-
 	<ItemGroup>
 		<Compile Remove="bin\**" />
 		<Compile Remove="src\Debug\**" />
@@ -44,27 +25,25 @@
 		<None Remove="src\Debug\**" />
 		<None Remove="src\Patches\Mining\**" />
 	</ItemGroup>
-
 	<ItemGroup>
 		<Reference Include="0Harmony, Version=2.0.4.0, Culture=neutral, processorArchitecture=MSIL">
 			<SpecificVersion>False</SpecificVersion>
 			<HintPath>$(VINTAGE_STORY)\Lib\0Harmony.dll</HintPath>
 		</Reference>
 		<Reference Include="ACulinaryArtillery">
-			<HintPath>$(LOCAL_DEPENDENCIES)\ACulinaryArtillery.dll</HintPath>
+			<HintPath>..\..\..\vshelper\dependencies\ACulinaryArtillery.dll</HintPath>
 		</Reference>
 		<Reference Include="ElectricalProgressive-QOL">
-			<HintPath>$(LOCAL_DEPENDENCIES)\ElectricalProgressive-QOL.dll</HintPath>
+			<HintPath>..\..\..\vshelper\dependenciesElectricalProgressive-QOL.dll</HintPath>
 		</Reference>
 		<Reference Include="cairo-sharp">
 			<HintPath>$(VINTAGE_STORY)\Lib\cairo-sharp.dll</HintPath>
-			<Private>False</Private>
 		</Reference>
 		<Reference Include="Overhaullib">
-			<HintPath>$(LOCAL_DEPENDENCIES)\Overhaullib.dll</HintPath>
+			<HintPath>..\..\..\vshelper\dependencies\Overhaullib.dll</HintPath>
 		</Reference>
 		<Reference Include="primitivesurvival">
-			<HintPath>$(LOCAL_DEPENDENCIES)\primitivesurvival.dll</HintPath>
+			<HintPath>..\..\..\vshelper\dependencies\primitivesurvival.dll</HintPath>
 		</Reference>
 		<Reference Include="protobuf-net, Version=2.1.0.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
 			<SpecificVersion>False</SpecificVersion>
@@ -86,12 +65,15 @@
 			<HintPath>$(VINTAGE_STORY)\Mods\VSEssentials.dll</HintPath>
 			<Private>False</Private>
 		</Reference>
+		<Reference Include="cairo-sharp">
+			<HintPath>$(VINTAGE_STORY)/Lib/cairo-sharp.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
 		<Reference Include="VSCreativeMod">
 			<HintPath>$(VINTAGE_STORY)\Mods\VSCreativeMod.dll</HintPath>
 			<Private>False</Private>
 		</Reference>
 	</ItemGroup>
-
 	<ItemGroup>
 		<Content Include="assets\xskills\lang\cn.json" />
 		<Content Include="assets\xskills\lang\de.json" />
@@ -125,11 +107,9 @@
 		<Content Include="assets\xskills\skills\temporaladaptation.json" />
 		<Content Include="modinfo.json" />
 	</ItemGroup>
-
 	<ItemGroup>
 		<ProjectReference Include="..\xlib\xlib.csproj" />
 	</ItemGroup>
-
 	<ItemGroup>
 		<Content Include="assets\xskills\patches\husbandry\animals.json" />
 		<Content Include="assets\xskills\blocktypes\cage.json" />
@@ -140,40 +120,32 @@
 		<Content Include="assets\xskills\patches\cooking.json" />
 		<Content Include="assets\xskills\lang\es-419.json" />
 	</ItemGroup>
-
 	<ItemGroup>
 		<PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>
-
 	<ItemGroup>
 		<Folder Include="assets\xskills\shapes\item\" />
 	</ItemGroup>
-
-	<Target Name="ValidateLocalBuildSettings" BeforeTargets="ResolveReferences">
-		<Message Importance="High" Text="VINTAGE_STORY=$(VINTAGE_STORY)" />
-		<Message Importance="High" Text="LOCAL_DEPENDENCIES=$(LOCAL_DEPENDENCIES)" />
-		<Error Condition="'$(VINTAGE_STORY)' == ''"
-			   Text="VINTAGE_STORY is not configured. Create Local.Build.props.user in the repository root and set VINTAGE_STORY." />
-		<Error Condition="'$(VINTAGE_STORY)' != '' and !Exists('$(VINTAGE_STORY)\VintagestoryAPI.dll')"
-			   Text="Invalid VINTAGE_STORY directory: $(VINTAGE_STORY). VintagestoryAPI.dll was not found." />
-		<Error Condition="!Exists('$(LOCAL_DEPENDENCIES)\ACulinaryArtillery.dll')"
-			   Text="Missing dependency: $(LOCAL_DEPENDENCIES)\ACulinaryArtillery.dll" />
-		<Error Condition="!Exists('$(LOCAL_DEPENDENCIES)\ElectricalProgressive-QOL.dll')"
-			   Text="Missing dependency: $(LOCAL_DEPENDENCIES)\ElectricalProgressive-QOL.dll" />
-		<Error Condition="!Exists('$(LOCAL_DEPENDENCIES)\Overhaullib.dll')"
-			   Text="Missing dependency: $(LOCAL_DEPENDENCIES)\Overhaullib.dll" />
-		<Error Condition="!Exists('$(LOCAL_DEPENDENCIES)\primitivesurvival.dll')"
-			   Text="Missing dependency: $(LOCAL_DEPENDENCIES)\primitivesurvival.dll" />
-	</Target>
-
+	<PropertyGroup>
+		<BaseOutputPath>./bin</BaseOutputPath>
+	</PropertyGroup>
+	<ProjectExtensions>
+		<VisualStudio>
+			<UserProperties assets_4xskills_4lang_4en_1json__JsonSchema="" />
+		</VisualStudio>
+	</ProjectExtensions>
 	<Target Name="PostRebuild" AfterTargets="Rebuild">
 		<PropertyGroup>
-			<ModName>$([System.Text.RegularExpressions.Regex]::Match('$([System.IO.File]::ReadAllText("$(ProjectDir)modinfo.json"))', '&quot;name&quot;\s*:\s*&quot;([^&quot;]+)&quot;').Groups[1].Value)</ModName>
-			<ModVersion>$([System.Text.RegularExpressions.Regex]::Match('$([System.IO.File]::ReadAllText("$(ProjectDir)modinfo.json"))', '&quot;version&quot;\s*:\s*&quot;([^&quot;]+)&quot;').Groups[1].Value)</ModVersion>
+			<ModName>$([System.Text.RegularExpressions.Regex]::Match('$([System.IO.File]::ReadAllText("$(ProjectDir)modinfo.json"))', '"name"\s*:\s*"([^"]+)"').Groups[1].Value)</ModName>
+			<ModVersion>$([System.Text.RegularExpressions.Regex]::Match('$([System.IO.File]::ReadAllText("$(ProjectDir)modinfo.json"))', '"version"\s*:\s*"([^"]+)"').Groups[1].Value)</ModVersion>
+
 			<ZipTempDir>$(TargetDir)ZipTemp</ZipTempDir>
-			<ZipOutDir>$(MSBuildProjectDirectory)\..\..\..\releases\$(ModName)</ZipOutDir>
-			<DevOutDir>$(ZipOutDir)\dev $(ModName)</DevOutDir>
+			<ZipOutDir>..\..\..\releases\$(ModName)</ZipOutDir>
+
+			<!-- Папка живой версии -->
+			<DevOutDir>..\..\..\releases\$(ModName)\dev $(ModName)</DevOutDir>
+
 		</PropertyGroup>
 
 		<MakeDir Directories="$(ZipOutDir)" Condition="!Exists('$(ZipOutDir)')" />
@@ -181,6 +153,7 @@
 		<RemoveDir Directories="$(ZipTempDir)" Condition="Exists('$(ZipTempDir)')" />
 		<MakeDir Directories="$(ZipTempDir)" />
 
+		<!-- Очистка dev копии -->
 		<RemoveDir Directories="$(DevOutDir)" Condition="Exists('$(DevOutDir)')" />
 		<MakeDir Directories="$(DevOutDir)" />
 
@@ -202,28 +175,17 @@
 		<Copy SourceFiles="@(ProjectFiles)" DestinationFolder="$(DevOutDir)" />
 
 		<ItemGroup>
-			<AssetFiles Include="$(ProjectDir)assets\**\*" />
+			<AssetFiles Include="$(ProjectDir)assets\**" />
 		</ItemGroup>
 
 		<Copy SourceFiles="@(AssetFiles)" DestinationFolder="$(ZipTempDir)\assets\%(RecursiveDir)" />
 		<Copy SourceFiles="@(AssetFiles)" DestinationFolder="$(DevOutDir)\assets\%(RecursiveDir)" />
 
-		<ZipDirectory SourceDirectory="$(ZipTempDir)"
-					  DestinationFile="$(ZipOutDir)\$(ModName) v$(ModVersion).zip"
-					  Overwrite="true" />
+		<ZipDirectory SourceDirectory="$(ZipTempDir)" DestinationFile="$(ZipOutDir)\$(ModName) v$(ModVersion).zip" Overwrite="true" />
 
 		<RemoveDir Directories="$(ZipTempDir)" />
 
-		<Exec Command="py &quot;$(LOCAL_DEPLOY_SCRIPT)&quot;"
-			  Condition="'$(LOCAL_DEPLOY_SCRIPT)' != '' and Exists('$(LOCAL_DEPLOY_SCRIPT)')" />
+		<Exec Command="py &quot;C:\sourcecode\копирует xskills в папку с модами.py&quot;" />
 
-		<Warning Text="LOCAL_DEPLOY_SCRIPT does not exist: $(LOCAL_DEPLOY_SCRIPT)"
-				 Condition="'$(LOCAL_DEPLOY_SCRIPT)' != '' and !Exists('$(LOCAL_DEPLOY_SCRIPT)')" />
 	</Target>
-
-	<ProjectExtensions>
-		<VisualStudio>
-			<UserProperties assets_4xskills_4lang_4en_1json__JsonSchema="" />
-		</VisualStudio>
-	</ProjectExtensions>
 </Project>

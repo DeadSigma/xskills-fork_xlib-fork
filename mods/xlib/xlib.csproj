@@ -1,127 +1,108 @@
 <Project Sdk="Microsoft.NET.Sdk">
-	<Import Project="$(MSBuildProjectDirectory)\..\..\Local.Build.props.user"
-			Condition="Exists('$(MSBuildProjectDirectory)\..\..\Local.Build.props.user')" />
-	<PropertyGroup>
-		<TargetFramework>net10.0</TargetFramework>
-		<OutputType>Library</OutputType>
-		<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-		<NuGetAudit>false</NuGetAudit>
-	</PropertyGroup>
-
-
-	<PropertyGroup>
-		<!-- Can also be supplied through an environment variable named VINTAGE_STORY. -->
-		<VINTAGE_STORY Condition="'$(VINTAGE_STORY)' == ''">$(VINTAGE_STORY_HOME)</VINTAGE_STORY>
-
-		<!-- Optional local Python deployment script. Empty means: do not run one. -->
-		<LOCAL_DEPLOY_SCRIPT Condition="'$(LOCAL_DEPLOY_SCRIPT)' == ''"></LOCAL_DEPLOY_SCRIPT>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-		<OutputPath>.\bin</OutputPath>
-		<IntermediateOutputPath>.\obj\Debug\xlib\</IntermediateOutputPath>
-		<DocumentationFile>..\..\..\..\..\..\..\bin\xlib.xml</DocumentationFile>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
-		<OutputPath>.\bin</OutputPath>
-		<IntermediateOutputPath>.\obj\Release\xlib\</IntermediateOutputPath>
-		<DocumentationFile>..\..\..\..\..\..\..\bin\xlib.xml</DocumentationFile>
-	</PropertyGroup>
-
-	<ItemGroup>
-		<None Remove="assets\xeffects\lang\es-419.json" />
-		<None Remove="assets\xeffects\lang\pl.json" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Reference Include="0Harmony, Version=2.0.4.0, Culture=neutral, processorArchitecture=MSIL">
-			<SpecificVersion>False</SpecificVersion>
-			<HintPath>$(VINTAGE_STORY)\Lib\0Harmony.dll</HintPath>
-		</Reference>
-		<Reference Include="protobuf-net, Version=2.1.0.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
-			<SpecificVersion>False</SpecificVersion>
-			<HintPath>$(VINTAGE_STORY)\Lib\protobuf-net.dll</HintPath>
-		</Reference>
-		<Reference Include="VintagestoryAPI">
-			<HintPath>$(VINTAGE_STORY)\VintagestoryAPI.dll</HintPath>
-			<Private>False</Private>
-		</Reference>
-		<Reference Include="VintagestoryLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-			<SpecificVersion>False</SpecificVersion>
-			<HintPath>$(VINTAGE_STORY)\VintagestoryLib.dll</HintPath>
-		</Reference>
-		<Reference Include="VSSurvivalMod">
-			<HintPath>$(VINTAGE_STORY)\Mods\VSSurvivalMod.dll</HintPath>
-			<Private>False</Private>
-		</Reference>
-		<Reference Include="VSEssentials">
-			<HintPath>$(VINTAGE_STORY)\Mods\VSEssentials.dll</HintPath>
-			<Private>False</Private>
-		</Reference>
-		<Reference Include="VSCreativeMod">
-			<HintPath>$(VINTAGE_STORY)\Mods\VSCreativeMod.dll</HintPath>
-			<Private>False</Private>
-		</Reference>
-		<Reference Include="cairo-sharp">
-			<HintPath>$(VINTAGE_STORY)\Lib\cairo-sharp.dll</HintPath>
-			<Private>False</Private>
-		</Reference>
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Include="assets\xeffects\effects\effects.json" />
-		<Content Include="assets\xeffects\lang\de.json" />
-		<Content Include="assets\xeffects\lang\cn.json" />
-		<Content Include="assets\xeffects\lang\pl.json" />
-		<Content Include="assets\xeffects\lang\en.json" />
-		<Content Include="assets\xeffects\lang\es-419.json" />
-		<Content Include="assets\xeffects\lang\zh-CN.json" />
-		<Content Include="assets\xeffects\lang\ru.json" />
-		<Content Include="assets\xeffects\patches\entities.json" />
-		<Content Include="assets\xlib\lang\de.json" />
-		<Content Include="assets\xlib\lang\en.json" />
-		<Content Include="assets\xlib\lang\fr.json" />
-		<Content Include="assets\xlib\lang\pt-br.json" />
-		<Content Include="assets\xlib\lang\ru.json" />
-		<Content Include="modinfo.json" />
-		<Content Include="modicon.png" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Content Include="assets\xeffects\lang\fr.json" />
-		<Content Include="assets\xeffects\lang\ja.json" />
-		<Content Include="assets\xeffects\lang\es-es.json" />
-		<Content Include="assets\xeffects\lang\uk.json" />
-		<Content Include="assets\xlib\lang\zh-CN.json" />
-		<Content Include="assets\xlib\lang\es-es.json" />
-		<Content Include="assets\xlib\lang\ro.json" />
-		<Content Include="assets\xlib\lang\sv.json" />
-		<Content Include="assets\xlib\lang\pl.json" />
-		<Content Include="assets\xlib\effects\effects.json" />
-		<Content Include="assets\xlib\lang\ja.json" />
-		<Content Include="assets\xlib\lang\es-419.json" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-	</ItemGroup>
-
-	<Target Name="ValidateLocalBuildSettings" BeforeTargets="ResolveReferences">
-		<Error Condition="'$(VINTAGE_STORY)' == ''"
-			   Text="VINTAGE_STORY is not configured. Create Local.Build.props.user in the repository root and set VINTAGE_STORY." />
-		<Error Condition="'$(VINTAGE_STORY)' != '' and !Exists('$(VINTAGE_STORY)\VintagestoryAPI.dll')"
-			   Text="Invalid VINTAGE_STORY directory: $(VINTAGE_STORY). VintagestoryAPI.dll was not found." />
-	</Target>
-
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	  <NuGetAudit>false</NuGetAudit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>.\bin</OutputPath>
+    <IntermediateOutputPath>.\obj\Debug\xlib\</IntermediateOutputPath>
+    <DocumentationFile>..\..\..\..\..\..\..\bin\xlib.xml</DocumentationFile>
+	<VINTAGE_STORY>C:\Users\Mrzub\AppData\Roaming\Vintagestory 1.22.2</VINTAGE_STORY>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>.\bin</OutputPath>
+    <IntermediateOutputPath>.\obj\Debug\xlib\</IntermediateOutputPath>
+    <DocumentationFile>..\..\..\..\..\..\..\bin\xlib.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="assets\xeffects\lang\es-419.json" />
+    <None Remove="assets\xeffects\lang\pl.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="0Harmony, Version=2.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(VINTAGE_STORY)\Lib\0Harmony.dll</HintPath>
+    </Reference>
+    <Reference Include="protobuf-net, Version=2.1.0.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(VINTAGE_STORY)\Lib\protobuf-net.dll</HintPath>
+    </Reference>
+    <Reference Include="VintagestoryAPI">
+      <HintPath>$(VINTAGE_STORY)\VintagestoryAPI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="VintagestoryLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(VINTAGE_STORY)\VintagestoryLib.dll</HintPath>
+    </Reference>
+    <Reference Include="VSSurvivalMod">
+      <HintPath>$(VINTAGE_STORY)\Mods\VSSurvivalMod.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="VSEssentials">
+      <HintPath>$(VINTAGE_STORY)\Mods\VSEssentials.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+	  
+    <Reference Include="VSCreativeMod">
+      <HintPath>$(VINTAGE_STORY)\Mods\VSCreativeMod.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+	  <Reference Include="cairo-sharp">
+		  <HintPath>$(VINTAGE_STORY)/Lib/cairo-sharp.dll</HintPath>
+		  <Private>False</Private>
+	  </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="assets\xeffects\effects\effects.json" />
+    <Content Include="assets\xeffects\lang\de.json" />
+    <Content Include="assets\xeffects\lang\cn.json" />
+    <Content Include="assets\xeffects\lang\pl.json" />
+    <Content Include="assets\xeffects\lang\en.json" />
+    <Content Include="assets\xeffects\lang\es-419.json" />
+    <Content Include="assets\xeffects\lang\zh-CN.json" />
+    <Content Include="assets\xeffects\lang\ru.json" />
+    <Content Include="assets\xeffects\patches\entities.json" />
+    <Content Include="assets\xlib\lang\de.json" />
+    <Content Include="assets\xlib\lang\en.json" />
+    <Content Include="assets\xlib\lang\fr.json" />
+    <Content Include="assets\xlib\lang\pt-br.json" />
+    <Content Include="assets\xlib\lang\ru.json" />
+    <Content Include="modinfo.json" />
+	<Content Include="modicon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="assets\xeffects\lang\fr.json" />
+    <Content Include="assets\xeffects\lang\ja.json" />
+    <Content Include="assets\xeffects\lang\es-es.json" />
+    <Content Include="assets\xeffects\lang\uk.json" />
+    <Content Include="assets\xlib\lang\zh-CN.json" />
+    <Content Include="assets\xlib\lang\es-es.json" />
+    <Content Include="assets\xlib\lang\ro.json" />
+    <Content Include="assets\xlib\lang\sv.json" />
+    <Content Include="assets\xlib\lang\pl.json" />
+    <Content Include="assets\xlib\effects\effects.json" />
+    <Content Include="assets\xlib\lang\ja.json" />
+    <Content Include="assets\xlib\lang\es-419.json" />
+  </ItemGroup>
+  <ItemGroup>
+	  <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+  <PropertyGroup />
 	<Target Name="PostRebuild" AfterTargets="Rebuild">
 		<PropertyGroup>
-			<ModName>$([System.Text.RegularExpressions.Regex]::Match('$([System.IO.File]::ReadAllText("$(ProjectDir)modinfo.json"))', '&quot;name&quot;\s*:\s*&quot;([^&quot;]+)&quot;').Groups[1].Value)</ModName>
-			<ModVersion>$([System.Text.RegularExpressions.Regex]::Match('$([System.IO.File]::ReadAllText("$(ProjectDir)modinfo.json"))', '&quot;version&quot;\s*:\s*&quot;([^&quot;]+)&quot;').Groups[1].Value)</ModVersion>
+			<ModName>$([System.Text.RegularExpressions.Regex]::Match('$([System.IO.File]::ReadAllText("$(ProjectDir)modinfo.json"))', '"name"\s*:\s*"([^"]+)"').Groups[1].Value)</ModName>
+			<ModVersion>$([System.Text.RegularExpressions.Regex]::Match('$([System.IO.File]::ReadAllText("$(ProjectDir)modinfo.json"))', '"version"\s*:\s*"([^"]+)"').Groups[1].Value)</ModVersion>
+
 			<ZipTempDir>$(TargetDir)ZipTemp</ZipTempDir>
-			<ZipOutDir>$(MSBuildProjectDirectory)\..\..\..\releases\$(ModName)</ZipOutDir>
-			<DevOutDir>$(ZipOutDir)\dev $(ModName)</DevOutDir>
+			<ZipOutDir>..\..\..\releases\$(ModName)</ZipOutDir>
+
+			<!-- Папка живой версии -->
+			<DevOutDir>..\..\..\releases\$(ModName)\dev $(ModName)</DevOutDir>
+
 		</PropertyGroup>
 
 		<MakeDir Directories="$(ZipOutDir)" Condition="!Exists('$(ZipOutDir)')" />
@@ -129,6 +110,7 @@
 		<RemoveDir Directories="$(ZipTempDir)" Condition="Exists('$(ZipTempDir)')" />
 		<MakeDir Directories="$(ZipTempDir)" />
 
+		<!-- Очистка dev копии -->
 		<RemoveDir Directories="$(DevOutDir)" Condition="Exists('$(DevOutDir)')" />
 		<MakeDir Directories="$(DevOutDir)" />
 
@@ -150,28 +132,21 @@
 		<Copy SourceFiles="@(ProjectFiles)" DestinationFolder="$(DevOutDir)" />
 
 		<ItemGroup>
-			<AssetFiles Include="$(ProjectDir)assets\**\*" />
+			<AssetFiles Include="$(ProjectDir)assets\**" />
 		</ItemGroup>
 
 		<Copy SourceFiles="@(AssetFiles)" DestinationFolder="$(ZipTempDir)\assets\%(RecursiveDir)" />
 		<Copy SourceFiles="@(AssetFiles)" DestinationFolder="$(DevOutDir)\assets\%(RecursiveDir)" />
 
-		<ZipDirectory SourceDirectory="$(ZipTempDir)"
-					  DestinationFile="$(ZipOutDir)\$(ModName) v$(ModVersion).zip"
-					  Overwrite="true" />
+		<ZipDirectory SourceDirectory="$(ZipTempDir)" DestinationFile="$(ZipOutDir)\$(ModName) v$(ModVersion).zip" Overwrite="true" />
 
 		<RemoveDir Directories="$(ZipTempDir)" />
 
-		<Exec Command="py &quot;$(LOCAL_DEPLOY_SCRIPT)&quot;"
-			  Condition="'$(LOCAL_DEPLOY_SCRIPT)' != '' and Exists('$(LOCAL_DEPLOY_SCRIPT)')" />
-
-		<Warning Text="LOCAL_DEPLOY_SCRIPT does not exist: $(LOCAL_DEPLOY_SCRIPT)"
-				 Condition="'$(LOCAL_DEPLOY_SCRIPT)' != '' and !Exists('$(LOCAL_DEPLOY_SCRIPT)')" />
+		<Exec Command="py &quot;C:\sourcecode\копирует xlib в папку с модами.py&quot;" />
 	</Target>
-
-	<ProjectExtensions>
-		<VisualStudio>
-			<UserProperties assets_4xeffects_4lang_4uk_1json__JsonSchema="" />
-		</VisualStudio>
-	</ProjectExtensions>
+  <ProjectExtensions>
+	  <VisualStudio>
+		  <UserProperties assets_4xeffects_4lang_4uk_1json__JsonSchema="" />
+	  </VisualStudio>
+  </ProjectExtensions>
 </Project>

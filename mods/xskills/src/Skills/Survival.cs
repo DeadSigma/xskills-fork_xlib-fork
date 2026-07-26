@@ -1037,9 +1037,7 @@ namespace XSkills
             deltaTime = Math.Min(deltaTime, adaptationTime);
             int light = capi.World.BlockAccessor.GetLightLevel(player.Pos.AsBlockPos, EnumLightLevelType.MaxTimeOfDayLight);
 
-            // Учитываем ЛЮБЫЕ светящиеся сущности: игроков, животных с фонарями, светящихся мобов.
-            // Раньше здесь был GetPlayersAround, из-за чего фонарь на животном
-            // не учитывался в адаптации и постоянно слепил.
+            // Учитываем любые светящиеся сущности: игроков, животных с фонарями, светящихся мобов
             Entity[] entities = capi.World.GetEntitiesAround(player.Pos.XYZ, 32.0f, 32.0f,
                 (e) => (e.LightHsv?[2] ?? 0) > 0);
 
@@ -1048,12 +1046,18 @@ namespace XSkills
                 int entityBrightness = Math.Clamp(entity.LightHsv?[2] ?? 0, (byte)0, (byte)32);
                 if (entityBrightness == 0) continue;
                 int distance = (int)entity.Pos.DistanceTo(player.Pos);
-
                 light = Math.Max(light, entityBrightness - distance * 2);
             }
 
-            float mult = light == 0 ? 1.6f : 1.0f;
-            float destination = (1.0f - light / 16.0f) * mult;
+            // Кривая яркости
+            const float noVisionLight = 16.0f; // при этом уровне света и выше ночное зрение выключается
+            const float maxIntensity = 1.6f;  // сила усиления в полной темноте - главный "рычаг" яркости
+            const float darkFloor = 0.15f; // базовая добавка яркости в темноте (тянет почти-чёрный кадр из нуля)
+
+            // 0 = светло, 1 = кромешная тьма. Гладко и без разрыва в точке light==0.
+            float darkness = Math.Clamp((noVisionLight - light) / noVisionLight, 0.0f, 1.0f);
+            float destination = maxIntensity * darkness;
+
             if (adaptationTime > 0.0f)
                 nightVisionIntensity = (nightVisionIntensity * (adaptationTime - deltaTime) + destination * deltaTime) / adaptationTime;
             else
@@ -1066,9 +1070,13 @@ namespace XSkills
 
                 capi.Render.GLDisableDepthTest();
 
+                // Чем темнее кадр - тем выше "пол" яркости: иначе усиление лишь умножает почти-чёрный кадр и остаются одни силуэты (тёмные пещеры, мрак в непогоду).
+                float darkAmount = Math.Clamp(nightVisionIntensity / maxIntensity, 0.0f, 1.0f);
+                float floorBoost = darkFloor * darkAmount;
+
                 Shader.BindTexture2D("primaryScene", capi.Render.FrameBuffers[(int)EnumFrameBuffer.Primary].ColorTextureIds[0], 0);
                 Shader.Uniform("intensity", nightVisionIntensity);
-                Shader.Uniform("brightness", NightVisionBrightness + ability.Value(0));
+                Shader.Uniform("brightness", NightVisionBrightness + ability.Value(0) + floorBoost);
 
                 capi.Render.RenderMesh(quadRef);
                 Shader.Stop();
