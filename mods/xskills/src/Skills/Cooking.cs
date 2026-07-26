@@ -1,4 +1,4 @@
-﻿using ProtoBuf;
+using ProtoBuf;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -42,6 +42,97 @@ namespace XSkills
 
         /// <summary>Базовое насыщение на литр для жидкостей без nutritionPropsPerLitre (вода, рассол).</summary>
         private const float LiquidBaseSatiety = 50.0f;
+
+        /// <summary>Stores the Well Done shelf-life bonus calculated before saucepan cooking completes.</summary>
+        public const string WellDoneShelfLifeAttribute = "xskillsWellDoneShelfLifeBonus";
+
+        /// <summary>Marks that a saucepan operation has a Well Done snapshot, including a zero-value snapshot.</summary>
+        public const string WellDoneSnapshotAttribute = "xskillsWellDoneSnapshotReady";
+
+        /// <summary>
+        /// Returns whether Dilution should treat the supplied stack as food.
+        /// Supports normal nutrition, liquid nutrition per litre, and meal-only nutrition used by Expanded Foods.
+        /// </summary>
+        private static bool IsFoodForDilution(ItemStack stack)
+        {
+            CollectibleObject collectible = stack?.Collectible;
+            if (collectible == null) return false;
+
+            if ((collectible.NutritionProps?.Satiety ?? 0.0f) > 0.0f)
+            {
+                return true;
+            }
+
+            WaterTightContainableProps liquidProps = BlockLiquidContainerBase.GetContainableProps(stack);
+            if ((liquidProps?.NutritionPropsPerLitre?.Satiety ?? 0.0f) > 0.0f)
+            {
+                return true;
+            }
+
+            JsonObject attributes = collectible.Attributes;
+            return attributes != null &&
+                   (attributes["nutritionPropsWhenInMeal"].Exists ||
+                    attributes["nutritionPropsWhenInMealByType"].Exists);
+        }
+
+        /// <summary>
+        /// Scales a stack while preserving fractional Dilution output through probabilistic rounding.
+        /// </summary>
+        private static int ScaleStackSizeWithRandomRounding(int currentSize, float multiplier, Random random)
+        {
+            if (currentSize <= 0 || multiplier <= 1.0f || random == null) return currentSize;
+
+            float scaledSize = currentSize * multiplier;
+            int roundedSize = (int)Math.Floor(scaledSize);
+            float remainder = scaledSize - roundedSize;
+
+            // Random rounding preserves the configured average bonus for small liquid batches.
+            if (remainder > 0.0f && random.NextDouble() < remainder)
+            {
+                roundedSize++;
+            }
+
+            return Math.Max(currentSize, roundedSize);
+        }
+
+        /// <summary>
+        /// Reads the Well Done values that should be recorded before a cooking operation completes.
+        /// </summary>
+        public bool TryGetWellDoneBonuses(IPlayer player, out float shelfLifeBonus, out float cookingTimeBonus)
+        {
+            shelfLifeBonus = 0.0f;
+            cookingTimeBonus = 0.0f;
+
+            PlayerSkill skill = player?.Entity?.GetBehavior<PlayerSkillSet>()?[this.Id];
+            PlayerAbility ability = skill?[this.WellDoneId];
+            if (ability?.Tier <= 0) return false;
+
+            shelfLifeBonus = Math.Max(0.0f, ability.SkillDependentFValue());
+            cookingTimeBonus = Math.Max(0.0f, ability.FValue(3));
+            return shelfLifeBonus > 0.0f || cookingTimeBonus > 0.0f;
+        }
+
+        /// <summary>
+        /// Calculates the combined Fast Food and Well Done duration multiplier for a player.
+        /// </summary>
+        public float GetCookingTimeMultiplier(IPlayer player)
+        {
+            PlayerSkill skill = player?.Entity?.GetBehavior<PlayerSkillSet>()?[this.Id];
+            if (skill == null) return 1.0f;
+
+            PlayerAbility fastFood = skill[this.FastFoodId];
+            PlayerAbility wellDone = skill[this.WellDoneId];
+
+            float fastFoodMultiplier = fastFood?.Tier > 0
+                ? 1.0f - fastFood.SkillDependentFValue()
+                : 1.0f;
+
+            float wellDoneMultiplier = wellDone?.Tier > 0
+                ? 1.0f + wellDone.FValue(3)
+                : 1.0f;
+
+            return Math.Max(0.05f, fastFoodMultiplier * wellDoneMultiplier);
+        }
 
         protected Dictionary<CookingRecipeStack, List<CookingRecipeStack>> resolvedRecipeStacks = new();
         public Cooking(ICoreAPI api) : base("cooking", "xskills:skill-cooking", "xskills:group-processing")
@@ -476,11 +567,21 @@ namespace XSkills
 
                 if (liquidContainer != null)
                 {
-                    float mult = 1.0f + playerAbility.SkillDependentFValue();
+                    float multiplier = 1.0f + playerAbility.SkillDependentFValue();
+                    bool refinedDilution = (skill[this.RefinedDilutionId]?.Tier ?? 0) > 0;
+
                     foreach (ItemStack stack in contentStacks)
                     {
-                        if (stack.Collectible.NutritionProps?.Satiety > 0.0f)
-                            stack.StackSize = (int)(stack.StackSize * mult);
+                        if (stack?.Collectible == null) continue;
+
+                        // Normal Dilution affects food liquids. Refined Dilution also allows non-edible processing liquids.
+                        if (!IsFoodForDilution(stack) && !refinedDilution) continue;
+
+                        stack.StackSize = ScaleStackSizeWithRandomRounding(
+                            stack.StackSize,
+                            multiplier,
+                            world.Rand
+                        );
                     }
                 }
                 else if (mealContainer == null || mealContainer is BlockPie)
@@ -611,41 +712,44 @@ namespace XSkills
 
             //well done
             playerAbility = skill[this.WellDoneId];
-            foreach (ItemStack stack in contentStacks)
+
+            // Saucepan cooking records the bonus before completion. Other cooking paths keep the existing completion-time behavior.
+            bool hasWellDoneSnapshot = outputStack.Attributes.GetBool(WellDoneSnapshotAttribute);
+            float shelfLifeBonus = hasWellDoneSnapshot
+                ? outputStack.Attributes.GetFloat(WellDoneShelfLifeAttribute)
+                : playerAbility?.Tier > 0
+                    ? playerAbility.SkillDependentFValue()
+                    : 0.0f;
+
+            // Clear the operation snapshot after applying it to the finished product.
+            outputStack.Attributes.SetBool(WellDoneSnapshotAttribute, false);
+            outputStack.Attributes.SetFloat(WellDoneShelfLifeAttribute, 0.0f);
+
+            if (shelfLifeBonus > 0.0f)
             {
-                if (stack == null) continue;
-                ITreeAttribute attr = (stack.Attributes as TreeAttribute)?.GetTreeAttribute("transitionstate");
+                float shelfLifeMultiplier = 1.0f + shelfLifeBonus;
+
+                foreach (ItemStack stack in contentStacks)
+                {
+                    if (stack?.Collectible == null) continue;
+                    ITreeAttribute attr = (stack.Attributes as TreeAttribute)?.GetTreeAttribute("transitionstate");
 
                 // Продукт котла синтезируется из шаблона рецепта и не имеет transitionstate, поэтому Well Done ниже нечего продлевать. Инициализируем состояние здесь, как это сделала бы игра на следующем тике
-                if (attr == null && (stack.Collectible?.TransitionableProps?.Length ?? 0) > 0)
-                {
-                    stack.Collectible.UpdateAndGetTransitionStates(world, new DummySlot(stack));
-                    attr = (stack.Attributes as TreeAttribute)?.GetTreeAttribute("transitionstate");
-                }
+                    if (attr == null && (stack.Collectible?.TransitionableProps?.Length ?? 0) > 0)
+                    {
+                        stack.Collectible.UpdateAndGetTransitionStates(world, new DummySlot(stack));
+                        attr = (stack.Attributes as TreeAttribute)?.GetTreeAttribute("transitionstate");
+                    }
 
-                if (attr != null)
-                {
-                    FloatArrayAttribute freshHoursAttribute = attr["freshHours"] as FloatArrayAttribute;
-                    FloatArrayAttribute transitionedHoursAttribute = attr["transitionedHours"] as FloatArrayAttribute;
-                    if (freshHoursAttribute == null || transitionedHoursAttribute == null) continue;
+                    FloatArrayAttribute freshHoursAttribute = attr?["freshHours"] as FloatArrayAttribute;
+                    if (freshHoursAttribute?.value == null) continue;
 
                     for (int ii = 0; ii < freshHoursAttribute.value.Length; ++ii)
                     {
-                        if (freshHoursAttribute.value[ii] != 0.0f)
-                        {
-                            if (mealContainer == null)
-                            {
-                                TransitionableProperties[] transProps = outputStack.Collectible.TransitionableProps;
-                                if (transProps != null)
-                                {
-                                    freshHoursAttribute.value[ii] = transProps[ii].FreshHours.avg * (1.0f + playerAbility.SkillDependentFValue());
-                                }
-                            }
-                            else
-                            {
-                                freshHoursAttribute.value[ii] = freshHoursAttribute.value[ii] * (1.0f + playerAbility.SkillDependentFValue());
-                            }
-                        }
+                        if (freshHoursAttribute.value[ii] <= 0.0f) continue;
+
+                        // Preserve the actual initialized shelf life instead of rebuilding it from the outer container template.
+                        freshHoursAttribute.value[ii] *= shelfLifeMultiplier;
                     }
                 }
             }
