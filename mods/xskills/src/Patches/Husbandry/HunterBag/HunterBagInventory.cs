@@ -267,9 +267,14 @@ namespace XSkills
 
         private const string WalkSpeedStatCode = "hunterbagweight";
 
-        // Подброр: замедление за один предмет в сумке. 0.1 = -10% скорости за штуку
-        // Подбери под ощущение обычного слота Butchering (или замени на чтение веса из атрибутов туши)
         private const float WalkSpeedPenaltyPerItem = 0.1f;
+
+        private static float PerStackWalkSpeedPenalty(ItemStack stack)
+        {
+            JsonObject attrs = stack?.Collectible?.Attributes;
+            if (attrs == null) return 0f;
+            return attrs["mass"].AsFloat(0f);
+        }
 
         // Пересчитывает и применяет штраф скорости (только на сервере; клиенту стат синхронизируется)
         public void UpdateWeightPenalty()
@@ -292,9 +297,15 @@ namespace XSkills
                 return;
             }
 
-            float penalty = WalkSpeedPenaltyPerItem * itemCount;
-            if (penalty > 0.9f) penalty = 0.9f; // не даём остановить игрока полностью
+            float penalty = 0f;
+            for (int i = 0; i < contentSlots.Count; i++)
+            {
+                ItemStack st = contentSlots[i]?.Itemstack;
+                if (st != null) penalty += PerStackWalkSpeedPenalty(st) * st.StackSize;
+            }
 
+            if (penalty <= 0f) { entity.Stats.Remove("walkspeed", WalkSpeedStatCode); return; }
+            if (penalty > 0.9f) penalty = 0.9f;
             entity.Stats.Set("walkspeed", WalkSpeedStatCode, -penalty, false);
         }
 

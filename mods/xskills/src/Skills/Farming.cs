@@ -358,10 +358,11 @@ namespace XSkills
     [HarmonyPatch]
     public class FruitingBushHarvestPatch
     {
-        // Указываем Harmony патчить сразу несколько методов в разных классах
+        // префикс вызывается для всех блоков
+        // Обязательно фильтровать по BlockEntity
         public static IEnumerable<MethodBase> TargetMethods()
         {
-            // 1. Новый класс кустов из 1.22
+            //  Новый класс кустов из 1.22
             Type newType = AccessTools.TypeByName("Vintagestory.GameContent.BlockRequireFertileGround");
             if (newType != null)
             {
@@ -371,7 +372,7 @@ namespace XSkills
                 if (m2 != null) yield return m2;
             }
 
-            // 2. Старый класс (для поддержки модов вроде Wildcraft, если они ещё не обновились)
+            // Старый класс (Wildcraft и легаси-кусты)
             Type oldType = AccessTools.TypeByName("Vintagestory.GameContent.BlockBerryBush");
             if (oldType != null)
             {
@@ -382,38 +383,68 @@ namespace XSkills
             }
         }
 
+        // Обрабатываем только блоки, чьё блок-энтити НЕ является контейнером
+        // Именно инвентарь сундука (itemstack-атрибуты) роняет сериализацию, а у кустов инвентаря нет - так что кусты сюда проходят, сундуки отсекаются.
+        private static bool ShouldProcess(BlockEntity be)
+        {
+            if (be == null) return false;
+            if (be is BlockEntityContainer) return false; // сундуки, бочки, лабелы и т.п.
+            return true;
+        }
+
+        // Безопасный бинарный снимок состояния. В отличие от ToJsonToken() не обращается к Collectible, поэтому не падает на нерезолвнутых стаках
+        private static byte[] SnapshotState(BlockEntity be)
+        {
+            try
+            {
+                ITreeAttribute tree = new TreeAttribute();
+                be.ToTreeAttributes(tree);
+                using (var ms = new System.IO.MemoryStream())
+                using (var writer = new System.IO.BinaryWriter(ms))
+                {
+                    tree.ToBytes(writer);
+                    return ms.ToArray();
+                }
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private static bool StateChanged(byte[] before, byte[] after)
+        {
+            if (before == null || after == null) return false;
+            if (before.Length != after.Length) return true;
+            for (int i = 0; i < before.Length; i++)
+                if (before[i] != after[i]) return true;
+            return false;
+        }
+
         [HarmonyPrefix]
-        public static void Prefix(IWorldAccessor world, BlockSelection blockSel, out string __state)
+        public static void Prefix(IWorldAccessor world, BlockSelection blockSel, out byte[] __state)
         {
             __state = null;
             if (world?.Side != EnumAppSide.Server || blockSel == null) return;
 
-            // Запоминаем память блока каждый "тик" удержания кнопки
             BlockEntity be = world.BlockAccessor.GetBlockEntity(blockSel.Position);
-            if (be != null)
-            {
-                ITreeAttribute tree = new TreeAttribute();
-                be.ToTreeAttributes(tree);
-                __state = tree.ToJsonToken();
-            }
+            if (!ShouldProcess(be)) return;
+
+            __state = SnapshotState(be);
         }
 
         [HarmonyPostfix]
-        public static void Postfix(IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel, string __state)
+        public static void Postfix(IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel, byte[] __state)
         {
             if (world?.Side != EnumAppSide.Server || blockSel == null || __state == null || byPlayer == null) return;
-            // if (byPlayer.InventoryManager?.ActiveTool == EnumTool.Knife) return;
 
-            // Читаем память блока ПОСЛЕ тика/окончания сбора
             BlockEntity be = world.BlockAccessor.GetBlockEntity(blockSel.Position);
-            if (be == null) return;
+            if (!ShouldProcess(be)) return;
 
-            ITreeAttribute treeAfter = new TreeAttribute();
-            be.ToTreeAttributes(treeAfter);
-            string stateAfter = treeAfter.ToJsonToken();
+            byte[] stateAfter = SnapshotState(be);
+            if (stateAfter == null) return;
 
-            // Если за этот "тик" память изменилась - значит, таймер сбора дошел до конца и ягоды упали!
-            if (__state != stateAfter)
+            if (StateChanged(__state, stateAfter))
             {
                 Farming farming = XLeveling.Instance(world.Api)?.GetSkill("farming") as Farming;
                 if (farming == null) return;
@@ -421,7 +452,7 @@ namespace XSkills
                 PlayerSkill playerSkill = byPlayer.Entity.GetBehavior<PlayerSkillSet>()?.PlayerSkills[farming.Id];
                 if (playerSkill == null) return;
 
-                // 1. ВЫДАЧА ОПЫТА 
+                // 1. ВЫДАЧА ОПЫТА
                 playerSkill.AddExperience(0.33f);
 
                 // 2. Логика навыка Gatherer (дополнительный дроп)

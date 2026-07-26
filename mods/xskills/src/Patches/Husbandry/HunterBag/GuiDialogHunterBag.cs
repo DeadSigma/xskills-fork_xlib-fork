@@ -301,8 +301,6 @@ namespace xskills.src.Patches.Husbandry.HunterBag
         // Разворачиваем HUD только пока курсор над ним; иначе сворачиваем до слота(ов) сумки
         private void UpdateHoverExpansion(double mouseX, double mouseY)
         {
-            // Если галочка включена, сразу выходим и ничего не сворачиваем
-            if (layout != null && layout.AlwaysExpanded) return;
 
             bool hasContent = (inventory?.Count ?? 0) > BagSlotCount();
 
