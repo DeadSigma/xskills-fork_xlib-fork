@@ -19,6 +19,8 @@ namespace XSkills
         private readonly Husbandry husbandry;
         private readonly TemporalAdaptation adaptation;
 
+        private readonly Fishing fishing;
+
         private double oldStability;
         private float oldHealth;
         private float oldOxygen;
@@ -42,6 +44,8 @@ namespace XSkills
             this.adaptation = XLeveling.Instance(entity.Api)?.GetSkill("temporaladaptation") as TemporalAdaptation;
             ITreeAttribute healthTree = entity.WatchedAttributes.GetTreeAttribute("health");
             ITreeAttribute oxygenTree = entity.WatchedAttributes.GetTreeAttribute("oxygen");
+
+            this.fishing = XLeveling.Instance(entity.Api)?.GetSkill("fishing") as Fishing;
 
             this.oldStability = TemporalAffected?.OwnStability ?? 1.0;
             this.oldHealth = healthTree?.GetFloat("currenthealth") ?? 0.0f;
@@ -341,6 +345,7 @@ namespace XSkills
                 ApplyAbilitiesStability();
                 ApplyAbilitiesOxygen();
                 ApplyMovementAbilities();
+                ApplyFishingAbilities();
                 timeSinceUpdate = 0.0f;
             }
 
@@ -475,5 +480,44 @@ namespace XSkills
         //    maxSaturation = (1500 + playerAbility.Value(0));
         //    hungerTree.SetFloat("maxSaturation", maxSaturation);
         //}
+
+        // Код из мода pandaxskills от пользователя Pandarific
+        public void ApplyFishingAbilities()
+        {
+            if (this.fishing == null) return;
+
+            EntityStats stats = this.entity.Stats;
+            if (stats == null) return;
+
+            PlayerSkillSet behavior = this.entity.GetBehavior<PlayerSkillSet>();
+            PlayerSkill playerSkill = behavior?[this.fishing.Id];
+            if (playerSkill == null) return;
+
+            EntityPlayer entityPlayer = this.entity as EntityPlayer;
+            object obj = null;
+            if (entityPlayer != null)
+            {
+                ItemSlot rightHandItemSlot = entityPlayer.RightHandItemSlot;
+                if (rightHandItemSlot != null)
+                {
+                    ItemStack itemstack = rightHandItemSlot.Itemstack;
+                    obj = itemstack?.Collectible;
+                }
+            }
+
+            bool flag = obj is ItemFishingPole;
+
+            // Код из мода pandaxskills от пользователя Pandarific
+            // AncientMarinerId логика
+            PlayerAbility playerAbility = playerSkill[this.fishing.AncientMarinerId];
+            if (playerAbility != null && playerAbility.Tier > 0 && flag)
+            {
+                stats.Set("hungerrate", "ability-ancientmariner", -playerAbility.FValue(0, 0f), false);
+            }
+            else
+            {
+                stats.Remove("hungerrate", "ability-ancientmariner");
+            }
+        }
     }//! XSkillsPlayerBehavior
 }//!namespace XSkills

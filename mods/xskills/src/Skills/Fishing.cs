@@ -22,6 +22,13 @@ namespace XSkills
         public int DoubleHookId { get; private set; }
         public int MagneticHookId { get; private set; }
 
+        public int FreshFishId { get; private set; } // pandaxskills code
+        public int MoonlitWatersId { get; private set; } // pandaxskills code
+        public int RiverSpecialistId { get; private set; } // pandaxskills code
+        public int CoastalMasterId { get; private set; } // pandaxskills code
+        public int IceFisherId { get; private set; } // pandaxskills code
+        public int AncientMarinerId { get; private set; } // pandaxskills code
+
         public Fishing(ICoreAPI api) : base("fishing", "xskills:skill-fishing", "xskills:group-collecting")
         {
             XLeveling.Instance(api)?.RegisterSkill(this);
@@ -34,7 +41,7 @@ namespace XSkills
             this.ExpMult = 10.0f;
             this.ExpEquationValue = 0.8f;
 
-            // ПРОФЕССИЯ: Рыбак
+            // Профессия: Рыбак
             // 5 - уровень навыка для открытия
             // 1 - максимальный тир
             // 40 - бонусный опыт в процентах
@@ -129,6 +136,75 @@ namespace XSkills
                 "xskills:ability-magnetichook",
                 "xskills:abilitydesc-magnetichook",
                 6, 3, new int[] { 5, 1, 25, 8, 1, 30, 12, 1, 35 }));
+
+
+            // Код из мода pandaxskills от пользователя Pandarific
+            // Способность: Свежее филе
+            // 3 - уровень навыка для открытия
+            // 3 - максимальный тир
+            // 25, 50, 75 - значения для тиров
+            FreshFishId = this.AddAbility(new Ability(
+                "freshfish",
+                "xskills:ability-freshfish",
+                "xskills:abilitydesc-freshfish",
+                3, 3, new int[] { 25, 50, 75 }, false));
+
+            // Код из мода pandaxskills от пользователя Pandarific
+            // Способность: Лунные воды
+            // 3 - уровень навыка для открытия
+            // 3 - максимальный тир
+            // 20, 40, 60 - значения для тиров
+            MoonlitWatersId = this.AddAbility(new Ability(
+                "moonlitwaters",
+                "xskills:ability-moonlitwaters",
+                "xskills:abilitydesc-moonlitwaters",
+                3, 3, new int[] { 20, 40, 60 }, false));
+
+            // Код из мода pandaxskills от пользователя Pandarific
+            // Способность: Речной специалист
+            // 5 - уровень навыка для открытия
+            // 3 - максимальный тир
+            // 20, 35, 50 - значения для тиров
+            RiverSpecialistId = this.AddAbility(new Ability(
+                "riverspecialist",
+                "xskills:ability-riverspecialist",
+                "xskills:abilitydesc-riverspecialist",
+                5, 3, new int[] { 20, 55, 100 }, false));
+
+            // Код из мода pandaxskills от пользователя Pandarific
+            // Способность: Мастер побережья
+            // 5 - уровень навыка для открытия
+            // 3 - максимальный тир
+            // 20, 35, 50 - значения для тиров
+            CoastalMasterId = this.AddAbility(new Ability(
+                "coastalmaster",
+                "xskills:ability-coastalmaster",
+                "xskills:abilitydesc-coastalmaster",
+                5, 3, new int[] { 20, 35, 50 }, false));
+
+            // Код из мода pandaxskills от пользователя Pandarific
+            // Способность: Подледный рыбак
+            // 6 - уровень навыка для открытия
+            // 2 - максимальный тир
+            // 50, 100 - значения для тиров
+            IceFisherId = this.AddAbility(new Ability(
+                "icefisher",
+                "xskills:ability-icefisher",
+                "xskills:abilitydesc-icefisher",
+                6, 2, new int[] { 50, 100 }, false));
+
+            // Код из мода pandaxskills от пользователя Pandarific
+            // Способность: Древний мореплаватель
+            // 7 - уровень навыка для открытия
+            // 2 - максимальный тир
+            // 40, 70 - значения для тиров
+            AncientMarinerId = this.AddAbility(new Ability(
+                "ancientmariner",
+                "xskills:ability-ancientmariner",
+                "xskills:abilitydesc-ancientmariner",
+                7, 2, new int[] { 40, 70 }, false));
+
+            new ExclusiveAbilityRequirement(this[RiverSpecialistId], this[CoastalMasterId], 1, false);
 
         }
     }

@@ -143,7 +143,7 @@ namespace PandaXPDrops
             { "metalworking",       new Entry(0.75, 0.78, 0.82, "game:anvil-copper") },
             { "pottery",            new Entry(0.78, 0.45, 0.25, "game:bowl-blue-raw") },
             { "cooking",            new Entry(0.90, 0.55, 0.15, "game:claypot-blue-fired") },
-            { "fishing",            new Entry(0.55, 0.30, 0.75, "game:creature-fish-reef-wrasse-creole-adult") },
+            { "fishing",            new Entry(0.55, 0.30, 0.75, "game:fishraw-freshwater-tilapia-nile-adult") },
             { "temporaladaptation", new Entry(0.55, 0.30, 0.75, "game:gear-temporal") }
         };
 
