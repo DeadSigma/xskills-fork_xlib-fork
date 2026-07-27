@@ -46,7 +46,7 @@ namespace XSkills
                 if (seeds == null)
                 {
                     seeds = new List<Item>();
-                    foreach(Item item in XLeveling.Api.World.Items)
+                    foreach (Item item in XLeveling.Api.World.Items)
                     {
                         if (item is ItemPlantableSeed seed) seeds.Add(seed);
                         else if (item.Attributes?["isCrop"]?.AsBool() ?? false) seeds.Add(item);
@@ -117,7 +117,7 @@ namespace XSkills
                 RecyclerId = this.AddAbility(new Ability(
                     "recycler",
                     "xskills:ability-recycler",
-                    "xskills:abilitydesc-recycler", 
+                    "xskills:abilitydesc-recycler",
                     3, 2, new int[] { 0, 65 }));
             }
 
@@ -310,6 +310,23 @@ namespace XSkills
             }
         }
 
+        // Начисление опыта за сбор травы
+        public override void OnBlockBroken(IWorldAccessor world, BlockPos pos, IPlayer byPlayer, float dropQuantityMultiplier, ref EnumHandling handling)
+        {
+            if (world.Side != EnumAppSide.Server) return;
+
+            if (this.farming == null)
+            {
+                this.farming = XLeveling.Instance(world.Api)?.GetSkill("farming") as Farming;
+                if (this.farming == null) return;
+            }
+
+            PlayerSkill playerSkill = byPlayer?.Entity.GetBehavior<PlayerSkillSet>()?[this.farming.Id];
+            if (playerSkill == null) return;
+
+            playerSkill.AddExperience(this.xp);
+        }
+
         public override ItemStack[] GetDrops(IWorldAccessor world, BlockPos pos, IPlayer byPlayer, ref float dropChanceMultiplier, ref EnumHandling handling)
         {
             List<ItemStack> drops = new List<ItemStack>();
@@ -319,10 +336,8 @@ namespace XSkills
             PlayerSkill playerSkill = byPlayer?.Entity.GetBehavior<PlayerSkillSet>()?[farming.Id];
             if (playerSkill == null) return drops.ToArray();
 
-            // 1. Опыт выдается всегда
-            playerSkill.AddExperience(this.xp);
 
-            // 2. Проверяем наличие перка Gatherer
+            // Проверяем наличие перка Gatherer
             PlayerAbility playerAbility = playerSkill[farming.GathererId];
             if (playerAbility == null || playerAbility.Tier <= 0 || block.Drops == null)
                 return drops.ToArray();
@@ -544,7 +559,7 @@ namespace XSkills
                         world.SpawnItemEntity(stack, blockSel.Position.ToVec3d().Add(0.5, 0.5, 0.5));
                     }
                 }
-                else 
+                else
                 {
                     foreach (BlockDropItemStack drop in drops)
                     {
@@ -1032,7 +1047,7 @@ namespace XSkills
 
             PlayerAbility playerAbility = playerSkill[farming.BeemasterId];
             if (playerAbility == null || playerAbility.Tier <= 0) return false;
-            
+
             BlockEntityBeehive beh = world.BlockAccessor.GetBlockEntity(blockSel.Position) as BlockEntityBeehive;
             if (beh == null || !beh.Harvestable) return false;
 
@@ -1043,7 +1058,7 @@ namespace XSkills
 
         public override bool OnBlockInteractStep(float secondsUsed, IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel, ref EnumHandling handling)
         {
-            if (blockSel == null)  return false;
+            if (blockSel == null) return false;
             BlockEntityBeehive beh = world.BlockAccessor.GetBlockEntity(blockSel.Position) as BlockEntityBeehive;
             if (beh == null || !beh.Harvestable) return false;
 
