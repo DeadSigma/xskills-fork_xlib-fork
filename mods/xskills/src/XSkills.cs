@@ -262,6 +262,14 @@ namespace XSkills
             this.Skills.Add(cooking.Name, cooking);
             Fishing fishing = new Fishing(api);
             this.Skills.Add(fishing.Name, fishing);
+            Tailoring tailoring = new Tailoring(api);
+            this.Skills.Add(tailoring.Name, tailoring);
+            Brewing brewing = new Brewing(api);
+            this.Skills.Add(brewing.Name, brewing);
+            Riding riding = new Riding(api);
+            this.Skills.Add(riding.Name, riding);
+            Sailing sailing = new Sailing(api);
+            this.Skills.Add(sailing.Name, sailing);
 
             if (api.World.Config.GetBool("temporalStability"))
             {

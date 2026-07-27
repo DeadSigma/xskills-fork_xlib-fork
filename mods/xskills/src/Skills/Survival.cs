@@ -1123,7 +1123,7 @@ namespace XSkills
                 value.TryGetValue("allowSteeplechaserToggle", out str);
                 if (str != null) bool.TryParse(str, out this.allowSteeplechaserToggle);
 
-                // ДОБАВЛЕНО: Читаем параметр потери опыта
+                // Читаем параметр потери опыта
                 value.TryGetValue("expLossOnDeath", out str);
                 if (str != null) float.TryParse(str, styles, provider, out this.expLossOnDeath);
             }
@@ -1137,7 +1137,6 @@ namespace XSkills
         [DefaultValue(false)]
         public bool allowCatEyesToggle = false;
 
-        // ДОБАВЛЕНО: Само поле с дефолтным значением 0.5f (как было в жестком коде)
         [ProtoMember(3)]
         [DefaultValue(0.5f)]
         public float expLossOnDeath = 0.5f;

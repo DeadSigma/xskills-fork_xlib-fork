@@ -721,9 +721,9 @@ namespace XSkills
                     ? playerAbility.SkillDependentFValue()
                     : 0.0f;
 
-            // Clear the operation snapshot after applying it to the finished product.
-            outputStack.Attributes.SetBool(WellDoneSnapshotAttribute, false);
-            outputStack.Attributes.SetFloat(WellDoneShelfLifeAttribute, 0.0f);
+            // Полностью удаляем атрибуты, чтобы предмет мог стакаться с обычной едой
+            outputStack.Attributes.RemoveAttribute(WellDoneSnapshotAttribute);
+            outputStack.Attributes.RemoveAttribute(WellDoneShelfLifeAttribute);
 
             if (shelfLifeBonus > 0.0f)
             {

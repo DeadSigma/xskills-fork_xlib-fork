@@ -348,7 +348,7 @@ namespace PandaXPDrops
         {
             "survival", "farming", "digging", "forestry", "mining",
             "husbandry", "combat", "metalworking", "pottery", "cooking",
-            "fishing", "temporaladaptation"
+            "fishing", "temporaladaptation", "tailoring", "brewing", "sailing", "riding"
         };
 
         /// <summary>Список навыков, для которых не будут показываться уведомления об опыте. Заполняется игроком вручную.</summary>

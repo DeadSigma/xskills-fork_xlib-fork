@@ -143,8 +143,14 @@ namespace PandaXPDrops
             { "metalworking",       new Entry(0.75, 0.78, 0.82, "game:anvil-copper") },
             { "pottery",            new Entry(0.78, 0.45, 0.25, "game:bowl-blue-raw") },
             { "cooking",            new Entry(0.90, 0.55, 0.15, "game:claypot-blue-fired") },
+            { "temporaladaptation", new Entry(0.55, 0.30, 0.75, "game:gear-temporal") },
             { "fishing",            new Entry(0.55, 0.30, 0.75, "game:fishraw-freshwater-tilapia-nile-adult") },
-            { "temporaladaptation", new Entry(0.55, 0.30, 0.75, "game:gear-temporal") }
+            { "tailoring",           new Entry(0.85, 0.25, 0.25, "game:sewingkit") },
+            { "brewing",           new Entry(0.85, 0.25, 0.25, "game:barrel") },
+            { "sailing",           new Entry(0.85, 0.25, 0.25, "game:seashell-seastar-cinnamon") },
+            { "riding",           new Entry(0.85, 0.25, 0.25, "game:hoovedwearables-middleback-saddle1") },
+
+
         };
 
         /// <summary>Нормализует имя навыка в ключ словаря</summary>
