@@ -226,6 +226,7 @@ namespace XSkills
         public override void Dispose()
         {
             base.Dispose();
+            MountedXpListener.Stop();
             harmony?.UnpatchAll("XSkillsPatch");
             harmony = null;
             new Harmony("com.xskills.toolsmithpatch").UnpatchAll("com.xskills.toolsmithpatch");
@@ -348,6 +349,8 @@ namespace XSkills
         {
             base.StartServerSide(api);
             DoHarmonyPatch(api);
+
+            MountedXpListener.Register(api);
 
             StorageTweaksCompat.ApplyPatch(api);
             serverFixChannel = api.Network

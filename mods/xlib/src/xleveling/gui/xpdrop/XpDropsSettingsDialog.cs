@@ -47,7 +47,7 @@ namespace PandaXPDrops
         private readonly string[] keys = new string[] {
             "Enabled", "BarRightMargin", "BarTopMargin", "BarScale", "MinBarWidth", "BarHeight", "Padding", "TextGap",
             "TextSpawnBelowBar", "TextSpawnOffsetX", "DropScale", "DropSpacing", "BarIdleTimeout", "BarFadeDuration", "DropLifetime", "FadeStartPct",
-            "AccumulationWindow", "SurvivalBatchInterval", "MinimumXp", "FloatSpeed", "FontSize", "IconSize", "IgnoredSkills",
+            "AccumulationWindow", "BatchInterval", "MinimumXp", "FloatSpeed", "FontSize", "IconSize", "IgnoredSkills",
             "HunterBagEnabled", "HunterBagHideWhenClosed", "HunterBagAlwaysExpanded"
         };
 
@@ -155,7 +155,7 @@ namespace PandaXPDrops
             SetFieldValue("DropLifetime", src.DropLifetime);
             SetFieldValue("FadeStartPct", src.FadeStartPct);
             SetFieldValue("AccumulationWindow", src.AccumulationWindow);
-            SetFieldValue("SurvivalBatchInterval", src.SurvivalBatchInterval);
+            SetFieldValue("BatchInterval", src.BatchInterval);
             SetFieldValue("MinimumXp", src.MinimumXp);
             SetFieldValue("FloatSpeed", src.FloatSpeed);
             SetFieldValue("FontSize", src.FontSize);
@@ -207,7 +207,7 @@ namespace PandaXPDrops
             config.DropLifetime = ParseDouble("DropLifetime", config.DropLifetime);
             config.FadeStartPct = ParseDouble("FadeStartPct", config.FadeStartPct);
             config.AccumulationWindow = ParseDouble("AccumulationWindow", config.AccumulationWindow);
-            config.SurvivalBatchInterval = ParseDouble("SurvivalBatchInterval", config.SurvivalBatchInterval);
+            config.BatchInterval = ParseDouble("BatchInterval", config.BatchInterval); 
             config.MinimumXp = ParseFloat("MinimumXp", config.MinimumXp);
             config.FloatSpeed = ParseFloat("FloatSpeed", config.FloatSpeed);
             config.FontSize = ParseFloat("FontSize", config.FontSize);

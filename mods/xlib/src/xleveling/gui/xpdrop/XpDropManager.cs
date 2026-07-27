@@ -223,12 +223,24 @@ namespace PandaXPDrops
         private readonly List<XpDrop> activeDrops = new List<XpDrop>();
         private readonly Dictionary<string, DummySlot> skillSlots = new Dictionary<string, DummySlot>();
 
-        // группировка выживания
-        private float survivalAccumulated;
-        private float survivalLastProgress;
-        private int survivalLastLevel;
-        private int survivalSkillId = -1;
-        private double survivalTimer;
+        // Группировка навыков с непрерывным получением опыта
+        private class BatchedSkill
+        {
+            public int SkillId;
+            public string SkillName;
+            public float Accumulated;
+            public float LastProgress;
+            public int LastLevel;
+            public double Timer;
+        }
+
+        private readonly Dictionary<string, BatchedSkill> batchedSkills = new Dictionary<string, BatchedSkill>(StringComparer.OrdinalIgnoreCase);
+
+        // Навыки, опыт для которых должен накапливаться порциями
+        private readonly HashSet<string> batchedSkillNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "survival", "sailing", "riding"
+        };
 
         // состояние полосы
         private string barSkillName;
@@ -287,7 +299,7 @@ namespace PandaXPDrops
 
         /// <summary>
         /// Обрабатывает одно получение опыта: обновляет полосу и либо объединяет с недавней меткой, либо создает новую.
-        /// Получения выживания здесь только накапливаются, см. <see cref="UpdateSurvivalBatch"/>
+        /// Опыт для непрерывных навыков (таких как survival, sailing, riding) здесь только накапливается, см. <see cref="UpdateBatches"/>
         /// </summary>
         /// <param name="skillId">ID навыка XLib</param>
         /// <param name="skillName">Внутреннее имя навыка</param>
@@ -308,13 +320,19 @@ namespace PandaXPDrops
                 }
             }
 
-            // Выживание поступает постоянно - группируем его, чтобы не спамить экран
-            if (string.Equals(skillName, SurvivalSkill, StringComparison.OrdinalIgnoreCase))
+            // Некоторые навыки поступают постоянно - группируем их, чтобы не спамить экран
+            if (skillName != null && batchedSkillNames.Contains(skillName))
             {
-                survivalSkillId = skillId;
-                survivalAccumulated += xpAmount;
-                survivalLastProgress = Math.Clamp(progressFraction, 0f, 1f);
-                survivalLastLevel = level;
+                if (!batchedSkills.TryGetValue(skillName, out BatchedSkill batch))
+                {
+                    batch = new BatchedSkill { SkillName = skillName };
+                    batchedSkills[skillName] = batch;
+                }
+
+                batch.SkillId = skillId;
+                batch.Accumulated += xpAmount;
+                batch.LastProgress = Math.Clamp(progressFraction, 0f, 1f);
+                batch.LastLevel = level;
                 return;
             }
 
@@ -348,7 +366,7 @@ namespace PandaXPDrops
                 InvalidateTextures();
             }
 
-            UpdateSurvivalBatch(dt);
+            UpdateBatches(dt);
             if (EditPreview) UpdatePreview();
             UpdateBar(dt);
             UpdateDrops(dt);
@@ -370,8 +388,7 @@ namespace PandaXPDrops
             barVisible = false;
             BarAlpha = 0f;
             barIdleTimer = 0.0;
-            survivalAccumulated = 0f;
-            survivalTimer = 0.0;
+            batchedSkills.Clear();
         }
 
         /// <summary>Экранный прямоугольник полосы. Привязан к своему правому краю, поэтому при увеличении масштаба он растет влево</summary>
@@ -417,29 +434,29 @@ namespace PandaXPDrops
         }
 
         /// <summary>
-        /// Собирает опыт выживания и выпускает его в виде одной метки
-        /// Таймер работает только пока что-то ожидается, поэтому интервал означает "собирать в течение N секунд,
-        /// начиная с первого получения", а не "выпустить первое получение, которое придет через N секунд"
+        /// Собирает опыт для непрерывных навыков и выпускает его в виде меток.
         /// </summary>
-        /// <param name="dt">Дельта кадра в секундах</param>
-        private void UpdateSurvivalBatch(float dt)
+        private void UpdateBatches(float dt)
         {
-            if (survivalAccumulated <= 0f)
+            foreach (var batch in batchedSkills.Values)
             {
-                survivalTimer = 0.0;
-                return;
+                if (batch.Accumulated <= 0f)
+                {
+                    batch.Timer = 0.0;
+                    continue;
+                }
+
+                batch.Timer += dt;
+                if (batch.Timer < config.BatchInterval) continue;
+
+                batch.Timer = 0.0;
+                if (batch.Accumulated < config.MinimumXp) continue; // продолжаем собирать
+
+                float amount = batch.Accumulated;
+                batch.Accumulated = 0f;
+                ShowBar(batch.SkillName, batch.LastProgress, batch.LastLevel);
+                SpawnDrop(batch.SkillId, batch.SkillName, amount);
             }
-
-            survivalTimer += dt;
-            if (survivalTimer < config.SurvivalBatchInterval) return;
-
-            survivalTimer = 0.0;
-            if (survivalAccumulated < config.MinimumXp) return; // продолжаем собирать вместо того, чтобы выбрасывать
-
-            float amount = survivalAccumulated;
-            survivalAccumulated = 0f;
-            ShowBar(SurvivalSkill, survivalLastProgress, survivalLastLevel);
-            SpawnDrop(survivalSkillId, SurvivalSkill, amount);
         }
 
         /// <summary>Поддерживает полосу активной и одну плавающую метку, пока открыт диалог редактирования</summary>
