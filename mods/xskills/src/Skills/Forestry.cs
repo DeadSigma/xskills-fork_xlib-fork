@@ -69,7 +69,7 @@ namespace XSkills
                 "treenursery",
                 "xskills:ability-treenursery",
                 "xskills:abilitydesc-treenursery",
-                3, 3, new int[] { 87, 74, 60 }));
+                3, 3, new int[] { 85, 70, 60 }));
 
             // momentum
             // 0: base value
