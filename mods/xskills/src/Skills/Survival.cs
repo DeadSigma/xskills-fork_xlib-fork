@@ -1,4 +1,5 @@
-﻿using ProtoBuf;
+﻿using HarmonyLib;
+using ProtoBuf;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -1122,7 +1123,7 @@ namespace XSkills
                 value.TryGetValue("allowSteeplechaserToggle", out str);
                 if (str != null) bool.TryParse(str, out this.allowSteeplechaserToggle);
 
-                // ДОБАВЛЕНО: Читаем параметр потери опыта
+                // Читаем параметр потери опыта
                 value.TryGetValue("expLossOnDeath", out str);
                 if (str != null) float.TryParse(str, styles, provider, out this.expLossOnDeath);
             }
@@ -1136,7 +1137,6 @@ namespace XSkills
         [DefaultValue(false)]
         public bool allowCatEyesToggle = false;
 
-        // ДОБАВЛЕНО: Само поле с дефолтным значением 0.5f (как было в жестком коде)
         [ProtoMember(3)]
         [DefaultValue(0.5f)]
         public float expLossOnDeath = 0.5f;
@@ -1145,4 +1145,40 @@ namespace XSkills
         [DefaultValue(true)]
         public bool allowSteeplechaserToggle = true;
     }//!class SurvivalSkillConfig
+
+    //Опыт за припарки
+    [HarmonyPatch(typeof(Vintagestory.GameContent.CollectibleBehaviorHealingItem))]
+    [HarmonyPatch("OnHeldInteractStop")]
+    public class HealingItemPatch
+    {
+        [HarmonyPrefix]
+        public static void Prefix(ItemSlot slot, out int __state)
+        {
+            __state = slot.Empty ? 0 : slot.StackSize;
+        }
+
+        [HarmonyPostfix]
+        public static void Postfix(float secondsUsed, ItemSlot slot, EntityAgent byEntity, BlockSelection blockSel, EntitySelection entitySel, ref EnumHandling handling, int __state)
+        {
+            if (byEntity?.World?.Side != EnumAppSide.Server) return;
+
+            int currentSize = slot.Empty ? 0 : slot.StackSize;
+
+            // Если размер стака стал меньше, значит ванильный код успешно потратил бинт на лечение
+            if (currentSize < __state)
+            {
+                IPlayer byPlayer = (byEntity as EntityPlayer)?.Player;
+                if (byPlayer == null) return;
+
+                Survival survival = XLeveling.Instance(byEntity.Api)?.GetSkill("survival") as Survival;
+                if (survival == null) return;
+
+                PlayerSkill playerSkill = byEntity.GetBehavior<PlayerSkillSet>()?[survival.Id];
+                if (playerSkill == null) return;
+
+                // Начисляем опыт
+                playerSkill.AddExperience(0.2f);
+            }
+        }
+    }
 }//!namespace XSkills

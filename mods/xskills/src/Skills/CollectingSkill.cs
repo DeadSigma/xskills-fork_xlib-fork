@@ -101,7 +101,7 @@ namespace XSkills
         {
             if (this.Skill == null || byPlayer == null) return;
 
-            // Вот здесь мы передаем новый параметр в базовый метод:
+            // Вот здесь передаем новый параметр в базовый метод:
             base.OnBlockBroken(world, pos, byPlayer, dropQuantityMultiplier, ref handling);
 
             PlayerSkill playerSkill = byPlayer.Entity.GetBehavior<PlayerSkillSet>()?[this.Skill.Id];

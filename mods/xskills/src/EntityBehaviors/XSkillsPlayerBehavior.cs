@@ -12,7 +12,7 @@ using XLib.XLeveling;
 
 namespace XSkills
 {
-    public class XSkillsPlayerBehavior : EntityBehavior
+    public partial class XSkillsPlayerBehavior : EntityBehavior
     {
         private readonly Survival survival;
         private readonly Combat combat;
@@ -20,6 +20,11 @@ namespace XSkills
         private readonly TemporalAdaptation adaptation;
 
         private readonly Fishing fishing;
+        private readonly Tailoring tailoring;
+        private readonly Brewing brewing;
+        private readonly Sailing sailing;
+        private readonly Riding riding;
+
 
         private double oldStability;
         private float oldHealth;
@@ -46,6 +51,11 @@ namespace XSkills
             ITreeAttribute oxygenTree = entity.WatchedAttributes.GetTreeAttribute("oxygen");
 
             this.fishing = XLeveling.Instance(entity.Api)?.GetSkill("fishing") as Fishing;
+            this.tailoring = XLeveling.Instance(entity.Api)?.GetSkill("tailoring") as Tailoring;
+            this.brewing = XLeveling.Instance(entity.Api)?.GetSkill("brewing") as Brewing;
+            this.sailing = XLeveling.Instance(entity.Api)?.GetSkill("sailing") as Sailing;
+            this.riding = XLeveling.Instance(entity.Api)?.GetSkill("riding") as Riding;
+
 
             this.oldStability = TemporalAffected?.OwnStability ?? 1.0;
             this.oldHealth = healthTree?.GetFloat("currenthealth") ?? 0.0f;
@@ -78,7 +88,6 @@ namespace XSkills
             if (this.survival != null && Health != null && dmgSource.Type != EnumDamageType.Heal)
             {
                 PlayerAbility playerAbility = playerSkillSet[this.survival.Id]?[this.survival.LastStandId];
-                // Проверка playerAbility != null, чтобы безопасно обращаться к .Tier
                 if (playerAbility != null && damage > Health.Health && Health.MaxHealth > 0.0f && playerAbility.Tier > 0)
                 {
                     float ratio = Health.Health / Health.MaxHealth;
@@ -93,7 +102,6 @@ namespace XSkills
             if (this.survival != null && dmgSource.Source == EnumDamageSource.Fall && dmgSource.Type == EnumDamageType.Gravity)
             {
                 PlayerAbility playerAbility = playerSkillSet[this.survival.Id]?[this.survival.FeatherFallId];
-                // Проверка перед вызовом методов .Value() и .FValue()
                 if (playerAbility != null)
                 {
                     damage = Math.Max(damage - playerAbility.Value(0), 0);
@@ -105,7 +113,6 @@ namespace XSkills
             if (this.adaptation != null && dmgSource.Source == EnumDamageSource.Machine && dmgSource.SourceEntity == null && dmgSource.Type == EnumDamageType.Poison)
             {
                 PlayerAbility playerAbility = playerSkillSet[this.adaptation.Id]?[this.adaptation.TimelessId];
-                // Проверка playerAbility != null
                 if (playerAbility != null && playerAbility.Tier > 0) damage = 0.0f;
             }
 
@@ -162,7 +169,7 @@ namespace XSkills
         {
             if (entity.WatchedAttributes == null || this.survival == null) return;
             PlayerAbility playerAbility = this.entity.GetBehavior<PlayerSkillSet>()?[this.survival.Id]?[survival.DiverId];
-            if ((playerAbility?.Tier ?? 0) < 1) return; 
+            if ((playerAbility?.Tier ?? 0) < 1) return;
 
             TreeAttribute oxygen = entity.WatchedAttributes.GetTreeAttribute("oxygen") as TreeAttribute;
             float currentOxygen = oxygen.GetFloat("currentoxygen");
@@ -217,7 +224,7 @@ namespace XSkills
                     }
                 }
             }
-            
+
             //combat
             if (this.combat != null)
             {
@@ -339,19 +346,25 @@ namespace XSkills
 
             timeSinceUpdate += deltaTime;
 
-            if(timeSinceUpdate >= 1.0f)
+            if (timeSinceUpdate >= 1.0f)
             {
                 ApplyAbilitiesHealth();
                 ApplyAbilitiesStability();
                 ApplyAbilitiesOxygen();
                 ApplyMovementAbilities();
+
+                // Вызовы вынесенных методов
                 ApplyFishingAbilities();
+                ApplyTailoringAbilities();
+                ApplyBrewingAbilities();
+                ApplySailingAbilities();
+                ApplyRidingAbilities();
+
                 timeSinceUpdate = 0.0f;
             }
 
             if (entity.Api.Side == EnumAppSide.Client)
             {
-                //MaxSaturationFix();
                 if (lastWeatherForecast < (uint)this.entity.World.Calendar.TotalDays)
                 {
                     PlayerAbility ability = entity.GetBehavior<PlayerSkillSet>()?[survival.Id]?[survival.MeteorologistId];
@@ -368,7 +381,7 @@ namespace XSkills
         {
             ITreeAttribute healthTree = entity.WatchedAttributes.GetTreeAttribute("health");
             PlayerSkill playerSkill = entity.GetBehavior<PlayerSkillSet>()?[this.combat.Id];
-            
+
             //link inventories
             XSkillsPlayerInventory inv = (this.entity as EntityPlayer)?.Player?.InventoryManager?.GetOwnInventory("xskillshotbar") as XSkillsPlayerInventory;
             if (inv != null) inv.Linked = true;
@@ -382,7 +395,6 @@ namespace XSkills
             PlayerAbility playerAbility;
 
             //Healer
-            //uses TicksPerDuration to identify the hot from healing items
             if (damageSource.Source == EnumDamageSource.Internal && damageSource.Type == EnumDamageType.Heal && damageSource.TicksPerDuration > 1)
             {
                 AffectedEntityBehavior affected = this.entity.GetBehavior<AffectedEntityBehavior>();
@@ -454,7 +466,6 @@ namespace XSkills
                 XSkillsPlayerInventory inv = (this.entity as EntityPlayer)?.Player.InventoryManager.GetOwnInventory("xskillshotbar") as XSkillsPlayerInventory;
                 if (inv != null) inv.Linked = false;
             }
-        }
 
         //public override void OnEntityRevive()
         //{
@@ -480,44 +491,6 @@ namespace XSkills
         //    maxSaturation = (1500 + playerAbility.Value(0));
         //    hungerTree.SetFloat("maxSaturation", maxSaturation);
         //}
-
-        // Код из мода pandaxskills от пользователя Pandarific
-        public void ApplyFishingAbilities()
-        {
-            if (this.fishing == null) return;
-
-            EntityStats stats = this.entity.Stats;
-            if (stats == null) return;
-
-            PlayerSkillSet behavior = this.entity.GetBehavior<PlayerSkillSet>();
-            PlayerSkill playerSkill = behavior?[this.fishing.Id];
-            if (playerSkill == null) return;
-
-            EntityPlayer entityPlayer = this.entity as EntityPlayer;
-            object obj = null;
-            if (entityPlayer != null)
-            {
-                ItemSlot rightHandItemSlot = entityPlayer.RightHandItemSlot;
-                if (rightHandItemSlot != null)
-                {
-                    ItemStack itemstack = rightHandItemSlot.Itemstack;
-                    obj = itemstack?.Collectible;
-                }
-            }
-
-            bool flag = obj is ItemFishingPole;
-
-            // Код из мода pandaxskills от пользователя Pandarific
-            // AncientMarinerId логика
-            PlayerAbility playerAbility = playerSkill[this.fishing.AncientMarinerId];
-            if (playerAbility != null && playerAbility.Tier > 0 && flag)
-            {
-                stats.Set("hungerrate", "ability-ancientmariner", -playerAbility.FValue(0, 0f), false);
-            }
-            else
-            {
-                stats.Remove("hungerrate", "ability-ancientmariner");
-            }
         }
-    }//! XSkillsPlayerBehavior
-}//!namespace XSkills
+    }
+}

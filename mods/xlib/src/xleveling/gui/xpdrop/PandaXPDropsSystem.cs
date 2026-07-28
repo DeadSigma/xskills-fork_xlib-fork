@@ -304,8 +304,8 @@ namespace PandaXPDrops
         /// <summary>Секунды, в течение которых дальнейшие получения того же навыка суммируются в существующую метку</summary>
         public double AccumulationWindow { get; set; } = 1.0;
 
-        /// <summary>Секунды, в течение которых постоянно поступающий опыт выживания собирается перед показом одной метки</summary>
-        public double SurvivalBatchInterval { get; set; } = 300.0;
+        /// <summary>Секунды, в течение которых постоянно поступающий опыт собирается перед показом одной метки</summary>
+        public double BatchInterval { get; set; } = 300.0;
 
         /// <summary>Получение опыта ниже этого значения никогда не вызывает появление метки</summary>
         public float MinimumXp { get; set; } = 0.1f;
@@ -348,7 +348,7 @@ namespace PandaXPDrops
         {
             "survival", "farming", "digging", "forestry", "mining",
             "husbandry", "combat", "metalworking", "pottery", "cooking",
-            "fishing", "temporaladaptation"
+            "fishing", "temporaladaptation", "tailoring", "brewing", "sailing", "riding"
         };
 
         /// <summary>Список навыков, для которых не будут показываться уведомления об опыте. Заполняется игроком вручную.</summary>
@@ -367,7 +367,7 @@ namespace PandaXPDrops
             DropLifetime = Math.Clamp(DropLifetime, 0.25, 120.0);
             FadeStartPct = Math.Clamp(FadeStartPct, 0.0, 0.95);
             AccumulationWindow = Math.Max(0.0, AccumulationWindow);
-            SurvivalBatchInterval = Math.Max(1.0, SurvivalBatchInterval);
+            BatchInterval = Math.Max(1.0, BatchInterval);
             MinimumXp = Math.Max(0f, MinimumXp);
             FloatSpeed = Math.Max(0f, FloatSpeed);
             DropSpacing = Math.Max(0f, DropSpacing);

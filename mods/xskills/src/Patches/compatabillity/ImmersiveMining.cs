@@ -13,9 +13,9 @@ namespace XSkills.Compatibility
         private static ConcurrentDictionary<string, int> MomentumStacks = new ConcurrentDictionary<string, int>();
         private static ConcurrentDictionary<string, long> LastHitTimes = new ConcurrentDictionary<string, long>();
 
-        // =====================================================================
+        
         // 1. УМНОЖЕНИЕ УРОНА И ОБНОВЛЕНИЕ ТАЙМЕРА (Срабатывает при каждом ударе)
-        // =====================================================================
+        
         [HarmonyPatch("OnGettingBroken")]
         [HarmonyPrefix]
         [HarmonyPriority(Priority.Last)]
@@ -68,9 +68,9 @@ namespace XSkills.Compatibility
             dt *= speedMultiplier;
         }
 
-        // =====================================================================
+        
         // 2. ВЫДАЧА СТАКОВ (Срабатывает ТОЛЬКО когда блок сломан)
-        // =====================================================================
+        
         [HarmonyPatch("OnBlockBroken")]
         [HarmonyPostfix]
         public static void Postfix_OnBlockBroken(IPlayer byPlayer)
