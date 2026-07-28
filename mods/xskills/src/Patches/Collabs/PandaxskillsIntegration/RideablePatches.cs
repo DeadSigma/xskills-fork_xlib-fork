@@ -6,8 +6,9 @@ using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.GameContent;
 using XLib.XLeveling;
+using XSkills;
 
-namespace XSkills
+namespace xskills.src.Patches.Collabs.PandaxskillsIntegration
 {
     [HarmonyPatch(typeof(EntityBehaviorRideable))]
     public class RideablePatches

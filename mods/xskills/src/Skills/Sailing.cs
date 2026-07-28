@@ -21,7 +21,7 @@ namespace XSkills
 		public int WaveReaderId { get; private set; }
 		public int AirshipCaptainId { get; private set; } = -1;
 
-		public Sailing(ICoreAPI api) : base("sailing", "xskills:skill-sailing", "xskills:group-collecting", 200, 1.33f, 25)
+		public Sailing(ICoreAPI api) : base("sailing", "xskills:skill-sailing", "xskills:group-survival", 200, 1.33f, 25)
 		{
 			XLeveling xleveling = XLeveling.Instance(api);
 			if (xleveling != null)

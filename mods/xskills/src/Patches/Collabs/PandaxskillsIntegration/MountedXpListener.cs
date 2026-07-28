@@ -7,8 +7,9 @@ using Vintagestory.API.MathTools;
 using Vintagestory.API.Server;
 using Vintagestory.GameContent;
 using XLib.XLeveling;
+using XSkills;
 
-namespace XSkills
+namespace xskills.src.Patches.Collabs.PandaxskillsIntegration
 {
     public static class MountedXpListener
     {

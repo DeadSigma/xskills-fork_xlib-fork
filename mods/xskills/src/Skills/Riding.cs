@@ -23,7 +23,7 @@ namespace XSkills
 		public int DragonBondId { get; private set; } = -1;
 		public int PegasusRiderId { get; private set; } = -1;
 
-		public Riding(ICoreAPI api) : base("riding", "xskills:skill-riding", "xskills:group-collecting", 200, 1.33f, 25)
+		public Riding(ICoreAPI api) : base("riding", "xskills:skill-riding", "xskills:group-survival", 200, 1.33f, 25)
 		{
 			XLeveling xleveling = XLeveling.Instance(api);
 			if (xleveling != null)

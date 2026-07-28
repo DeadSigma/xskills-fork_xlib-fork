@@ -6,8 +6,9 @@ using Vintagestory.API.Common;
 using Vintagestory.API.MathTools;
 using Vintagestory.GameContent;
 using XLib.XLeveling;
+using XSkills;
 
-namespace XSkills
+namespace xskills.src.Patches.Collabs.PandaxskillsIntegration
 {
     [HarmonyPatch(typeof(EntityBoat))]
     public class BoatPatches

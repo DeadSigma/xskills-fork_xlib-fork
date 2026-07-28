@@ -34,6 +34,8 @@ namespace XSkills
         public int CompostingId { get; private set; }
         public int CrossBreedingId { get; private set; }
         public int BeemasterId { get; private set; }
+        public int CuttingRhythmId { get; private set; } //Перк от пользователя Taper4ik
+        public int BushNurseryId { get; private set; } //Перк от пользователя Taper4ik
 
         public static float MultiBreakMultiplier { get; set; }
 
@@ -191,6 +193,24 @@ namespace XSkills
                 "beemaster",
                 "xskills:ability-beemaster",
                 "xskills:abilitydesc-beemaster", 10, 1));
+
+            //Перк от пользователя Taper4ik
+            // Уменьшает время перезарядки срезания черенков с кустов
+            // 0: процент уменьшения
+            CuttingRhythmId = this.AddAbility(new Ability(
+                "cuttingrhythm",
+                "xskills:ability-cuttingrhythm",
+                "xskills:abilitydesc-cuttingrhythm",
+                5, 3, new int[] { 20, 35, 50 }));
+
+            //Перк от пользователя Taper4ik
+            // Ускоряет рост посаженных черенков ягодных кустов
+            // 0: процент времени от нормального (85 = рост за 85% времени)
+            BushNurseryId = this.AddAbility(new Ability(
+                "bushnursery",
+                "xskills:ability-bushnursery",
+                "xskills:abilitydesc-bushnursery",
+                3, 3, new int[] { 85, 70, 60 }));
 
             //behaviors
             api.RegisterBlockBehaviorClass("XSkillsGrass", typeof(XSkillsGrassBehavior));

@@ -36,6 +36,7 @@ namespace XSkills
         public int BloodlustId { get; private set; }
         public int MonsterExpertId { get; private set; }
         public int SwiftSpearId { get; private set; }
+        public int CarefulShooterId { get; private set; } //Перк от пользователя Taper4ik
         public Combat(ICoreAPI api) : base("combat", "xskills:skill-combat", "xskills:group-survival")
         {
             (XLeveling.Instance(api))?.RegisterSkill(this);
@@ -264,6 +265,14 @@ namespace XSkills
                 "xskills:ability-monsterexpert",
                 "xskills:abilitydesc-monsterexpert",
                 10, 1, new int[] {}));
+
+            //Перк от пользователя Taper4ik
+            // уменьшает потерю прочности и повышает шанс сохранить боеприпасы для пращ и луков
+            CarefulShooterId = this.AddAbility(new Ability(
+                "carefulshooter",
+                "xskills:ability-carefulshooter",
+                "xskills:abilitydesc-carefulshooter",
+                5, 3, new int[] { 5, 1, 15, 3, 5, 2, 25, 6, 5, 2, 45, 10 }));
 
             //behaviors
             api.RegisterEntityBehaviorClass("XSkillsEntity", typeof(XSkillsEntityBehavior));
