@@ -49,6 +49,260 @@ namespace XSkills
         /// <summary>Marks that a saucepan operation has a Well Done snapshot, including a zero-value snapshot.</summary>
         public const string WellDoneSnapshotAttribute = "xskillsWellDoneSnapshotReady";
 
+        [ThreadStatic]
+        private static ItemSlot pendingPreviousOutputSlot;
+
+        [ThreadStatic]
+        private static ItemStack pendingPreviousOutputStack;
+
+        /// <summary>
+        /// Supplies a pre-smelt output snapshot to legacy cooking helpers that still call
+        /// the six-argument ApplyAbilities overload. The value is thread-local and is
+        /// consumed by the next matching call.
+        /// </summary>
+        internal static void SetPendingPreviousOutput(ItemSlot outputSlot, ItemStack previousOutputStack)
+        {
+            pendingPreviousOutputSlot = outputSlot;
+            pendingPreviousOutputStack = previousOutputStack;
+        }
+
+        internal static void ClearPendingPreviousOutput(ItemSlot outputSlot)
+        {
+            if (!ReferenceEquals(pendingPreviousOutputSlot, outputSlot)) return;
+
+            pendingPreviousOutputSlot = null;
+            pendingPreviousOutputStack = null;
+        }
+
+        private static ItemStack TakePendingPreviousOutput(ItemSlot outputSlot)
+        {
+            if (!ReferenceEquals(pendingPreviousOutputSlot, outputSlot)) return null;
+
+            ItemStack previousOutputStack = pendingPreviousOutputStack;
+            pendingPreviousOutputSlot = null;
+            pendingPreviousOutputStack = null;
+            return previousOutputStack;
+        }
+
+        private static bool SameCollectible(ItemStack first, ItemStack second)
+        {
+            if (first?.Collectible == null || second?.Collectible == null) return false;
+            return ReferenceEquals(first.Collectible, second.Collectible)
+                || first.Collectible.Code?.Equals(second.Collectible.Code) == true;
+        }
+
+        private static ITreeAttribute GetOrCreateTransitionState(IWorldAccessor world, ItemStack stack)
+        {
+            if (world == null || stack?.Collectible == null) return null;
+
+            ITreeAttribute transitionState =
+                (stack.Attributes as TreeAttribute)?.GetTreeAttribute("transitionstate");
+
+            if (transitionState == null && (stack.Collectible.TransitionableProps?.Length ?? 0) > 0)
+            {
+                stack.Collectible.UpdateAndGetTransitionStates(world, new DummySlot(stack));
+                transitionState =
+                    (stack.Attributes as TreeAttribute)?.GetTreeAttribute("transitionstate");
+            }
+
+            return transitionState;
+        }
+
+        private static float[] GetBaseFreshHours(IWorldAccessor world, ItemStack stack)
+        {
+            if (world == null || stack?.Collectible == null) return null;
+
+            ItemStack cleanStack = stack.Clone();
+            cleanStack.Attributes.RemoveAttribute("transitionstate");
+
+            ITreeAttribute transitionState = GetOrCreateTransitionState(world, cleanStack);
+            FloatArrayAttribute freshHours =
+                transitionState?["freshHours"] as FloatArrayAttribute;
+
+            return freshHours?.value == null
+                ? null
+                : (float[])freshHours.value.Clone();
+        }
+
+        private static ItemStack FindPreviousContentStack(
+            ItemStack currentStack,
+            ItemStack[] previousContentStacks,
+            bool[] usedPreviousStacks,
+            int preferredIndex)
+        {
+            if (currentStack == null || previousContentStacks == null) return null;
+
+            if (preferredIndex >= 0
+                && preferredIndex < previousContentStacks.Length
+                && !usedPreviousStacks[preferredIndex]
+                && SameCollectible(currentStack, previousContentStacks[preferredIndex]))
+            {
+                usedPreviousStacks[preferredIndex] = true;
+                return previousContentStacks[preferredIndex];
+            }
+
+            for (int index = 0; index < previousContentStacks.Length; index++)
+            {
+                if (usedPreviousStacks[index]
+                    || !SameCollectible(currentStack, previousContentStacks[index]))
+                {
+                    continue;
+                }
+
+                usedPreviousStacks[index] = true;
+                return previousContentStacks[index];
+            }
+
+            return null;
+        }
+
+        private static float GetOutputQuantity(IWorldAccessor world, ItemStack stack)
+        {
+            if (world == null || stack?.Collectible == null) return 0.0f;
+
+            if (stack.Collectible is BlockLiquidContainerBase liquidContainer)
+            {
+                return Math.Max(0.0f, liquidContainer.GetCurrentLitres(stack));
+            }
+
+            if (stack.Collectible is IBlockMealContainer mealContainer)
+            {
+                return Math.Max(0.0f, mealContainer.GetQuantityServings(world, stack));
+            }
+
+            return Math.Max(0, stack.StackSize);
+        }
+
+        /// <summary>
+        /// Applies Well Done only to the quantity produced by the current operation.
+        /// Existing output keeps its stored shelf-life duration, so repeatedly adding
+        /// products to the output slot cannot multiply the old stack again.
+        /// </summary>
+        private void ApplyWellDoneShelfLife(
+            ItemStack outputStack,
+            ItemStack[] contentStacks,
+            ItemStack previousOutputStack,
+            IWorldAccessor world,
+            float shelfLifeBonus)
+        {
+            if (shelfLifeBonus <= 0.0f
+                || outputStack == null
+                || contentStacks == null
+                || contentStacks.Length == 0)
+            {
+                return;
+            }
+
+            float shelfLifeMultiplier = 1.0f + shelfLifeBonus;
+            bool sameOutputType = SameCollectible(outputStack, previousOutputStack);
+
+            ItemStack[] previousContentStacks = sameOutputType
+                ? ContentStacks(previousOutputStack, world)
+                : null;
+
+            bool[] usedPreviousStacks = previousContentStacks == null
+                ? null
+                : new bool[previousContentStacks.Length];
+
+            bool useContainerQuantity =
+                outputStack.Collectible is IBlockMealContainer
+                || outputStack.Collectible is BlockLiquidContainerBase;
+
+            float currentContainerQuantity = useContainerQuantity
+                ? GetOutputQuantity(world, outputStack)
+                : 0.0f;
+
+            float previousContainerQuantity = useContainerQuantity && sameOutputType
+                ? GetOutputQuantity(world, previousOutputStack)
+                : 0.0f;
+
+            for (int stackIndex = 0; stackIndex < contentStacks.Length; stackIndex++)
+            {
+                ItemStack currentStack = contentStacks[stackIndex];
+                if (currentStack?.Collectible == null) continue;
+
+                ITreeAttribute currentTransitionState =
+                    GetOrCreateTransitionState(world, currentStack);
+
+                FloatArrayAttribute currentFreshHours =
+                    currentTransitionState?["freshHours"] as FloatArrayAttribute;
+
+                if (currentFreshHours?.value == null) continue;
+
+                ItemStack previousStack = FindPreviousContentStack(
+                    currentStack,
+                    previousContentStacks,
+                    usedPreviousStacks,
+                    stackIndex
+                );
+
+                float totalWeight;
+                float previousWeight;
+
+                if (useContainerQuantity && currentContainerQuantity > 0.0f)
+                {
+                    totalWeight = currentContainerQuantity;
+                    previousWeight = previousStack == null
+                        ? 0.0f
+                        : Math.Min(previousContainerQuantity, totalWeight);
+                }
+                else
+                {
+                    totalWeight = Math.Max(0, currentStack.StackSize);
+                    previousWeight = previousStack == null
+                        ? 0.0f
+                        : Math.Min(Math.Max(0, previousStack.StackSize), totalWeight);
+                }
+
+                float producedWeight = totalWeight - previousWeight;
+                if (totalWeight <= 0.0f || producedWeight <= 0.0f) continue;
+
+                ITreeAttribute previousTransitionState = previousStack == null
+                    ? null
+                    : GetOrCreateTransitionState(world, previousStack);
+
+                FloatArrayAttribute previousFreshHours =
+                    previousTransitionState?["freshHours"] as FloatArrayAttribute;
+
+                float[] baseFreshHours = GetBaseFreshHours(world, currentStack);
+
+                for (int transitionIndex = 0;
+                     transitionIndex < currentFreshHours.value.Length;
+                     transitionIndex++)
+                {
+                    float currentFresh = currentFreshHours.value[transitionIndex];
+                    if (currentFresh <= 0.0f || !float.IsFinite(currentFresh)) continue;
+
+                    float baseFresh = baseFreshHours != null
+                        && transitionIndex < baseFreshHours.Length
+                        && baseFreshHours[transitionIndex] > 0.0f
+                        && float.IsFinite(baseFreshHours[transitionIndex])
+                            ? baseFreshHours[transitionIndex]
+                            : currentFresh;
+
+                    float boostedProducedFresh = baseFresh * shelfLifeMultiplier;
+
+                    if (previousWeight <= 0.0f)
+                    {
+                        currentFreshHours.value[transitionIndex] = boostedProducedFresh;
+                        continue;
+                    }
+
+                    float previousFresh = previousFreshHours?.value != null
+                        && transitionIndex < previousFreshHours.value.Length
+                        && previousFreshHours.value[transitionIndex] > 0.0f
+                        && float.IsFinite(previousFreshHours.value[transitionIndex])
+                            ? previousFreshHours.value[transitionIndex]
+                            : currentFresh;
+
+                    currentFreshHours.value[transitionIndex] =
+                        (previousFresh * previousWeight
+                         + boostedProducedFresh * producedWeight)
+                        / totalWeight;
+                }
+            }
+        }
+
         /// <summary>
         /// Returns whether Dilution should treat the supplied stack as food.
         /// Supports normal nutrition, liquid nutrition per litre, and meal-only nutrition used by Expanded Foods.
@@ -461,7 +715,33 @@ namespace XSkills
             quality /= ingredientCount;
         }
 
-        public void ApplyAbilities(ItemSlot outputSlot, IPlayer player, float oldQuality, float cookedAmount = 1.0f, ItemStack[] sourceStacks = null, float expMult = 1.0f)
+        public void ApplyAbilities(
+            ItemSlot outputSlot,
+            IPlayer player,
+            float oldQuality,
+            float cookedAmount = 1.0f,
+            ItemStack[] sourceStacks = null,
+            float expMult = 1.0f)
+        {
+            ApplyAbilities(
+                outputSlot,
+                player,
+                oldQuality,
+                cookedAmount,
+                sourceStacks,
+                expMult,
+                TakePendingPreviousOutput(outputSlot)
+            );
+        }
+
+        public void ApplyAbilities(
+            ItemSlot outputSlot,
+            IPlayer player,
+            float oldQuality,
+            float cookedAmount,
+            ItemStack[] sourceStacks,
+            float expMult,
+            ItemStack previousOutputStack)
         {
             ItemStack outputStack = outputSlot?.Itemstack;
             if (outputStack == null || player == null) return;
@@ -721,38 +1001,18 @@ namespace XSkills
                     ? playerAbility.SkillDependentFValue()
                     : 0.0f;
 
-            // Полностью удаляем атрибуты, чтобы предмет мог стакаться с обычной едой
+            // Operation-only attributes must never remain on finished food because
+            // their presence prevents otherwise identical stacks from merging.
             outputStack.Attributes.RemoveAttribute(WellDoneSnapshotAttribute);
             outputStack.Attributes.RemoveAttribute(WellDoneShelfLifeAttribute);
 
-            if (shelfLifeBonus > 0.0f)
-            {
-                float shelfLifeMultiplier = 1.0f + shelfLifeBonus;
-
-                foreach (ItemStack stack in contentStacks)
-                {
-                    if (stack?.Collectible == null) continue;
-                    ITreeAttribute attr = (stack.Attributes as TreeAttribute)?.GetTreeAttribute("transitionstate");
-
-                // Продукт котла синтезируется из шаблона рецепта и не имеет transitionstate, поэтому Well Done ниже нечего продлевать. Инициализируем состояние здесь, как это сделала бы игра на следующем тике
-                    if (attr == null && (stack.Collectible?.TransitionableProps?.Length ?? 0) > 0)
-                    {
-                        stack.Collectible.UpdateAndGetTransitionStates(world, new DummySlot(stack));
-                        attr = (stack.Attributes as TreeAttribute)?.GetTreeAttribute("transitionstate");
-                    }
-
-                    FloatArrayAttribute freshHoursAttribute = attr?["freshHours"] as FloatArrayAttribute;
-                    if (freshHoursAttribute?.value == null) continue;
-
-                    for (int ii = 0; ii < freshHoursAttribute.value.Length; ++ii)
-                    {
-                        if (freshHoursAttribute.value[ii] <= 0.0f) continue;
-
-                        // Preserve the actual initialized shelf life instead of rebuilding it from the outer container template.
-                        freshHoursAttribute.value[ii] *= shelfLifeMultiplier;
-                    }
-                }
-            }
+            ApplyWellDoneShelfLife(
+                outputStack,
+                contentStacks,
+                previousOutputStack,
+                world,
+                shelfLifeBonus
+            );
             FreshnessAndQuality(sourceStacks ?? contentStacks, out float freshness, out float sourceQuality);
             if (float.IsNaN(sourceQuality)) sourceQuality = 0.0f;
 

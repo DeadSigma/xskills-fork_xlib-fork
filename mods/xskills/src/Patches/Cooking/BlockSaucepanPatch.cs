@@ -44,6 +44,7 @@ namespace XSkills
             if (inv == null) return;
 
             __state.quality = inv[2].Itemstack?.Attributes.GetFloat("quality") ?? 0.0f;
+            __state.previousOutputStack = outputSlot?.Itemstack?.Clone();
 
             for (int ii = 3; ii <= 6; ++ii)
             {
@@ -75,7 +76,15 @@ namespace XSkills
 
             Cooking cooking = blockEntity?.Api.ModLoader.GetModSystem<XLeveling>()?.GetSkill("cooking") as Cooking;
             if (cooking == null) return;
-            cooking.ApplyAbilities(outputSlot, ownable.Owner, __state.quality, outputSlot.StackSize - __state.stackSize, __state.stacks, exp);
+            cooking.ApplyAbilities(
+                outputSlot,
+                ownable.Owner,
+                __state.quality,
+                outputSlot.StackSize - __state.stackSize,
+                __state.stacks,
+                exp,
+                __state.previousOutputStack
+            );
         }
     }//!class BlockSaucepanPatch
 

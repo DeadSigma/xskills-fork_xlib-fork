@@ -63,6 +63,7 @@ namespace XSkills
             __state = new DoSmeltState();
             __state.stackSize = outputSlot.Itemstack?.StackSize ?? 0;
             __state.quality = outputSlot.Itemstack?.Attributes.GetFloat("quality") ?? 0.0f;
+            __state.previousOutputStack = outputSlot.Itemstack?.Clone();
         }
 
         /// <summary>
@@ -81,7 +82,15 @@ namespace XSkills
 
             int cooked = (outputSlot.Itemstack?.StackSize ?? 0) - __state.stackSize;
             if (ownable?.Owner == null || cooked <= 0) return;
-            CollectibleObjectPatch.DoSmeltCooking(ownable?.Owner, outputSlot, cooked, __state.quality);
+            Cooking.SetPendingPreviousOutput(outputSlot, __state.previousOutputStack);
+            try
+            {
+                CollectibleObjectPatch.DoSmeltCooking(ownable.Owner, outputSlot, cooked, __state.quality);
+            }
+            finally
+            {
+                Cooking.ClearPendingPreviousOutput(outputSlot);
+            }
         }
     }//!class ItemExpandedRawFoodPatch
 }//!namespace XSkills

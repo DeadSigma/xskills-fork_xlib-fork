@@ -63,6 +63,7 @@ namespace XSkills
             if (inv == null) return;
 
             __state.quality = inv[1].Itemstack?.Attributes.GetFloat("quality") ?? 0.0f;
+            __state.previousOutputStack = __instance.OutputStack?.Clone();
             __state.outputStackSize = __instance.OutputStack?.StackSize ?? 0;
 
             for (int ii = 2; ii <= 7; ++ii)
@@ -91,7 +92,15 @@ namespace XSkills
                                || outputStack.Collectible is BlockLiquidContainerBase;
 
             // качество/свежесть/опыт; для контейнеров (суп/жидкость) тут же растут порции/объём
-            cooking.ApplyAbilities(outputSlot, byPlayer, __state.quality, cooked, __state.stacks);
+            cooking.ApplyAbilities(
+                outputSlot,
+                byPlayer,
+                __state.quality,
+                cooked,
+                __state.stacks,
+                1.0f,
+                __state.previousOutputStack
+            );
 
             // контейнеры обрабатываются внутри ApplyAbilities на месте - стак не трогаем
             if (isContainer || outputSlot.Itemstack == null) return;
