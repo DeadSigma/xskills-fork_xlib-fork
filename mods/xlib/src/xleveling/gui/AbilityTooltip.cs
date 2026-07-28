@@ -76,38 +76,37 @@ namespace XLib.XLeveling
             double[] red = { 0.8, 0.0, 0.0 };
             double[] gray = { 0.5, 0.5, 0.5 };
 
-            // 1. ПЕРКИ НА ШАНС (Вероятность события)
+            // Перки на шанс (Вероятность события)
             var chanceAbilities = new System.Collections.Generic.HashSet<string>
-    {
-        "magnetichook", "doublehook", "baitmaster", "strongline",
-        "carefuldigger", "carefullumberjack", "carefulminer",
-        "cultivatedseeds", "stonecutter", "feeder", "duplicator",
-        "jackpot", "happymeal", "finishingtouch", "fastpotter"
-    };
+             {
+                 "magnetichook", "doublehook", "baitmaster", "strongline",
+                 "carefuldigger", "carefullumberjack", "carefulminer",
+                 "cultivatedseeds", "stonecutter", "feeder", "duplicator",
+                 "jackpot", "happymeal", "finishingtouch", "fastpotter", "carefulshooter"
+             };
 
-            // 2. ПЕРКИ НА БОНУС / ДОБЫЧУ (Увеличение лута, скорости, ХП)
-            var bonusAbilities = new System.Collections.Generic.HashSet<string>
-    {
-        "goodbait", "greenthumb", "demetersbless", "gatherer", "orchardist",
-        "claydigger", "peatcutter", "saltpeterdigger", "golddigger",
-        "lumberjack", "moreladders", "stonebreaker", "oreminer",
-        "gemstoneminer", "butcher", "furrier", "bonebreaker",
-        "looter", "salvager", "dilution", "longlife", "hammerexpert",
-        "shovelexpert", "axeexpert", "pickaxeexpert", "fastfood"
-    };
+                     // Перки на бонус/ Добычу (Увеличение лута, скорости, ХП)
+                     var bonusAbilities = new System.Collections.Generic.HashSet<string>
+             {
+                 "goodbait", "greenthumb", "demetersbless", "gatherer", "orchardist",
+                 "claydigger", "peatcutter", "saltpeterdigger", "golddigger",
+                 "lumberjack", "moreladders", "stonebreaker", "oreminer",
+                 "gemstoneminer", "butcher", "furrier", "bonebreaker",
+                 "looter", "salvager", "dilution", "longlife", "hammerexpert",
+                 "shovelexpert", "axeexpert", "pickaxeexpert", "fastfood", "steadyhelm", "steadyhand"
+             };
 
-            // 3. ПЕРКИ НА УРОН И ЗАЩИТУ (Боевка)
-            var damageAbilities = new System.Collections.Generic.HashSet<string>
-    {
-        "swordsman", "archer", "spearman", "tank", "hunter", "toolmastery"
-    };
+                     // Перки на урон и защиту
+                     var damageAbilities = new System.Collections.Generic.HashSet<string>
+             {
+                 "swordsman", "archer", "spearman", "tank", "hunter", "toolmastery"
+             };
 
-            // 4. ПЕРКИ С МАКСИМАЛЬНЫМ ЛИМИТОМ ШТУК (Особая математика)
-            var maxBonusAbilities = new System.Collections.Generic.HashSet<string>
-    {
-        "fishfilleter" 
-        // Если в будущем добавишь перки типа meatcarver с такой же механикой лимита - просто впиши сюда
-    };
+                     // Перки с максимальным кол-вом штук (Особая математика)
+                     var maxBonusAbilities = new System.Collections.Generic.HashSet<string>
+             {
+                 "fishfilleter" 
+             };
 
             string abilityName = playerAbility.Ability.Name;
 

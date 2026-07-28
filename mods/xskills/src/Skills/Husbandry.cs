@@ -9,7 +9,7 @@ using Vintagestory.API.Server;
 using Vintagestory.Common;
 using Vintagestory.GameContent;
 using XLib.XLeveling;
-using xskills.src.Patches.Husbandry.HunterBag;
+using XSkills;
 
 namespace XSkills
 {

@@ -4,7 +4,7 @@ using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using XSkills;
 
-namespace xskills.src.Patches.Husbandry.HunterBag
+namespace XSkills
 {
     /// <summary>Сохраняемая позиция слота (в немасштабированных GUI-единицах)</summary>
     public class HunterBagSlotLayout

@@ -10,7 +10,7 @@ using Vintagestory.GameContent;
 using XLib.XLeveling;
 using XSkills;
 
-namespace xskills.src.Patches.Collabs.PandaxskillsIntegration
+namespace XSkills
 {
     
     // Patch 1: BlockBarrelInspectorPatch

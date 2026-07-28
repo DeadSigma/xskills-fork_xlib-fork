@@ -15,8 +15,6 @@ using Vintagestory.Client.NoObf;
 using Vintagestory.Common;
 using Vintagestory.Server;
 using XLib.XLeveling;
-using xskills.src.Patches.Collabs.PandaxskillsIntegration;
-using xskills.src.Patches.Husbandry.HunterBag;
 
 namespace XSkills
 {
