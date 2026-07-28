@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 
@@ -48,15 +49,36 @@ namespace XLib.XEffects
         private EffectTooltip effectTooltip;
 
         /// <summary>
+        /// Called whenever the Effects HUD mode changes.
+        /// </summary>
+        private readonly Action<int> forcedStateChanged;
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="EffectFrame"/> class.
         /// </summary>
         /// <param name="capi">The Client API</param>
-        public EffectFrame(ICoreClientAPI capi) : base(capi)
+        public EffectFrame(ICoreClientAPI capi)
+            : this(capi, 0, null)
         {
-            ForcedState = 0;
+        }
+
+        /// <summary>
+        /// Initializes a new Effects HUD with a persisted mode and change callback.
+        /// </summary>
+        /// <param name="capi">The Client API.</param>
+        /// <param name="forcedState">-1 = never, 0 = dynamic, 1 = always.</param>
+        /// <param name="forcedStateChanged">Called after the mode changes.</param>
+        public EffectFrame(
+            ICoreClientAPI capi,
+            int forcedState,
+            Action<int> forcedStateChanged
+        ) : base(capi)
+        {
+            ForcedState = Math.Clamp(forcedState, -1, 1);
             TextWidth = 200;
             effectBoxes = new List<EffectBox>();
             effectTooltip = null;
+            this.forcedStateChanged = forcedStateChanged;
         }
 
         /// <summary>
@@ -137,8 +159,31 @@ namespace XLib.XEffects
         /// </summary>
         public void OnTitleBarClose()
         {
-            this.ForcedState -= 1;
+            SetForcedState(this.ForcedState - 1);
             TryClose();
+        }
+
+        /// <summary>
+        /// Changes the Effects HUD mode and notifies the owning system so the
+        /// selection can be persisted.
+        /// </summary>
+        /// <param name="state">-1 = never, 0 = dynamic, 1 = always.</param>
+        public void SetForcedState(int state)
+        {
+            int normalizedState = Math.Clamp(state, -1, 1);
+
+            if (this.ForcedState == normalizedState)
+            {
+                return;
+            }
+
+            this.ForcedState = normalizedState;
+            this.forcedStateChanged?.Invoke(normalizedState);
+
+            if (normalizedState == -1 && this.IsOpened())
+            {
+                TryClose();
+            }
         }
 
         /// <summary>

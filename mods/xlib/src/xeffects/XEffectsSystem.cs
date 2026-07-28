@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -17,6 +17,7 @@ namespace XLib.XEffects
     /// <seealso cref="ModSystem" />
     public class XEffectsSystem : ModSystem
     {
+        private const string ConfigPath = "xeffects.json";
         /// <summary>
         /// the asset category
         /// </summary>
@@ -200,7 +201,7 @@ namespace XLib.XEffects
         /// </summary>
         public void LoadConfig()
         {
-            string path = "xeffects.json";
+            string path = ConfigPath;
 
             try
             {
@@ -286,7 +287,11 @@ namespace XLib.XEffects
         public override void StartClientSide(ICoreClientAPI api)
         {
             base.StartClientSide(api);
-            effectFrame = new EffectFrame(api);
+            effectFrame = new EffectFrame(
+                api,
+                Config?.effectFrameState ?? 0,
+                OnEffectFrameStateChanged
+            );
             api.Event.RegisterGameTickListener((float tick) => this.effectFrame.Update(), 100);
 
             api.Input.RegisterHotKey("effectframehotkey", Lang.Get("xskills:hotkey-effectframehotkey"), GlKeys.B, HotkeyType.GUIOrOtherControls);
@@ -464,6 +469,28 @@ namespace XLib.XEffects
         }
 
         /// <summary>
+        /// Persists the Effects HUD mode immediately when it changes.
+        /// </summary>
+        /// <param name="state">-1 = never, 0 = dynamic, 1 = always.</param>
+        private void OnEffectFrameStateChanged(int state)
+        {
+            if (Config == null || Api == null)
+            {
+                return;
+            }
+
+            int normalizedState = Math.Clamp(state, -1, 1);
+
+            if (Config.effectFrameState == normalizedState)
+            {
+                return;
+            }
+
+            Config.effectFrameState = normalizedState;
+            Api.StoreModConfig(Config, ConfigPath);
+        }
+
+        /// <summary>
         /// Called when effect frame hot key was pressed.
         /// </summary>
         /// <param name="comb">The comb.</param>
@@ -472,11 +499,11 @@ namespace XLib.XEffects
         {
             if (this.effectFrame.IsOpened())
             {
-                this.effectFrame.ForcedState = Math.Clamp(this.effectFrame.ForcedState -1, -1, 1);
+                this.effectFrame.SetForcedState(this.effectFrame.ForcedState - 1);
             }
             else
             {
-                this.effectFrame.ForcedState = Math.Clamp(this.effectFrame.ForcedState + 1, -1, 1);
+                this.effectFrame.SetForcedState(this.effectFrame.ForcedState + 1);
             }
             ICoreClientAPI capi = this.Api as ICoreClientAPI;
             switch(this.effectFrame.ForcedState)

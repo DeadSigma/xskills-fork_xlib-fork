@@ -34,10 +34,28 @@ namespace XSkills
                     prefix: new HarmonyMethod(typeof(BlockEntityEFruitPressPatch), nameof(ExtractJuicePrefix)),
                     postfix: new HarmonyMethod(typeof(BlockEntityEFruitPressPatch), nameof(ExtractJuicePostfix)));
 
+
+
             // Патчим GetJuiceableProperties
-            MethodInfo getJuiceableProperties = AccessTools.Method(targetType, "GetJuiceableProperties");
+            MethodInfo getJuiceableProperties = AccessTools.Method(
+                targetType,
+                "GetJuiceableProperties",
+                new[] { typeof(ItemStack) }
+            );
             if (getJuiceableProperties != null)
-                harmony.Patch(getJuiceableProperties, postfix: new HarmonyMethod(typeof(BlockEntityEFruitPressPatch), nameof(GetJuiceablePropertiesPostfix)));
+            {
+                harmony.Patch(
+                    getJuiceableProperties,
+                    prefix: new HarmonyMethod(
+                        typeof(BlockEntityEFruitPressPatch),
+                        nameof(GetJuiceablePropertiesPrefix)
+                    ),
+                    postfix: new HarmonyMethod(
+                        typeof(BlockEntityEFruitPressPatch),
+                        nameof(GetJuiceablePropertiesPostfix)
+                    )
+                );
+            }
         }
 
         public static bool Prepare()
@@ -93,8 +111,43 @@ namespace XSkills
             skill.AddExperience(diff * exp);
         }
 
-        public static void GetJuiceablePropertiesPostfix(BlockEntity __instance, ref object __result)
+        /// <summary>
+        /// Prevents Electrical Progressive from evaluating an empty or unresolved
+        /// ItemStack while the fruit press inventory is being deserialized or updated.
+        /// </summary>
+        public static bool GetJuiceablePropertiesPrefix(ItemStack stack)
         {
+            if (stack == null)
+            {
+                return false;
+            }
+
+            if (stack.StackSize <= 0)
+            {
+                return false;
+            }
+
+            if (stack.Collectible == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public static void GetJuiceablePropertiesPostfix(BlockEntity __instance,ItemStack stack,ref object __result)
+        {
+            // Prefix may have skipped the original method.
+            // The original method may also legitimately return null.
+            if (__instance == null ||
+                __instance.Api == null ||
+                stack == null ||
+                stack.StackSize <= 0 ||
+                stack.Collectible == null ||
+                __result == null)
+            {
+                return;
+            }
             if (__result == null) return;
 
             dynamic props = __result;
