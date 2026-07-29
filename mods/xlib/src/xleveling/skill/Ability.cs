@@ -406,10 +406,24 @@ namespace XLib.XLeveling
 
                     if (type == "class")
                     {
-                        string reqClass = token["class"]?.ToString();
-                        if (reqClass != null)
+                        JToken classToken = token["classes"] ?? token["class"];
+
+                        if (classToken != null)
                         {
-                            this.AddRequirement(new ClassRequirement(new string[] { reqClass }, minTier, hide));
+                            string[] reqClasses;
+
+                            // Если игрок написал массив (например, ["hunter", "malefactor"])
+                            if (classToken.Type == JTokenType.Array)
+                            {
+                                reqClasses = classToken.ToObject<string[]>();
+                            }
+                            // Если игрок написал одну строку (например, "hunter")
+                            else
+                            {
+                                reqClasses = new string[] { classToken.ToString() };
+                            }
+
+                            this.AddRequirement(new ClassRequirement(reqClasses, minTier, hide));
                         }
                     }
 
