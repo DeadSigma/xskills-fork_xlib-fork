@@ -218,10 +218,13 @@ namespace PandaXPDrops
             if (config == null)
             {
                 config = new XpDropConfig();
+                config.ConfigVersion = XpDropConfig.CurrentConfigVersion; 
                 api.StoreModConfig(config, ConfigFile);
             }
 
+            bool migrated = config.Migrate();
             config.Sanitize();
+            if (migrated) api.StoreModConfig(config, ConfigFile);
             return config;
         }
 
@@ -264,6 +267,15 @@ namespace PandaXPDrops
     /// </remarks>
     public class XpDropConfig
     {
+
+        /// <summary>Текущая версия схемы конфига</summary>
+        public const int CurrentConfigVersion = 1;
+
+        /// <summary>
+        /// Версия, до которой уже мигрирован этот файл. Должна оставаться 0 по умолчанию,
+        /// чтобы старые файлы без этого поля считались немигрированными
+        /// </summary>
+        public int ConfigVersion { get; set; } = 0;
 
         /// <summary>
         /// Отрисовывается ли HUD. Переключается в игре горячей клавишей показа/скрытия и сразу сохраняется;
@@ -308,7 +320,7 @@ namespace PandaXPDrops
         public double BatchInterval { get; set; } = 300.0;
 
         /// <summary>Получение опыта ниже этого значения никогда не вызывает появление метки</summary>
-        public float MinimumXp { get; set; } = 0.1f;
+        public float MinimumXp { get; set; } = 0.01f;
 
         /// <summary>Скорость подъема метки в немасштабируемых пикселях в секунду</summary>
         public float FloatSpeed { get; set; } = 35f;
@@ -393,6 +405,22 @@ namespace PandaXPDrops
                     }
                 }
             }
+        }
+        /// <summary>
+        /// Приводит старые конфиги к <see cref="CurrentConfigVersion"/> Возвращает true, если что-то
+        /// изменилось - тогда вызывающий пересохраняет файл Добавляй сюда шаги при смене дефолтов.
+        /// </summary>
+        public bool Migrate()
+        {
+            if (ConfigVersion >= CurrentConfigVersion) return false;
+
+            if (ConfigVersion < 1 && MinimumXp == 0.1f)
+            {
+                MinimumXp = 0.01f;
+            }
+
+            ConfigVersion = CurrentConfigVersion;
+            return true;
         }
     }
 

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -267,93 +268,94 @@ namespace XLib.XLeveling
         /// </summary>
         private void LoadConfiguration()
         {
-            // ВЕРСИЯ КОНФИГА МОДА:
-            int CURRENT_CONFIG_VERSION = 9;
-
-            bool forceConfigReset = false;
+            // Версия берётся из ConfigMigrations
+            int CURRENT_CONFIG_VERSION = ConfigMigrations.CurrentVersion;
 
             string path = Path.Combine("XLeveling", "xleveling.json");
             ICoreServerAPI api = XLeveling.Api as ICoreServerAPI;
 
+            int storedVersion;
+            bool configWasMissing = false;
+
+           
             try
             {
                 this.Config = api.LoadModConfig<Config>(path);
 
-                if (this.Config == null || this.Config.configVersion < CURRENT_CONFIG_VERSION)
+                if (this.Config == null)
                 {
-                    forceConfigReset = true;
+                    configWasMissing = true;
                     this.Config = new Config();
-                    this.Config.configVersion = CURRENT_CONFIG_VERSION;
-                    api.Server.LogNotification($"[XLeveling] CONFIG UPDATE: xleveling.json updated to version {CURRENT_CONFIG_VERSION}.");
                 }
             }
             catch (Exception error)
             {
-                forceConfigReset = true;
+                configWasMissing = true;
                 this.Config = new Config();
-                this.Config.configVersion = CURRENT_CONFIG_VERSION;
-                api.Server.LogError("[XLeveling] Error while loading: " + path + ". Resetting to defaults.");
+                api.Server.LogError("[XLeveling] Error while loading: " + path + ". Recreating xleveling.json only (skill configs untouched).");
                 api.Server.LogError(error.Message);
             }
 
-            // Если в конфиге включено отключение всех классов, добавляем секретный флаг в список
+            storedVersion = configWasMissing ? CURRENT_CONFIG_VERSION : this.Config.configVersion;
+
             if (this.Config != null && this.Config.disableAllClassRequirements)
             {
                 if (this.Config.disabledRequirements == null)
-                {
                     this.Config.disabledRequirements = new List<string>();
-                }
 
                 if (!this.Config.disabledRequirements.Contains("DISABLE_ALL_CLASSES"))
-                {
                     this.Config.disabledRequirements.Add("DISABLE_ALL_CLASSES");
-                }
             }
 
-            // ЖЕСТКИЙ СБРОС ФАЙЛОВ
-            if (forceConfigReset)
-            {
-                string configDir = Path.Combine(Vintagestory.API.Config.GamePaths.ModConfig, "XLeveling");
-                if (Directory.Exists(configDir))
-                {
-                    List<string> skillsToReset = new List<string> {
-            "metalworking" 
-            // "combat", 
-            // "farming",
-            // "all" 
-        };
+            ConfigMigrations.SkillResetPlan plan =
+                ConfigMigrations.CollectSkillResets(storedVersion, CURRENT_CONFIG_VERSION);
 
-                    bool resetAll = skillsToReset.Contains("all");
-
-                    foreach (Skill skill in this.XLeveling.SkillSetTemplate.Skills)
-                    {
-                        if (resetAll || skillsToReset.Contains(skill.Name))
-                        {
-                            string fullPath = Path.Combine(configDir, skill.Name + ".json");
-                            if (File.Exists(fullPath))
-                            {
-                                File.Delete(fullPath);
-                                api.Server.LogNotification($"[XLeveling] Config Reset: Deleted old {skill.Name}.json to apply new default values.");
-                            }
-                        }
-                    }
-                }
-            }
+            if (!configWasMissing && storedVersion < CURRENT_CONFIG_VERSION)
+                api.Server.LogNotification($"[XLeveling] CONFIG MIGRATION: v{storedVersion} -> v{CURRENT_CONFIG_VERSION}.");
 
             LimitationRequirement specialisations;
             this.XLeveling.Limitations.TryGetValue("specialisations", out specialisations);
             if (specialisations != null) specialisations.Limit = this.Config.specialisationLimit;
 
+            // Обновляем только номер версии и сохраняем
+            this.Config.configVersion = CURRENT_CONFIG_VERSION;
             this.XLeveling.Mod.Logger.Debug("Save: " + path);
             api.StoreModConfig(this.Config, path);
 
             this.XLeveling.RemoveRequirements(this.Config.disabledRequirements);
 
-            // 2. Теперь загружаем конфиги навыков (игра создаст новые, так как старых уже нет)
+            // Загружаем конфиги скиллов, применяя точечные/полные сбросы из плана
+            string configDir = Path.Combine(GamePaths.ModConfig, "XLeveling");
             foreach (Skill skill in this.XLeveling.SkillSetTemplate.Skills)
             {
-                SkillConfig skillConfig;
                 string skillPath = Path.Combine("XLeveling", skill.Name + ".json");
+                string fullPath = Path.Combine(configDir, skill.Name + ".json");
+
+                bool resetWhole = plan.WholeSkills.Contains(skill.Name);
+                plan.Abilities.TryGetValue(skill.Name, out Dictionary<string, ConfigMigrations.AbilityReset> resetAbilities);
+
+                if (resetWhole)
+                {
+                    try
+                    {
+                        if (File.Exists(fullPath)) File.Delete(fullPath);
+                        api.Server.LogNotification($"[XLeveling] Migration: reset whole {skill.Name}.json to defaults.");
+                    }
+                    catch (Exception e)
+                    {
+                        api.Server.LogError($"[XLeveling] Could not delete {skill.Name}.json: {e.Message}");
+                    }
+                }
+                else if (resetAbilities != null && resetAbilities.Count > 0 && File.Exists(fullPath))
+                {
+                    try { ResetAbilitiesInFile(skill, fullPath, resetAbilities, api); }
+                    catch (Exception e)
+                    {
+                        api.Server.LogError($"[XLeveling] Ability reset failed for {skill.Name}.json: {e.Message}");
+                    }
+                }
+
+                SkillConfig skillConfig;
                 try
                 {
                     this.XLeveling.Mod.Logger.Debug("Load: " + skillPath);
@@ -371,8 +373,114 @@ namespace XLib.XLeveling
                 api.StoreModConfig(skillConfig, skillPath);
             }
 
-            //remove requirements
             this.XLeveling.RemoveRequirements(this.Config.disabledRequirements);
+        }
+
+        /// <summary>
+        /// Подменяет в файле скилла записи перков на дефолтные. Для перков с oldValues сброс
+        /// происходит только если текущие values совпали со старым стандартом; иначе запись сохраняется.
+        /// </summary>
+        private void ResetAbilitiesInFile(Skill skill, string fullPath,
+            Dictionary<string, ConfigMigrations.AbilityReset> abilityResets, ICoreServerAPI api)
+        {
+            JObject defaultJson = JObject.FromObject(new SkillConfig(skill));
+            JObject userJson = JObject.Parse(File.ReadAllText(fullPath));
+
+            JArray defaultAbilities = FindAbilityArray(defaultJson);
+            JArray userAbilities = FindAbilityArray(userJson);
+            if (defaultAbilities == null || userAbilities == null)
+            {
+                api.Server.LogWarning($"[XLeveling] Reset: could not locate abilities array in {skill.Name}.json, skipped.");
+                return;
+            }
+
+            bool changed = false;
+            foreach (var pair in abilityResets)
+            {
+                string abilityName = pair.Key;
+                ConfigMigrations.AbilityReset rule = pair.Value;
+
+                JObject def = FindByName(defaultAbilities, abilityName);
+                if (def == null)
+                {
+                    api.Server.LogWarning($"[XLeveling] Reset: ability '{abilityName}' not in default {skill.Name} config, skipped.");
+                    continue;
+                }
+
+                JObject existing = FindByName(userAbilities, abilityName);
+
+                // Перка нет в файле игрока - добавляем дефолт только при безусловном сбросе.
+                if (existing == null)
+                {
+                    if (rule.Unconditional)
+                    {
+                        userAbilities.Add(def.DeepClone());
+                        changed = true;
+                        api.Server.LogNotification($"[XLeveling] Migration: added missing ability '{abilityName}' to {skill.Name}.json.");
+                    }
+                    continue;
+                }
+
+                bool shouldReset = rule.Unconditional || MatchesAnyOldValues(existing["values"], rule.MatchOldValues);
+                if (!shouldReset)
+                {
+                    api.Server.LogNotification($"[XLeveling] Migration: kept custom '{abilityName}' in {skill.Name}.json (values differ from old default).");
+                    continue;
+                }
+
+                existing.Replace(def.DeepClone());
+                changed = true;
+                api.Server.LogNotification($"[XLeveling] Migration: reset ability '{abilityName}' in {skill.Name}.json to defaults.");
+            }
+
+            if (changed) File.WriteAllText(fullPath, userJson.ToString(Formatting.Indented));
+        }
+
+        /// <summary>Совпадают ли текущие values перка хотя бы с одним из старых стандартных наборов.</summary>
+        private static bool MatchesAnyOldValues(JToken valuesToken, List<int[]> oldValueSets)
+        {
+            if (oldValueSets == null || oldValueSets.Count == 0) return false;
+            if (!(valuesToken is JArray arr)) return false;
+
+            foreach (int[] old in oldValueSets)
+            {
+                if (old == null || arr.Count != old.Length) continue;
+                bool all = true;
+                for (int i = 0; i < old.Length; i++)
+                {
+                    double v;
+                    try { v = arr[i].Value<double>(); } catch { all = false; break; }
+                    if (v != old[i]) { all = false; break; }
+                }
+                if (all) return true;
+            }
+            return false;
+        }
+
+        /// <summary>Находит массив записей перков (сначала по имени "abilities", иначе по форме элементов)</summary>
+        private static JArray FindAbilityArray(JObject skillJson)
+        {
+            foreach (var prop in skillJson.Properties())
+                if (string.Equals(prop.Name, "abilities", StringComparison.OrdinalIgnoreCase) && prop.Value is JArray a)
+                    return a;
+
+            // Фолбэк: любой массив, чьи элементы похожи на записи перков (есть "name" и "values").
+            foreach (var prop in skillJson.Properties())
+                if (prop.Value is JArray arr)
+                    foreach (var item in arr)
+                        if (item is JObject o && o["name"] != null && o["values"] != null)
+                            return arr;
+
+            return null;
+        }
+
+        /// <summary>Ищет запись перка по полю "name" (регистр не важен)</summary>
+        private static JObject FindByName(JArray arr, string name)
+        {
+            foreach (var t in arr)
+                if (t is JObject o && string.Equals((string)o["name"], name, StringComparison.OrdinalIgnoreCase))
+                    return o;
+            return null;
         }
 
         /// <summary>
