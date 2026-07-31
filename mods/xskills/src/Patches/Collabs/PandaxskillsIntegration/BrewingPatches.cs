@@ -13,72 +13,8 @@ using XSkills;
 namespace XSkills
 {
     
-    // Patch 1: BlockBarrelInspectorPatch
-    // Выводит в интерфейсе бочки информацию о времени брожения (перк BarrelInspector)
     
-    [HarmonyPatch(typeof(BlockBarrel))]
-    public class BlockBarrelInspectorPatch
-    {
-        public static bool Prepare(MethodBase original)
-        {
-            XSkills instance = XSkills.Instance;
-            if (instance == null)
-            {
-                return false;
-            }
-            Skill skill;
-            instance.Skills.TryGetValue("brewing", out skill);
-            Brewing brewing = skill as Brewing;
-            return brewing != null && brewing.Enabled;
-        }
-
-        [HarmonyPostfix]
-        [HarmonyPatch("GetPlacedBlockInfo")]
-        public static void GetPlacedBlockInfoPostfix(IWorldAccessor world, BlockPos pos, IPlayer forPlayer, ref string __result)
-        {
-            if (((forPlayer != null) ? forPlayer.Entity : null) == null)
-            {
-                return;
-            }
-            XSkills instance = XSkills.Instance;
-            Brewing brewing = ((instance != null) ? instance.Skills["brewing"] : null) as Brewing;
-            if (brewing == null)
-            {
-                return;
-            }
-            PlayerSkillSet behavior = forPlayer.Entity.GetBehavior<PlayerSkillSet>();
-            PlayerAbility playerAbility;
-            if (behavior == null)
-            {
-                playerAbility = null;
-            }
-            else
-            {
-                PlayerSkill playerSkill = behavior[brewing.Id];
-                playerAbility = ((playerSkill != null) ? playerSkill[brewing.BarrelInspectorId] : null);
-            }
-            PlayerAbility playerAbility2 = playerAbility;
-            if (playerAbility2 == null || playerAbility2.Tier <= 0)
-            {
-                return;
-            }
-            BlockEntityBarrel blockEntityBarrel = world.BlockAccessor.GetBlockEntity(pos) as BlockEntityBarrel;
-            if (blockEntityBarrel == null || blockEntityBarrel.CurrentRecipe == null || !blockEntityBarrel.Sealed)
-            {
-                return;
-            }
-            double sealHours = blockEntityBarrel.CurrentRecipe.SealHours;
-            double num = world.Calendar.TotalHours - blockEntityBarrel.SealedSinceTotalHours;
-            double num2 = Math.Max(0.0, sealHours - num);
-            StringBuilder stringBuilder = new StringBuilder(__result ?? "");
-            stringBuilder.AppendLine();
-            stringBuilder.AppendLine(string.Format("[XSkills] Fermentation: {0:0.0}h remaining of {1:0.0}h", num2, sealHours));
-            __result = stringBuilder.ToString();
-        }
-    }
-
-    
-    // Patch 2: BlockEntityBarrelBrewingPatch
+    // BlockEntityBarrelBrewingPatch
     // Отслеживает процесс запечатывания, начисляет опыт и возвращает ингредиенты
     
     [HarmonyPatch(typeof(BlockEntityBarrel))]
@@ -233,7 +169,7 @@ namespace XSkills
     }
 
     
-    // Patch 3: BarrelCompletionPatch
+    // BarrelCompletionPatch
     // Обрабатывает завершение работы бочки и увеличивает количество продукта
     
     [HarmonyPatch(typeof(BlockEntityBarrel))]
@@ -490,7 +426,7 @@ namespace XSkills
     }
 
     
-    // Patch 4: BarrelTransitionSpeedPatch
+    // BarrelTransitionSpeedPatch
     // Ускоряет процесс брожения с помощью перка SteadyHand
     
     [HarmonyPatch(typeof(BlockEntityBarrel))]

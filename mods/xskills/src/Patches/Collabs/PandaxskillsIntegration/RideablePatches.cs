@@ -139,38 +139,57 @@ namespace XSkills
             return RideablePatches.MountType.Unknown;
         }
 
-        [HarmonyPostfix]
-        [HarmonyPatch("get_SpeedMultiplier")]
-        public static void GetSpeedMultiplierPostfix(EntityBehaviorRideable __instance, ref float __result)
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(EntityBehaviorGait), "Move")]
+        public static void GaitMovePrefix(EntityBehaviorGait __instance)
         {
+            Entity entity = __instance.entity;
+            if (entity == null) return;
+
+            EntityBehaviorRideable rideable = entity.GetBehavior<EntityBehaviorRideable>();
+            if (rideable == null) return;
+
             Riding riding;
-            PlayerSkill driverRidingSkill = RideablePatches.GetDriverRidingSkill(__instance, out riding);
+            PlayerSkill driverRidingSkill = RideablePatches.GetDriverRidingSkill(rideable, out riding);
+
             if (driverRidingSkill == null)
             {
+                __instance.MoveSpeedModifier = 1.0;
                 return;
             }
-            float num = __result;
-            PlayerAbility playerAbility = driverRidingSkill[riding.SteadyReinsId];
-            if (playerAbility != null && playerAbility.Tier > 0)
+
+            // Расчет бонусов скорости
+            float speedMultiplier = 1f;
+
+            // Перк Steady Reins
+            PlayerAbility steadyReins = driverRidingSkill[riding.SteadyReinsId];
+            if (steadyReins != null && steadyReins.Tier > 0)
             {
-                __result *= 1f + playerAbility.SkillDependentFValue(0);
+                speedMultiplier += steadyReins.SkillDependentFValue(0);
             }
-            RideablePatches.MountType mountType = RideablePatches.ClassifyMount(__instance.Mount);
-            RideablePatches.ApplyTypeBonus(driverRidingSkill, riding.LightCavalryId, mountType == RideablePatches.MountType.Light, ref __result);
-            RideablePatches.ApplyTypeBonus(driverRidingSkill, riding.HeavyCavalryId, mountType == RideablePatches.MountType.Heavy, ref __result);
-            RideablePatches.ApplyTypeBonus(driverRidingSkill, riding.SkyRiderId, mountType == RideablePatches.MountType.Sky || mountType == RideablePatches.MountType.Dragon || mountType == RideablePatches.MountType.Pegasus, ref __result);
-            RideablePatches.ApplyTypeBonus(driverRidingSkill, riding.EquusAffinityId, mountType == RideablePatches.MountType.Equus, ref __result);
-            RideablePatches.ApplyTypeBonus(driverRidingSkill, riding.DragonBondId, mountType == RideablePatches.MountType.Dragon, ref __result);
-            RideablePatches.ApplyTypeBonus(driverRidingSkill, riding.PegasusRiderId, mountType == RideablePatches.MountType.Pegasus, ref __result);
-            PlayerAbility playerAbility2 = driverRidingSkill[riding.MultiSeatMasterId];
-            if (playerAbility2 != null && playerAbility2.Tier > 0)
+
+            // Перк Multi Seat Master (пассажиры)
+            PlayerAbility multiSeat = driverRidingSkill[riding.MultiSeatMasterId];
+            if (multiSeat != null && multiSeat.Tier > 0)
             {
-                int num2 = RideablePatches.CountExtraPassengers(__instance);
-                if (num2 > 0)
+                int passengers = RideablePatches.CountExtraPassengers(rideable);
+                if (passengers > 0)
                 {
-                    __result *= 1f + playerAbility2.FValue(0, 0f) * (float)num2;
+                    speedMultiplier += multiSeat.FValue(0, 0f) * (float)passengers;
                 }
             }
+
+            // 5. Применяем бонусы от типа животного (используем ваши оригинальные методы)
+            RideablePatches.MountType mountType = RideablePatches.ClassifyMount(rideable.Mount);
+            RideablePatches.ApplyTypeBonus(driverRidingSkill, riding.LightCavalryId, mountType == RideablePatches.MountType.Light, ref speedMultiplier);
+            RideablePatches.ApplyTypeBonus(driverRidingSkill, riding.HeavyCavalryId, mountType == RideablePatches.MountType.Heavy, ref speedMultiplier);
+            RideablePatches.ApplyTypeBonus(driverRidingSkill, riding.SkyRiderId, mountType == RideablePatches.MountType.Sky || mountType == RideablePatches.MountType.Dragon || mountType == RideablePatches.MountType.Pegasus, ref speedMultiplier);
+            RideablePatches.ApplyTypeBonus(driverRidingSkill, riding.EquusAffinityId, mountType == RideablePatches.MountType.Equus, ref speedMultiplier);
+            RideablePatches.ApplyTypeBonus(driverRidingSkill, riding.DragonBondId, mountType == RideablePatches.MountType.Dragon, ref speedMultiplier);
+            RideablePatches.ApplyTypeBonus(driverRidingSkill, riding.PegasusRiderId, mountType == RideablePatches.MountType.Pegasus, ref speedMultiplier);
+
+            // 6. Записываем итоговый результат в переменную ванильного класса
+            __instance.MoveSpeedModifier = speedMultiplier;
         }
 
         private static int CountExtraPassengers(EntityBehaviorRideable behavior)
@@ -264,23 +283,48 @@ namespace XSkills
             {
                 return true;
             }
+
             Entity entity = __instance.entity;
-            Random random;
-            if (entity == null)
-            {
-                random = null;
-            }
-            else
-            {
-                IWorldAccessor world = entity.World;
-                random = ((world != null) ? world.Rand : null);
-            }
-            double num = (random ?? new Random()).NextDouble();
+            Random random = (entity != null && entity.World != null) ? entity.World.Rand : new Random();
+
+            double num = random.NextDouble();
             float num2 = playerAbility.FValue(0, 0f);
+
+            // Если перк сработал (игрок удерживается в седле)
             if (num < (double)num2)
             {
+                // 1. СБРОС ТАЙМЕРА! Даем еще 4 секунды спокойной езды.
+                AccessTools.Field(typeof(EntityBehaviorRideable), "mountedTotalMs").SetValue(__instance, entity.Api.World.ElapsedMilliseconds);
+
+                // 2. Успокаиваем животное (гасим флаг прыжка и переводим в Idle)
+                AccessTools.Field(typeof(EntityBehaviorRideable), "jumpNow").SetValue(__instance, false);
+                var ebg = AccessTools.Field(typeof(EntityBehaviorRideable), "ebg").GetValue(__instance);
+                if (ebg != null)
+                {
+                    AccessTools.Method(ebg.GetType(), "SetIdle")?.Invoke(ebg, null);
+                }
+
+                // 3. Продвигаем прогресс приручения
+                float interval = (float)AccessTools.Field(typeof(EntityBehaviorRideable), "saddleBreakDayInterval").GetValue(__instance);
+                double currentDays = __instance.entity.Api.World.Calendar.TotalDays;
+
+                if (currentDays - __instance.LastSaddleBreakTotalDays > (double)interval)
+                {
+                    __instance.RemainingSaddleBreaks--;
+                    __instance.LastSaddleBreakTotalDays = currentDays;
+
+                    if (__instance.RemainingSaddleBreaks <= 0)
+                    {
+                        // Вызываем скрытый метод превращения животного в прирученное
+                        AccessTools.Method(typeof(EntityBehaviorRideable), "ConvertToTamedAnimal").Invoke(__instance, null);
+                    }
+                }
+
+                // Отменяем ванильный метод
                 return false;
             }
+
+            // Иначе запускаем ванильный метод (животное сбрасывает игрока)
             return true;
         }
 
