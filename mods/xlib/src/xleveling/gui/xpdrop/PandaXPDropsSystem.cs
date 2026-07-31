@@ -490,7 +490,8 @@ namespace PandaXPDrops
 
                 PlayerSkill playerSkill = skillSet.PlayerSkills[package.skillId];
                 var skill = playerSkill?.Skill;
-                if (skill == null) return;
+
+                if (skill == null || !skill.Enabled) return;
 
                 float progress = playerSkill.RequiredExperience > 0f
                     ? playerSkill.Experience / playerSkill.RequiredExperience
