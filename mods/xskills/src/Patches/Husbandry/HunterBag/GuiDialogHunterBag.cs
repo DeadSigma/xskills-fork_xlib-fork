@@ -16,11 +16,12 @@ namespace XSkills
         public bool HideWhenInvClosed { get; set; } = false;
         public bool AlwaysExpanded { get; set; } = false;
         public bool HasValue { get; set; }
+        public int Version { get; set; } = 0;
     }
 
     public class GuiDialogHunterBag : GuiDialog
     {
-        private const string LayoutConfigFile = "xskills/hunterbagslotlayout.json";
+        private const string LayoutConfigFile = "XLeveling/gui/hunterbagslotlayout.json";
 
         private readonly IInventory inventory;
         private int composedSlotCount;
@@ -70,26 +71,34 @@ namespace XSkills
             try { layout = capi.LoadModConfig<HunterBagSlotLayout>(LayoutConfigFile); }
             catch { layout = null; }
 
-            double scale = RuntimeEnv.GUIScale <= 0 ? 1.0 : RuntimeEnv.GUIScale;
-            double screenW = capi.Render.FrameWidth / scale;
-            double screenH = capi.Render.FrameHeight / scale;
-
             if (layout != null && layout.HasValue)
             {
-                posX = layout.X;
-                posY = layout.Y;
-
-                if (posY > 0)
+                // Если версия конфига меньше 1 (то есть это старый файл сохранения)
+                if (layout.Version < 1)
                 {
-                    posX = posX - (screenW / 2.0);
-                    posY = posY - screenH;
+                    // Жестко сбрасываем на новые идеальные координаты
+                    posX = 490.33;
+                    posY = -62.56;
+
+                    // Обновляем конфиг в памяти и перезаписываем файл игроку
+                    layout.X = posX;
+                    layout.Y = posY;
+                    layout.Version = 1;
+                    capi.StoreModConfig(layout, LayoutConfigFile);
+                }
+                else
+                {
+                    // Если версия 1 и выше, значит игрок уже использует новую систему центрирования
+                    posX = layout.X;
+                    posY = layout.Y;
                 }
             }
             else
             {
+                // Для новых игроков (или если файл конфига был удален)
                 posX = 490.33;
                 posY = -62.56;
-                layout = new HunterBagSlotLayout { X = posX, Y = posY, HasValue = false };
+                layout = new HunterBagSlotLayout { X = posX, Y = posY, HasValue = false, Version = 1 };
             }
         }
 
@@ -245,6 +254,7 @@ namespace XSkills
                 layout.X = posX;
                 layout.Y = posY;
                 layout.HasValue = true;
+                layout.Version = 1;
                 capi.StoreModConfig(layout, LayoutConfigFile);
             }
             catch { }

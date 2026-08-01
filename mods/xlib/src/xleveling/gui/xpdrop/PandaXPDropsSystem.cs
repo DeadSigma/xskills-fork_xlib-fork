@@ -59,7 +59,7 @@ namespace PandaXPDrops
 
         /// <summary>Файл конфигурации клиента внутри <c>VintagestoryData/ModConfig</c></summary>
         /// <remarks>Намеренно сохранено оригинальное имя - его переименование в тихом режиме сбросит настройки всех пользователей</remarks>
-        private const string ConfigFile = "XLeveling/xLibGuiSettings.json";
+        private const string ConfigFile = "XLeveling/gui/xLibGuiSettings.json";
 
         /// <summary>Код горячей клавиши для переключения отображения/скрытия</summary>
         private const string ToggleHotkeyCode = "xpdropstoggle";
