@@ -732,4 +732,91 @@ namespace XSkills
             }
         }
     }//!class XSkillsBloomeryBehavior
+
+    //Выдача опыта за закалку 
+    [HarmonyPatch(typeof(CollectibleBehaviorQuenchable), "IsGettingCooled")]
+    public class QuenchingExperiencePatch
+    {
+        [HarmonyPrefix]
+        public static void Prefix(CollectibleBehaviorQuenchable __instance, IWorldAccessor world, ItemSlot slot, float temperature, out object[] __state)
+        {
+            __state = null;
+            if (world == null || world.Side == EnumAppSide.Client || slot?.Itemstack == null) return;
+
+            string currentState = __instance.GetState(slot.Itemstack);
+
+            if (currentState == "overheat" || currentState == "quench")
+            {
+                if (!slot.Itemstack.TempAttributes.GetBool("xskills_wasQuenching"))
+                {
+                    slot.Itemstack.TempAttributes.SetBool("xskills_wasQuenching", true);
+                }
+            }
+        }
+
+        [HarmonyPostfix]
+        public static void Postfix(CollectibleBehaviorQuenchable __instance, IWorldAccessor world, ItemSlot slot, float temperature, object[] __state)
+        {
+            if (world == null || world.Side == EnumAppSide.Client || slot?.Itemstack == null) return;
+
+            // Проверяем, стоял ли маячок закалки и остыл ли предмет до 200 градусов или ниже
+            if (slot.Itemstack.TempAttributes.GetBool("xskills_wasQuenching") && temperature <= 200f)
+            {
+                // Снимаем маячок, чтобы опыт начислился ровно 1 раз за процесс
+                slot.Itemstack.TempAttributes.RemoveAttribute("xskills_wasQuenching");
+
+                IPlayer player = null;
+                Vec3d pos = null;
+
+                if (slot.Inventory is InventoryBasePlayer invPlayer)
+                {
+                    player = invPlayer.Player;
+                }
+                else
+                {
+                    if (world is IServerWorldAccessor serverWorld)
+                    {
+                        foreach (var entity in serverWorld.LoadedEntities.Values)
+                        {
+                            if (entity is EntityItem entityItem && (entityItem.Slot == slot || entityItem.Itemstack == slot.Itemstack))
+                            {
+                                pos = entity.Pos.XYZ;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (pos == null && slot.Inventory != null)
+                    {
+                        var posProp = slot.Inventory.GetType().GetProperty("Pos");
+                        if (posProp != null && posProp.GetValue(slot.Inventory) is BlockPos blockPos)
+                        {
+                            pos = new Vec3d(blockPos.X + 0.5, blockPos.Y + 0.5, blockPos.Z + 0.5);
+                        }
+                    }
+
+                    if (pos != null)
+                    {
+                        IPlayer nearest = world.NearestPlayer(pos.X, pos.Y, pos.Z);
+                        if (nearest != null && nearest.Entity.Pos.DistanceTo(pos) <= 15.0)
+                        {
+                            player = nearest;
+                        }
+                    }
+                }
+
+                if (player != null)
+                {
+                    Metalworking metalworking = XLeveling.Instance(world.Api)?.GetSkill("metalworking") as Metalworking;
+                    if (metalworking != null)
+                    {
+                        PlayerSkill playerSkill = player.Entity?.GetBehavior<PlayerSkillSet>()?.PlayerSkills[metalworking.Id];
+
+                        playerSkill?.AddExperience(1.0f);
+                    }
+                }
+            }
+        }
+    } //Выдача опыта за закалку 
+
 }//!namespace XSkills
