@@ -17,6 +17,12 @@ namespace XLib.XLeveling
         public List<Skill> Skills { get; private set; }
 
         /// <summary>
+        /// Получает список дублирующихся навыков
+        /// Используется для временного хранения навыков из других модов с таким же именем перед их слиянием
+        /// </summary>
+        public List<Skill> DuplicateSkills { get; private set; } = new List<Skill>();
+
+        /// <summary>
         /// Gets the count of skills in this template.
         /// </summary>
         /// <value>
@@ -55,19 +61,22 @@ namespace XLib.XLeveling
         /// </returns>
         public int AddSkill(Skill skill)
         {
-            int count = 0;
             if (skill == null) { return -1; }
-            foreach (Skill skill2 in Skills)
+
+            for (int i = 0; i < this.Skills.Count; i++)
             {
-                if (skill2.Name == skill.Name)
+                if (this.Skills[i].Name == skill.Name)
                 {
-                    return -1;
+                    // Поймали дубликат! Сохраняем его, но не трогаем основной список.
+                    skill.Id = this.Skills[i].Id;
+                    this.DuplicateSkills.Add(skill);
+                    return skill.Id;
                 }
-                count++;
             }
-            skill.Id = count;
+
+            skill.Id = this.Skills.Count;
             this.Skills.Add(skill);
-            return count;
+            return skill.Id;
         }
 
         /// <summary>

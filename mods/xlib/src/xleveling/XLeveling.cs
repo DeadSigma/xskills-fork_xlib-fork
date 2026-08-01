@@ -187,7 +187,29 @@ namespace XLib.XLeveling
             base.AssetsLoaded(api);
             this.Mod.Logger.Event("Initialize skills");
 
+            foreach (Skill dupSkill in this.SkillSetTemplate.DuplicateSkills)
+            {
+                Skill primarySkill = this.SkillSetTemplate.FindSkill(dupSkill.Name);
 
+                if (primarySkill != null)
+                {
+                    foreach (Ability ability in dupSkill.Abilities)
+                    {
+                        if (primarySkill.FindAbility(ability.Name) == null)
+                        {
+                            primarySkill.AddAbility(ability);
+                        }
+                    }
+
+                    foreach (Ability ability in primarySkill.Abilities)
+                    {
+                        if (dupSkill.FindAbility(ability.Name) == null)
+                        {
+                            dupSkill.AddAbility(ability);
+                        }
+                    }
+                }
+            }
             LoadJsonSkills();
 
 
@@ -235,8 +257,22 @@ namespace XLib.XLeveling
         /// </returns>
         public int RegisterSkill(Skill skill)
         {
+            Skill existingSkill = this.GetSkill(skill.Name);
+
+            if (existingSkill != null)
+            {
+                foreach (Ability existingAbility in existingSkill.Abilities)
+                {
+                    if (skill.FindAbility(existingAbility.Name) == null)
+                    {
+                        skill.AddAbility(existingAbility);
+                    }
+                }
+            }
+
             int result = this.SkillSetTemplate.AddSkill(skill);
             skill.XLeveling = this;
+
             return result;
         }
 
@@ -505,6 +541,58 @@ namespace XLib.XLeveling
             file.Close();
 #endif
         }
+
+        /// <summary>
+        /// Вызывается на сервере или клиенте после того, как все ассеты полностью загружены и пропатчены
+        /// Отвечает за финальное межмодовое слияние дублирующихся навыков и способностей
+        /// </summary>
+        /// <param name="api">Core API Vintage Story.</param>
+        public override void AssetsFinalize(ICoreAPI api)
+        {
+            base.AssetsFinalize(api);
+            this.Mod.Logger.Event("Forcing cross-mod skill merges...");
+
+            foreach (Skill dupSkill in this.SkillSetTemplate.DuplicateSkills)
+            {
+                Skill primarySkill = this.SkillSetTemplate.FindSkill(dupSkill.Name);
+
+                if (primarySkill != null && primarySkill != dupSkill)
+                {
+                    foreach (Ability ability in dupSkill.Abilities)
+                    {
+                        if (primarySkill.FindAbility(ability.Name) == null)
+                        {
+                            try
+                            {
+                                var field = typeof(Ability).GetField("skill", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.IgnoreCase);
+                                if (field != null) field.SetValue(ability, primarySkill);
+
+                                var prop = typeof(Ability).GetProperty("Skill", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                                if (prop != null && prop.CanWrite) prop.SetValue(ability, primarySkill);
+                            }
+                            catch { /* ошибки доступа игнорируются */ }
+
+                            primarySkill.AddAbility(ability);
+
+                            if (primarySkill.FindAbility(ability.Name) == null)
+                            {
+                                if (primarySkill.Abilities is System.Collections.IList list)
+                                {
+                                    try
+                                    {
+                                        var idProp = typeof(Ability).GetProperty("Id", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                                        if (idProp != null && idProp.CanWrite) idProp.SetValue(ability, list.Count);
+                                    }
+                                    catch { }
+
+                                    list.Add(ability);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }//!class XLeveling
 
     /// <summary>
@@ -585,5 +673,7 @@ namespace XLib.XLeveling
         /// The configuration.
         /// </value>
         Config Config { get; }
+
     }//!interface IXLevelingAPI
+
 }//!namespace XLeveling
