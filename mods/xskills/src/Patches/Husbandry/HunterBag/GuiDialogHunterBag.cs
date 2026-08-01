@@ -38,6 +38,10 @@ namespace XSkills
         // Токен регистрации в F6-редакторе
         private object editToken;
 
+        private double lastGuiScale = -1;
+        private int lastFrameWidth = -1;
+        private int lastFrameHeight = -1;
+
         public override string ToggleKeyCombinationCode => null;
         public override EnumDialogType DialogType => EnumDialogType.HUD;
         public override bool PrefersUngrabbedMouse => false;
@@ -66,18 +70,25 @@ namespace XSkills
             try { layout = capi.LoadModConfig<HunterBagSlotLayout>(LayoutConfigFile); }
             catch { layout = null; }
 
+            double scale = RuntimeEnv.GUIScale <= 0 ? 1.0 : RuntimeEnv.GUIScale;
+            double screenW = capi.Render.FrameWidth / scale;
+            double screenH = capi.Render.FrameHeight / scale;
+
             if (layout != null && layout.HasValue)
             {
                 posX = layout.X;
                 posY = layout.Y;
+
+                if (posY > 0)
+                {
+                    posX = posX - (screenW / 2.0);
+                    posY = posY - screenH;
+                }
             }
             else
             {
-                // По умолчанию - правый нижний угол (в немасштабированных единицах)
-                double scale = RuntimeEnv.GUIScale;
-                if (scale <= 0) scale = 1.0;
-                posX = Math.Max(0.0, capi.Render.FrameWidth / scale - 100.0);
-                posY = Math.Max(0.0, capi.Render.FrameHeight / scale - 120.0);
+                posX = 490.33;
+                posY = -62.56;
                 layout = new HunterBagSlotLayout { X = posX, Y = posY, HasValue = false };
             }
         }
@@ -85,15 +96,11 @@ namespace XSkills
         private void ComposeDialog()
         {
             int total = inventory?.Count ?? 0;
-
-            // SingleComposer = null нелегален в этом движке (сеттер разыменовывает value),
-            // поэтому при отсутствии слотов просто не собираем композицию
             if (inventory == null || total == 0) { composedSlotCount = 0; return; }
 
             int bagCount = BagSlotCount();
             bool isExpanded = expanded || (layout != null && layout.AlwaysExpanded);
 
-            // Используем isExpanded
             composedSlotCount = (isExpanded && total > bagCount) ? total : bagCount;
             if (composedSlotCount < 1) composedSlotCount = 1;
             if (composedSlotCount > total) composedSlotCount = total;
@@ -101,22 +108,27 @@ namespace XSkills
             int count = composedSlotCount;
             int contentCount = Math.Max(0, count - bagCount);
 
-            double scale = RuntimeEnv.GUIScale;
-            if (scale <= 0) scale = 1.0;
+            double scale = RuntimeEnv.GUIScale <= 0 ? 1.0 : RuntimeEnv.GUIScale;
             double screenWUnscaled = capi.Render.FrameWidth / scale;
+            double screenHUnscaled = capi.Render.FrameHeight / scale;
 
-            // По умолчанию рост вправо: сетка с переносом до 8 в ряд, слоты сумки идут первыми
+            double absX = (screenWUnscaled / 2.0) + posX;
+            double absY = screenHUnscaled + posY;
+
             int cols = Math.Min(count, 8);
             int rows = (count + cols - 1) / cols;
             ElementBounds slotBounds = ElementStdBounds.SlotGrid(EnumDialogArea.None, 0, 0, cols, rows);
 
+            // Защита от ухода за края экрана (на всякий случай)
+            absX = Math.Max(0.0, Math.Min(absX, screenWUnscaled - slotBounds.fixedWidth));
+            absY = Math.Max(0.0, Math.Min(absY, screenHUnscaled - slotBounds.fixedHeight));
+
             int[] slotIndices = new int[count];
             for (int i = 0; i < count; i++) slotIndices[i] = i;
 
-            double anchorX = posX;
+            double anchorX = absX;
 
-            // Используем isExpanded вместо expanded
-            bool growLeft = isExpanded && contentCount > 0 && (posX + slotBounds.fixedWidth > screenWUnscaled);
+            bool growLeft = isExpanded && contentCount > 0 && (absX + slotBounds.fixedWidth > screenWUnscaled);
             if (growLeft)
             {
                 cols = count;
@@ -124,31 +136,26 @@ namespace XSkills
                 slotBounds = ElementStdBounds.SlotGrid(EnumDialogArea.None, 0, 0, cols, rows);
 
                 double cellW = slotBounds.fixedWidth / count;
-                anchorX = Math.Max(0.0, posX - contentCount * cellW);
+                anchorX = Math.Max(0.0, absX - contentCount * cellW);
 
-                // Порядок: сперва слоты содержимого, затем слот(ы) сумки - так сумка оказывается справа
                 int k = 0;
                 for (int i = bagCount; i < count; i++) slotIndices[k++] = i;
                 for (int i = 0; i < bagCount; i++) slotIndices[k++] = i;
             }
 
-            // Контейнер без фона (без рамки), только для расчёта размера
             ElementBounds childBounds = ElementBounds.Fill.WithFixedPadding(0);
             childBounds.BothSizing = ElementSizing.FitToChildren;
             childBounds.WithChildren(slotBounds);
 
-            // Позиция левого-верхнего угла (при росте влево якорь сдвинут так, чтобы сумка осталась на месте)
-            dialogBounds = ElementBounds.Fixed(anchorX, posY, 0, 0);
+            dialogBounds = ElementBounds.Fixed(anchorX, absY, 0, 0);
             dialogBounds.BothSizing = ElementSizing.FitToChildren;
             dialogBounds.WithChildren(childBounds);
 
-            // Освобождаем прежний композер перед пересборкой (сеттер SingleComposer его не диспозит)
             SingleComposer?.Dispose();
 
             GuiComposer composer = capi.Gui.CreateCompo("hunterbaggui", dialogBounds)
                 .BeginChildElements(childBounds);
 
-            // Свой грид с отключённым тултипом (эквивалент .AddItemSlotGrid, но без всплывающей подсказки)
             composer.AddInteractiveElement(
                 new GuiElementHunterBagSlotGrid(capi, inventory, SendInvPacket, cols, slotIndices, slotBounds),
                 "hunterbagslot");
@@ -219,13 +226,13 @@ namespace XSkills
         /// <summary>Ставит слот левым-верхним углом в экранную точку (реальные пиксели) и пересобирает</summary>
         private void SetTopLeft(double screenX, double screenY)
         {
-            double scale = RuntimeEnv.GUIScale;
-            if (scale <= 0) scale = 1.0;
+            double scale = RuntimeEnv.GUIScale <= 0 ? 1.0 : RuntimeEnv.GUIScale;
+            double screenW = capi.Render.FrameWidth / scale;
+            double screenH = capi.Render.FrameHeight / scale;
 
-            posX = screenX / scale;
-            posY = screenY / scale;
+            posX = (screenX / scale) - (screenW / 2.0);
+            posY = (screenY / scale) - screenH;
 
-            // Пересборка вне стадии рендера (вызывается из OnMouseMove редактора)
             ComposeDialog();
         }
 
@@ -272,6 +279,15 @@ namespace XSkills
         public override void OnRenderGUI(float deltaTime)
         {
             if (!CanRenderThisFrame()) return;
+
+            if (lastGuiScale != RuntimeEnv.GUIScale || lastFrameWidth != capi.Render.FrameWidth || lastFrameHeight != capi.Render.FrameHeight)
+            {
+                lastGuiScale = RuntimeEnv.GUIScale;
+                lastFrameWidth = capi.Render.FrameWidth;
+                lastFrameHeight = capi.Render.FrameHeight;
+                ComposeDialog();
+            }
+
             base.OnRenderGUI(deltaTime);
         }
 

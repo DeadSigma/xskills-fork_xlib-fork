@@ -1,18 +1,19 @@
+using HarmonyLib;
+using ProtoBuf;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
-using Vintagestory.GameContent;
-using XLib.XLeveling;
-using ProtoBuf;
-using Vintagestory.ServerMods;
-using System.ComponentModel;
-using System.Globalization;
-using Vintagestory.Client.NoObf;
 using Vintagestory.API.Util;
+using Vintagestory.Client.NoObf;
+using Vintagestory.GameContent;
+using Vintagestory.ServerMods;
+using XLib.XLeveling;
 
 namespace XSkills
 {
@@ -782,4 +783,69 @@ namespace XSkills
             if (byPlayer != null && bomb.IsLit) this.mining.RegisterExplosion(pos, byPlayer);
         }
     }//!class XSkillsBombBehavior
+    
+    //Опыт за разрушение руды
+    [HarmonyPatch(typeof(CollectibleObject), "ConsumeCraftingIngredients")]
+    public class CollectibleObject_OreCrushing_Patch
+    {
+        [HarmonyPostfix]
+        public static void Postfix(ItemSlot[] slots, ItemSlot outputSlot)
+        {
+            if (slots == null || outputSlot == null) return;
+
+            bool hasHammer = false;
+            bool hasOre = false;
+            bool isCrystalized = false;
+
+            foreach (ItemSlot slot in slots)
+            {
+                if (slot.Empty || slot.Itemstack?.Collectible == null) continue;
+                CollectibleObject col = slot.Itemstack.Collectible;
+                string path = col.Code?.Path ?? "";
+
+                bool isHammer = col.Tool == EnumTool.Hammer || path.Contains("hammer");
+                if (col.Attributes != null && col.Attributes["tool"]?.AsString() == "hammer")
+                {
+                    isHammer = true;
+                }
+
+                if (isHammer)
+                {
+                    hasHammer = true;
+                }
+                else if (path.Contains("ore") && !path.Contains("crushed"))
+                {
+                    hasOre = true;
+                    if (path.Contains("crystalizedore"))
+                    {
+                        isCrystalized = true;
+                    }
+                }
+            }
+
+            if (!hasHammer || !hasOre) return;
+
+            IPlayer player = (outputSlot.Inventory as InventoryBasePlayer)?.Player;
+            if (player == null)
+            {
+                foreach (var slot in slots)
+                {
+                    player = (slot?.Inventory as InventoryBasePlayer)?.Player;
+                    if (player != null) break;
+                }
+            }
+
+            if (player?.Entity == null) return;
+
+            Mining mining = XLeveling.Instance(player.Entity.Api)?.GetSkill("mining") as Mining;
+            if (mining == null) return;
+
+            PlayerSkill playerSkill = player.Entity.GetBehavior<PlayerSkillSet>()?[mining.Id];
+            if (playerSkill == null) return;
+
+            // 0.50 опыта за кристаллизованную руду, 0.05 за обычную
+            float expReward = isCrystalized ? 0.50f : 0.05f;
+            playerSkill.AddExperience(expReward, true);
+        }
+    }
 }//!namespace XSkills

@@ -164,6 +164,10 @@ namespace XSkills
             if (pottery == null || world == null) return false;
 
             PlayerSkill playerSkill = byPlayer.Entity.GetBehavior<PlayerSkillSet>()?[pottery.Id];
+
+            // Выдаем 1 XP игроку за успешный обжиг, независимо от уровня перков
+            playerSkill?.AddExperience(1);
+
             PlayerAbility playerAbility = playerSkill?[pottery.PotteryTimerId];
             if (playerAbility?.Tier > 0)
             {
@@ -185,7 +189,7 @@ namespace XSkills
                 dest = new List<CollectibleObject>();
                 pottery.InspirationCollectibles[name] = dest;
 
-                foreach(CollectibleObject collectible in world.Collectibles)
+                foreach (CollectibleObject collectible in world.Collectibles)
                 {
                     if (collectible.Code.Path.Contains(name) && collectible != outputSlot.Itemstack.Collectible)
                     {
