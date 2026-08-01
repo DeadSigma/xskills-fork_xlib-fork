@@ -304,8 +304,15 @@ namespace XSkills
                 if (st != null) penalty += PerStackWalkSpeedPenalty(st) * st.StackSize;
             }
 
+            string playerClass = entity.WatchedAttributes.GetString("characterClass");
+            if (playerClass != null && playerClass == "innkeeper")
+            {
+                penalty *= 0.5f;
+            }
+
             if (penalty <= 0f) { entity.Stats.Remove("walkspeed", WalkSpeedStatCode); return; }
             if (penalty > 0.9f) penalty = 0.9f;
+
             entity.Stats.Set("walkspeed", WalkSpeedStatCode, -penalty, false);
         }
 
