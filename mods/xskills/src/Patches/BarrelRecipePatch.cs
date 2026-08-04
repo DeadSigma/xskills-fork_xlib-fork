@@ -55,17 +55,22 @@ namespace XSkills
             }
 
             //seald
-            if (packetid == 1337 && (
-                __instance.CurrentRecipe.Code.Contains("soakedhide") ||
-                __instance.CurrentRecipe.Code.Contains("preparedhide") ||
-                __instance.CurrentRecipe.Code.Contains("leather-plain")))
+            if (packetid == 1337)
             {
-                Husbandry husbandry = XLeveling.Instance(__instance.Api)?.GetSkill("husbandry") as Husbandry;
-                if (husbandry == null) return;
-                PlayerAbility playerAbility = player.Entity?.GetBehavior<PlayerSkillSet>()?[husbandry.Id]?[husbandry.TannerId];
-                if (playerAbility == null) return;
+                string recipeCode = __instance.CurrentRecipe?.Code;
 
-                __instance.Inventory?[1]?.Itemstack?.Attributes.SetFloat("usage", 1.0f - playerAbility.SkillDependentFValue());
+                if (recipeCode != null && (
+                    recipeCode.Contains("soakedhide") ||
+                    recipeCode.Contains("preparedhide") ||
+                    recipeCode.Contains("leather")))
+                {
+                    Husbandry husbandry = XLeveling.Instance(__instance.Api)?.GetSkill("husbandry") as Husbandry;
+                    if (husbandry == null) return;
+                    PlayerAbility playerAbility = player.Entity?.GetBehavior<PlayerSkillSet>()?[husbandry.Id]?[husbandry.TannerId];
+                    if (playerAbility == null) return;
+
+                    __instance.Inventory?[1]?.Itemstack?.Attributes.SetFloat("usage", 1.0f - playerAbility.SkillDependentFValue());
+                }
             }
         }
     }//!class BarrelPatch

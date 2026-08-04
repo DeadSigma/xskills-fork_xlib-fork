@@ -82,7 +82,7 @@ namespace XLib.XLeveling
                  "magnetichook", "doublehook", "baitmaster", "strongline",
                  "carefuldigger", "carefullumberjack", "carefulminer",
                  "cultivatedseeds", "stonecutter", "feeder", "duplicator",
-                 "jackpot", "happymeal", "finishingtouch", "fastpotter", "carefulshooter"
+                 "jackpot", "happymeal", "finishingtouch", "fastpotter", "carefulshooter", "masshusbandry", "breeder", "preserver", "tanner", "rancher"
              };
 
                      // Перки на бонус/ Добычу (Увеличение лута, скорости, ХП и так далее)
