@@ -17,7 +17,7 @@ namespace XSkills
         /// <param name="world">The world.</param>
         /// <param name="pos">The position.</param>
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(Block), "OnPickBlock")] // Явно указываем, что ищем в классе Block
+        [HarmonyPatch(typeof(BlockCrock), "OnPickBlock")]
         public static void OnPickBlockPostfix(ItemStack __result, IWorldAccessor world, BlockPos pos)
         {
             QualityUtil.PickQuality(__result, world, pos);
@@ -30,7 +30,7 @@ namespace XSkills
         /// <param name="world">The world.</param>
         /// <param name="pos">The position.</param>
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(Block), "GetPlacedBlockInfo")] // Явно указываем, что ищем в классе Block
+        [HarmonyPatch(typeof(BlockCrock), "GetPlacedBlockInfo")]
         public static void GetPlacedBlockInfoPostfix(ref string __result, IWorldAccessor world, BlockPos pos)
         {
             float quality = QualityUtil.GetQuality(world, pos);
