@@ -108,21 +108,7 @@ namespace XSkills
             return transitionState;
         }
 
-        private static float[] GetBaseFreshHours(IWorldAccessor world, ItemStack stack)
-        {
-            if (world == null || stack?.Collectible == null) return null;
-
-            ItemStack cleanStack = stack.Clone();
-            cleanStack.Attributes.RemoveAttribute("transitionstate");
-
-            ITreeAttribute transitionState = GetOrCreateTransitionState(world, cleanStack);
-            FloatArrayAttribute freshHours =
-                transitionState?["freshHours"] as FloatArrayAttribute;
-
-            return freshHours?.value == null
-                ? null
-                : (float[])freshHours.value.Clone();
-        }
+        
 
         private static ItemStack FindPreviousContentStack(
             ItemStack currentStack,
@@ -264,7 +250,7 @@ namespace XSkills
                 FloatArrayAttribute previousFreshHours =
                     previousTransitionState?["freshHours"] as FloatArrayAttribute;
 
-                float[] baseFreshHours = GetBaseFreshHours(world, currentStack);
+                
 
                 for (int transitionIndex = 0;
                      transitionIndex < currentFreshHours.value.Length;
@@ -273,14 +259,9 @@ namespace XSkills
                     float currentFresh = currentFreshHours.value[transitionIndex];
                     if (currentFresh <= 0.0f || !float.IsFinite(currentFresh)) continue;
 
-                    float baseFresh = baseFreshHours != null
-                        && transitionIndex < baseFreshHours.Length
-                        && baseFreshHours[transitionIndex] > 0.0f
-                        && float.IsFinite(baseFreshHours[transitionIndex])
-                            ? baseFreshHours[transitionIndex]
-                            : currentFresh;
+                    
 
-                    float boostedProducedFresh = baseFresh * shelfLifeMultiplier;
+                    float boostedProducedFresh = currentFresh * shelfLifeMultiplier;
 
                     if (previousWeight <= 0.0f)
                     {
