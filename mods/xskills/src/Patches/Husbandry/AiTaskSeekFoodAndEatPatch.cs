@@ -22,32 +22,38 @@ namespace XSkills
         [HarmonyPatch("FinishExecute")]
         public static void FinishExecutePrefix(AiTaskSeekFoodAndEat __instance, float ___quantityEaten)
         {
-            if (___quantityEaten < 1.0f) return;
+            if (___quantityEaten < 1.0f) return; 
             XSkillsAnimalBehavior animal = __instance.entity?.GetBehavior<XSkillsAnimalBehavior>();
-            if (animal == null) return;
+            if (animal == null) return; 
             IPlayer player = animal.Feeder;
-            if (player == null) return;
+            if (player == null) return; 
 
             Husbandry husbandry = XLeveling.Instance(__instance.entity.World.Api).GetSkill("husbandry") as Husbandry;
-            if (husbandry == null) return;
+            if (husbandry == null) return; 
             PlayerSkill playerSkill = player.Entity?.GetBehavior<PlayerSkillSet>()?[husbandry.Id];
-            if (playerSkill == null) return;
+            if (playerSkill == null) return; 
 
             //experience
-            playerSkill.AddExperience(0.025f * animal.XP);
+            playerSkill.AddExperience(0.025f * animal.XP); 
 
             //feeder
             PlayerAbility playerAbility = playerSkill[husbandry.FeederId];
-            if (playerAbility == null) return;
+            if (playerAbility == null) return; 
 
             if (__instance.entity.World.Rand.NextDouble() < playerAbility.FValue(3))
             {
-                int generation = __instance.entity.WatchedAttributes.GetInt("generation") + 1;
+                int generation = __instance.entity.WatchedAttributes.GetInt("generation") + 1; 
                 if (generation < playerAbility.Value(4))
                 {
-                    __instance.entity.WatchedAttributes.SetInt("generation", generation);
-                    __instance.entity.WatchedAttributes.MarkPathDirty("generation");
+                    __instance.entity.WatchedAttributes.SetInt("generation", generation); 
+                    __instance.entity.WatchedAttributes.MarkPathDirty("generation"); 
                 }
+            }
+
+            EntityBehaviorMultiply multiplyBehavior = __instance.entity.GetBehavior<EntityBehaviorMultiply>();
+            if (multiplyBehavior != null)
+            {
+                EntityBehaviorMultiplyPatch.ApplyBreederPerk(multiplyBehavior);
             }
         }
     }//!class AiTaskSeekFoodAndEatPatch

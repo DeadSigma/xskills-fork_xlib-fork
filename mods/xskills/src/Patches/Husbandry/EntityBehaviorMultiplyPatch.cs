@@ -28,66 +28,81 @@ namespace XSkills
             if (multiplyTree != null) multiplyTree.SetFloat("pregnancyDays", days);
         }
 
-
-        [HarmonyPatch("SpawnQuantityMin", MethodType.Getter)]
-        public static void Postfix1(EntityBehaviorMultiply __instance, ref float __result)
+        public static void ApplyBreederPerk(EntityBehaviorMultiply __instance)
         {
             IPlayer player = __instance.entity?.GetBehavior<XSkillsAnimalBehavior>()?.Feeder;
             if (player == null) return;
 
             Husbandry husbandry = XLeveling.Instance(__instance.entity.World.Api).GetSkill("husbandry") as Husbandry;
             if (husbandry == null) return;
-            PlayerSkill playerSkill = player.Entity?.GetBehavior<PlayerSkillSet>()?[husbandry.Id];
-            if (playerSkill == null) return;
-            PlayerAbility playerAbility = playerSkill[husbandry.BreederId];
-            if (playerAbility == null) return;
-            __result += playerAbility.Value(playerAbility.Tier);
-        }
 
-        [HarmonyPatch("SpawnQuantityMax", MethodType.Getter)]
-        public static void Postfix2(EntityBehaviorMultiply __instance, ref float __result)
-        {
-            IPlayer player = __instance.entity?.GetBehavior<XSkillsAnimalBehavior>()?.Feeder;
-            if (player == null) return;
-
-            Husbandry husbandry = XLeveling.Instance(__instance.entity.World.Api).GetSkill("husbandry") as Husbandry;
-            if (husbandry == null) return;
             PlayerSkill playerSkill = player.Entity?.GetBehavior<PlayerSkillSet>()?[husbandry.Id];
-            if (playerSkill == null) return;
-            PlayerAbility playerAbility = playerSkill[husbandry.BreederId];
-            if (playerAbility == null) return;
-            __result += playerAbility.Value(playerAbility.Tier);
+            PlayerAbility playerAbility = playerSkill?[husbandry.BreederId];
+
+            if (playerAbility != null && playerAbility.Tier > 0)
+            {
+                ITreeAttribute multiplyTree = __instance.entity.WatchedAttributes.GetTreeAttribute("multiply");
+
+                // Берем оригинальное время, которое мы сохранили при инициализации
+                float basePregnancyDays = multiplyTree?.GetFloat("basePregnancyDays", 0.0f) ?? 0.0f;
+
+                // Если по какой-то причине его там нет, тащим рефлексией (21.0f на крайний случай)
+                if (basePregnancyDays <= 0.0f)
+                {
+                    FieldInfo field = typeof(EntityBehaviorMultiply).GetField("pregnancyDays", BindingFlags.Instance | BindingFlags.NonPublic);
+                    basePregnancyDays = field != null ? (float)field.GetValue(__instance) : 21.0f;
+                }
+
+                int baseBonus = playerAbility.Value(0);      // 10
+                int perLevelBonus = playerAbility.Value(1);  // 2
+                int perGenBonus = playerAbility.Value(2);    // 1
+                int maxBonus = playerAbility.Value(3);       // 60
+
+                int currentLevel = playerAbility.PlayerSkill.Level;
+                int animalGen = __instance.entity.WatchedAttributes.GetInt("generation", 0);
+
+                float calculatedBonus = baseBonus + (currentLevel * perLevelBonus) + (animalGen * perGenBonus);
+                float finalBonus = Math.Min(calculatedBonus, maxBonus);
+
+                float reductionPercent = finalBonus / 100f;
+
+                reductionPercent = Math.Min(reductionPercent, 0.9f);
+                float newPregnancyDays = basePregnancyDays * (1.0f - reductionPercent);
+
+                FieldInfo fieldSet = typeof(EntityBehaviorMultiply).GetField("pregnancyDays", BindingFlags.Instance | BindingFlags.NonPublic);
+                if (fieldSet != null)
+                {
+                    fieldSet.SetValue(__instance, newPregnancyDays);
+                }
+
+                if (multiplyTree != null)
+                {
+                    multiplyTree.SetFloat("pregnancyDays", newPregnancyDays);
+                }
+            }
         }
 
         [HarmonyPatch("Initialize")]
         [HarmonyPostfix]
         public static void InitializePostfix(EntityBehaviorMultiply __instance)
         {
-            // КРИТИЧЕСКОЕ ИСПРАВЛЕНИЕ ДЛЯ 1.22:
-            // Проверяем существование дерева атрибутов "multiply", чтобы избежать NullReferenceException
             ITreeAttribute multiplyTree = __instance.entity.WatchedAttributes.GetTreeAttribute("multiply");
             if (multiplyTree == null) return;
 
-            float pregnancyDays = multiplyTree.GetFloat("pregnancyDays", 0.0f);
-            if (pregnancyDays <= 0.0f)
+            // КРИТИЧЕСКОЕ ИЗМЕНЕНИЕ: Сохраняем исходное базовое значение игры в дерево
+            // до того, как перки успеют его уменьшить
+            if (!multiplyTree.HasAttribute("basePregnancyDays"))
             {
-                // Попытка получить значение через рефлексию, если в атрибутах пусто
                 FieldInfo field = typeof(EntityBehaviorMultiply).GetField("pregnancyDays", BindingFlags.Instance | BindingFlags.NonPublic);
                 if (field != null)
                 {
-                    pregnancyDays = (float)field.GetValue(__instance);
-                    multiplyTree.SetFloat("pregnancyDays", pregnancyDays);
+                    float origPregnancyDays = (float)field.GetValue(__instance);
+                    multiplyTree.SetFloat("basePregnancyDays", origPregnancyDays);
                 }
             }
-        }
 
-        /*[HarmonyPatch("GetInteractionHelp")]
-        [HarmonyPrefix]
-        public static bool GetInteractionHelpPrefix(EntityBehaviorMultiply __instance, IWorldAccessor world, ref WorldInteraction[] interactions, ref EnumHandling handling)
-        {
-            return true;
+            ApplyBreederPerk(__instance);
         }
-        */
 
         [HarmonyPatch("GetInfoText")]
         [HarmonyPrefix]
@@ -120,6 +135,29 @@ namespace XSkills
                 else infotext.AppendLine(Lang.Get("xskills:ready-to-mate", daysLeft));
             }
             return false;
+        }
+        [HarmonyPatch(typeof(EntityBehaviorMultiply))]
+        public static class EntityBehaviorMultiplyBirthPatch
+        {
+            [HarmonyPatch("GiveBirth")]
+            [HarmonyPostfix]
+            public static void BirthPostfix(EntityBehaviorMultiply __instance)
+            {
+                XSkillsAnimalBehavior animal = __instance.entity?.GetBehavior<XSkillsAnimalBehavior>();
+                if (animal == null) return;
+
+                IPlayer player = animal.Feeder;
+                if (player == null) return;
+
+                Husbandry husbandry = XLeveling.Instance(__instance.entity.World.Api).GetSkill("husbandry") as Husbandry;
+                if (husbandry == null) return;
+
+                PlayerSkill playerSkill = player.Entity?.GetBehavior<PlayerSkillSet>()?[husbandry.Id];
+                if (playerSkill == null) return;
+
+                float xpReward = animal.XP * 1.5f;
+                playerSkill.AddExperience(xpReward);
+            }
         }
     }//!class EntityBehaviorMultiplyPatch
 }//!namespace XSkills

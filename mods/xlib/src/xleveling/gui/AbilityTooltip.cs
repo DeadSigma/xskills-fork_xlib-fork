@@ -82,7 +82,7 @@ namespace XLib.XLeveling
                  "magnetichook", "doublehook", "baitmaster", "strongline",
                  "carefuldigger", "carefullumberjack", "carefulminer",
                  "cultivatedseeds", "stonecutter", "feeder", "duplicator",
-                 "jackpot", "happymeal", "finishingtouch", "fastpotter", "carefulshooter", "masshusbandry", "breeder", "preserver", "tanner", "rancher"
+                 "jackpot", "happymeal", "finishingtouch", "fastpotter", "carefulshooter", "masshusbandry", "preserver", "tanner", "rancher"
              };
 
                      // Перки на бонус/ Добычу (Увеличение лута, скорости, ХП и так далее)
@@ -111,7 +111,7 @@ namespace XLib.XLeveling
             string abilityName = playerAbility.Ability.Name;
 
             // Проверяем, есть ли наш перк хоть в одном из списков
-            if (chanceAbilities.Contains(abilityName) || bonusAbilities.Contains(abilityName) || damageAbilities.Contains(abilityName) || maxBonusAbilities.Contains(abilityName))
+            if (chanceAbilities.Contains(abilityName) || bonusAbilities.Contains(abilityName) || damageAbilities.Contains(abilityName) || maxBonusAbilities.Contains(abilityName) || abilityName == "breeder")
             {
                 int baseVal = playerAbility.Value(0);
                 int bonusFromLevel = playerAbility.PlayerSkill.Level * playerAbility.Value(1);
@@ -136,6 +136,14 @@ namespace XLib.XLeveling
 
                     sb.Append("\n\n" + Vintagestory.API.Config.Lang.Get("xskills:perk-chance", currentVal, baseVal, bonusFromLevel));
                     sb.Append("\n" + Vintagestory.API.Config.Lang.Get("xskills:perk-maxbonus", maxBonus));
+                }
+
+                else if (abilityName == "breeder")
+                {
+                    int maxVal = playerAbility.Value(3);
+                    int displayVal = Math.Min(baseVal + bonusFromLevel, maxVal);
+
+                    sb.Append("\n\n" + Vintagestory.API.Config.Lang.Get("xskills:perk-bonus", displayVal, baseVal, bonusFromLevel));
                 }
             }
 

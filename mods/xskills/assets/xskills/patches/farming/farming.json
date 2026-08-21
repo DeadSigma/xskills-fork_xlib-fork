@@ -1,5 +1,24 @@
 [
     {
+        "file": "game:blocktypes/plant/reedpapyrus",
+        "op": "add",
+        "path": "/behaviorsByType",
+        "value": {
+            "*-harvested-*": [
+                {
+                    "name": "XSkillsGrass",
+                    "properties": { "xp": 0.20 }
+                }
+            ],
+            "*": [
+                {
+                    "name": "XSkillsGrass",
+                    "properties": { "xp": 0.10 }
+                }
+            ]
+        }
+    },
+    {
         "file": "game:blocktypes/plant/tallgrass",
         "op": "add",
         "path": "/behaviorsByType/*/0",
