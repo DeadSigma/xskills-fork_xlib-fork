@@ -1,5 +1,4 @@
-﻿//Код от пользователя Taper4ik
-using HarmonyLib;
+﻿using HarmonyLib;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -33,7 +32,8 @@ namespace xskills.src.Patches.Collabs.Combat.Taper4ik
             if (path.Contains("sling") || type.Contains("sling")) return true;
             if (path.Contains("crossbow") || type.Contains("crossbow")) return true;
 
-            return path == "bow" || path.Contains("bow-") || path.EndsWith("bow", StringComparison.Ordinal) || type == "itembow";
+            // Исправлено: теперь не будет срабатывать на "rainbow-sword" или "elbow"
+            return path == "bow" || path.StartsWith("bow-") || path.EndsWith("-bow") || type == "itembow";
         }
 
         public static bool CanPreserveAmmo(ItemStack stack)
@@ -70,15 +70,15 @@ namespace xskills.src.Patches.Collabs.Combat.Taper4ik
     [HarmonyPatch(typeof(CollectibleObject), nameof(CollectibleObject.DamageItem))]
     internal static class CarefulShooterDurabilityPatch
     {
-        public static bool Prefix(object[] __args)
+        public static bool Prefix(IWorldAccessor world, Entity byEntity, ItemSlot itemslot, ref int amount)
         {
-            ItemSlot slot = __args.OfType<ItemSlot>().FirstOrDefault();
-            if (slot?.Itemstack == null || !CarefulShooterRules.IsCarefulShooterDurabilityTarget(slot.Itemstack)) return true;
+            // Если урон уже отменен другим модом, не вмешиваемся
+            if (amount <= 0 || itemslot?.Itemstack == null) return true;
 
-            Entity entity = __args.OfType<Entity>().FirstOrDefault();
-            if (entity?.World?.Side != EnumAppSide.Server) return true;
+            if (!CarefulShooterRules.IsCarefulShooterDurabilityTarget(itemslot.Itemstack)) return true;
+            if (world?.Side != EnumAppSide.Server) return true;
 
-            IPlayer player = (entity as EntityPlayer)?.Player;
+            IPlayer player = (byEntity as EntityPlayer)?.Player;
             if (player == null) return true;
 
             PlayerAbility ability = CarefulShooterRules.GetAbility(player);
@@ -87,7 +87,14 @@ namespace xskills.src.Patches.Collabs.Combat.Taper4ik
             int chance = ability.SkillDependentValue();
             if (chance <= 0) return true;
 
-            return entity.World.Rand.NextDouble() >= (chance / 100f);
+            if (world.Rand.NextDouble() < (chance / 100f))
+            {
+                // Установка amount в 0 и возврат true - максимально совместимый способ отменить урон.
+                // Это позволяет выполниться префиксам и постфиксам других модов, но сам метод DamageItem не нанесет урона, так как amount равен 0.
+                amount = 0;
+            }
+
+            return true;
         }
     }
 
@@ -105,19 +112,18 @@ namespace xskills.src.Patches.Collabs.Combat.Taper4ik
             return AccessTools.Method(typeof(ItemSling), "OnHeldInteractStop");
         }
 
-        public static void Prefix(object[] __args, ref SlingUseState __state)
+        // Также запрашиваем точные параметры OnHeldInteractStop
+        public static void Prefix(ItemSlot slot, EntityAgent byEntity, ref SlingUseState __state)
         {
             __state = null;
-            EntityAgent agent = __args.OfType<EntityAgent>().FirstOrDefault();
-            if (agent?.World?.Side != EnumAppSide.Server) return;
+            if (byEntity?.World?.Side != EnumAppSide.Server) return;
 
-            IPlayer player = (agent as EntityPlayer)?.Player;
+            IPlayer player = (byEntity as EntityPlayer)?.Player;
             if (player == null) return;
 
-            ItemSlot slingSlot = __args.OfType<ItemSlot>().FirstOrDefault();
-            if (!CarefulShooterRules.IsSling(slingSlot?.Itemstack)) return;
+            if (!CarefulShooterRules.IsSling(slot?.Itemstack)) return;
 
-            ItemSlot ammoSlot = CarefulShooterRules.FindFirstAmmoSlot(player, slot => CarefulShooterRules.CanPreserveAmmo(slot.Itemstack));
+            ItemSlot ammoSlot = CarefulShooterRules.FindFirstAmmoSlot(player, s => CarefulShooterRules.CanPreserveAmmo(s.Itemstack));
             if (ammoSlot?.Itemstack == null) return;
 
             __state = new SlingUseState
@@ -127,24 +133,22 @@ namespace xskills.src.Patches.Collabs.Combat.Taper4ik
             };
         }
 
-        public static void Postfix(object[] __args, SlingUseState __state)
+        public static void Postfix(EntityAgent byEntity, SlingUseState __state)
         {
             if (__state?.PreservableAmmoBefore == null) return;
+            if (byEntity?.World?.Side != EnumAppSide.Server) return;
 
-            EntityAgent agent = __args.OfType<EntityAgent>().FirstOrDefault();
-            if (agent?.World?.Side != EnumAppSide.Server) return;
-
-            IPlayer player = (agent as EntityPlayer)?.Player;
+            IPlayer player = (byEntity as EntityPlayer)?.Player;
             if (player == null) return;
 
             PlayerAbility ability = CarefulShooterRules.GetAbility(player);
             if (ability == null || ability.Tier <= 0) return;
 
             int chance = ability.Value(3);
-            if (chance <= 0 || agent.World.Rand.NextDouble() >= (chance / 100f)) return;
+            if (chance <= 0 || byEntity.World.Rand.NextDouble() >= (chance / 100f)) return;
 
-            ItemSlot ammoSlot = CarefulShooterRules.FindFirstAmmoSlot(player, slot =>
-                slot.Itemstack != null && slot.Itemstack.Equals(player.Entity.World, __state.PreservableAmmoBefore, GlobalConstants.IgnoredStackAttributes));
+            ItemSlot ammoSlot = CarefulShooterRules.FindFirstAmmoSlot(player, s =>
+                s.Itemstack != null && s.Itemstack.Equals(player.Entity.World, __state.PreservableAmmoBefore, GlobalConstants.IgnoredStackAttributes));
 
             int current = ammoSlot?.Itemstack?.StackSize ?? 0;
             if (current >= __state.PreservableAmmoQuantityBefore) return;
@@ -153,7 +157,7 @@ namespace xskills.src.Patches.Collabs.Combat.Taper4ik
             restored.StackSize = 1;
             if (!player.InventoryManager.TryGiveItemstack(restored, true))
             {
-                agent.World.SpawnItemEntity(restored, player.Entity.Pos.XYZ.Add(0, 0.5, 0));
+                byEntity.World.SpawnItemEntity(restored, player.Entity.Pos.XYZ.Add(0, 0.5, 0));
             }
         }
     }

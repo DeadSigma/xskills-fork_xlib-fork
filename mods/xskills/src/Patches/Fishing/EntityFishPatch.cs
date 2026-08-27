@@ -82,10 +82,10 @@ namespace XSkills
 
             if (player.InventoryManager == null) return;
 
-            // Проходимся по инвентарям и метим свежую рыбу
             foreach (var inventory in player.InventoryManager.Inventories.Values)
             {
-                if (inventory == null) continue;
+                // пропускаем неинициализированный креативный инвентарь
+                if (inventory == null || inventory.ClassName == "creative") continue;
 
                 foreach (ItemSlot itemSlot in inventory)
                 {
@@ -93,7 +93,7 @@ namespace XSkills
                     if (stack?.Collectible?.Code?.Path == null) continue;
                     if (!stack.Collectible.Code.Path.Contains("fish")) continue;
 
-                    // Если у рыбы ещё нет нашей метки свежести - вешаем её
+                    // вешаем метку свежести если её ещё нет
                     if (!stack.Attributes.HasAttribute("freshFishMul"))
                     {
                         stack.Attributes.SetFloat("freshFishMul", perishMultiplier);

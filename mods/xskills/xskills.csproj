@@ -126,6 +126,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="assets\xskills\shapes\item\" />
+		<Folder Include="src\Patches\Collabs\Combat\Taper4ik\" />
 	</ItemGroup>
 	<PropertyGroup>
 		<BaseOutputPath>./bin</BaseOutputPath>

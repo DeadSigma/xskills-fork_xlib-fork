@@ -342,6 +342,7 @@ namespace XSkills
             {
                 PlayerInventoryLibCompat.ApplyPatch(api);
             }
+            XInvTweaksCompat.ApplyPatch(api);
         }
 
         public override void StartServerSide(ICoreServerAPI api)

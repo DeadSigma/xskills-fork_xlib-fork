@@ -15,6 +15,9 @@ namespace XSkills
         public static string FreeColor { get; set; } = "#8A9A8A";
         protected Cooking cooking;
 
+        [ThreadStatic]
+        internal static bool InOwnSuitability;
+
         ItemSlot[] slots;
         ItemSlot[] buffer;
 
@@ -225,21 +228,22 @@ namespace XSkills
 
         public override float GetSuitability(ItemSlot sourceSlot, ItemSlot targetSlot, bool isMerge)
         {
-            float suitability = base.GetSuitability(sourceSlot, targetSlot, isMerge);
-            float num2 = 0.0f;
-            if (sourceSlot.Inventory is CreativeInventoryTab)
+            if (IsFixed) return -1.0f;
+
+            // Помечаем, что мы внутри собственного расчёта: постфикс на base.GetSuitability пропустит
+            // этот вызов, поэтому здесь получим настоящий приоритет (~0.8), нужный StorageTweaks.
+            InOwnSuitability = true;
+            try
             {
-                return 0.0f;
+                if (sourceSlot.Inventory is CreativeInventoryTab) return 0.0f;
+
+                float suitability = base.GetSuitability(sourceSlot, targetSlot, isMerge);
+                return suitability + ((sourceSlot is ItemSlotOutput || sourceSlot is ItemSlotCraftingOutput) ? 1.0f : 0.0f);
             }
-            else if (sourceSlot.Inventory is InventoryGeneric)
+            finally
             {
-                ItemStack itemstack = sourceSlot.Itemstack;
-                if (itemstack == null || itemstack.Collectible.Tool == null)
-                {
-                    num2 = 1.0f;
-                }
+                InOwnSuitability = false;
             }
-            return (suitability + num2) + ((sourceSlot is ItemSlotOutput || sourceSlot is ItemSlotCraftingOutput) ? 1.0f : 0.0f);
         }
 
         public override float GetTransitionSpeedMul(EnumTransitionType transType, ItemStack stack)

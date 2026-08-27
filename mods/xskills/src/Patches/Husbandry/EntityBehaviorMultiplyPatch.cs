@@ -82,6 +82,47 @@ namespace XSkills
             }
         }
 
+        [HarmonyPatch("SpawnQuantityMin", MethodType.Getter)]
+        public static void MinQuantityPostfix(EntityBehaviorMultiply __instance, ref float __result)
+        {
+            ApplyMassHusbandry(__instance, ref __result);
+        }
+
+        [HarmonyPatch("SpawnQuantityMax", MethodType.Getter)]
+        public static void MaxQuantityPostfix(EntityBehaviorMultiply __instance, ref float __result)
+        {
+            ApplyMassHusbandry(__instance, ref __result);
+        }
+
+        private static void ApplyMassHusbandry(EntityBehaviorMultiply __instance, ref float __result)
+        {
+            IPlayer player = __instance.entity?.GetBehavior<XSkillsAnimalBehavior>()?.Feeder;
+            if (player == null) return;
+
+            Husbandry husbandry = XLeveling.Instance(__instance.entity.World.Api).GetSkill("husbandry") as Husbandry;
+            if (husbandry == null) return;
+
+            PlayerSkill playerSkill = player.Entity?.GetBehavior<PlayerSkillSet>()?[husbandry.Id];
+            PlayerAbility playerAbility = playerSkill?[husbandry.MassHusbandryId]; // Теперь тут правильный перк
+
+            if (playerAbility != null && playerAbility.Tier > 0)
+            {
+                int baseBonus = playerAbility.Value(0);      
+                int perLevelBonus = playerAbility.Value(1);  
+                int perGenBonus = playerAbility.Value(2);    
+                int maxBonus = playerAbility.Value(3);       
+
+                int currentLevel = playerAbility.PlayerSkill.Level;
+                int animalGen = __instance.entity.WatchedAttributes.GetInt("generation", 0);
+
+                float calculatedBonus = baseBonus + (currentLevel * perLevelBonus) + (animalGen * perGenBonus);
+                float finalBonus = Math.Min(calculatedBonus, maxBonus);
+
+                // Делим на 100, чтобы бонус был в процентах (30 = +0.3 к шансу рождения доп. особи) Иначе игра будет спавнить +30 животных за раз
+                __result += (finalBonus / 100f);
+            }
+        }
+
         [HarmonyPatch("Initialize")]
         [HarmonyPostfix]
         public static void InitializePostfix(EntityBehaviorMultiply __instance)
