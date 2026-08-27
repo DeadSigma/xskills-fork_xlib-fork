@@ -21,7 +21,7 @@ namespace XSkills
 
     public class GuiDialogHunterBag : GuiDialog
     {
-        private const string LayoutConfigFile = "XLeveling/gui/hunterbagslotlayout.json";
+        private const string LayoutConfigFile = "XLeveling/gui/HunterBagSlotLayout.json";
 
         private readonly IInventory inventory;
         private int composedSlotCount;

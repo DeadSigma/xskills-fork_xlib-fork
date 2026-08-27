@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿//Код от пользователя Taper4ik
+using HarmonyLib;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -23,17 +24,18 @@ namespace xskills.src.Patches.Collabs.Combat.Taper4ik
             return path.Contains("sling") || type.Contains("sling");
         }
 
-        public static bool IsCarefulShooterDurabilityTarget(ItemStack stack)
+        public static bool IsBow(ItemStack stack)
         {
-            if (stack?.Collectible?.Code == null) return false;
-            string path = stack.Collectible.Code.Path.ToLowerInvariant();
-            string type = stack.Collectible.GetType().Name.ToLowerInvariant();
+            CollectibleObject coll = stack?.Collectible;
+            if (coll?.Code == null) return false;
 
-            if (path.Contains("sling") || type.Contains("sling")) return true;
-            if (path.Contains("crossbow") || type.Contains("crossbow")) return true;
+            if (coll is ItemBow) return true;
 
-            // Исправлено: теперь не будет срабатывать на "rainbow-sword" или "elbow"
-            return path == "bow" || path.StartsWith("bow-") || path.EndsWith("-bow") || type == "itembow";
+            if (coll.Tool != null) return coll.Tool == EnumTool.Bow || coll.Tool == EnumTool.Sling;
+
+            // запасной вариант для предметов без tool
+            string path = coll.Code.Path.ToLowerInvariant();
+            return path == "bow" || path.StartsWith("bow-", StringComparison.Ordinal);
         }
 
         public static bool CanPreserveAmmo(ItemStack stack)
@@ -70,13 +72,12 @@ namespace xskills.src.Patches.Collabs.Combat.Taper4ik
     [HarmonyPatch(typeof(CollectibleObject), nameof(CollectibleObject.DamageItem))]
     internal static class CarefulShooterDurabilityPatch
     {
-        public static bool Prefix(IWorldAccessor world, Entity byEntity, ItemSlot itemslot, ref int amount)
+        [HarmonyPriority(Priority.Last)]
+        public static bool Prefix(IWorldAccessor world, Entity byEntity, ItemSlot itemSlot)
         {
-            // Если урон уже отменен другим модом, не вмешиваемся
-            if (amount <= 0 || itemslot?.Itemstack == null) return true;
-
-            if (!CarefulShooterRules.IsCarefulShooterDurabilityTarget(itemslot.Itemstack)) return true;
             if (world?.Side != EnumAppSide.Server) return true;
+            if (itemSlot?.Itemstack == null) return true;
+            if (!CarefulShooterRules.IsBow(itemSlot.Itemstack)) return true;
 
             IPlayer player = (byEntity as EntityPlayer)?.Player;
             if (player == null) return true;
@@ -87,14 +88,7 @@ namespace xskills.src.Patches.Collabs.Combat.Taper4ik
             int chance = ability.SkillDependentValue();
             if (chance <= 0) return true;
 
-            if (world.Rand.NextDouble() < (chance / 100f))
-            {
-                // Установка amount в 0 и возврат true - максимально совместимый способ отменить урон.
-                // Это позволяет выполниться префиксам и постфиксам других модов, но сам метод DamageItem не нанесет урона, так как amount равен 0.
-                amount = 0;
-            }
-
-            return true;
+            return world.Rand.NextDouble() >= (chance / 100f);
         }
     }
 
@@ -112,18 +106,19 @@ namespace xskills.src.Patches.Collabs.Combat.Taper4ik
             return AccessTools.Method(typeof(ItemSling), "OnHeldInteractStop");
         }
 
-        // Также запрашиваем точные параметры OnHeldInteractStop
-        public static void Prefix(ItemSlot slot, EntityAgent byEntity, ref SlingUseState __state)
+        public static void Prefix(object[] __args, ref SlingUseState __state)
         {
             __state = null;
-            if (byEntity?.World?.Side != EnumAppSide.Server) return;
+            EntityAgent agent = __args.OfType<EntityAgent>().FirstOrDefault();
+            if (agent?.World?.Side != EnumAppSide.Server) return;
 
-            IPlayer player = (byEntity as EntityPlayer)?.Player;
+            IPlayer player = (agent as EntityPlayer)?.Player;
             if (player == null) return;
 
-            if (!CarefulShooterRules.IsSling(slot?.Itemstack)) return;
+            ItemSlot slingSlot = __args.OfType<ItemSlot>().FirstOrDefault();
+            if (!CarefulShooterRules.IsSling(slingSlot?.Itemstack)) return;
 
-            ItemSlot ammoSlot = CarefulShooterRules.FindFirstAmmoSlot(player, s => CarefulShooterRules.CanPreserveAmmo(s.Itemstack));
+            ItemSlot ammoSlot = CarefulShooterRules.FindFirstAmmoSlot(player, slot => CarefulShooterRules.CanPreserveAmmo(slot.Itemstack));
             if (ammoSlot?.Itemstack == null) return;
 
             __state = new SlingUseState
@@ -133,22 +128,24 @@ namespace xskills.src.Patches.Collabs.Combat.Taper4ik
             };
         }
 
-        public static void Postfix(EntityAgent byEntity, SlingUseState __state)
+        public static void Postfix(object[] __args, SlingUseState __state)
         {
             if (__state?.PreservableAmmoBefore == null) return;
-            if (byEntity?.World?.Side != EnumAppSide.Server) return;
 
-            IPlayer player = (byEntity as EntityPlayer)?.Player;
+            EntityAgent agent = __args.OfType<EntityAgent>().FirstOrDefault();
+            if (agent?.World?.Side != EnumAppSide.Server) return;
+
+            IPlayer player = (agent as EntityPlayer)?.Player;
             if (player == null) return;
 
             PlayerAbility ability = CarefulShooterRules.GetAbility(player);
             if (ability == null || ability.Tier <= 0) return;
 
             int chance = ability.Value(3);
-            if (chance <= 0 || byEntity.World.Rand.NextDouble() >= (chance / 100f)) return;
+            if (chance <= 0 || agent.World.Rand.NextDouble() >= (chance / 100f)) return;
 
-            ItemSlot ammoSlot = CarefulShooterRules.FindFirstAmmoSlot(player, s =>
-                s.Itemstack != null && s.Itemstack.Equals(player.Entity.World, __state.PreservableAmmoBefore, GlobalConstants.IgnoredStackAttributes));
+            ItemSlot ammoSlot = CarefulShooterRules.FindFirstAmmoSlot(player, slot =>
+                slot.Itemstack != null && slot.Itemstack.Equals(player.Entity.World, __state.PreservableAmmoBefore, GlobalConstants.IgnoredStackAttributes));
 
             int current = ammoSlot?.Itemstack?.StackSize ?? 0;
             if (current >= __state.PreservableAmmoQuantityBefore) return;
@@ -157,7 +154,7 @@ namespace xskills.src.Patches.Collabs.Combat.Taper4ik
             restored.StackSize = 1;
             if (!player.InventoryManager.TryGiveItemstack(restored, true))
             {
-                byEntity.World.SpawnItemEntity(restored, player.Entity.Pos.XYZ.Add(0, 0.5, 0));
+                agent.World.SpawnItemEntity(restored, player.Entity.Pos.XYZ.Add(0, 0.5, 0));
             }
         }
     }
