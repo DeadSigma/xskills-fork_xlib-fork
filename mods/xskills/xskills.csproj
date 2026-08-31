@@ -98,6 +98,7 @@
 		<Content Include="assets\xskills\recipes\barrel\mead.json" />
 		<Content Include="assets\xskills\recipes\cooking\salt.json" />
 		<Content Include="assets\xskills\recipes\cooking\lime.json" />
+		<Content Include="assets\xskills\skills\alchemy.json" />
 		<Content Include="assets\xskills\skills\combat.json" />
 		<Content Include="assets\xskills\skills\digging.json" />
 		<Content Include="assets\xskills\skills\farming.json" />

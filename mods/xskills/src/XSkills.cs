@@ -186,6 +186,35 @@ namespace XSkills
                         BlockEntityPressureCookerPatch.Apply(harmony, cookerType);
                     }
                 }
+                if (api.ModLoader.IsModEnabled("alchemy"))
+                {
+                    api.Logger.Notification(
+                        "[XSkills Alchemy] Alchemy mod detected"
+                    );
+
+                    Type cauldronType =
+                        api.ClassRegistry.GetBlockEntity("BlockEntityCauldronFirepit");
+
+                    api.Logger.Notification(
+                        "[XSkills Alchemy] Registry cauldron type: {0}",
+                        cauldronType?.FullName ?? "NULL"
+                    );
+
+                    if (cauldronType != null)
+                    {
+                        BlockEntityCauldronFirepitPatch.Apply(
+                            harmony,
+                            cauldronType,
+                            xskills
+                        );
+                    }
+                }
+                else
+                {
+                    api.Logger.Warning(
+                        "[XSkills Alchemy] Alchemy mod NOT detected"
+                    );
+                }
             }
         }
 
@@ -270,6 +299,8 @@ namespace XSkills
             this.Skills.Add(riding.Name, riding);
             Sailing sailing = new Sailing(api);
             this.Skills.Add(sailing.Name, sailing);
+            Alchemy alchemy = new Alchemy(api);
+            this.Skills.Add(alchemy.Name, alchemy);
 
             if (api.World.Config.GetBool("temporalStability"))
             {

@@ -15,15 +15,7 @@ namespace XSkills
     {
         public static bool Prepare(MethodBase original)
         {
-            XSkills instance = XSkills.Instance;
-            if (instance == null)
-            {
-                return false;
-            }
-            Skill skill;
-            instance.Skills.TryGetValue("tailoring", out skill);
-            Tailoring tailoring = skill as Tailoring;
-            return tailoring != null && tailoring.Enabled;
+            return true;
         }
 
         [HarmonyPostfix]
@@ -74,6 +66,14 @@ namespace XSkills
             if (playerAbility3 != null && playerAbility3.Tier > 0 && flag2)
             {
                 num += playerAbility3.FValue(0, 0f);
+            }
+            PlayerAbility playerAbility4 = playerSkill[tailoring.ReinforcedSeamsId];
+            if (playerAbility4 != null && playerAbility4.Tier > 0)
+            {
+                float protectionBonus = playerAbility4.FValue(0, 0f);
+
+                outputSlot.Itemstack.Attributes.SetFloat("reinforcedProtection", protectionBonus);
+                outputSlot.MarkDirty();
             }
             if (num > 1.001f)
             {
@@ -184,7 +184,7 @@ namespace XSkills
                     IServerPlayer serverPlayer2 = player as IServerPlayer;
                     if (serverPlayer2 != null)
                     {
-                       
+
                     }
                     return;
                 }
@@ -208,7 +208,7 @@ namespace XSkills
                     IServerPlayer serverPlayer3 = player as IServerPlayer;
                     if (serverPlayer3 != null)
                     {
-                       
+
                     }
                 }
             }
@@ -254,7 +254,7 @@ namespace XSkills
             {
                 float num = __result;
                 __result *= 1f + playerAbility2.FValue(0, 0f);
-                
+
             }
         }
 
@@ -297,8 +297,34 @@ namespace XSkills
                 IServerPlayer serverPlayer = player as IServerPlayer;
                 if (serverPlayer != null)
                 {
-                   
+
                 }
+            }
+        }
+        [HarmonyPostfix]
+        [HarmonyPatch("GetProtectionModifiers")]
+        public static void GetProtectionModifiersPostfix(ItemSlot slot, ref ProtectionModifiers __result)
+        {
+            if (slot == null || slot.Itemstack == null || slot.Itemstack.Attributes == null || __result == null)
+            {
+                return;
+            }
+
+            float bonus = slot.Itemstack.Attributes.GetFloat("reinforcedProtection", 0f);
+
+            if (bonus > 0f)
+            {
+                ProtectionModifiers mod = new ProtectionModifiers();
+
+                mod.FlatDamageReduction = __result.FlatDamageReduction;
+                mod.ProtectionTier = __result.ProtectionTier;
+                mod.HighDamageTierResistant = __result.HighDamageTierResistant;
+                mod.PerTierFlatDamageReductionLoss = __result.PerTierFlatDamageReductionLoss;
+                mod.PerTierRelativeProtectionLoss = __result.PerTierRelativeProtectionLoss;
+
+                mod.RelativeProtection = __result.RelativeProtection + bonus;
+                __result = mod;
+
             }
         }
     }

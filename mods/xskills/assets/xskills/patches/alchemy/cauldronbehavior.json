@@ -1,0 +1,15 @@
+[
+    {
+        "dependsOn": [
+            { "modid": "alchemy" }
+        ],
+        "file": "alchemy:blocktypes/potioncauldron",
+        "op": "addmerge",
+        "path": "/entityBehaviors",
+        "value": [
+            {
+                "name": "XskillsOwnable"
+            }
+        ]
+    }
+]
