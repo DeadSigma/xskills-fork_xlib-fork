@@ -31,10 +31,10 @@ namespace XSkills
 
         [HarmonyPostfix]
         public static void GetMeltingDurationPostfix(
-            ref float __result,
-            IWorldAccessor __0,
-            ISlotProvider __1,
-            ItemSlot __2)
+    ref float __result,
+    IWorldAccessor __0,
+    ISlotProvider __1,
+    ItemSlot __2)
         {
             IWorldAccessor world = __0;
             ISlotProvider cookingSlotsProvider = __1;
@@ -43,7 +43,7 @@ namespace XSkills
             if (__result <= 0.0f || world == null) return;
 
             InventoryBase inventory = cookingSlotsProvider as InventoryBase;
-            if (inventory == null || inventory.Pos == null) return;
+            if (inventory?.Pos == null) return;
 
             IPlayer player = CookingUtil.GetOwnerFromInventory(inventory);
             if (player?.Entity == null) return;
@@ -54,28 +54,18 @@ namespace XSkills
 
             if (cooking == null) return;
 
-            ItemStack saucepanStack = inputSlot?.Itemstack;
-            if (saucepanStack != null)
+            if (world.Side == EnumAppSide.Server)
             {
-                cooking.TryGetWellDoneBonuses(
-                    player,
-                    out float shelfLifeBonus,
-                    out _
-                );
+                ItemStack saucepanStack = inputSlot?.Itemstack;
+                if (saucepanStack != null)
+                {
+                    cooking.TryGetWellDoneBonuses(player, out float shelfLifeBonus, out _);
 
-                // Store the pre-completion value so the finished product receives the same Well Done bonus.
-                saucepanStack.Attributes.SetFloat(
-                    Cooking.WellDoneShelfLifeAttribute,
-                    shelfLifeBonus
-                );
-                saucepanStack.Attributes.SetBool(
-                    Cooking.WellDoneSnapshotAttribute,
-                    true
-                );
+                    saucepanStack.Attributes.SetFloat(Cooking.WellDoneShelfLifeAttribute, shelfLifeBonus);
+                    saucepanStack.Attributes.SetBool(Cooking.WellDoneSnapshotAttribute, true);
+                }
             }
 
-            // The vanilla firepit already receives the XSkills multiplier through BlockEntityFirepitPatch.
-            // Electrical Progressive uses a separate saucepan duration path, so apply the combined multiplier here.
             if (!IsElectricalProgressiveMachine(world, inventory)) return;
 
             __result *= cooking.GetCookingTimeMultiplier(player);

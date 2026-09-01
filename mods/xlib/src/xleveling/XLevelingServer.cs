@@ -196,34 +196,37 @@ namespace XLib.XLeveling
                 .WithDescription("Sets the level of a player's skill. Can also be used to set a skill level for all players or all skills. You can also use this command to reset configurations.")
                 .HandleWith(OnSkillLevelCommand)
                 .WithRootAlias("skill")
-                .WithArgs(new ICommandArgumentParser[] { 
-                    parsers.WordRange("cmd", new string[] { "add", "set", "get", "reset"}), 
-                    parsers.Word("player"),
-                    parsers.Word("skill"),
-                    parsers.OptionalInt("level")});
+               .WithArgs(new ICommandArgumentParser[] {
+                parsers.WordRange("cmd", new string[] { "add", "set", "get", "reset"}),
+                parsers.Word("arg1"),
+                parsers.Word("arg2"),
+                parsers.OptionalInt("level")
+            });
 
             api.ChatCommands.Create()
-                .WithName("exp")
-                .RequiresPrivilege(Privilege.commandplayer)
-                .WithDescription("Sets the experience of a player's skill.")
-                .HandleWith(OnSkillExpCommand)
-                .WithArgs(new ICommandArgumentParser[] {
-                    parsers.WordRange("cmd", new string[] { "add", "set", "get"}),
-                    parsers.Word("player"),
-                    parsers.Word("skill"),
-                    parsers.OptionalFloat("experience")});
+              .WithName("exp")
+              .RequiresPrivilege(Privilege.commandplayer)
+              .WithDescription("Sets the experience of a player's skill.")
+              .HandleWith(OnSkillExpCommand)
+              .WithArgs(new ICommandArgumentParser[] {
+                 parsers.WordRange("cmd", new string[] { "add", "set", "get" }),
+                 parsers.Word("arg1"),
+                 parsers.OptionalWord("arg2"),
+                 parsers.OptionalFloat("experience")
+              });
 
             api.ChatCommands.Create()
-                .WithName("tier")
-                .RequiresPrivilege(Privilege.commandplayer)
-                .WithDescription("Sets the tier of a player's ability.")
-                .HandleWith(OnAbilityTierCommand)
-                .WithArgs(new ICommandArgumentParser[] {
-                    parsers.WordRange("cmd", new string[] { "add", "set", "get"}),
-                    parsers.Word("player"),
-                    parsers.Word("skill"),
-                    parsers.Word("ability"),
-                    parsers.Int("tier")});
+             .WithName("tier")
+             .RequiresPrivilege(Privilege.commandplayer)
+             .WithDescription("Sets the tier of a player's ability.")
+             .HandleWith(OnAbilityTierCommand)
+             .WithArgs(new ICommandArgumentParser[] {
+                 parsers.WordRange("cmd", new string[] { "add", "set", "get" }),
+                 parsers.Word("arg1"),
+                 parsers.Word("arg2"),
+                 parsers.OptionalWord("arg3"),
+                 parsers.OptionalInt("tier")
+             });
 
             api.ChatCommands.Create()
                 .WithName("skillset")
@@ -1008,10 +1011,38 @@ namespace XLib.XLeveling
             result.StatusMessage = "";
             result.Status = EnumCommandStatus.Success;
             IServerPlayer player = arguments.Caller.Player as IServerPlayer;
+
             string cmd = arguments[0] as string;
-            string splayer = arguments[1] as string;
-            string sskill = arguments[2] as string;
-            int level = arguments.ArgCount >= 4 ? (int)arguments[3] : 0;
+
+            string splayer;
+            string sskill;
+            int level;
+
+            bool shortForm = arguments.Parsers[3].IsMissing;
+
+            if (shortForm)
+            {
+                if (player == null)
+                {
+                    return CommandErrorResult("This command must be executed by a player.");
+                }
+
+                splayer = player.PlayerName;
+                sskill = arguments[1] as string;
+
+                string levelText = arguments[2] as string;
+
+                if (!int.TryParse(levelText, out level))
+                {
+                    return CommandErrorResult("Level must be a number.");
+                }
+            }
+            else
+            {
+                splayer = arguments[1] as string;
+                sskill = arguments[2] as string;
+                level = (int)arguments[3];
+            }
 
             //list of players affected by this command
             List<PlayerSkillSet> playerSkillSets = new List<PlayerSkillSet>();
@@ -1025,10 +1056,12 @@ namespace XLib.XLeveling
 
             if (arguments.ArgCount != 4 && !(arguments.ArgCount == 3 && cmd == "reset"))
             {
-                return CommandErrorResult("The level/skill command requires 4 parameter or reset as the first and 2 additional parameters.");
+                return CommandErrorResult(
+                    "Usage: /level <set|add|get|reset> [player] <skill> [level]"
+                );
             }
 
-            if(level > 0)
+            if (level > 0)
             {
                 setLevel = true;
             }
@@ -1179,27 +1212,75 @@ namespace XLib.XLeveling
             result.StatusMessage = "";
             result.Status = EnumCommandStatus.Success;
 
-            if (arguments.ArgCount != 4)
+            IServerPlayer caller = arguments.Caller.Player as IServerPlayer;
+            string cmd = arguments[0] as string;
+
+            string playerName;
+            string skillName;
+            float exp = 0f;
+
+            if (cmd == "get")
             {
-                return CommandErrorResult("The exp command requires 4 parameter.");
+                // /exp get survival
+                if (arguments.Parsers[2].IsMissing)
+                {
+                    if (caller == null)
+                        return CommandErrorResult("This command must be executed by a player.");
+
+                    playerName = caller.PlayerName;
+                    skillName = arguments[1] as string;
+                }
+                // /exp get PlayerName survival
+                else
+                {
+                    playerName = arguments[1] as string;
+                    skillName = arguments[2] as string;
+                }
+            }
+            else
+            {
+                // /exp set survival 100
+                // /exp add survival 100
+                if (arguments.Parsers[3].IsMissing)
+                {
+                    if (caller == null)
+                        return CommandErrorResult("This command must be executed by a player.");
+
+                    playerName = caller.PlayerName;
+                    skillName = arguments[1] as string;
+
+                    string expText = arguments[2] as string;
+
+                    if (!float.TryParse(
+                        expText,
+                        System.Globalization.NumberStyles.Float,
+                        System.Globalization.CultureInfo.InvariantCulture,
+                        out exp))
+                    {
+                        return CommandErrorResult("Experience must be a number.");
+                    }
+                }
+                // /exp set PlayerName survival 100
+                // /exp add PlayerName survival 100
+                else
+                {
+                    playerName = arguments[1] as string;
+                    skillName = arguments[2] as string;
+                    exp = (float)arguments[3];
+                }
             }
 
-            string playerName = arguments[1] as string;
             PlayerSkillSet playerSkillSet = this.GetPlayerSkillSet(playerName);
             if (playerSkillSet == null)
             {
                 return CommandErrorResult("Can't find the player " + playerName + ".");
             }
 
-            string skillName = arguments[2] as string;
             PlayerSkill playerSkill = playerSkillSet.FindSkill(skillName, true);
             if (playerSkill == null)
             {
                 return CommandErrorResult("Can't find the skill " + skillName + ".");
             }
-
-            float exp = (float)arguments[3];
-            string cmd = arguments[0] as string;
 
             if (cmd == "set")
             {
@@ -1211,28 +1292,35 @@ namespace XLib.XLeveling
             }
             else if (cmd == "get")
             {
-                result.StatusMessage = 
-                    playerName + "'s " + 
-                    playerSkill.Skill.Name + 
-                    " skill's experience is " + 
-                    playerSkill.Experience + "/" + 
+                result.StatusMessage =
+                    playerName + "'s " +
+                    playerSkill.Skill.Name +
+                    " skill's experience is " +
+                    playerSkill.Experience + "/" +
                     playerSkill.RequiredExperience + ".";
+
                 return result;
             }
             else
             {
                 return CommandErrorResult(cmd + " is not a valid operation.");
             }
-            
-            result.StatusMessage = 
-                exp.ToString("0.00") + " experience was given to " + 
-                playerName + "'s " + 
+
+            result.StatusMessage =
+                exp.ToString("0.00") + " experience was given to " +
+                playerName + "'s " +
                 playerSkill.Skill.Name + " skill.";
 
-            (playerSkillSet.Player as IServerPlayer)?.SendMessage(0, "You have gained  " + exp.ToString("0.00") + " experience in the " + playerSkill.Skill.Name + " skill.", EnumChatType.CommandSuccess);
+            (playerSkillSet.Player as IServerPlayer)?.SendMessage(
+                0,
+                "You have gained " + exp.ToString("0.00") +
+                " experience in the " + playerSkill.Skill.Name + " skill.",
+                EnumChatType.CommandSuccess
+            );
 
             PlayerSkillPackage package = new PlayerSkillPackage(playerSkill);
-            this.channel.SendPacket(package, (playerSkillSet.Player as IServerPlayer));
+            this.channel.SendPacket(package, playerSkillSet.Player as IServerPlayer);
+
             return result;
         }
 
@@ -1246,34 +1334,82 @@ namespace XLib.XLeveling
             result.StatusMessage = "";
             result.Status = EnumCommandStatus.Success;
 
-            if (arguments.ArgCount != 5)
+            IServerPlayer caller = arguments.Caller.Player as IServerPlayer;
+            string cmd = arguments[0] as string;
+
+            string playerName;
+            string skillName;
+            string abilityName;
+            int tier = 0;
+
+            if (cmd == "get")
             {
-                return CommandErrorResult("The exp command requires 5 parameter.");
+                // /tier get survival strongback
+                if (arguments.Parsers[3].IsMissing)
+                {
+                    if (caller == null)
+                        return CommandErrorResult("This command must be executed by a player.");
+
+                    playerName = caller.PlayerName;
+                    skillName = arguments[1] as string;
+                    abilityName = arguments[2] as string;
+                }
+                // /tier get PlayerName survival strongback
+                else
+                {
+                    playerName = arguments[1] as string;
+                    skillName = arguments[2] as string;
+                    abilityName = arguments[3] as string;
+                }
+            }
+            else
+            {
+                // /tier set survival strongback 2
+                // /tier add survival strongback 1
+                if (arguments.Parsers[4].IsMissing)
+                {
+                    if (caller == null)
+                        return CommandErrorResult("This command must be executed by a player.");
+
+                    playerName = caller.PlayerName;
+                    skillName = arguments[1] as string;
+                    abilityName = arguments[2] as string;
+
+                    string tierText = arguments[3] as string;
+
+                    if (!int.TryParse(tierText, out tier))
+                    {
+                        return CommandErrorResult("Tier must be a number.");
+                    }
+                }
+                // /tier set PlayerName survival strongback 2
+                // /tier add PlayerName survival strongback 1
+                else
+                {
+                    playerName = arguments[1] as string;
+                    skillName = arguments[2] as string;
+                    abilityName = arguments[3] as string;
+                    tier = (int)arguments[4];
+                }
             }
 
-            string playerName = arguments[1] as string;
             PlayerSkillSet playerSkillSet = this.GetPlayerSkillSet(playerName);
             if (playerSkillSet == null)
             {
                 return CommandErrorResult("Can't find the player " + playerName + ".");
             }
 
-            string skillName = arguments[2] as string;
             PlayerSkill playerSkill = playerSkillSet.FindSkill(skillName, true);
             if (playerSkill == null)
             {
                 return CommandErrorResult("Can't find the skill " + skillName + ".");
             }
 
-            string abilityName = arguments[3] as string;
             PlayerAbility playerAbility = playerSkill.FindAbility(abilityName, true);
             if (playerAbility == null)
             {
                 return CommandErrorResult("Can't find the ability " + abilityName + ".");
             }
-
-            int tier = (int)arguments[4];
-            string cmd = arguments[0] as string;
 
             if (cmd == "set")
             {
@@ -1286,10 +1422,11 @@ namespace XLib.XLeveling
             else if (cmd == "get")
             {
                 result.StatusMessage =
-                    playerName + "'s " + 
-                    playerAbility.Ability.Name + 
-                    " ability tier is " + 
+                    playerName + "'s " +
+                    playerAbility.Ability.Name +
+                    " ability tier is " +
                     playerAbility.Tier + ".";
+
                 return result;
             }
             else
@@ -1298,15 +1435,23 @@ namespace XLib.XLeveling
             }
 
             result.StatusMessage =
-                "Set player " + playerName + "'s " + 
+                "Set player " + playerName + "'s " +
                 playerAbility.Ability.Name + " " +
-                "ability tier to " + 
+                "ability tier to " +
                 playerAbility.Tier + ".";
 
-            (playerSkillSet.Player as IServerPlayer)?.SendMessage(0, "Your tier of the " + playerAbility.Ability.Name + " ability was set to " + playerAbility.Tier + ".", EnumChatType.CommandSuccess);
+            (playerSkillSet.Player as IServerPlayer)?.SendMessage(
+                0,
+                "Your tier of the " +
+                playerAbility.Ability.Name +
+                " ability was set to " +
+                playerAbility.Tier + ".",
+                EnumChatType.CommandSuccess
+            );
 
             PlayerAbilityPackage package = new PlayerAbilityPackage(playerAbility);
-            this.channel.SendPacket(package, (playerSkillSet.Player as IServerPlayer));
+            this.channel.SendPacket(package, playerSkillSet.Player as IServerPlayer);
+
             return result;
         }
 

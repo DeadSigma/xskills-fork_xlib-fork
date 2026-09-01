@@ -342,7 +342,8 @@ namespace XSkills
 
             PlayerSkill skill = player?.Entity?.GetBehavior<PlayerSkillSet>()?[this.Id];
             PlayerAbility ability = skill?[this.WellDoneId];
-            if (ability?.Tier <= 0) return false;
+
+            if (ability == null || ability.Tier <= 0) return false;
 
             shelfLifeBonus = Math.Max(0.0f, ability.SkillDependentFValue());
             cookingTimeBonus = Math.Max(0.0f, ability.FValue(3));
