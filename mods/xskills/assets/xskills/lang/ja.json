@@ -555,7 +555,7 @@
     "ability-temporalunstable": "時間的不安定性",
     "abilitydesc-temporalunstable": "アビリティ「不変の採掘者」と「不変の戦士」は、時間的安定領域ではなく時間的不安定領域からボーナスを得て、これらのボーナスを{0}%増加させます。",
     "ability-tenuation": "テニュエーション",
-    "abilitydesc-tenuation": "醸造時に完成するポーションの量が{0}回分増加します（レベルごとに+{1}、最大{2}まで）。",
+    "abilitydesc-tenuation": "調合時に完成したポーションの生成量が {0}% 増加します（錬金術レベルごとにさらに {1}%、最大 {2}%）。",
     "ability-thrift": "倹約家",
     "abilitydesc-thrift": "陶芸に使用した粘土の数だけ、ボクセルが{0}個増えます。",
     "ability-thriftybrewer": "倹約醸造家",

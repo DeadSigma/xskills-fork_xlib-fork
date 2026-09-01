@@ -555,7 +555,7 @@
     "ability-temporalunstable": "Temporal Unstable",
     "abilitydesc-temporalunstable": "Your Stable Miner and Stable Warrior abilities will receive bonuses from temporal unstable areas instead of temporal stable areas and increases these bonuses by {0}%.",
     "ability-tenuation": "Tenuation",
-    "abilitydesc-tenuation": "Ökar mängden färdig dryck vid bryggning med {0} portioner (+{1} per nivå, upp till {2}).",
+    "abilitydesc-tenuation": "Ökar mängden färdig dryck vid bryggning med {0}% (+ {1}% per nivå i Alkemi, upp till {2}%).",
     "ability-thrift": "Thrift",
     "abilitydesc-thrift": "You will receive {0} more voxels for each clay you use for pottery.",
     "ability-thriftybrewer": "Sparsam bryggare",

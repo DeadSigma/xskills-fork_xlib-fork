@@ -555,7 +555,7 @@
     "ability-temporalunstable": "时空不稳",
     "abilitydesc-temporalunstable": "你的稳定矿工和稳定战士\n技能将从时空不稳定区域而\n不是时空稳定区域获得强化，\n并将这些强化增加{0}%。",
     "ability-tenuation": "增量炼制",
-    "abilitydesc-tenuation": "酿造时，成品药水的产量增加 {0} 份（每级额外 +{1}，最高达到 {2}）。",
+    "abilitydesc-tenuation": "酿制时成品药水的产量提高 {0}%（炼金术每提升1级，额外增加 {1}%，最高 {2}%）。",
     "ability-thrift": "勤俭节约",
     "abilitydesc-thrift": "你每用一块陶土做陶器，\n就会获得{0}个额外的体素。",
     "ability-thriftybrewer": "节俭酿酒师",

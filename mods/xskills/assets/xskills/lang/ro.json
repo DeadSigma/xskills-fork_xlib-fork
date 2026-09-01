@@ -555,7 +555,7 @@
     "ability-temporalunstable": "Temporal Unstable",
     "abilitydesc-temporalunstable": "Your Stable Miner and Stable Warrior abilities will receive bonuses from temporal unstable areas instead of temporal stable areas and increases these bonuses by {0}%.",
     "ability-tenuation": "Tenuație",
-    "abilitydesc-tenuation": "Mărește cantitatea de poțiune obținută la preparare cu {0} porții (+{1} pentru fiecare nivel, până la {2}).",
+    "abilitydesc-tenuation": "Crește randamentul poțiunii finite la preparare cu {0}% (+ {1}% pentru fiecare nivel de Alchimie, până la {2}%).",
     "ability-thrift": "Thrift",
     "abilitydesc-thrift": "You will receive {0} more voxels for each clay you use for pottery.",
     "ability-thriftybrewer": "Berar econom",

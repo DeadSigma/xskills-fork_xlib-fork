@@ -555,7 +555,7 @@
     "ability-temporalunstable": "Temporal Unstable",
     "abilitydesc-temporalunstable": "Your Stable Miner and Stable Warrior abilities will receive bonuses from temporal unstable areas instead of temporal stable areas and increases these bonuses by {0}%.",
     "ability-tenuation": "Tenuation",
-    "abilitydesc-tenuation": "Increases the amount of finished potion produced when brewing by {0} servings (+{1} per level, up to {2}).",
+    "abilitydesc-tenuation": "Increases the yield of the finished potion when brewing by {0}% (+ {1}% per Alchemy level, up to {2}%).",
     "ability-thrift": "Thrift",
     "abilitydesc-thrift": "You will receive {0} more voxels for each clay you use for pottery.",
     "ability-thriftybrewer": "Thrifty Brewer",

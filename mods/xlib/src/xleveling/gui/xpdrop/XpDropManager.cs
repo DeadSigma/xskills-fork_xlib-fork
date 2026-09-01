@@ -241,7 +241,7 @@ namespace PandaXPDrops
         // Навыки, опыт для которых должен накапливаться порциями
         private readonly HashSet<string> batchedSkillNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
-            "survival", "sailing", "riding"
+            "survival", "sailing", "riding", "temporaladaptation"
         };
 
         // состояние полосы

@@ -555,7 +555,7 @@
     "ability-temporalunstable": "Temporal instabil",
     "abilitydesc-temporalunstable": "Deine Fähigkeiten 'Stabiler Bergmann' und 'Stabiler Krieger' erhalten Boni aus temporal instabilen Bereichen anstelle von temporal stabilen Bereichen und erhöht diese Boni um {0}%.",
     "ability-tenuation": "Tenuation",
-    "abilitydesc-tenuation": "Erhöht die Menge des fertigen Tranks beim Brauen um {0} Portionen (+{1} pro Stufe, bis zu {2}).",
+    "abilitydesc-tenuation": "Erhöht die Ausbeute des fertigen Tranks beim Brauen um {0}% (+ {1}% pro Alchemie-Stufe, bis zu {2}%).",
     "ability-thrift": "Sparsamkeit",
     "abilitydesc-thrift": "Du erhältst {0} mehr Voxel für jeden Ton, den du für die Töpferei verwendest.",
     "ability-thriftybrewer": "Sparsamer Brauer",

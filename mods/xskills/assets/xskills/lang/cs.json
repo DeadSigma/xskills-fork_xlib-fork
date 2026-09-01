@@ -555,7 +555,7 @@
     "ability-temporalunstable": "Časově nestabilní",
     "abilitydesc-temporalunstable": "Vaše schopnosti Stable Miner a Stable Warrior dostanou bonusy z dočasně nestabilních oblastí namísto dočasně stabilních oblastí a zvýší tyto bonusy o {0}%.",
     "ability-tenuation": "Tenuace",
-    "abilitydesc-tenuation": "Zvyšuje množství hotového lektvaru při vaření o {0} porcí (+{1} za každou úroveň, až do {2}).",
+    "abilitydesc-tenuation": "Zvyšuje výtěžnost hotového lektvaru při vaření o {0}% (+ {1}% za každou úroveň alchymie, až do {2}%).",
     "ability-thrift": "Spořivec",
     "abilitydesc-thrift": "Za každý jíl, který použijete na keramiku, obdržíte o {0} více voxelů.",
     "ability-thriftybrewer": "Úsporný sládek",

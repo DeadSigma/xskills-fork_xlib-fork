@@ -555,7 +555,7 @@
     "ability-temporalunstable": "Instabilité temporelle",
     "abilitydesc-temporalunstable": "Vos aptitudes Mineur stable et Guerrier stable recevront un bonus des zones temporelles instables au lieu des zone stables. et augmenteteront de {0}%.",
     "ability-tenuation": "Ténuation",
-    "abilitydesc-tenuation": "Augmente la quantité de potion obtenue lors du brassage de {0} portions (+{1} par niveau, jusqu'à {2}).",
+    "abilitydesc-tenuation": "Augmente le rendement de la potion finale lors de sa préparation de {0}% (+ {1}% par niveau d'Alchimie, jusqu'à {2}%).",
     "ability-thrift": "Économe",
     "abilitydesc-thrift": "Vous recevrez {0} voxels en plus pour chaque argile que vous utiliserez pour la poterie.",
     "ability-thriftybrewer": "Brasseur économe",

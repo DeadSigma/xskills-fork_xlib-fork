@@ -555,7 +555,7 @@
     "ability-temporalunstable": "Inestabilidad",
     "abilitydesc-temporalunstable": "Tus habilidades de Minero estable y Guerrero estable recibirán bonificaciones de áreas inestables temporales en lugar de áreas estables. Además, estas bonificaciones se incrementarán en un {0}%.",
     "ability-tenuation": "Tenuación",
-    "abilitydesc-tenuation": "Aumenta la cantidad de poción terminada al elaborarla en {0} porciones (+{1} por cada nivel, hasta {2}).",
+    "abilitydesc-tenuation": "Aumenta en un {0}% la cantidad de poción obtenida al elaborarla (+ un {1}% por cada nivel de Alquimia, hasta un máximo de {2}%).",
     "ability-thrift": "Hasta el último gramo",
     "abilitydesc-thrift": "Recibirás {0} vóxeles adicionales por cada arcilla que uses en un trabajo de cerámica.",
     "ability-thriftybrewer": "Cervecero ahorrador",

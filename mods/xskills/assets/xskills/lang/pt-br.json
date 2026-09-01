@@ -555,7 +555,7 @@
     "ability-temporalunstable": "Instabilidade Temporal",
     "abilitydesc-temporalunstable": "Suas habilidades Mineiro Estável e Guerreiro Estável receberão bônus de áreas temporalmente instáveis em vez de áreas temporalmente estáveis e aumenta esses bônus em {0}%.",
     "ability-tenuation": "Tenuação",
-    "abilitydesc-tenuation": "Aumenta a quantidade de poção pronta produzida ao preparar em {0} porções (+{1} por nível, até {2}).",
+    "abilitydesc-tenuation": "Aumenta em {0}% o rendimento da poção pronta ao prepará-la (+ {1}% por nível de Alquimia, até {2}%).",
     "ability-thrift": "Economia",
     "abilitydesc-thrift": "Você receberá {0} voxels a mais para cada argila que usar para cerâmica.",
     "ability-thriftybrewer": "Cervejeiro Econômico",

@@ -555,7 +555,7 @@
     "ability-temporalunstable": "Niestabilny temporalnie",
     "abilitydesc-temporalunstable": "Twoje umiejętności Stabilny górnik i Stabilny wojownik będą otrzymywać bonusy z obszarów niestabilnych temporalnie zamiast z obszarów stabilnych temporalnie i zwiększa te bonusy o {0}%.",
     "ability-tenuation": "Tenuacja",
-    "abilitydesc-tenuation": "Zwiększa ilość gotowej mikstury podczas warzenia o {0} porcji (+{1} za każdy poziom, maksymalnie do {2}).",
+    "abilitydesc-tenuation": "Zwiększa wydajność gotowej mikstury podczas warzenia o {0}% (+ {1}% za każdy poziom Alchemii, maksymalnie do {2}%).",
     "ability-thrift": "Oszczędność",
     "abilitydesc-thrift": "Otrzymasz {0} więcej wokseli za każdą glinę, której użyjesz do garncarstwa.",
     "ability-thriftybrewer": "Oszczędny piwowar",
