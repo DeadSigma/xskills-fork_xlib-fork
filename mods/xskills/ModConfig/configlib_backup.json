@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "file": "xskillsgilded.json",
+  "settings": {
+    "boolean": {
+      "LVPOPUPENABLED": {
+        "name": "lvPopupEnabled",
+        "ingui": "xskillgilded:lvPopupEnabled",
+        "weight": 1,
+        "default": true
+      },
+
+      "EFFECTBOXENABLED": {
+        "name": "effectBoxEnabled",
+        "ingui": "xskillgilded:effectBoxEnabled",
+        "weight": 2,
+        "default": true
+      }
+    },
+    "float": {
+      "EFFECTBOXORIGINX": {
+        "name": "effectBoxOriginX",
+        "ingui": "xskillgilded:effectBoxOriginX",
+        "weight": 3,
+        "default": 8
+      },
+      "EFFECTBOXORIGINY": {
+        "name": "effectBoxOriginY",
+        "ingui": "xskillgilded:effectBoxOriginY",
+        "weight": 4,
+        "default": 8
+      },
+      "EFFECTBOXSIZE": {
+        "name": "effectBoxSize",
+        "ingui": "xskillgilded:effectBoxSize",
+        "weight": 5,
+        "default": 40
+      }
+    },
+    "integer": {
+      "EFFECTBOXORIENTATION": {
+        "name": "effectBoxOrientation",
+        "ingui": "xskillgilded:effectBoxOrientation",
+        "weight": 2.5,
+        "default": 0,
+        "range": {
+          "min": 0,
+          "max": 4,
+          "step": 1
+        }
+      }
+    }
+  },
+  "formatting": [
+    {
+      "type": "separator",
+      "title": "Level Up Popup",
+      "weight": 0.5
+    },
+    {
+      "type": "separator",
+      "title": "Effect box",
+      "weight": 1.5
+    }
+  ]
+}

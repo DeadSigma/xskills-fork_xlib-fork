@@ -10,8 +10,6 @@ namespace XSkills
         public int BrewingSpeedId { get; private set; }
         public int PotentPotionId { get; private set; }
         public int AlchemistId { get; private set; }
-        public int TransmutationId { get; private set; }
-        public int ToxicToleranceId { get; private set; }
         public int TenuationId { get; private set; }
         public int PotionQualityId { get; private set; }
 
@@ -46,23 +44,6 @@ namespace XSkills
                 "xskills:abilitydesc-alchemist",
                 5, 1, new int[] { 40 }));
 
-            // шанс случайной трансмутации в редкий предмет
-            // 0: базовая вероятность
-            // 1: прирост за уровень
-            // 2: макс вероятность
-            TransmutationId = this.AddAbility(new Ability(
-                "transmutation",
-                "xskills:ability-transmutation",
-                "xskills:abilitydesc-transmutation",
-                5, 3, new int[] { 1, 1, 2, 2, 2, 4, 2, 2, 6 }));
-
-            // пассивное сопротивление токсинам
-            // 0: сила сопротивления
-            ToxicToleranceId = this.AddAbility(new Ability(
-                "toxictolerance",
-                "xskills:ability-toxictolerance",
-                "xskills:abilitydesc-toxictolerance",
-                7, 2, new int[] { 10, 20 }));
 
             // Тенуация
             // увеличивает количество порций при приготовлении

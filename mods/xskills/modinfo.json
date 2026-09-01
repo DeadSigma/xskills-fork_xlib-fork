@@ -6,7 +6,9 @@
   "description": "Adds skills to the game.",
   "website": "https://www.vintagestory.at/forums/topic/1720-xlib-and-xskills/",
   "version": "1.0.97",
-    "dependencies": {
-        "xlibfork": "1.0.36"
-    }
+  "dependencies": {
+    "xlibfork": "1.0.36",
+    "vsimgui": ""
+
+  }
 }

@@ -12,6 +12,7 @@ using Vintagestory.API.Server;
 using Vintagestory.GameContent;
 using XLib.XEffects;
 using XLib.XLeveling;
+using Vintagestory.API.Util;
 
 namespace XSkills
 {
@@ -39,6 +40,7 @@ namespace XSkills
         public int HappyMealId { get; private set; }
         public int JuicerId { get; private set; }
         public int EggTimerId { get; private set; }
+        public int BurntMasteryId { get; private set; }
 
         /// <summary>Базовое насыщение на литр для жидкостей без nutritionPropsPerLitre (вода, рассол).</summary>
         private const float LiquidBaseSatiety = 50.0f;
@@ -108,7 +110,7 @@ namespace XSkills
             return transitionState;
         }
 
-        
+
 
         private static ItemStack FindPreviousContentStack(
             ItemStack currentStack,
@@ -250,7 +252,7 @@ namespace XSkills
                 FloatArrayAttribute previousFreshHours =
                     previousTransitionState?["freshHours"] as FloatArrayAttribute;
 
-                
+
 
                 for (int transitionIndex = 0;
                      transitionIndex < currentFreshHours.value.Length;
@@ -259,7 +261,7 @@ namespace XSkills
                     float currentFresh = currentFreshHours.value[transitionIndex];
                     if (currentFresh <= 0.0f || !float.IsFinite(currentFresh)) continue;
 
-                    
+
 
                     float boostedProducedFresh = currentFresh * shelfLifeMultiplier;
 
@@ -473,12 +475,19 @@ namespace XSkills
                 "xskills:abilitydesc-eggtimer",
                 8));
 
-           //Позволяет перку Dilution распространяться на несъедобные продукты
+            //Позволяет перку Dilution распространяться на несъедобные продукты
             RefinedDilutionId = this.AddAbility(new Ability(
                 "refineddilution",
                 "xskills:ability-refineddilution",
                 "xskills:abilitydesc-refineddilution",
                 5));
+
+            // обугленная еда получает такое же качество, как нормально приготовленная
+            BurntMasteryId = this.AddAbility(new Ability(
+                "burntmastery",
+                "xskills:ability-burntmastery",
+                "xskills:abilitydesc-burntmastery",
+                8));
 
             this[SaltyBackpackId].OnPlayerAbilityTierChanged += OnSaltyBackpack;
 
@@ -743,6 +752,11 @@ namespace XSkills
             float satiety = outputStack.Collectible.NutritionProps?.Satiety ?? 0.0f;
             float servings = (float)outputStack.Attributes.GetDecimal("quantityServings", cookedAmount);
             bool charred = (sourceStack?.Collectible.NutritionProps?.Satiety ?? 0.0f) > satiety || outputStack.Collectible.Code.Path.Contains("charred");
+            // сухари и им подобное пересушены by design - штраф не применяем никогда
+            // перк снимает штраф для всего остального, но обугливание и урезанный опыт остаются
+            bool charredQuality = charred
+                && !IsQualityExempt(outputStack)
+                && (skill[this.BurntMasteryId]?.Tier ?? 0) <= 0;
             float ingredientDiversity = IngredientDiversity(outputStack, contentStacks, world, out int ingredientCount);
             bool expandedFood = outputStack.Attributes.HasAttribute("madeWith");
             IBlockMealContainer mealContainer = (outputStack.Collectible as IBlockMealContainer);
@@ -857,7 +871,7 @@ namespace XSkills
                         else
                             outputStack.StackSize = totalCooked;
                     }
-                }   
+                }
                 else
                 {
                     // Теперь этот код сработает корректно для горшков/котлов (mealContainer)
@@ -902,7 +916,7 @@ namespace XSkills
                         if (inv[i].Itemstack == null || inv[i].Itemstack.StackSize == 0)
                         {
                             bonusSlot = inv[i];
-                            break; 
+                            break;
                         }
                     }
                 }
@@ -1004,7 +1018,7 @@ namespace XSkills
                 float quality;
                 if ((sourceStacks != null ? sourceStacks.Length : contentStacks.Length) == 1 && sourceQuality > 0.0f)
                 {
-                    quality = sourceQuality * (charred ? 0.2f : 1.1f);
+                    quality = sourceQuality * (charredQuality ? 0.2f : 1.1f);
                 }
                 else
                 {
@@ -1028,6 +1042,31 @@ namespace XSkills
                 }
             }
             liquidContainer?.SetContents(outputStack, contentStacks);
+        }
+        /// <summary>Есть ли у игрока перк, отменяющий штраф качества за пережарку</summary>
+        public bool HasBurntMastery(IPlayer player)
+        {
+            PlayerAbility ability = player?.Entity?.GetBehavior<PlayerSkillSet>()?[this.Id]?[this.BurntMasteryId];
+            return (ability?.Tier ?? 0) > 0;
+        }
+
+        /// <summary>Предметы, которые пересушены по своей природе и не должны получать штраф качества за пережарку</summary>
+        private static readonly AssetLocation[] QualityExemptCodes =
+        {
+    new AssetLocation("expandedfoods", "hardtack-*")
+};
+
+        /// <summary>Освобождён ли предмет от штрафа качества за пережарку независимо от перков</summary>
+        public static bool IsQualityExempt(ItemStack stack)
+        {
+            AssetLocation code = stack?.Collectible?.Code;
+            if (code == null) return false;
+
+            foreach (AssetLocation exempt in QualityExemptCodes)
+            {
+                if (WildcardUtil.Match(exempt, code)) return true;
+            }
+            return false;
         }
 
         protected CookingRecipeStack GetResolvedIngredient(IWorldAccessor world, CookingRecipeStack recipeStack)
@@ -1131,7 +1170,7 @@ namespace XSkills
         public void OnSaltyBackpack(PlayerAbility playerAbility, int oldTier)
         {
             IPlayer player = playerAbility.PlayerSkill.PlayerSkillSet.Player;
-            player.Entity.Stats.Set("perishMult", "ability", - 1.0f + playerAbility.FValue(0));
+            player.Entity.Stats.Set("perishMult", "ability", -1.0f + playerAbility.FValue(0));
 
             InventoryBase backPackInv = player.InventoryManager.GetOwnInventory(GlobalConstants.backpackInvClassName) as InventoryBase;
             InventoryBase hotBarInv = player.InventoryManager.GetOwnInventory(GlobalConstants.hotBarInvClassName) as InventoryBase;

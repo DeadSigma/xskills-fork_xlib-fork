@@ -26,6 +26,12 @@
 		<None Remove="src\Patches\Mining\**" />
 	</ItemGroup>
 	<ItemGroup>
+		<PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="VSImGui" Version="0.0.6" />
+		<PackageReference Include="VSImGui_DebugTools" Version="0.0.6" />
+	</ItemGroup>
+	<ItemGroup>
 		<Reference Include="0Harmony, Version=2.0.4.0, Culture=neutral, processorArchitecture=MSIL">
 			<SpecificVersion>False</SpecificVersion>
 			<HintPath>$(VINTAGE_STORY)\Lib\0Harmony.dll</HintPath>
@@ -44,6 +50,22 @@
 		</Reference>
 		<Reference Include="primitivesurvival">
 			<HintPath>..\..\..\vshelper\dependencies\primitivesurvival.dll</HintPath>
+		</Reference>
+		<Reference Include="Microsoft.Data.Sqlite">
+			<HintPath>$(VINTAGE_STORY)\Lib\Microsoft.Data.Sqlite.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+		<Reference Include="OpenTK.Core">
+			<HintPath>$(VINTAGE_STORY)\Lib\OpenTK.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="OpenTK.Mathematics">
+			<HintPath>$(VINTAGE_STORY)\Lib\OpenTK.Mathematics.dll</HintPath>
+		</Reference>
+		<Reference Include="OpenTK.Windowing.Common">
+			<HintPath>$(VINTAGE_STORY)\Lib\OpenTK.Windowing.Common.dll</HintPath>
+		</Reference>
+		<Reference Include="OpenTK.Windowing.Desktop">
+			<HintPath>$(VINTAGE_STORY)\Lib\OpenTK.Windowing.Desktop.dll</HintPath>
 		</Reference>
 		<Reference Include="protobuf-net, Version=2.1.0.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
 			<SpecificVersion>False</SpecificVersion>
@@ -72,6 +94,7 @@
 		<Reference Include="VSCreativeMod">
 			<HintPath>$(VINTAGE_STORY)\Mods\VSCreativeMod.dll</HintPath>
 			<Private>False</Private>
+
 		</Reference>
 	</ItemGroup>
 	<ItemGroup>
@@ -120,10 +143,6 @@
 		<Content Include="assets\xskills\lang\ja.json" />
 		<Content Include="assets\xskills\patches\cooking.json" />
 		<Content Include="assets\xskills\lang\es-419.json" />
-	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 	</ItemGroup>
 	<ItemGroup>
 		<Folder Include="assets\xskills\shapes\item\" />
@@ -190,4 +209,5 @@
 		<Exec Command="py &quot;C:\sourcecode\копирует xskills в папку с модами.py&quot;" />
 
 	</Target>
+
 </Project>

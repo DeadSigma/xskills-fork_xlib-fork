@@ -188,17 +188,8 @@ namespace XSkills
                 }
                 if (api.ModLoader.IsModEnabled("alchemy"))
                 {
-                    api.Logger.Notification(
-                        "[XSkills Alchemy] Alchemy mod detected"
-                    );
-
                     Type cauldronType =
                         api.ClassRegistry.GetBlockEntity("BlockEntityCauldronFirepit");
-
-                    api.Logger.Notification(
-                        "[XSkills Alchemy] Registry cauldron type: {0}",
-                        cauldronType?.FullName ?? "NULL"
-                    );
 
                     if (cauldronType != null)
                     {
@@ -207,12 +198,19 @@ namespace XSkills
                             cauldronType,
                             xskills
                         );
+
+
+                        AlchemyPotionDurationPatch.Apply(
+                            harmony,
+                            cauldronType.Assembly,
+                            api
+                        );
                     }
                 }
                 else
                 {
                     api.Logger.Warning(
-                        "[XSkills Alchemy] Alchemy mod NOT detected"
+                        "[XSkills Alchemy] Alchemy mod not detected"
                     );
                 }
             }
@@ -299,8 +297,11 @@ namespace XSkills
             this.Skills.Add(riding.Name, riding);
             Sailing sailing = new Sailing(api);
             this.Skills.Add(sailing.Name, sailing);
-            Alchemy alchemy = new Alchemy(api);
-            this.Skills.Add(alchemy.Name, alchemy);
+            if (api.ModLoader.IsModEnabled("alchemy"))
+            {
+                Alchemy alchemy = new Alchemy(api);
+                this.Skills.Add(alchemy.Name, alchemy);
+            }
 
             if (api.World.Config.GetBool("temporalStability"))
             {
@@ -390,6 +391,20 @@ namespace XSkills
              .RegisterMessageType<XSkillsFixRequestPacket>()
              .SetMessageHandler<XSkillsFixTogglePacket>(OnFixTogglePacket)
              .SetMessageHandler<XSkillsFixRequestPacket>(OnFixRequestPacket);
+
+            if (api.ModLoader.IsModEnabled("xskillsgilded"))
+            {
+                string msg = Lang.Get("xskills:error-gilded-conflict");
+
+                api.Logger.Error(msg);
+
+                api.Event.PlayerNowPlaying += (IServerPlayer player) =>
+                {
+                    player.SendMessage(GlobalConstants.GeneralChatGroup, msg, EnumChatType.CommandError);
+                };
+
+                return;
+            }
         }
 
         public override void AssetsLoaded(ICoreAPI api)
