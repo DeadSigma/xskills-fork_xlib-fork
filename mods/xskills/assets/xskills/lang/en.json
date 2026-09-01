@@ -435,7 +435,7 @@
     "ability-pickaxeexpert": "Pickaxe Expert",
     "abilitydesc-pickaxeexpert": "Breaking a block with a pickaxe increases your mining speed with pickaxes by {0}% and additional 0.{1}% for each level at the mining skill. Maxed out at {2}%. This effect stacks up to {3} times and last {4} seconds.",
     "ability-potionquality": "Potion Quality",
-    "abilitydesc-potionquality": "Potions you brew gain a “quality” attribute (base value – {0}, maximum – {1}). A player who drinks such a potion receives an additional bonus to the potion's duration; the higher the quality, the greater the bonus.",
+    "abilitydesc-potionquality": "Potions you brew gain a «quality» attribute (base value - {0}, maximum - {1}). A player who drinks such a potion receives an additional bonus to the potion's duration; the higher the quality, the greater the bonus.",
     "ability-potter": "Potter",
     "abilitydesc-potter": "You will receive {0}% more experience for the pottery skill. The amount of specializations you can learn is limited.",
     "ability-potterytimer": "Pottery Timer",

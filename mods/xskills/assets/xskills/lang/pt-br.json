@@ -435,7 +435,7 @@
     "ability-pickaxeexpert": "Especialista em Picareta",
     "abilitydesc-pickaxeexpert": "Quebrar um bloco com uma picareta aumenta sua velocidade de mineração com picaretas em {0}% e adicionalmente 0.{1}% para cada nível na habilidade de mineração. Máximo em {2}%. Este efeito acumula até {3} vezes e dura {4} segundos.",
     "ability-potionquality": "Qualidade das poções",
-    "abilitydesc-potionquality": "As poções que você prepara recebem o parâmetro “qualidade” (valor base – {0}, máximo – {1}). Um jogador que beber essa poção receberá um bônus adicional na duração do efeito da poção; quanto maior a qualidade, maior o bônus.",
+    "abilitydesc-potionquality": "As poções que você prepara recebem o parâmetro «qualidade» (valor base – {0}, máximo – {1}). Um jogador que beber essa poção receberá um bônus adicional na duração do efeito da poção; quanto maior a qualidade, maior o bônus.",
     "ability-potter": "Oleiro",
     "abilitydesc-potter": "Você receberá {0}% mais experiência pela habilidade de cerâmica. A quantidade de profissões que você pode aprender é limitada.",
     "ability-potterytimer": "Temporizador de cerâmica",

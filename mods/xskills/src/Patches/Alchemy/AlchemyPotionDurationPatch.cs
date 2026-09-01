@@ -40,31 +40,10 @@ namespace XSkills
                 return;
             }
 
-
-            Type consumableType =
-                alchemyAssembly.GetType(
-                    "Alchemy.PotionConsumableLogic",
-                    false
-                );
-
-            Type registryType =
-                alchemyAssembly.GetType(
-                    "Alchemy.EffectRegistry",
-                    false
-                );
-
-            Type potionDataType =
-                alchemyAssembly.GetType(
-                    "Alchemy.PotionData",
-                    false
-                );
-
-            Type effectContextType =
-                alchemyAssembly.GetType(
-                    "Alchemy.EffectContext",
-                    false
-                );
-
+            Type consumableType = alchemyAssembly.GetType("Alchemy.PotionConsumableLogic", false);
+            Type registryType = alchemyAssembly.GetType("Alchemy.EffectRegistry", false);
+            Type potionDataType = alchemyAssembly.GetType("Alchemy.PotionData", false);
+            Type effectContextType = alchemyAssembly.GetType("Alchemy.EffectContext", false);
 
             if (consumableType == null
                 || registryType == null
@@ -74,86 +53,55 @@ namespace XSkills
                 return;
             }
 
+            MethodInfo processPotion = consumableType.GetMethod(
+                "TryProcessPotionEffects",
+                BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic
+            );
 
-            MethodInfo processPotion =
-                consumableType.GetMethod(
-                    "TryProcessPotionEffects",
-                    BindingFlags.Static |
-                    BindingFlags.Public |
-                    BindingFlags.NonPublic
-                );
+            MethodInfo buildEffect = registryType.GetMethod(
+                "Build",
+                BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic
+            );
 
+            sourceStackField = potionDataType.GetField(
+                "SourceStack",
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
+            );
 
-            MethodInfo buildEffect =
-                registryType.GetMethod(
-                    "Build",
-                    BindingFlags.Static |
-                    BindingFlags.Public |
-                    BindingFlags.NonPublic
-                );
+            durationField = effectContextType.GetField(
+                "Duration",
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
+            );
 
-
-            sourceStackField =
-                potionDataType.GetField(
-                    "SourceStack",
-                    BindingFlags.Instance |
-                    BindingFlags.Public |
-                    BindingFlags.NonPublic
-                );
-
-
-            durationField =
-                effectContextType.GetField(
-                    "Duration",
-                    BindingFlags.Instance |
-                    BindingFlags.Public |
-                    BindingFlags.NonPublic
-                );
-
-            durationProperty =
-                effectContextType.GetProperty(
-                    "Duration",
-                    BindingFlags.Instance |
-                    BindingFlags.Public |
-                    BindingFlags.NonPublic
-                );
-
+            durationProperty = effectContextType.GetProperty(
+                "Duration",
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic
+            );
 
             if (processPotion == null
                 || buildEffect == null
                 || sourceStackField == null
-                || (durationField == null
-                    && durationProperty == null))
+                || (durationField == null && durationProperty == null))
             {
                 return;
             }
 
+            Type patchType = typeof(AlchemyPotionDurationPatch);
 
-            Type patchType =
-                typeof(AlchemyPotionDurationPatch);
+            MethodInfo processPrefix = patchType.GetMethod(
+                nameof(TryProcessPotionEffects_Prefix),
+                BindingFlags.Static | BindingFlags.NonPublic
+            );
 
+            MethodInfo processFinalizer = patchType.GetMethod(
+                nameof(TryProcessPotionEffects_Finalizer),
+                BindingFlags.Static | BindingFlags.NonPublic
+            );
 
-            MethodInfo processPrefix =
-                patchType.GetMethod(
-                    nameof(TryProcessPotionEffects_Prefix),
-                    BindingFlags.Static |
-                    BindingFlags.NonPublic
-                );
-
-            MethodInfo processFinalizer =
-                patchType.GetMethod(
-                    nameof(TryProcessPotionEffects_Finalizer),
-                    BindingFlags.Static |
-                    BindingFlags.NonPublic
-                );
-
-            MethodInfo buildPostfix =
-                patchType.GetMethod(
-                    nameof(Build_Postfix),
-                    BindingFlags.Static |
-                    BindingFlags.NonPublic
-                );
-
+            MethodInfo buildPostfix = patchType.GetMethod(
+                nameof(Build_Postfix),
+                BindingFlags.Static | BindingFlags.NonPublic
+            );
 
             harmony.Patch(
                 processPotion,
@@ -161,190 +109,92 @@ namespace XSkills
                 finalizer: new HarmonyMethod(processFinalizer)
             );
 
-
             harmony.Patch(
                 buildEffect,
                 postfix: new HarmonyMethod(buildPostfix)
             );
         }
 
-
-
-        private static void TryProcessPotionEffects_Prefix(
-            object[] __args
-        )
+        // перехват питья зелья
+        private static void TryProcessPotionEffects_Prefix(object[] __args)
         {
             currentPotionQuality = 0f;
 
-
-            // Аргументы оригинального метода:
-            //
-            // 0 = EntityAgent byEntity
-            // 1 = PotionData data
-            // 2 = ICoreAPI api
-
-            if (__args == null
-                || __args.Length < 2)
+            // args: 0 - EntityAgent, 1 - PotionData, 2 - ICoreAPI
+            if (__args == null || __args.Length < 2)
             {
                 return;
             }
 
+            object potionData = __args[1];
+            if (potionData == null) return;
 
-            object potionData =
-                __args[1];
+            ItemStack sourceStack = sourceStackField?.GetValue(potionData) as ItemStack;
+            if (sourceStack == null) return;
 
-            if (potionData == null)
-                return;
+            float quality = QualityUtil.GetQuality(sourceStack);
+            if (quality <= 0f) return;
 
-
-            ItemStack sourceStack =
-                sourceStackField?.GetValue(
-                    potionData
-                ) as ItemStack;
-
-
-            if (sourceStack == null)
-                return;
-
-
-            float quality =
-                QualityUtil.GetQuality(
-                    sourceStack
-                );
-
-
-            if (quality <= 0f)
-                return;
-
-
-            currentPotionQuality =
-                quality;
-
+            currentPotionQuality = quality;
         }
 
-
-        private static void Build_Postfix(
-            object __result
-        )
+        // модификация длительности эффекта
+        private static void Build_Postfix(object __result)
         {
-            if (__result == null)
-                return;
+            if (__result == null || currentPotionQuality <= 0f) return;
 
-            if (currentPotionQuality <= 0f)
-                return;
+            int baseDuration = GetDuration(__result);
 
+            // мгновенные эффекты не продливаются
+            if (baseDuration <= 0) return;
 
-            int baseDuration =
-                GetDuration(
-                    __result
-                );
+            float multiplier = 1f + currentPotionQuality * DurationBonusPerQuality;
+            int finalDuration = Math.Max(1, (int)Math.Round(baseDuration * multiplier));
 
-
-            // Главный фильтр
-            // Duration <= 0 = мгновенное зелье
-            //
-            // Recall, Nutrition, Temporal, Reshape, Grow, Shrink и т.д сюда не попадут
-            if (baseDuration <= 0)
-                return;
-
-
-            float multiplier =
-                1f
-                + currentPotionQuality
-                * DurationBonusPerQuality;
-
-
-            int finalDuration =
-                Math.Max(
-                    1,
-                    (int)Math.Round(
-                        baseDuration
-                        * multiplier
-                    )
-                );
-
-
-            SetDuration(
-                __result,
-                finalDuration
-            );
-
+            SetDuration(__result, finalDuration);
         }
 
-
-        // CLEANUP
-        private static Exception TryProcessPotionEffects_Finalizer(
-            Exception __exception
-        )
+        // сброс качества после применения
+        private static Exception TryProcessPotionEffects_Finalizer(Exception __exception)
         {
             currentPotionQuality = 0f;
-
             return __exception;
         }
 
-
-        private static int GetDuration(
-            object context
-        )
+        // получение длительности
+        private static int GetDuration(object context)
         {
-            if (context == null)
-                return 0;
-
+            if (context == null) return 0;
 
             if (durationField != null)
             {
-                object value =
-                    durationField.GetValue(
-                        context
-                    );
-
-                if (value is int duration)
-                    return duration;
+                object value = durationField.GetValue(context);
+                if (value is int duration) return duration;
             }
-
 
             if (durationProperty != null)
             {
-                object value =
-                    durationProperty.GetValue(
-                        context
-                    );
-
-                if (value is int duration)
-                    return duration;
+                object value = durationProperty.GetValue(context);
+                if (value is int duration) return duration;
             }
-
 
             return 0;
         }
 
-
-        private static void SetDuration(
-            object context,
-            int duration
-        )
+        // установка длительности
+        private static void SetDuration(object context, int duration)
         {
-            if (context == null)
-                return;
-
+            if (context == null) return;
 
             if (durationField != null)
             {
-                durationField.SetValue(
-                    context,
-                    duration
-                );
-
+                durationField.SetValue(context, duration);
                 return;
             }
 
-
             if (durationProperty?.CanWrite == true)
             {
-                durationProperty.SetValue(
-                    context,
-                    duration
-                );
+                durationProperty.SetValue(context, duration);
             }
         }
     }

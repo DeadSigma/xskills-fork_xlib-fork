@@ -435,7 +435,7 @@
     "ability-pickaxeexpert": "Expert de la pioche",
     "abilitydesc-pickaxeexpert": "Casser un bloc avec la pioche augment votre vitesse de minage de {0}% et 0.{1}% additionnel pour chaque niveau de votre compétence de Minage. Maximisé à {2}%. Cet effet s'empile jusqu'à {3} fois et dure {4} secondes.",
     "ability-potionquality": "Qualité des potions",
-    "abilitydesc-potionquality": "Les potions que vous préparez obtiennent un paramètre « qualité » (valeur de base – {0}, maximum – {1}). Un joueur qui boit une telle potion reçoit un bonus supplémentaire à la durée de son effet ; plus la qualité est élevée, plus le bonus est important.",
+    "abilitydesc-potionquality": "Les potions que vous préparez obtiennent un paramètre « qualité » (valeur de base - {0}, maximum - {1}). Un joueur qui boit une telle potion reçoit un bonus supplémentaire à la durée de son effet ; plus la qualité est élevée, plus le bonus est important.",
     "ability-potter": "Potier",
     "abilitydesc-potter": "Vous recevrez {0}% d'expérience supplémentaire pour votre compétence Poterie. Le nombre de specializations que vous pouvez apprendre est limité.",
     "ability-potterytimer": "Minuteur de poterie",
