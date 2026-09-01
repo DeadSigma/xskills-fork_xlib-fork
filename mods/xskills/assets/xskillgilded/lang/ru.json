@@ -20,7 +20,7 @@
   "effectBoxSize": "Размер окна эффектов",
   "expBonusDesc": "Бонус/штраф очков опыта от вашего текущего класса.<br><br>Эффект класса: {0}<br>Общий эффект: {1}<br>",
   "expBonusTitle": "Бонус опыта",
-  "hotkey-xSkillGilded_v2": "xSkills Gilded: Показать/Скрыть меню навыков",
+  "hotkey-xSkillGilded_v2": "xSkills: Показать/Скрыть меню навыков",
   "layout-edit-el-effectbox": "Эффекты",
   "layout-edit-el-levelpopup": "Новый уровень",
   "layout-edit-el-window": "Окно навыков",
