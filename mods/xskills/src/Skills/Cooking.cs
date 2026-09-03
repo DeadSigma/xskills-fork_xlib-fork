@@ -93,6 +93,29 @@ namespace XSkills
                 || first.Collectible.Code?.Equals(second.Collectible.Code) == true;
         }
 
+        /// <summary>
+        /// Возвращает неизменённое значение свежести в часах, заданное непосредственно для предмета.
+        /// Используется как фиксированная базовая величина, чтобы Well Done никогда не мог повторно умножить собственный результат.
+        /// </summary>
+
+        private static float[] GetBaseFreshHours(IWorldAccessor world, ItemStack stack)
+        {
+            if (world == null || stack?.Collectible == null) return null;
+
+            TransitionableProperties[] props =
+                stack.Collectible.GetTransitionableProperties(world, stack, null);
+
+            if (props == null || props.Length == 0) return null;
+
+            float[] baseFreshHours = new float[props.Length];
+            for (int index = 0; index < props.Length; index++)
+            {
+                baseFreshHours[index] = props[index]?.FreshHours?.avg ?? 0.0f;
+            }
+
+            return baseFreshHours;
+        }
+
         private static ITreeAttribute GetOrCreateTransitionState(IWorldAccessor world, ItemStack stack)
         {
             if (world == null || stack?.Collectible == null) return null;
@@ -252,7 +275,8 @@ namespace XSkills
                 FloatArrayAttribute previousFreshHours =
                     previousTransitionState?["freshHours"] as FloatArrayAttribute;
 
-
+                // база берётся из определения предмета - иначе бонус накручивается сам на себя
+                float[] baseFreshHours = GetBaseFreshHours(world, currentStack);
 
                 for (int transitionIndex = 0;
                      transitionIndex < currentFreshHours.value.Length;
@@ -261,9 +285,14 @@ namespace XSkills
                     float currentFresh = currentFreshHours.value[transitionIndex];
                     if (currentFresh <= 0.0f || !float.IsFinite(currentFresh)) continue;
 
+                    float baseFresh = baseFreshHours != null
+                        && transitionIndex < baseFreshHours.Length
+                        && baseFreshHours[transitionIndex] > 0.0f
+                        && float.IsFinite(baseFreshHours[transitionIndex])
+                            ? baseFreshHours[transitionIndex]
+                            : currentFresh;
 
-
-                    float boostedProducedFresh = currentFresh * shelfLifeMultiplier;
+                    float boostedProducedFresh = baseFresh * shelfLifeMultiplier;
 
                     if (previousWeight <= 0.0f)
                     {

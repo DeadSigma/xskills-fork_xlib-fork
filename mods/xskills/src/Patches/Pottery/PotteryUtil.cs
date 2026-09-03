@@ -191,22 +191,25 @@ namespace XSkills
 
                 foreach (CollectibleObject collectible in world.Collectibles)
                 {
-                    if (collectible.Code.Path.Contains(name) && collectible != outputSlot.Itemstack.Collectible)
-                    {
-                        if (collectible.Code.Path.EndsWith("raw")) continue;
-                        if (collectible.Code.Path.EndsWith("fired")) continue;
-                        dest.Add(collectible);
-                    }
+                    if (collectible?.Code == null) continue;
+                    if (collectible == outputSlot.Itemstack.Collectible) continue;
+                    if (!collectible.Code.Path.Contains(name)) continue;
+
+                    // отсекаем любые необожженные варианты, где бы ни стояло состояние в коде
+                    if (IsUnfired(collectible)) continue;
+                    if (collectible.Code.Path.EndsWith("fired")) continue;
+
+                    dest.Add(collectible);
                 }
             }
 
             if (dest.Count <= 0) return true;
             if (world.Rand.NextDouble() < playerAbility.FValue(0) / outputSlot.Itemstack.StackSize)
             {
-                CollectibleObject obj = dest[world.Rand.Next(dest.Count - 1)];
+                CollectibleObject obj = dest[world.Rand.Next(dest.Count)];
 
                 ItemStack stack = new ItemStack(obj, outputSlot.Itemstack.StackSize);
-                string type = obj.Attributes["defaultType"].AsString();
+                string type = obj.Attributes?["defaultType"]?.AsString();
                 if (type != null) stack.Attributes.SetString("type", type);
 
                 ITreeAttribute pairs = outputSlot.Itemstack.Attributes.GetTreeAttribute("temperature");
@@ -225,6 +228,26 @@ namespace XSkills
                 outputSlot.MarkDirty();
             }
             return true;
+        }
+
+        /// <summary>
+        /// Checks whether a collectible is an unfired (raw) product.
+        /// </summary>
+        /// <param name="collectible">The collectible.</param>
+        /// <returns></returns>
+        private static bool IsUnfired(CollectibleObject collectible)
+        {
+            // у сырого изделия всегда задан результат обжига - это работает для любого мода
+            CombustibleProperties props = collectible.CombustibleProps;
+            if (props != null && props.SmeltingType == EnumSmeltType.Fire && props.SmeltedStack != null) return true;
+
+            // запасная проверка по частям кода, если мод обжигает своими средствами
+            string[] parts = collectible.Code.Path.Split('-');
+            for (int i = 0; i < parts.Length; i++)
+            {
+                if (parts[i] == "raw" || parts[i] == "unfired" || parts[i] == "unburned") return true;
+            }
+            return false;
         }
 
         /// <summary>
