@@ -735,6 +735,7 @@ namespace XSkills
             quality /= ingredientCount;
         }
 
+        //  имя уникальное ибо внешние моды  ищут метод через GetMethod (name, flags) без списка типов
         public void ApplyAbilities(
             ItemSlot outputSlot,
             IPlayer player,
@@ -743,7 +744,7 @@ namespace XSkills
             ItemStack[] sourceStacks = null,
             float expMult = 1.0f)
         {
-            ApplyAbilities(
+            ApplyAbilitiesCore(
                 outputSlot,
                 player,
                 oldQuality,
@@ -754,7 +755,7 @@ namespace XSkills
             );
         }
 
-        public void ApplyAbilities(
+        public void ApplyAbilitiesCore(
             ItemSlot outputSlot,
             IPlayer player,
             float oldQuality,
