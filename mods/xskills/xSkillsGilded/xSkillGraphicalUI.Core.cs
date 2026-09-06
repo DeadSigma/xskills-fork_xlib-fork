@@ -41,6 +41,11 @@ namespace xSkillGilded
 
         Dictionary<PlayerSkill, int> previousLevels;
 
+        long popupsAllowedAfterMs;
+
+        // Пауза после пересборки набора навыков. checkLevelInterval = 100 мс, то есть это ~30 проверок.
+        const int levelSyncGraceMs = 3000;
+
         const int checkAPIInterval = 1000;
         const int checkLevelInterval = 100;
         private long checkAPIID, checkLevelID;
@@ -176,7 +181,8 @@ namespace xSkillGilded
             {
                 int currentLevel = skill.Level;
 
-                if (currentLevel > previousLevels[skill])
+                // Слепок обновляется всегда (ниже), а вот попап - только после окна синхронизации
+                if (api.ElapsedMilliseconds >= popupsAllowedAfterMs && currentLevel > previousLevels[skill])
                 {
                     try
                     {
@@ -210,6 +216,7 @@ namespace xSkillGilded
 
             skillGroups = new Dictionary<string, List<PlayerSkill>>();
             previousLevels = new Dictionary<PlayerSkill, int>();
+            popupsAllowedAfterMs = api.ElapsedMilliseconds + levelSyncGraceMs;
             allSkills = new List<PlayerSkill>();
             specializeGroups = new List<PlayerAbility>();
 
