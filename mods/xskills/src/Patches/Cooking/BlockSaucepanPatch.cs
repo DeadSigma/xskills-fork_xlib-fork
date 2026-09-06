@@ -76,7 +76,7 @@ namespace XSkills
 
             Cooking cooking = blockEntity?.Api.ModLoader.GetModSystem<XLeveling>()?.GetSkill("cooking") as Cooking;
             if (cooking == null) return;
-            cooking.ApplyAbilities(
+            cooking.ApplyAbilitiesCore(
                 outputSlot,
                 ownable.Owner,
                 __state.quality,

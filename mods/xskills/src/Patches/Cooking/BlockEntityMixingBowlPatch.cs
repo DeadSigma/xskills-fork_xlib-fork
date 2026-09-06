@@ -92,7 +92,7 @@ namespace XSkills
                                || outputStack.Collectible is BlockLiquidContainerBase;
 
             // качество/свежесть/опыт; для контейнеров (суп/жидкость) тут же растут порции/объём
-            cooking.ApplyAbilities(
+            cooking.ApplyAbilitiesCore(
                 outputSlot,
                 byPlayer,
                 __state.quality,
