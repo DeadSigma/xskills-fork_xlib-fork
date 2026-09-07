@@ -297,7 +297,12 @@ namespace XSkills
             this.Skills.Add(riding.Name, riding);
             Sailing sailing = new Sailing(api);
             this.Skills.Add(sailing.Name, sailing);
+            Knapping knapping = new Knapping(api);
+            this.Skills.Add(knapping.Name, knapping);
+
+
             if (api.ModLoader.IsModEnabled("alchemy"))
+
             {
                 Alchemy alchemy = new Alchemy(api);
                 this.Skills.Add(alchemy.Name, alchemy);

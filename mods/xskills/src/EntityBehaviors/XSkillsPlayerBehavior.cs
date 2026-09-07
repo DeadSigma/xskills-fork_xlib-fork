@@ -171,9 +171,19 @@ namespace XSkills
             PlayerAbility playerAbility = this.entity.GetBehavior<PlayerSkillSet>()?[this.survival.Id]?[survival.DiverId];
             if ((playerAbility?.Tier ?? 0) < 1) return;
 
-            TreeAttribute oxygen = entity.WatchedAttributes.GetTreeAttribute("oxygen") as TreeAttribute;
+            // дерева может не быть - оно ещё не синхронизировалось или behavior дыхания снят другим модом
+            ITreeAttribute oxygen = entity.WatchedAttributes.GetTreeAttribute("oxygen");
+            if (oxygen == null)
+            {
+                oldOxygen = 0.0f;
+                return;
+            }
+
             float currentOxygen = oxygen.GetFloat("currentoxygen");
             float maxOxygen = oxygen.GetFloat("maxoxygen");
+
+            // защита от кривого дерева - иначе Math.Min зажмёт кислород в ноль
+            if (maxOxygen <= 0.0f) return;
 
             float deltaOxygen = oldOxygen - currentOxygen;
             if (deltaOxygen > 0.0f)

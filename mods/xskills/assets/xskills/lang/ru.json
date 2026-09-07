@@ -33,10 +33,16 @@
   "cloudiness-range": "Облачность от {0:P2} до {1:P2}",
   "cooking-finished": "Приготовлений завершено: {0}",
   "error-gilded-conflict": "Удалите мод xSkills Gilded! Теперь он полностью встроен в основной xSkills",
+  "game:characterclass-archer": "Лучник",
   "game:characterclass-clockmakergloo": "GlooMeClasses: Часовщик",
+  "game:characterclass-forger": "Кузнец",
+  "game:characterclass-huntergloo": "GlooMeClasses: Охотник",
+  "game:characterclass-malefactorgloo": "GlooMeClasses: Негодяй",
+  "game:characterclass-smith": "GlooMeClasses: Кузнец",
   "group-collecting": "Собирательство",
   "group-processing": "Обработка",
   "group-survival": "Выживание",
+  "group-travel": "Путешествия",
   "harvestable-in-days": "Будет готово к сбору через {0:N1} д.",
   "hotkey-cateyesonoff": "xSkills: Кошачье зрение Вкл/Выкл",
   "hotkey-cateyestoggle": "xSkills: Переключить фильтры кошачьего зрения",
@@ -90,6 +96,7 @@
   "skill-fishing": "Рыбалка",
   "skill-forestry": "Лесничество",
   "skill-husbandry": "Животноводство",
+  "skill-knapping": "Откалывание",
   "skill-metalworking": "Металлообработка",
   "skill-mining": "Горн. дело",
   "skill-pottery": "Гончарное дело",
@@ -338,6 +345,9 @@
   "ability-fastforward": "Ускорение",
   "abilitydesc-fastforward": "Увеличивает скорость добычи и расхода пищи вплоть до {0}%. Чем меньше ваша текущая темпоральная устойчивость, тем больший эффект достигается.",
 
+  "ability-fastknapper": "Быстрое откалывание",
+  "abilitydesc-fastknapper": "Каждый успешный удар имеет до {0}% шанса убрать весь оставшийся лишний материал. Шанс растёт по мере завершения работы",
+
   "ability-fastpotter": "Быстрый гончар",
   "abilitydesc-fastpotter": "Переход на следующий слой с шансом вплоть до {0}% (плюс ещё 0.{1}% за каждый уровень навыка гончарного дела) может мгновенно завершить предмет, который вы лепите. Чем сложнее работа, тем выше шанс. Максимальное значение: {2}% на слой.",
 
@@ -457,6 +467,12 @@
 
   "ability-juicer": "Соковыжимальщик",
   "abilitydesc-juicer": "Увеличивает количество сока, получаемого из одного фрукта, на {0}%.",
+
+  "ability-knapper": "Кремнёвщик",
+  "abilitydesc-knapper": "Вы получаете на {0}% больше опыта навыка Откалывание. Количество доступных специализаций ограничено",
+
+  "ability-knappingjackpot": "Дубликатор",
+  "abilitydesc-knappingjackpot": "Вы имеете {0}% шанса и ещё {1}% за каждый уровень Откалывания получить второй такой же результат. Максимум {2}%",
 
   "ability-laststand": "Последний рубеж",
   "abilitydesc-laststand": "У вас есть шанс выжить после удара, который должен был вас убить. Вероятность выживания равна вашему оставшемуся относительному здоровью, умноженному на {0}%.",
@@ -841,6 +857,9 @@
 
   "ability-wellrested": "Отдохнувший",
   "abilitydesc-wellrested": "Увеличивает прирост опыта за каждый навык вплоть до {0}% на {1} секунд в зависимости от того, насколько вы отдохнули во время сна.",
+
+  "ability-widechipping": "Широкий скол",
+  "abilitydesc-widechipping": "Каждый успешный удар откалывает до {0} дополнительных соседних вокселей, которые не входят в рецепт",
 
   "ability-winterweaver": "Зимний ткач",
   "abilitydesc-winterweaver": "Созданная вами одежда даёт на {0}% больше тепла."

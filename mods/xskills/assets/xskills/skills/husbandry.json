@@ -123,6 +123,21 @@
           {
             "minimumTier": 2,
             "code": "class",
+            "class": "huntergloo"
+          },
+          {
+            "minimumTier": 2,
+            "code": "class",
+            "class": "malefactorgloo"
+          },
+          {
+            "minimumTier": 2,
+            "code": "class",
+            "class": "smith"
+          },
+          {
+            "minimumTier": 2,
+            "code": "class",
             "class": "malefactor"
           },
           {
