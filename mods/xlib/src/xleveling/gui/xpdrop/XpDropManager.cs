@@ -211,6 +211,10 @@ namespace PandaXPDrops
         /// <summary>Имя навыка, который получает опыт непрерывно и поэтому группируется (batched)</summary>
         private const string SurvivalSkill = "survival";
 
+        private const string TemporalAdaptationSkill = "temporaladaptation";
+        private const float TemporalBurstXpThreshold = 1f;
+        private const double TemporalBurstWindow = 4.0;
+
         /// <summary>Навык, отображаемый в предпросмотре режима редактирования</summary>
         private const string PreviewSkill = "mining";
 
@@ -237,11 +241,14 @@ namespace PandaXPDrops
         }
 
         private readonly Dictionary<string, BatchedSkill> batchedSkills = new Dictionary<string, BatchedSkill>(StringComparer.OrdinalIgnoreCase);
+        private readonly BatchedSkill temporalBatch = new BatchedSkill { SkillName = TemporalAdaptationSkill };
+        private float temporalBurstAccumulated;
+        private double temporalBurstTimer;
 
-        // Навыки, опыт для которых должен накапливаться порциями
+        // Навыки с обычным накоплением
         private readonly HashSet<string> batchedSkillNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
-            "survival", "sailing", "riding", "temporaladaptation"
+            "survival", "sailing", "riding"
         };
 
         // состояние полосы
@@ -322,7 +329,12 @@ namespace PandaXPDrops
                 }
             }
 
-            // Некоторые навыки поступают постоянно - группируем их, чтобы не спамить экран
+            if (string.Equals(skillName, TemporalAdaptationSkill, StringComparison.OrdinalIgnoreCase))
+            {
+                AddTemporalDrop(skillId, xpAmount, progressFraction, level);
+                return;
+            }
+
             if (skillName != null && batchedSkillNames.Contains(skillName))
             {
                 if (!batchedSkills.TryGetValue(skillName, out BatchedSkill batch))
@@ -369,6 +381,7 @@ namespace PandaXPDrops
             }
 
             UpdateBatches(dt);
+            UpdateTemporalBatch(dt);
             if (EditPreview) UpdatePreview();
             UpdateBar(dt);
             UpdateDrops(dt);
@@ -391,6 +404,10 @@ namespace PandaXPDrops
             BarAlpha = 0f;
             barIdleTimer = 0.0;
             batchedSkills.Clear();
+            temporalBatch.Accumulated = 0f;
+            temporalBatch.Timer = 0.0;
+            temporalBurstAccumulated = 0f;
+            temporalBurstTimer = 0.0;
         }
 
         /// <summary>Экранный прямоугольник полосы. Привязан к своему правому краю, поэтому при увеличении масштаба он растет влево</summary>
@@ -433,6 +450,61 @@ namespace PandaXPDrops
             double y = bar.Y + config.TextSpawnBelowBar * scale;
 
             return new GuiRect(cx - w / 2.0, y, w, h);
+        }
+
+        private void AddTemporalDrop(int skillId, float xpAmount, float progressFraction, int level)
+        {
+            temporalBatch.SkillId = skillId;
+            temporalBatch.Accumulated += xpAmount;
+            temporalBatch.LastProgress = Math.Clamp(progressFraction, 0f, 1f);
+            temporalBatch.LastLevel = level;
+            temporalBurstAccumulated += xpAmount;
+        }
+
+        private void UpdateTemporalBatch(float dt)
+        {
+            if (temporalBatch.Accumulated <= 0f)
+            {
+                temporalBatch.Timer = 0.0;
+                temporalBurstAccumulated = 0f;
+                temporalBurstTimer = 0.0;
+                return;
+            }
+
+            temporalBatch.Timer += dt;
+            temporalBurstTimer += dt;
+
+            if (temporalBurstTimer >= TemporalBurstWindow)
+            {
+                bool fastGain = temporalBurstAccumulated >= TemporalBurstXpThreshold;
+                temporalBurstAccumulated = 0f;
+                temporalBurstTimer = 0.0;
+
+                if (fastGain)
+                {
+                    FlushTemporalBatch();
+                    return;
+                }
+            }
+
+            if (temporalBatch.Timer < config.BatchInterval) return;
+
+            temporalBatch.Timer = 0.0;
+            FlushTemporalBatch();
+        }
+
+        private void FlushTemporalBatch()
+        {
+            if (temporalBatch.Accumulated < config.MinimumXp) return;
+
+            float amount = temporalBatch.Accumulated;
+            temporalBatch.Accumulated = 0f;
+            temporalBatch.Timer = 0.0;
+            temporalBurstAccumulated = 0f;
+            temporalBurstTimer = 0.0;
+
+            ShowBar(temporalBatch.SkillName, temporalBatch.LastProgress, temporalBatch.LastLevel);
+            SpawnDrop(temporalBatch.SkillId, temporalBatch.SkillName, amount);
         }
 
         /// <summary>
@@ -777,7 +849,7 @@ namespace PandaXPDrops
         {
             double scale = RuntimeEnv.GUIScale * config.DropScale;
             double fontSize = config.FontSize * scale * 0.85;
-            string xpText = "+" + drop.XpAmount.ToString("0.0#", CultureInfo.InvariantCulture);
+            string xpText = "+" + drop.XpAmount.ToString("0.0##", CultureInfo.InvariantCulture);
 
             int textW, textH;
             using (ImageSurface measure = new ImageSurface(Format.Argb32, 1, 1))

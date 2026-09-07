@@ -105,6 +105,13 @@ namespace PandaXPDrops
             Logger = api.Logger;
             Config = LoadConfig(api);
 
+            // В Classic уведомления выключены по умолчанию
+            if (api.ModLoader.IsModEnabled("xskillsforkclassic") && !Config.EnableWithXSkillsForkClassic)
+            {
+                Logger.Notification("[PandaXPDrops] XP drops disabled because xskillsforkclassic is enabled.");
+                return;
+            }
+
             DropManager = new XpDropManager(api, Config);
             hud = new XpDropsHud(api, DropManager);
             editDialog = new XpDropsEditDialog(api, DropManager, SaveConfig);
@@ -218,7 +225,7 @@ namespace PandaXPDrops
             if (config == null)
             {
                 config = new XpDropConfig();
-                config.ConfigVersion = XpDropConfig.CurrentConfigVersion; 
+                config.ConfigVersion = XpDropConfig.CurrentConfigVersion;
                 api.StoreModConfig(config, ConfigFile);
             }
 
@@ -269,7 +276,7 @@ namespace PandaXPDrops
     {
 
         /// <summary>Текущая версия схемы конфига</summary>
-        public const int CurrentConfigVersion = 1;
+        public const int CurrentConfigVersion = 3;
 
         /// <summary>
         /// Версия, до которой уже мигрирован этот файл. Должна оставаться 0 по умолчанию,
@@ -282,6 +289,9 @@ namespace PandaXPDrops
         /// пока он выключен, мод остается загруженным, чтобы горячая клавиша продолжала работать.
         /// </summary>
         public bool Enabled { get; set; } = true;
+
+        /// <summary>Разрешает уведомления при активном xskillsforkclassic</summary>
+        public bool EnableWithXSkillsForkClassic { get; set; } = false;
 
         /// <summary>Расстояние между правым краем экрана и правым краем полосы. Устанавливается перетаскиванием</summary>
         public float BarRightMargin { get; set; } = 270f;
@@ -320,7 +330,7 @@ namespace PandaXPDrops
         public double BatchInterval { get; set; } = 300.0;
 
         /// <summary>Получение опыта ниже этого значения никогда не вызывает появление метки</summary>
-        public float MinimumXp { get; set; } = 0.01f;
+        public float MinimumXp { get; set; } = 0.001f;
 
         /// <summary>Скорость подъема метки в немасштабируемых пикселях в секунду</summary>
         public float FloatSpeed { get; set; } = 35f;
@@ -417,6 +427,11 @@ namespace PandaXPDrops
             if (ConfigVersion < 1 && MinimumXp == 0.1f)
             {
                 MinimumXp = 0.01f;
+            }
+
+            if (ConfigVersion < 2)
+            {
+                MinimumXp = 0.001f;
             }
 
             ConfigVersion = CurrentConfigVersion;
