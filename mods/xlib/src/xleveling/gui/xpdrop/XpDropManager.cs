@@ -150,6 +150,7 @@ namespace PandaXPDrops
             { "sailing",           new Entry(0.85, 0.25, 0.25, "game:seashell-seastar-cinnamon") },
             { "riding",           new Entry(0.85, 0.25, 0.25, "game:hoovedwearables-middleback-saddle1") },
             { "alchemy",           new Entry(0.85, 0.25, 0.25, "alchemy:potioncauldron-oldworld-construct0") },
+            { "knapping",           new Entry(0.85, 0.25, 0.25, "game:flint") },
 
 
 
