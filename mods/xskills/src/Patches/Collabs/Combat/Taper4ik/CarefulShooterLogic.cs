@@ -6,6 +6,7 @@ using System.Reflection;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Config;
+using Vintagestory.Common;
 using Vintagestory.GameContent;
 using XLib.XLeveling;
 
@@ -19,6 +20,7 @@ namespace xskills.src.Patches.Collabs.Combat.Taper4ik
         public static bool IsSling(ItemStack stack)
         {
             if (stack?.Collectible?.Code == null) return false;
+
             string path = stack.Collectible.Code.Path.ToLowerInvariant();
             string type = stack.Collectible.GetType().Name.ToLowerInvariant();
             return path.Contains("sling") || type.Contains("sling");
@@ -31,9 +33,12 @@ namespace xskills.src.Patches.Collabs.Combat.Taper4ik
 
             if (coll is ItemBow) return true;
 
-            if (coll.Tool != null) return coll.Tool == EnumTool.Bow || coll.Tool == EnumTool.Sling;
+            if (coll.Tool != null)
+            {
+                return coll.Tool == EnumTool.Bow || coll.Tool == EnumTool.Sling;
+            }
 
-            // запасной вариант для предметов без tool
+            // Запасной вариант для предметов без tool.
             string path = coll.Code.Path.ToLowerInvariant();
             return path == "bow" || path.StartsWith("bow-", StringComparison.Ordinal);
         }
@@ -41,6 +46,7 @@ namespace xskills.src.Patches.Collabs.Combat.Taper4ik
         public static bool CanPreserveAmmo(ItemStack stack)
         {
             if (stack?.Collectible?.Code == null) return false;
+
             string code = stack.Collectible.Code.ToString().ToLowerInvariant();
             string path = stack.Collectible.Code.Path.ToLowerInvariant();
 
@@ -51,6 +57,7 @@ namespace xskills.src.Patches.Collabs.Combat.Taper4ik
         public static PlayerAbility GetAbility(IPlayer player)
         {
             if (player?.Entity == null) return null;
+
             PlayerSkillSet skillSet = player.Entity.GetBehavior<PlayerSkillSet>();
             PlayerSkill combatSkill = skillSet?.FindSkill("combat");
             return combatSkill?.FindAbility("carefulshooter");
@@ -58,13 +65,35 @@ namespace xskills.src.Patches.Collabs.Combat.Taper4ik
 
         public static ItemSlot FindFirstAmmoSlot(IPlayer player, System.Func<ItemSlot, bool> predicate)
         {
+            if (player?.InventoryManager?.InventoriesOrdered == null || predicate == null)
+            {
+                return null;
+            }
+
             foreach (InventoryBase inv in player.InventoryManager.InventoriesOrdered)
             {
+                if (inv == null)
+                {
+                    continue;
+                }
+
+                // InventoryPlayerCreative может быть не полностью инициализирован на сервере.
+                // Его перебор вызывает InventoryPlayerCreative.Count и способен выбросить
+                // NullReferenceException, поэтому для поиска обычных боеприпасов он не нужен.
+                if (inv is InventoryPlayerCreative)
+                {
+                    continue;
+                }
+
                 foreach (ItemSlot slot in inv)
                 {
-                    if (predicate(slot)) return slot;
+                    if (slot != null && predicate(slot))
+                    {
+                        return slot;
+                    }
                 }
             }
+
             return null;
         }
     }
@@ -109,16 +138,27 @@ namespace xskills.src.Patches.Collabs.Combat.Taper4ik
         public static void Prefix(object[] __args, ref SlingUseState __state)
         {
             __state = null;
+
+            if (__args == null) return;
+
             EntityAgent agent = __args.OfType<EntityAgent>().FirstOrDefault();
             if (agent?.World?.Side != EnumAppSide.Server) return;
 
             IPlayer player = (agent as EntityPlayer)?.Player;
             if (player == null) return;
 
+            // Не ищем боеприпасы вообще, если перк не изучен.
+            PlayerAbility ability = CarefulShooterRules.GetAbility(player);
+            if (ability == null || ability.Tier <= 0) return;
+
             ItemSlot slingSlot = __args.OfType<ItemSlot>().FirstOrDefault();
             if (!CarefulShooterRules.IsSling(slingSlot?.Itemstack)) return;
 
-            ItemSlot ammoSlot = CarefulShooterRules.FindFirstAmmoSlot(player, slot => CarefulShooterRules.CanPreserveAmmo(slot.Itemstack));
+            ItemSlot ammoSlot = CarefulShooterRules.FindFirstAmmoSlot(
+                player,
+                slot => CarefulShooterRules.CanPreserveAmmo(slot?.Itemstack)
+            );
+
             if (ammoSlot?.Itemstack == null) return;
 
             __state = new SlingUseState
@@ -131,6 +171,7 @@ namespace xskills.src.Patches.Collabs.Combat.Taper4ik
         public static void Postfix(object[] __args, SlingUseState __state)
         {
             if (__state?.PreservableAmmoBefore == null) return;
+            if (__args == null) return;
 
             EntityAgent agent = __args.OfType<EntityAgent>().FirstOrDefault();
             if (agent?.World?.Side != EnumAppSide.Server) return;
@@ -144,14 +185,22 @@ namespace xskills.src.Patches.Collabs.Combat.Taper4ik
             int chance = ability.Value(3);
             if (chance <= 0 || agent.World.Rand.NextDouble() >= (chance / 100f)) return;
 
-            ItemSlot ammoSlot = CarefulShooterRules.FindFirstAmmoSlot(player, slot =>
-                slot.Itemstack != null && slot.Itemstack.Equals(player.Entity.World, __state.PreservableAmmoBefore, GlobalConstants.IgnoredStackAttributes));
+            ItemSlot ammoSlot = CarefulShooterRules.FindFirstAmmoSlot(
+                player,
+                slot => slot?.Itemstack != null &&
+                        slot.Itemstack.Equals(
+                            player.Entity.World,
+                            __state.PreservableAmmoBefore,
+                            GlobalConstants.IgnoredStackAttributes
+                        )
+            );
 
             int current = ammoSlot?.Itemstack?.StackSize ?? 0;
             if (current >= __state.PreservableAmmoQuantityBefore) return;
 
             ItemStack restored = __state.PreservableAmmoBefore.Clone();
             restored.StackSize = 1;
+
             if (!player.InventoryManager.TryGiveItemstack(restored, true))
             {
                 agent.World.SpawnItemEntity(restored, player.Entity.Pos.XYZ.Add(0, 0.5, 0));
