@@ -199,23 +199,6 @@ namespace XSkills
             this.ExpEquationValue = 4.0f;
             this[HunterBagId].OnPlayerAbilityTierChanged += OnHunterBag;
 
-            // На сервере роняем сумку охотника (и её содержимое) при смерти игрока -  движок штатно дропает только свои инвентари, кастомный туда не входит
-            if (api is ICoreServerAPI sapi)
-            {
-                sapi.Event.PlayerDeath += OnPlayerDeath;
-            }
-        }
-
-        // Сервер: при смерти выбрасываем содержимое слота охотничьей сумки дропом и очищаем его
-        private void OnPlayerDeath(IServerPlayer player, DamageSource damageSource)
-        {
-            if (player?.Entity == null) return;
-            if (!(player.InventoryManager is PlayerInventoryManager invMan)) return;
-
-            if (invMan.GetOwnInventory("hunterbaginv") is HunterBagInventory inv)
-            {
-                inv.DropAllAndClear(player.Entity.Pos?.XYZ);
-            }
         }
 
         //Охотничий слот

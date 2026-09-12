@@ -99,20 +99,25 @@ namespace XSkills
         //    return true;
         //}
 
+        private const string LooterStatCode = "xskillsLooter";
+
         [HarmonyPrefix]
         [HarmonyPatch("SetHarvested")]
-        public static void SetHarvestedPrefix(EntityBehaviorHarvestable __instance, IPlayer byPlayer, ref float dropQuantityMultiplier)
+        public static void SetHarvestedPrefix(EntityBehaviorHarvestable __instance, IPlayer byPlayer)
         {
             if (__instance.entity.World.Side == EnumAppSide.Client || byPlayer?.Entity == null) return;
             XSkillsAnimalBehavior animalBehavior = __instance.entity?.GetBehavior<XSkillsAnimalBehavior>();
-            if (animalBehavior == null)
-            {
-                Combat combat = XLeveling.Instance(byPlayer.Entity.Api)?.GetSkill("combat") as Combat;
-                if (combat == null) return;
-                PlayerSkill playerSkill = byPlayer?.Entity.GetBehavior<PlayerSkillSet>()?[combat.Id];
-                if (playerSkill == null) return;
-                dropQuantityMultiplier += playerSkill[combat.LooterId].SkillDependentFValue();
-            }
+            if (animalBehavior != null) return;
+
+            Combat combat = XLeveling.Instance(byPlayer.Entity.Api)?.GetSkill("combat") as Combat;
+            if (combat == null) return;
+            PlayerSkill playerSkill = byPlayer.Entity.GetBehavior<PlayerSkillSet>()?[combat.Id];
+            if (playerSkill == null) return;
+
+            float bonus = playerSkill[combat.LooterId]?.SkillDependentFValue() ?? 0.0f;
+            if (bonus <= 0.0f) return;
+
+            byPlayer.Entity.Stats.Set("animalLootDropRate", LooterStatCode, bonus, false);
         }
 
         [HarmonyPostfix]
@@ -120,10 +125,12 @@ namespace XSkills
         public static void SetHarvestedPostfix(EntityBehaviorHarvestable __instance, IPlayer byPlayer, InventoryGeneric ___inv)
         {
             if (__instance.entity.World.Side == EnumAppSide.Client || byPlayer?.Entity == null) return;
-            if (___inv.Empty) return;
 
+            // снимаем временный бонус в любом случае
+            byPlayer.Entity.Stats.Remove("animalLootDropRate", LooterStatCode);
+
+            if (___inv.Empty) return;
             if (TrySetHarvestedAnimal(__instance, byPlayer, ___inv)) return;
-            //if (TrySetHarvestedEnemy(__instance, byPlayer, ___inv)) return;
         }
     }//!class EntityBehaviorHarvestablePatch
 }//!namespace XSkills

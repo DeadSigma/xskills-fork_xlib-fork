@@ -68,7 +68,7 @@ namespace XSkills
                 num += playerAbility3.FValue(0, 0f);
             }
             PlayerAbility playerAbility4 = playerSkill[tailoring.ReinforcedSeamsId];
-            if (playerAbility4 != null && playerAbility4.Tier > 0)
+            if (playerAbility4 != null && playerAbility4.Tier > 0 && (flag || flag2) && !HasMetalInput(inSlots))
             {
                 float protectionBonus = playerAbility4.FValue(0, 0f);
 
@@ -90,6 +90,16 @@ namespace XSkills
                     }
                 }
             }
+        }
+
+        
+        private static bool HasMetalInput(ItemSlot[] slots)
+        {
+            return HasInput(slots, "metal")
+                || HasInput(slots, "chain")
+                || HasInput(slots, "ingot")
+                || HasInput(slots, "lamell")
+                || HasInput(slots, "scale");
         }
 
         private static bool HasInput(ItemSlot[] slots, string substr)

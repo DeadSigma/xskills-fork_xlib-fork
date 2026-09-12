@@ -58,6 +58,16 @@ namespace XSkills
 
         public override int Count => slots.Length;
 
+        public override int CountForNetworkPacket
+        {
+            get
+            {
+                for (int i = 0; i < bagSlots.Length; i++)
+                    if (bagSlots[i]?.Itemstack != null) return slots.Length;
+                return bagSlots.Length;
+            }
+        }
+
         /// <summary>Число слотов под сами сумки (остальные слоты - содержимое сумок)</summary>
         public int BagSlotCount => bagSlots.Length;
 
@@ -331,5 +341,14 @@ namespace XSkills
             }
             return null;
         }
+        // HunterBagInventory
+        public override void OnOwningEntityDeath(Vec3d pos)
+        {
+            base.OnOwningEntityDeath(pos); 
+            RebuildContentSlots();         
+            SlotCountChanged?.Invoke();
+            UpdateWeightPenalty();
+        }
+
     }
 }

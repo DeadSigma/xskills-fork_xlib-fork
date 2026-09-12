@@ -185,6 +185,35 @@ namespace XSkills
         }
 
         /// <summary>
+        /// Для несъедобного выхода (клей, свечи, приманка) ингредиенты берутся из рецепта, в готовом стэке их уже нет Ищем по cooksInto.
+        /// </summary>
+        private static bool TryGetRecipeIngredients(IWorldAccessor world, ItemStack outputStack, out int ingredientCount, out float diversity)
+        {
+            ingredientCount = 0;
+            diversity = 1.0f;
+            if (world?.Api == null || outputStack?.Collectible?.Code == null) return false;
+
+            foreach (CookingRecipe recipe in world.Api.GetCookingRecipes())
+            {
+                ItemStack cooksInto = recipe?.CooksInto?.ResolvedItemstack;
+                if (cooksInto?.Collectible?.Code == null) continue;
+                if (!cooksInto.Collectible.Code.Equals(outputStack.Collectible.Code)) continue;
+                if (recipe.Ingredients == null || recipe.Ingredients.Length == 0) return false;
+
+                foreach (CookingRecipeIngredient ingredient in recipe.Ingredients)
+                {
+                    if (ingredient == null) continue;
+                    ingredientCount += Math.Max(1, ingredient.MinQuantity);
+                }
+
+                diversity = 1.0f + (recipe.Ingredients.Length - 1) * 0.1f;
+                return ingredientCount > 0;
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Applies Well Done only to the quantity produced by the current operation.
         /// Existing output keeps its stored shelf-life duration, so repeatedly adding
         /// products to the output slot cannot multiply the old stack again.
@@ -275,24 +304,15 @@ namespace XSkills
                 FloatArrayAttribute previousFreshHours =
                     previousTransitionState?["freshHours"] as FloatArrayAttribute;
 
-                // база берётся из определения предмета - иначе бонус накручивается сам на себя
-                float[] baseFreshHours = GetBaseFreshHours(world, currentStack);
 
                 for (int transitionIndex = 0;
-                     transitionIndex < currentFreshHours.value.Length;
-                     transitionIndex++)
+                transitionIndex < currentFreshHours.value.Length;
+                transitionIndex++)
                 {
                     float currentFresh = currentFreshHours.value[transitionIndex];
                     if (currentFresh <= 0.0f || !float.IsFinite(currentFresh)) continue;
 
-                    float baseFresh = baseFreshHours != null
-                        && transitionIndex < baseFreshHours.Length
-                        && baseFreshHours[transitionIndex] > 0.0f
-                        && float.IsFinite(baseFreshHours[transitionIndex])
-                            ? baseFreshHours[transitionIndex]
-                            : currentFresh;
-
-                    float boostedProducedFresh = baseFresh * shelfLifeMultiplier;
+                    float boostedProducedFresh = currentFresh * shelfLifeMultiplier;
 
                     if (previousWeight <= 0.0f)
                     {
@@ -300,12 +320,21 @@ namespace XSkills
                         continue;
                     }
 
-                    float previousFresh = previousFreshHours?.value != null
+                    bool hasPreviousFresh = previousFreshHours?.value != null
                         && transitionIndex < previousFreshHours.value.Length
                         && previousFreshHours.value[transitionIndex] > 0.0f
-                        && float.IsFinite(previousFreshHours.value[transitionIndex])
-                            ? previousFreshHours.value[transitionIndex]
-                            : currentFresh;
+                        && float.IsFinite(previousFreshHours.value[transitionIndex]);
+
+                    float previousFresh = hasPreviousFresh
+                        ? previousFreshHours.value[transitionIndex]
+                        : currentFresh;
+
+                    // долив в контейнер - стэк сохранил transitionstate приёмника, бонус в нём уже есть
+                    if (hasPreviousFresh
+                        && Math.Abs(currentFresh - previousFresh) <= previousFresh * 0.0005f)
+                    {
+                        continue;
+                    }
 
                     currentFreshHours.value[transitionIndex] =
                         (previousFresh * previousWeight
@@ -788,10 +817,16 @@ namespace XSkills
             bool charredQuality = charred
                 && !IsQualityExempt(outputStack)
                 && (skill[this.BurntMasteryId]?.Tier ?? 0) <= 0;
-            float ingredientDiversity = IngredientDiversity(outputStack, contentStacks, world, out int ingredientCount);
             bool expandedFood = outputStack.Attributes.HasAttribute("madeWith");
             IBlockMealContainer mealContainer = (outputStack.Collectible as IBlockMealContainer);
             BlockLiquidContainerBase liquidContainer = (outputStack.Collectible as BlockLiquidContainerBase);
+
+            // в жидкостном контейнере лежит один готовый продукт - ингредиенты берём из исходников
+            ItemStack[] diversityStacks = liquidContainer != null && sourceStacks?.Length > 0
+                ? sourceStacks
+                : contentStacks;
+
+            float ingredientDiversity = IngredientDiversity(outputStack, diversityStacks, world, out int ingredientCount);
 
             // Берём насыщение из nutritionPropsPerLitre содержимого, а порции - из литража
             if (liquidContainer != null)
@@ -810,23 +845,50 @@ namespace XSkills
                         if (contentSatiety > satiety) satiety = contentSatiety;
                     }
                 }
-
-                // Вода/морская вода не имеют насыщения вовсе - без floor'а выварка соли
-                // и кипячение воды так и останутся без опыта.
-                if (satiety <= 0.0f) satiety = LiquidBaseSatiety;
             }
 
             //experience
             float exp = expMult * (Config as CookingSkillConfig).expBase;
-            if (ingredientCount == 1)
+
+            float expUnits = servings;
+            float expSatiety = satiety;
+
+            int expCount = ingredientCount;
+            float expDiversity = ingredientDiversity;
+
+            if (liquidContainer == null)
             {
-                exp *= satiety * servings * bakeRange;
+                // голая порция на выходе - смола, сусло, приманка
+                WaterTightContainableProps outProps = BlockLiquidContainerBase.GetContainableProps(outputStack);
+                if (outProps != null)
+                {
+                    float itemsPerLitre = outProps.ItemsPerLitre > 0.0f ? outProps.ItemsPerLitre : 100.0f;
+                    expUnits = servings / itemsPerLitre;
+
+                    float perLitre = outProps.NutritionPropsPerLitre?.Satiety ?? 0.0f;
+                    if (perLitre > expSatiety) expSatiety = perLitre;
+                }
+            }
+
+            if (ingredientCount <= 1 && expSatiety <= 0.0f
+                && TryGetRecipeIngredients(world, outputStack, out int recipeCount, out float recipeDiversity))
+            {
+                expCount = recipeCount;
+                expDiversity = recipeDiversity;
+            }
+
+            if (ingredientCount == 1 && expSatiety > 0.0f)
+            {
+                exp *= expSatiety * expUnits * bakeRange;
             }
             else
             {
-                exp *= 225.0f * ingredientCount * ingredientDiversity * servings * bakeRange;
+                exp *= 225.0f
+                    * Math.Max(1, expCount)
+                    * Math.Max(1.0f, expDiversity)
+                    * expUnits
+                    * bakeRange;
             }
-
             if (!charred)
             {
                 if ((!expandedFood || satiety > 0.0f))
@@ -838,6 +900,7 @@ namespace XSkills
             {
                 skill.AddExperience(exp * 0.5f);
             }
+
 
             //eggtimer
             PlayerAbility playerAbility = skill[this.EggTimerId];
@@ -867,20 +930,25 @@ namespace XSkills
             float scaledCooked = servings;
             int totalCooked = (int)cookedAmount;
 
-            if (playerAbility?.Tier > 0 && firstStage && !outputStack.Collectible.Code.Path.Equals("glueportion-pitch-hot"))
+            bool refinedDilution = (skill[this.RefinedDilutionId]?.Tier ?? 0) > 0;
+
+            // клей исключён из обычного Dilution - RefinedDilution снимает это ограничение
+            bool glueBlocked = outputStack.Collectible.Code.Path.Equals("glueportion-pitch-hot")
+                && !refinedDilution;
+
+            if (playerAbility?.Tier > 0 && firstStage && !glueBlocked)
             {
                 scaledCooked = servings * (1.0f + playerAbility.SkillDependentFValue());
 
                 if (liquidContainer != null)
                 {
                     float multiplier = 1.0f + playerAbility.SkillDependentFValue();
-                    bool refinedDilution = (skill[this.RefinedDilutionId]?.Tier ?? 0) > 0;
 
                     foreach (ItemStack stack in contentStacks)
                     {
                         if (stack?.Collectible == null) continue;
 
-                        // Normal Dilution affects food liquids. Refined Dilution also allows non-edible processing liquids.
+                        // обычный Dilution только на съедобные жидкости
                         if (!IsFoodForDilution(stack) && !refinedDilution) continue;
 
                         stack.StackSize = ScaleStackSizeWithRandomRounding(
@@ -892,8 +960,7 @@ namespace XSkills
                 }
                 else if (mealContainer == null || mealContainer is BlockPie)
                 {
-                    if (outputStack.Collectible.NutritionProps != null || mealContainer is BlockPie ||
-                          (skill[this.RefinedDilutionId]?.Tier ?? 0) > 0)
+                    if (outputStack.Collectible.NutritionProps != null || mealContainer is BlockPie || refinedDilution)
                     {
                         float rel = scaledCooked - (int)scaledCooked;
                         totalCooked = (int)scaledCooked + (world.Rand.NextDouble() < rel ? 1 : 0);
@@ -905,7 +972,6 @@ namespace XSkills
                 }
                 else
                 {
-                    // Теперь этот код сработает корректно для горшков/котлов (mealContainer)
                     mealContainer.SetQuantityServings(world, outputStack, scaledCooked);
                 }
             }

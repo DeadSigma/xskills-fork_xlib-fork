@@ -320,6 +320,8 @@ namespace XSkills
         {
             if (HunterBagLayoutBridge.IsEditing) return;
 
+            if ((inventory?.Count ?? 0) < composedSlotCount) ComposeDialog();
+
             UpdateHoverExpansion(args.X, args.Y);
             base.OnMouseMove(args);
         }
