@@ -93,6 +93,27 @@ namespace XSkills
                 || first.Collectible.Code?.Equals(second.Collectible.Code) == true;
         }
 
+        private static bool IsReconversion(ItemStack outputStack, ItemStack[] sourceStacks)
+        {
+            if (outputStack?.Collectible?.Code == null) return false;
+            if (outputStack.Collectible.NutritionProps != null) return false;
+            if (sourceStacks == null || sourceStacks.Length == 0) return false;
+
+            AssetLocation outCode = outputStack.Collectible.Code;
+            int checkedStacks = 0;
+
+            foreach (ItemStack source in sourceStacks)
+            {
+                if (source?.Collectible?.Code == null) continue;
+                if (source.Collectible.NutritionProps != null) return false;
+                if (source.Collectible.Code.Domain != outCode.Domain) return false;
+                if (source.Collectible.Code.FirstCodePart() != outCode.FirstCodePart()) return false;
+                checkedStacks++;
+            }
+
+            return checkedStacks > 0;
+        }
+
         /// <summary>
         /// Возвращает неизменённое значение свежести в часах, заданное непосредственно для предмета.
         /// Используется как фиксированная базовая величина, чтобы Well Done никогда не мог повторно умножить собственный результат.
@@ -847,6 +868,16 @@ namespace XSkills
                 }
             }
 
+            bool reconversion = IsReconversion(outputStack, sourceStacks);
+
+            world.Logger.Notification("[recon] out={0} prev={1} srcCount={2} src0={3} content0={4} recon={5}",
+    outputStack.Collectible.Code,
+    previousOutputStack?.Collectible?.Code,
+    sourceStacks?.Length ?? -1,
+    sourceStacks != null && sourceStacks.Length > 0 ? sourceStacks[0]?.Collectible?.Code : null,
+    contentStacks.Length > 0 ? contentStacks[0]?.Collectible?.Code : null,
+    reconversion);
+
             //experience
             float exp = expMult * (Config as CookingSkillConfig).expBase;
 
@@ -889,7 +920,10 @@ namespace XSkills
                     * expUnits
                     * bakeRange;
             }
-            if (!charred)
+            if (reconversion)
+            {
+            }
+            else if (!charred)
             {
                 if ((!expandedFood || satiety > 0.0f))
                 {
@@ -936,7 +970,7 @@ namespace XSkills
             bool glueBlocked = outputStack.Collectible.Code.Path.Equals("glueportion-pitch-hot")
                 && !refinedDilution;
 
-            if (playerAbility?.Tier > 0 && firstStage && !glueBlocked)
+            if (playerAbility?.Tier > 0 && firstStage && !glueBlocked && !reconversion)
             {
                 scaledCooked = servings * (1.0f + playerAbility.SkillDependentFValue());
 

@@ -52,6 +52,20 @@ namespace XSkills
             }
         }
 
+        public class SmeltState
+        {
+            public int maxServingSize;
+            public ItemStack[] sourceStacks;
+        }
+
+        private static ItemStack[] CloneStacks(ItemStack[] stacks)
+        {
+            if (stacks == null) return null;
+            ItemStack[] clones = new ItemStack[stacks.Length];
+            for (int i = 0; i < stacks.Length; i++) clones[i] = stacks[i]?.Clone();
+            return clones;
+        }
+
         /// <summary>
         /// Prefix for the CanSmelt method.
         /// Temporarily increases MaxServingSize for the Canteen Cook ability.
@@ -115,9 +129,12 @@ namespace XSkills
         /// <param name="cookingSlotsProvider">The cooking slots provider.</param>
         [HarmonyPrefix]
         [HarmonyPatch("DoSmelt")]
-        public static void DoSmeltPrefix(BlockCookingContainer __instance, out int __state, ISlotProvider cookingSlotsProvider)
+        public static void DoSmeltPrefix(BlockCookingContainer __instance, out SmeltState __state, ISlotProvider cookingSlotsProvider)
         {
-            __state = CookingUtil.SetMaxServingSize(__instance, cookingSlotsProvider);
+            __state = new SmeltState();
+            __state.maxServingSize = CookingUtil.SetMaxServingSize(__instance, cookingSlotsProvider);
+
+            __state.sourceStacks = CloneStacks(__instance.GetCookingStacks(cookingSlotsProvider, false));
         }
 
         /// <summary>
@@ -128,19 +145,18 @@ namespace XSkills
         /// <param name="__state">The state.</param>
         /// <param name="cookingSlotsProvider">The cooking slots provider.</param>
         /// <param name="outputSlot">The output slot.</param>
-        [HarmonyPostfix]
+              [HarmonyPostfix]
         [HarmonyPatch("DoSmelt")]
-        public static void DoSmeltPostfix(BlockCookingContainer __instance, int __state, ISlotProvider cookingSlotsProvider, ItemSlot outputSlot)
+        public static void DoSmeltPostfix(BlockCookingContainer __instance, SmeltState __state, ISlotProvider cookingSlotsProvider, ItemSlot outputSlot)
         {
-            __instance.MaxServingSize = __state;
+            __instance.MaxServingSize = __state.maxServingSize;
             IPlayer player = CookingUtil.GetOwnerFromInventory(cookingSlotsProvider as InventoryBase);
             if (player?.Entity == null) return;
 
             Cooking cooking = player.Entity.Api.ModLoader.GetModSystem<XLeveling>()?.GetSkill("cooking") as Cooking;
             if (cooking == null) return;
 
-            //  Собираем массив исходных ингредиентов
-            ItemStack[] sourceStacks = __instance.GetCookingStacks(cookingSlotsProvider, false);
+            ItemStack[] sourceStacks = __state.sourceStacks;
 
             // Вызываем ApplyAbilities с полным набором из 6 аргументов
             if (outputSlot?.Itemstack != null)
