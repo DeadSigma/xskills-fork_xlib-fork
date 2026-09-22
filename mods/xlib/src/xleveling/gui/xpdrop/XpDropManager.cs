@@ -215,6 +215,7 @@ namespace PandaXPDrops
         private const string TemporalAdaptationSkill = "temporaladaptation";
         private const float TemporalBurstXpThreshold = 1f;
         private const double TemporalBurstWindow = 4.0;
+        private const double QueuedBarHoldTime = 2.0;
 
         /// <summary>Навык, отображаемый в предпросмотре режима редактирования</summary>
         private const string PreviewSkill = "mining";
@@ -252,7 +253,14 @@ namespace PandaXPDrops
             "survival", "sailing", "riding"
         };
 
-        // состояние полосы
+        private class QueuedBar
+        {
+            public string SkillName;
+            public float Progress;
+            public int Level;
+        }
+
+        private readonly List<QueuedBar> barQueue = new List<QueuedBar>();
         private string barSkillName;
         private float barProgress;
         private int barLevel;
@@ -307,20 +315,16 @@ namespace PandaXPDrops
             this.config = config;
         }
 
-        /// <summary>
-        /// Обрабатывает одно получение опыта: обновляет полосу и либо объединяет с недавней меткой, либо создает новую.
-        /// Опыт для непрерывных навыков (таких как survival, sailing, riding) здесь только накапливается, см. <see cref="UpdateBatches"/>
-        /// </summary>
-        /// <param name="skillId">ID навыка XLib</param>
-        /// <param name="skillName">Внутреннее имя навыка</param>
-        /// <param name="xpAmount">Полученный опыт, игнорируется, если равен нулю или отрицательный</param>
-        /// <param name="progressFraction">Прогресс до следующего уровня, 0..1</param>
+        /// <summary>Изменение опыта добавляется в HUD</summary>
+        /// <param name="skillId">ID навыка</param>
+        /// <param name="skillName">Имя навыка</param>
+        /// <param name="xpAmount">Изменение опыта</param>
+        /// <param name="progressFraction">Прогресс до следующего уровня</param>
         /// <param name="level">Текущий уровень</param>
         public void AddDrop(int skillId, string skillName, float xpAmount, float progressFraction, int level)
         {
-            if (!config.Enabled || xpAmount <= 0f) return;
+            if (!config.Enabled || xpAmount == 0f) return;
 
-            // Проверка: находится ли навык в списке игнорируемых
             if (skillName != null && config.IgnoredSkills != null)
             {
                 string searchName = skillName.ToLowerInvariant();
@@ -328,6 +332,16 @@ namespace PandaXPDrops
                 {
                     if (config.IgnoredSkills[i] == searchName) return;
                 }
+            }
+
+            if (Math.Abs(xpAmount) < config.MinimumXp) return;
+
+            if (xpAmount < 0f)
+            {
+                // Потеря опыта выводится сразу - отрицательные значения не копятся в пакетах
+                ShowBar(skillName, progressFraction, level);
+                AddOrSpawnDrop(skillId, skillName, xpAmount);
+                return;
             }
 
             if (string.Equals(skillName, TemporalAdaptationSkill, StringComparison.OrdinalIgnoreCase))
@@ -351,14 +365,18 @@ namespace PandaXPDrops
                 return;
             }
 
-            if (xpAmount < config.MinimumXp) return;
-
             ShowBar(skillName, progressFraction, level);
+            AddOrSpawnDrop(skillId, skillName, xpAmount);
+        }
 
+        private void AddOrSpawnDrop(int skillId, string skillName, float xpAmount)
+        {
             for (int i = activeDrops.Count - 1; i >= 0; i--)
             {
                 XpDrop existing = activeDrops[i];
-                if (existing.SkillId == skillId && existing.Age < config.AccumulationWindow)
+                if (existing.SkillId == skillId
+                    && existing.Age < config.AccumulationWindow
+                    && Math.Sign(existing.XpAmount) == Math.Sign(xpAmount))
                 {
                     existing.XpAmount += xpAmount;
                     existing.TextureDirty = true;
@@ -404,6 +422,7 @@ namespace PandaXPDrops
             barVisible = false;
             BarAlpha = 0f;
             barIdleTimer = 0.0;
+            barQueue.Clear();
             batchedSkills.Clear();
             temporalBatch.Accumulated = 0f;
             temporalBatch.Timer = 0.0;
@@ -548,18 +567,35 @@ namespace PandaXPDrops
         /// <param name="dt">Дельта кадра в секундах</param>
         private void UpdateBar(float dt)
         {
-            if (!barVisible) return;
+            if (!barVisible)
+            {
+                if (barQueue.Count > 0) ShowNextBar();
+                else return;
+            }
 
             barIdleTimer += dt;
+
+            if (barQueue.Count > 0 && barIdleTimer >= Math.Min(config.BarIdleTimeout, QueuedBarHoldTime))
+            {
+                ShowNextBar();
+            }
+
             if (barIdleTimer >= config.BarIdleTimeout)
             {
                 double fadeElapsed = barIdleTimer - config.BarIdleTimeout;
                 BarAlpha = 1f - (float)Math.Min(fadeElapsed / config.BarFadeDuration, 1.0);
                 if (BarAlpha <= 0f)
                 {
-                    BarAlpha = 0f;
-                    barVisible = false;
-                    return;
+                    if (barQueue.Count > 0)
+                    {
+                        ShowNextBar();
+                    }
+                    else
+                    {
+                        BarAlpha = 0f;
+                        barVisible = false;
+                        return;
+                    }
                 }
             }
             else BarAlpha = 1f;
@@ -599,13 +635,59 @@ namespace PandaXPDrops
         /// <param name="level">Текущий уровень</param>
         private void ShowBar(string skillName, float progressFraction, int level)
         {
+            float progress = Math.Clamp(progressFraction, 0f, 1f);
+
+            if (!barVisible)
+            {
+                ActivateBar(skillName, progress, level);
+                return;
+            }
+
+            if (string.Equals(barSkillName, skillName, StringComparison.OrdinalIgnoreCase))
+            {
+                barProgress = progress;
+                barLevel = level;
+                if (barQueue.Count == 0) barIdleTimer = 0.0;
+                BarAlpha = 1f;
+                barTextureDirty = true;
+                return;
+            }
+
+            for (int i = 0; i < barQueue.Count; i++)
+            {
+                if (!string.Equals(barQueue[i].SkillName, skillName, StringComparison.OrdinalIgnoreCase)) continue;
+
+                barQueue[i].Progress = progress;
+                barQueue[i].Level = level;
+                return;
+            }
+
+            barQueue.Add(new QueuedBar
+            {
+                SkillName = skillName,
+                Progress = progress,
+                Level = level
+            });
+        }
+
+        private void ActivateBar(string skillName, float progress, int level)
+        {
             barSkillName = skillName;
-            barProgress = Math.Clamp(progressFraction, 0f, 1f);
+            barProgress = progress;
             barLevel = level;
             barIdleTimer = 0.0;
             barVisible = true;
             BarAlpha = 1f;
             barTextureDirty = true;
+        }
+
+        private void ShowNextBar()
+        {
+            if (barQueue.Count == 0) return;
+
+            QueuedBar next = barQueue[0];
+            barQueue.RemoveAt(0);
+            ActivateBar(next.SkillName, next.Progress, next.Level);
         }
 
         /// <summary>Добавляет новую метку; ее текстура будет создана в следующем кадре</summary>
@@ -844,13 +926,11 @@ namespace PandaXPDrops
             }
         }
 
-        /// <summary>Запекает метку "+X.X" одного выпадения, повторно используя существующий объект текстуры, если он есть</summary>
-        /// <param name="drop">Выпадение, чей <see cref="XpDrop.Texture"/> (пере)страивается</param>
         private void GenerateDropTexture(XpDrop drop)
         {
             double scale = RuntimeEnv.GUIScale * config.DropScale;
             double fontSize = config.FontSize * scale * 0.85;
-            string xpText = "+" + drop.XpAmount.ToString("0.0##", CultureInfo.InvariantCulture);
+            string xpText = (drop.XpAmount > 0f ? "+" : "") + drop.XpAmount.ToString("0.0##", CultureInfo.InvariantCulture);
 
             int textW, textH;
             using (ImageSurface measure = new ImageSurface(Format.Argb32, 1, 1))

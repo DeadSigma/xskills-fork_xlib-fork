@@ -2,6 +2,7 @@ using HarmonyLib;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.GameContent;
 using XLib.XLeveling;
@@ -47,6 +48,13 @@ namespace XSkills
 
             IPlayer player = CookingUtil.GetOwnerFromInventory(inventory);
             if (player?.Entity == null) return;
+
+            // на клиент синхронизируются только навыки своего игрока - чужой владелец пропускается
+            if (world is IClientWorldAccessor clientWorld &&
+                player.PlayerUID != clientWorld.Player?.PlayerUID)
+            {
+                return;
+            }
 
             Cooking cooking = player.Entity.Api.ModLoader
                 .GetModSystem<XLeveling>()?

@@ -71,6 +71,7 @@ namespace xSkillGilded
 
         float tooltipWidth = 400;
         float contentPadding = 16;
+        float specListHeight = 0;
 
         string page = "";
         int skillPage = 0;
@@ -155,7 +156,8 @@ namespace xSkillGilded
             {
                 if (e.KeyCode == (int)GlKeys.Escape && isOpen && !api.Input.KeyboardKeyState[(int)GlKeys.ControlLeft])
                 {
-                    Close();
+                    if (transferOpen) CloseTransfer();
+                    else Close();
                     e.Handled = true;
                 }
             };
@@ -530,11 +532,14 @@ namespace xSkillGilded
             if (!isOpen) return;
             isOpen = false;
             SetLayoutEdit(false);   // закрыли окно - редактор расположения не должен остаться взведённым
+            CloseTransfer(false);
             api.Gui.PlaySound(new AssetLocation("xskillgilded", "sounds/close.ogg"), false, .3f);
         }
 
         private bool Toggle(KeyCombination _)
         {
+            if (transferTyping) return false;
+
             if (isOpen) Close();
             else Open();
             return true;

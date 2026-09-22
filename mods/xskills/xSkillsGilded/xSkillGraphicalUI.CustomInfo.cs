@@ -9,7 +9,7 @@ namespace xSkillGilded
     public partial class xSkillGraphicalUI
     {
         //Количество глав в инфо
-        private int customInfoRowsCount = 3;
+        private int customInfoRowsCount = 4;
 
 
         private void DrawCustomInfoCenter(float abw, float abh)

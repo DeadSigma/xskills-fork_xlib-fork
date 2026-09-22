@@ -78,6 +78,9 @@ namespace XLib.XLeveling
             this.channel.SetMessageHandler<PlayerSkillPackage>(this.MessageHandler);
             this.channel.RegisterMessageType(typeof(ExperiencePackage));
             this.channel.SetMessageHandler<ExperiencePackage>(this.MessageHandler);
+            this.channel.RegisterMessageType(typeof(ExperienceTransferPackage));
+            this.channel.RegisterMessageType(typeof(ExperienceTransferUpdatePackage));
+            this.channel.SetMessageHandler<ExperienceTransferUpdatePackage>(this.MessageHandler);
             this.channel.RegisterMessageType(typeof(PlayerAbilityPackage));
             this.channel.SetMessageHandler<PlayerAbilityPackage>(this.MessageHandler);
             this.channel.RegisterMessageType(typeof(SkillConfig));
@@ -144,7 +147,7 @@ namespace XLib.XLeveling
                 this.LocalPlayerSkillSet = new PlayerSkillSet(player, this.XLeveling.SkillSetTemplate, XLeveling);
 
             Skill skill = this.LocalPlayerSkillSet[skillConfig.id]?.Skill;
-            if(skill == null || skill.Name != skillConfig.name)
+            if (skill == null || skill.Name != skillConfig.name)
             {
                 XLeveling.Api.Logger.Error("XLeveling: " + "The configuration of the server is not compatible with your Version!");
                 return;
@@ -176,7 +179,7 @@ namespace XLib.XLeveling
             {
                 PlayerSkill playerSkill = LocalPlayerSkillSet.PlayerSkills[package.skillId];
                 playerSkill.Experience += package.experience;
-                if (!this.XLeveling.Config.trackExpGain) return;
+                if (!this.XLeveling.Config.trackExpGain || package.experience <= 0f) return;
 
                 if (!AccumulatedExperience.ContainsKey(package.skillId))
                 {
@@ -212,6 +215,22 @@ namespace XLib.XLeveling
             }
         }
 
+        private void MessageHandler(ExperienceTransferUpdatePackage package)
+        {
+            if (package == null || package.skillId < 0 || package.skillId >= LocalPlayerSkillSet?.PlayerSkills.Count) return;
+
+            PlayerSkill playerSkill = LocalPlayerSkillSet.PlayerSkills[package.skillId];
+            int oldLevel = playerSkill.Level;
+
+            playerSkill.Level = package.level;
+            playerSkill.Experience = package.experience;
+
+            for (int level = oldLevel + 1; level <= playerSkill.Level; level++)
+            {
+                (this.XLeveling.Api as ICoreClientAPI)?.ShowChatMessage(Lang.Get("xlib:levelup", level, playerSkill.Skill.DisplayName));
+            }
+        }
+
         /// <summary>
         /// Handles the PlayerAbilityPackage from the server.
         /// </summary>
@@ -219,7 +238,7 @@ namespace XLib.XLeveling
         private void MessageHandler(PlayerAbilityPackage package)
         {
             PlayerAbility ability = this.LocalPlayerSkillSet?.Ability(package.skillId, package.abilityId);
-            if(ability != null)
+            if (ability != null)
             {
                 ability.IgnoredRequirements = EnumRequirementType.AllRequirements;
                 ability.Tier = package.skilledTier;
@@ -299,6 +318,13 @@ namespace XLib.XLeveling
             this.channel.SendPacket(package);
         }
 
+        /// <summary>Запрос передачи опыта отправляется серверу</summary>
+        /// <param name="package">Пакет передачи опыта</param>
+        public void SendPackage(ExperienceTransferPackage package)
+        {
+            this.channel.SendPacket(package);
+        }
+
         /// <summary>
         /// Gets the player skill set for the given player.
         /// </summary>
@@ -314,7 +340,7 @@ namespace XLib.XLeveling
             {
                 return this.LocalPlayerSkillSet;
             }
-            else  if (api.World.Player != null)
+            else if (api.World.Player != null)
             {
                 this.LocalPlayerSkillSet.Player = api.World.Player;
                 if (this.LocalPlayerSkillSet.Player == player)
@@ -354,7 +380,7 @@ namespace XLib.XLeveling
         /// <param name="informClient">if set to <c>true</c> the server will inform the client.</param>
         public void SetPlayerSkillLevel(IPlayer player, int skillId, int level, bool informClient = true)
         {
-            if(!informClient)
+            if (!informClient)
             {
                 PlayerSkillSet skillSet = this.GetPlayerSkillSet(player);
                 skillSet.PlayerSkills[skillId].Level += level;
@@ -375,7 +401,7 @@ namespace XLib.XLeveling
         {
             PlayerSkillSet playerSkillSet = this.GetPlayerSkillSet(player);
             PlayerAbility playerAbility = playerSkillSet?[skillId]?[abilityId];
-            if(playerAbility == null) return;
+            if (playerAbility == null) return;
 
             int reversedTierChange = playerAbility.Tier - tier;
             bool reduced = reversedTierChange > 0;

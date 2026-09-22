@@ -110,7 +110,7 @@ namespace XLib.XLeveling
         /// </value>
         public string SaveFileName
         {
-            get 
+            get
             {
                 return Path.Combine(SaveFileDirectory, FileName);
             }
@@ -141,7 +141,7 @@ namespace XLib.XLeveling
             this.XLeveling = xLeveling ?? throw new ArgumentNullException("The XLeveling system of a XLeveling server interface must not be null.");
             ICoreServerAPI api = this.XLeveling.Api as ICoreServerAPI ?? throw new Exception("Tried to create a server interface on the wrong side.");
 
-           
+
             this.Config = new Config();
             this.PlayerSkillSets = new Dictionary<IPlayer, PlayerSkillSet>();
 
@@ -180,6 +180,9 @@ namespace XLib.XLeveling
             this.channel = api.Network.RegisterChannel("XLeveling");
             this.channel.RegisterMessageType(typeof(PlayerSkillPackage));
             this.channel.RegisterMessageType(typeof(ExperiencePackage));
+            this.channel.RegisterMessageType(typeof(ExperienceTransferPackage));
+            this.channel.SetMessageHandler<ExperienceTransferPackage>(this.OnExperienceTransfer);
+            this.channel.RegisterMessageType(typeof(ExperienceTransferUpdatePackage));
             this.channel.RegisterMessageType(typeof(PlayerAbilityPackage));
             this.channel.SetMessageHandler<PlayerAbilityPackage>(this.OnPlayerAbilityPackage);
             this.channel.RegisterMessageType(typeof(SkillConfig));
@@ -280,7 +283,7 @@ namespace XLib.XLeveling
             int storedVersion;
             bool configWasMissing = false;
 
-           
+
             try
             {
                 this.Config = api.LoadModConfig<Config>(path);
@@ -516,7 +519,7 @@ namespace XLib.XLeveling
             try
             {
                 JsonSerializerSettings settings = new JsonSerializerSettings();
-                settings.Error = (object sender, Newtonsoft.Json.Serialization.ErrorEventArgs err) => 
+                settings.Error = (object sender, Newtonsoft.Json.Serialization.ErrorEventArgs err) =>
                 {
                     XLeveling.Api.Logger.Log(EnumLogType.Error, "[XLeveling] Error while loading: " + fileName + ": \n" + err.ErrorContext.Error.Message);
                     err.ErrorContext.Handled = true;
@@ -549,7 +552,7 @@ namespace XLib.XLeveling
         {
             int result = LoadFromFile(this.SaveFileName);
             if (result > 0) return;
-            if (result < 0) 
+            if (result < 0)
             {
                 XLeveling.Api.Logger.Warning("[XLeveling] Failed to load save file. Try to load backup.");
                 result = LoadFromFile(this.BackupSaveFileName);
@@ -594,7 +597,7 @@ namespace XLib.XLeveling
                 {
                     toStore.Add(key, this.DiscPlayerSkillSets[key]);
                 }
-                catch(Exception exp)
+                catch (Exception exp)
                 {
                     this.XLeveling.Api.Logger.Warning("Exception thrown during XLeveling data save but save will continue.");
                     this.XLeveling.Api.Logger.Warning(exp);
@@ -742,7 +745,7 @@ namespace XLib.XLeveling
 
                     // Обнуляем опыт и уровень
                     playerSkill.Experience = 0f;
-                    playerSkill.Level = 1; 
+                    playerSkill.Level = 1;
 
                     // Сообщаем клиенту о сбросе перков
                     this.channel.SendPacket(new CommandPackage(EnumXLevelingCommand.Reset, playerSkill.Skill.Id), byPlayer);
@@ -762,7 +765,7 @@ namespace XLib.XLeveling
                 // Принудительно сохраняем данные в файл
                 this.SaveData();
 
-                return; 
+                return;
             }
 
             PlayerSkillSet killerSkillSet = (damageSource.GetCauseEntity()?.GetBehavior<PlayerSkillSet>());
@@ -804,7 +807,7 @@ namespace XLib.XLeveling
                 EnumRequirementType ignored = EnumRequirementType.WeakRequirement;
                 playerSkillSet.CheckRequirements(ignored);
 
-                playerSkillSet.UnlearnPoints -= 
+                playerSkillSet.UnlearnPoints -=
                     this.GetPointsForUnlearn() * ((reversedTierChange > 1) ? reversedTierChange * 1.5f : 1);
                 playerSkillSet.UnlearnCooldown = this.Config.unlearnCooldown * 60.0f;
             }
@@ -836,6 +839,77 @@ namespace XLib.XLeveling
                     break;
                 default: return;
             }
+        }
+
+        private void OnExperienceTransfer(IServerPlayer fromPlayer, ExperienceTransferPackage package)
+        {
+            if (fromPlayer == null || package == null || string.IsNullOrWhiteSpace(package.targetPlayerName)) return;
+            if (package.skillId < 0 || package.levels < 0 || package.experience < 0f) return;
+            if (float.IsNaN(package.experience) || float.IsInfinity(package.experience)) return;
+            if (package.levels == 0 && package.experience <= 0f) return;
+
+            PlayerSkillSet sourceSet = GetPlayerSkillSet(fromPlayer);
+            if (sourceSet == null || package.skillId >= sourceSet.PlayerSkills.Count) return;
+
+            PlayerSkill sourceSkill = sourceSet.PlayerSkills[package.skillId];
+            if (sourceSkill?.Skill == null || !sourceSkill.Skill.Enabled) return;
+
+            PlayerSkillSet targetSet = null;
+            foreach (PlayerSkillSet playerSkillSet in PlayerSkillSets.Values)
+            {
+                if (string.Equals(playerSkillSet.Player?.PlayerName, package.targetPlayerName.Trim(), StringComparison.OrdinalIgnoreCase))
+                {
+                    targetSet = playerSkillSet;
+                    break;
+                }
+            }
+
+            if (targetSet?.Player == null || targetSet.Player.PlayerUID == fromPlayer.PlayerUID) return;
+            if (package.skillId >= targetSet.PlayerSkills.Count) return;
+
+            PlayerSkill targetSkill = targetSet.PlayerSkills[package.skillId];
+            if (targetSkill?.Skill == null || targetSkill.Skill.Name != sourceSkill.Skill.Name || !targetSkill.Skill.Enabled) return;
+
+            int maxLevels = Math.Max(0, Math.Min(sourceSkill.Level - sourceSkill.Skill.MinLevel, sourceSkill.AbilityPoints));
+            if (package.levels > maxLevels) return;
+            if (package.experience > sourceSkill.Experience + 0.001f) return;
+
+            int newLevel = sourceSkill.Level - package.levels;
+            float newExperience = Math.Max(0f, sourceSkill.Experience - package.experience);
+            if (newLevel < sourceSkill.Skill.MaxLevel)
+            {
+                float required = sourceSkill.Skill.GetRequiredExperience(newLevel + 1);
+                if (newExperience >= required) return;
+            }
+
+            float transferAmount = package.experience;
+            for (int level = newLevel + 1; level <= sourceSkill.Level; level++)
+            {
+                transferAmount += sourceSkill.Skill.GetRequiredExperience(level);
+            }
+
+            if (transferAmount <= 0f || float.IsNaN(transferAmount) || float.IsInfinity(transferAmount)) return;
+
+            float targetCapacity = -targetSkill.Experience;
+            for (int level = targetSkill.Level + 1; level <= targetSkill.Skill.MaxLevel; level++)
+            {
+                targetCapacity += targetSkill.Skill.GetRequiredExperience(level);
+            }
+            targetCapacity = Math.Max(0f, targetCapacity);
+            if (transferAmount > targetCapacity + 0.001f) return;
+
+            sourceSkill.Level = newLevel;
+            sourceSkill.Experience = newExperience;
+            targetSkill.Experience += transferAmount;
+
+            this.channel.SendPacket(
+                new ExperienceTransferUpdatePackage(package.skillId, sourceSkill.Level, sourceSkill.Experience, -transferAmount),
+                fromPlayer
+            );
+            this.channel.SendPacket(
+                new ExperienceTransferUpdatePackage(package.skillId, targetSkill.Level, targetSkill.Experience, transferAmount),
+                targetSet.Player as IServerPlayer
+            );
         }
 
         /// <summary>
@@ -973,7 +1047,7 @@ namespace XLib.XLeveling
         {
             PlayerSkillSet skillSet = this.GetPlayerSkillSet(player);
             if (name == null) return;
-            if (level == 0) 
+            if (level == 0)
                 skillSet.Knowledge.Remove(name);
             else
                 skillSet.Knowledge[name] = level;
@@ -1140,7 +1214,7 @@ namespace XLib.XLeveling
                     {
                         result.StatusMessage +=
                             playerSkillSet.Player.PlayerName + "'s " +
-                            skill.DisplayName + " skill is at level " + 
+                            skill.DisplayName + " skill is at level " +
                             playerSkill.Level + ".";
                         continue;
                     }
@@ -1151,8 +1225,8 @@ namespace XLib.XLeveling
                         playerSkill.Reset();
                         if (notify)
                         {
-                            result.StatusMessage += 
-                                "Player " + playerSkillSet.Player.PlayerName + "'s " + 
+                            result.StatusMessage +=
+                                "Player " + playerSkillSet.Player.PlayerName + "'s " +
                                 skill.DisplayName + " skill has been reset.";
                         }
                         (playerSkillSet.Player as IServerPlayer)?.SendMessage(0, "Your " + skill.DisplayName + " skill has been reset.", EnumChatType.CommandSuccess);
@@ -1167,9 +1241,9 @@ namespace XLib.XLeveling
                         playerSkill.AddExperience(-playerSkill.Experience, false);
                         if (notify)
                         {
-                            result.StatusMessage += 
-                                "Sets player " + playerSkillSet.Player.PlayerName + "'s " + 
-                                skill.DisplayName + " skill to level " + 
+                            result.StatusMessage +=
+                                "Sets player " + playerSkillSet.Player.PlayerName + "'s " +
+                                skill.DisplayName + " skill to level " +
                                 playerSkill.Level + ".";
                         }
                         (playerSkillSet.Player as IServerPlayer)?.SendMessage(0, "Your level of the " + skill.DisplayName + " skill was set to " + playerSkill.Level + ".", EnumChatType.CommandSuccess);

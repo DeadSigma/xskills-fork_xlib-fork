@@ -67,6 +67,8 @@ namespace xSkillGilded
             ImGui.Begin("xSkill Gilded", flags);
             try
             {
+                mouseBlocked = transferOpen;
+
                 windowX = (int)ImGui.GetWindowPos().X;
                 windowY = (int)ImGui.GetWindowPos().Y;
                 windowPosX = windowX;
@@ -506,10 +508,30 @@ namespace xSkillGilded
                     Vector2 skillTitle_size = drawTextFont(fTitleGold, skillTitle, sdx, sdy);
                     sdy += fTitleGold.getLineHeight() + _ui(8);
 
-                    foreach (PlayerSkill skill in allSkills)
+                    // список плавает по Y за мышкой, если не влезает между заголовком и кнопкой спарринга
+                    float listTop = sdy;
+                    float listBottom = windowHeight - padd - _ui(8) - _ui(96) - _ui(12);
+                    float listH = Math.Max(1, listBottom - listTop);
+                    float overflow = Math.Max(0, specListHeight - listH + _ui(8));
+                    float t = Math.Clamp((ImGui.GetMousePos().Y - windowY - listTop) / listH, 0f, 1f);
+                    sdy -= (float)Math.Round(overflow * t);
+
+                    // всё за пределами области обрезается и не ловит мышь
+                    ImGui.PushClipRect(new(windowX, windowY + listTop - _ui(4)), new(windowX + sdx + sdw + _ui(80), windowY + listBottom), true);
+                    try
                     {
-                        float hh = drawSkillLevelDetail(skill, sdx, sdy, sdw, false);
-                        sdy += hh;
+                        float listStart = sdy;
+                        foreach (PlayerSkill skill in allSkills)
+                        {
+                            bool nameHover = DrawTransferHover(skill, sdx, sdy, sdw, ref _hoveringID);
+                            float hh = drawSkillLevelDetail(skill, sdx, sdy, sdw, false, nameHover);
+                            sdy += hh;
+                        }
+                        specListHeight = sdy - listStart;
+                    }
+                    finally
+                    {
+                        ImGui.PopClipRect();
                     }
 
 
@@ -857,6 +879,9 @@ namespace xSkillGilded
 
                 #endregion
 
+                // окно передачи рисуется последним - поверх всего меню
+                DrawTransferPopup(windowWidth, windowHeight);
+
                 hoveringID = _hoveringID;
 
             }
@@ -866,6 +891,7 @@ namespace xSkillGilded
             }
             finally
             {
+                mouseBlocked = false;
                 drawImage9patch(Sprite("elements", "frame"), 0, 0, windowWidth, windowHeight, 60);
                 ImGui.End(); // Гарантированное закрытие главного окна
             }
@@ -962,14 +988,15 @@ namespace xSkillGilded
             return descBase;
         }
 
-        private float drawSkillLevelDetail(PlayerSkill skill, float x, float y, float w, bool title)
+        private float drawSkillLevelDetail(PlayerSkill skill, float x, float y, float w, bool title, bool highlight = false)
         {
             float ys = y;
             float sx = x;
 
             string skillTitle = skill.Skill.DisplayName;
 
-            Vector2 skillTitle_size = drawTextFont(title ? fTitleGold : fSubtitleGold, skillTitle, sx, y);
+            Font titleFont = highlight ? fSubtitle : (title ? fTitleGold : fSubtitleGold);
+            Vector2 skillTitle_size = drawTextFont(titleFont, skillTitle, sx, y);
 
             if (!title)
             {

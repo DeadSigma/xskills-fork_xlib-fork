@@ -367,3 +367,4 @@ FodyWeavers.xsd
 VSModLauncher.csproj
 mods/xskills/xskills.csproj
 mods/xlib/xlib.csproj
+/mods/xskills/structure.txt

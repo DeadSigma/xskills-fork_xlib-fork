@@ -140,7 +140,7 @@ namespace PandaXPDrops
         /// <summary>Точка входа, используемая <see cref="XpGainPatch"/> для каждого пакета опыта локального игрока</summary>
         /// <param name="skillId">ID навыка XLib, равный индексу в <c>PlayerSkillSet.PlayerSkills</c></param>
         /// <param name="skillName">Внутреннее (строчное) имя навыка, например <c>mining</c></param>
-        /// <param name="xpAmount">Опыт, полученный с этим пакетом</param>
+        /// <param name="xpAmount">Изменение опыта из пакета</param>
         /// <param name="progressFraction">Прогресс до следующего уровня, от 0 до 1</param>
         /// <param name="level">Текущий уровень навыка</param>
         public static void OnXpGained(int skillId, string skillName, float xpAmount, float progressFraction, int level)
@@ -440,83 +440,77 @@ namespace PandaXPDrops
     }
 
 
-    /// <summary>
-    /// Постфикс для <c>XLevelingClient.MessageHandler(ExperiencePackage)</c> - пакета, который сервер отправляет
-    /// владеющему клиенту при каждом получении опыта.
-    /// </summary>
-    /// <remarks>
-    /// Намеренно <b>не</b> аннотировано <c>[HarmonyPatch]</c> и применяется вручную: внутри общей сборки
-    /// xlibfork любой вызов <c>PatchAll(assembly)</c> из другой системы в противном случае подхватил бы этот класс
-    /// под чужим Harmony id и выполнил бы постфикс второй раз.
-    /// Цель и свойство разрешаются через <see cref="AccessTools"/>, поэтому непубличные члены XLib продолжают работать.
-    /// </remarks>
+    // Изменения опыта перехватываются после синхронизации клиента
     internal static class XpGainPatch
     {
         private static MethodBase target;
+        private static MethodBase transferTarget;
         private static PropertyInfo skillSetProp;
         private static bool patched;
         private static bool errorLogged;
 
-        /// <summary>Применяет постфикс один раз. Безопасно вызывать повторно</summary>
-        /// <param name="harmony">Экземпляр, созданный с собственным Harmony id этого мода</param>
-        /// <returns><c>true</c>, если перехватчик активен</returns>
         internal static bool Apply(Harmony harmony)
         {
             if (patched) return true;
 
             target = AccessTools.Method(typeof(XLevelingClient), "MessageHandler", new[] { typeof(ExperiencePackage) });
+            transferTarget = AccessTools.Method(typeof(XLevelingClient), "MessageHandler", new[] { typeof(ExperienceTransferUpdatePackage) });
             skillSetProp = AccessTools.Property(typeof(XLevelingClient), "LocalPlayerSkillSet");
-            if (target == null || skillSetProp == null)
+            if (target == null || transferTarget == null || skillSetProp == null)
             {
-                PandaXPDropsSystem.Logger?.Warning("[PandaXPDrops] XLevelingClient.MessageHandler(ExperiencePackage) / LocalPlayerSkillSet not found - XP drops stay off.");
+                PandaXPDropsSystem.Logger?.Warning("[PandaXPDrops] XLeveling XP handlers not found - XP drops stay off.");
                 return false;
             }
 
             harmony.Patch(target, postfix: new HarmonyMethod(AccessTools.Method(typeof(XpGainPatch), nameof(Postfix))));
+            harmony.Patch(transferTarget, postfix: new HarmonyMethod(AccessTools.Method(typeof(XpGainPatch), nameof(TransferPostfix))));
             patched = true;
             return true;
         }
 
-        /// <summary>
-        /// Удаляет только этот постфикс. Сброс <c>patched</c> важен: статическое состояние переживает систему модов,
-        /// поэтому в противном случае перехватчик никогда бы не применился повторно при подключении ко второму миру в той же сессии.
-        /// </summary>
-        /// <param name="harmony">Тот же экземпляр, с которым был вызван <see cref="Apply"/></param>
         internal static void Remove(Harmony harmony)
         {
             if (patched && target != null) harmony.Unpatch(target, HarmonyPatchType.Postfix, harmony.Id);
+            if (patched && transferTarget != null) harmony.Unpatch(transferTarget, HarmonyPatchType.Postfix, harmony.Id);
 
             patched = false;
             errorLogged = false;
             target = null;
+            transferTarget = null;
             skillSetProp = null;
         }
 
-        /// <summary>Считывает состояние навыка, которое XLib только что обновил, и пересылает его в HUD</summary>
-        /// <param name="__instance">Экземпляр <c>XLevelingClient</c></param>
-        /// <param name="package">Пакет опыта. Имя параметра должно совпадать с оригинальным методом</param>
         private static void Postfix(object __instance, ExperiencePackage package)
+        {
+            PushDrop(__instance, package.skillId, package.experience);
+        }
+
+        private static void TransferPostfix(object __instance, ExperienceTransferUpdatePackage package)
+        {
+            PushDrop(__instance, package.skillId, package.experienceDelta);
+        }
+
+        private static void PushDrop(object instance, int skillId, float experience)
         {
             try
             {
-                if (__instance == null || skillSetProp == null) return;
-                if (!(skillSetProp.GetValue(__instance) is PlayerSkillSet skillSet)) return;
-                if (package.skillId < 0 || package.skillId >= skillSet.PlayerSkills.Count) return;
+                if (instance == null || skillSetProp == null || experience == 0f) return;
+                if (!(skillSetProp.GetValue(instance) is PlayerSkillSet skillSet)) return;
+                if (skillId < 0 || skillId >= skillSet.PlayerSkills.Count) return;
 
-                PlayerSkill playerSkill = skillSet.PlayerSkills[package.skillId];
+                PlayerSkill playerSkill = skillSet.PlayerSkills[skillId];
                 var skill = playerSkill?.Skill;
-
                 if (skill == null || !skill.Enabled) return;
 
                 float progress = playerSkill.RequiredExperience > 0f
                     ? playerSkill.Experience / playerSkill.RequiredExperience
                     : 0f;
 
-                PandaXPDropsSystem.OnXpGained(package.skillId, skill.Name ?? "unknown", package.experience, progress, playerSkill.Level);
+                PandaXPDropsSystem.OnXpGained(skillId, skill.Name ?? "unknown", experience, progress, playerSkill.Level);
             }
             catch (Exception ex)
             {
-                // Косметический HUD никогда не должен ломать обработчик пакетов XLib - но и не должен проглатывать ошибку молча
+                // Ошибка HUD записывается один раз - обработка пакета не прерывается
                 if (!errorLogged)
                 {
                     errorLogged = true;

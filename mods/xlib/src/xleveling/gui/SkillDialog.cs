@@ -81,6 +81,9 @@ namespace XLib.XLeveling
         /// </summary>
         Dictionary<string, List<PlayerSkill>> groups;
 
+        private PlayerSkill activePlayerSkill;
+        private SkillTransferDialog transferDialog;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SkillDialog"/> class.
         /// </summary>
@@ -139,6 +142,7 @@ namespace XLib.XLeveling
             yy += 28;
             ElementBounds textBounds = ElementBounds.Fixed(0, yy, 140, 200);
             yy += 4;
+            ElementBounds transferBounds = ElementBounds.FixedOffseted(EnumDialogArea.LeftBottom, 0, -96, 120, 24);
             ElementBounds unlearnBounds = ElementBounds.FixedOffseted(EnumDialogArea.LeftBottom, 0, -68, 120, 24);
             ElementBounds unlearnAbilityBounds = ElementBounds.FixedOffseted(EnumDialogArea.LeftBottom, 0, -40, 120, 24);
             ElementBounds sparringButton = ElementBounds.FixedOffseted(EnumDialogArea.LeftBottom, 0, -12, 120, 24);
@@ -151,9 +155,9 @@ namespace XLib.XLeveling
             {
                 unlearnToggle = new GuiElementToggleButton(
                    this.capi, "",
-                    Lang.GetUnformatted("xlib:unlearn"), 
-                    CairoFont.WhiteDetailText(), 
-                    (bool state) => { if (state) { unlearnAbilityToggle.On = false; } }, 
+                    Lang.GetUnformatted("xlib:unlearn"),
+                    CairoFont.WhiteDetailText(),
+                    (bool state) => { if (state) { unlearnAbilityToggle.On = false; } },
                     unlearnBounds, true);
             }
             else
@@ -165,7 +169,7 @@ namespace XLib.XLeveling
             {
                 unlearnAbilityToggle = new GuiElementToggleButton(
                    this.capi, "",
-                    Lang.GetUnformatted("xlib:unlearnAbility"), 
+                    Lang.GetUnformatted("xlib:unlearnAbility"),
                     CairoFont.WhiteDetailText(),
                     (bool state) => { if (state) { unlearnToggle.On = false; } },
                     unlearnAbilityBounds, true);
@@ -207,7 +211,7 @@ namespace XLib.XLeveling
             bgBounds.horizontalSizing = ElementSizing.FitToChildren;
             bgBounds.verticalSizing = ElementSizing.Fixed;
             bgBounds.WithFixedHeight(yy + 8 * 36);
-            bgBounds.WithChildren(groupTabBounds, skillTabBounds, textBounds, unlearnBounds, unlearnAbilityBounds, sparringButton);
+            bgBounds.WithChildren(groupTabBounds, skillTabBounds, textBounds, transferBounds, unlearnBounds, unlearnAbilityBounds, sparringButton);
 
             //creates a tab for each skill within the skill group
             GuiTab[] skillTabs = new GuiTab[activeList.Count];
@@ -236,6 +240,12 @@ namespace XLib.XLeveling
 
             SingleComposer
                  .AddRichtext("", CairoFont.WhiteDetailText(), textBounds, "SkillInfo")
+                 .AddSmallButton(
+                     Lang.Get("xlib:transferexperience"),
+                     OnTransferClicked,
+                     transferBounds,
+                     EnumButtonStyle.Normal,
+                     "TransferExperience")
                  .AddInteractiveElement(unlearnToggle)
                  .AddInteractiveElement(unlearnAbilityToggle)
                  .AddInteractiveElement(sparringToggle);
@@ -243,6 +253,7 @@ namespace XLib.XLeveling
             //creates a button for every ability that belongs to the chosen skill
             skillTabsActive = skillTabsActive >= activeList.Count ? 0 : skillTabsActive;
             playerSkill = activeList[skillTabsActive];
+            activePlayerSkill = playerSkill;
             int abilityCount = 0;
             foreach (PlayerAbility playerAbility in playerSkill.PlayerAbilities)
             {
@@ -276,7 +287,7 @@ namespace XLib.XLeveling
                 Lang.GetUnformatted("xlib:abilitypoints") + ":\n" + playerSkill.AbilityPoints + "\n" +
                 Lang.GetUnformatted("xlib:unlearnpoints") + ":\n" + playerSkill.PlayerSkillSet.UnlearnPoints.ToString("n2") + "/" +
                 this.Client.GetPointsForUnlearn() + "\n" +
-                Lang.GetUnformatted("xlib:unlearncooldown") + ":\n" + playerSkill.PlayerSkillSet.UnlearnCooldown.ToString("N2"), 
+                Lang.GetUnformatted("xlib:unlearncooldown") + ":\n" + playerSkill.PlayerSkillSet.UnlearnCooldown.ToString("N2"),
                 CairoFont.WhiteDetailText());
         }
 
@@ -322,6 +333,8 @@ namespace XLib.XLeveling
         private void OnClose()
         {
             this.abilityTooltip.TryClose();
+            this.transferDialog?.TryClose();
+            this.transferDialog = null;
         }
 
         /// <summary>
@@ -337,6 +350,16 @@ namespace XLib.XLeveling
                 return base.TryOpen();
             }
             return false;
+        }
+
+        private bool OnTransferClicked()
+        {
+            if (activePlayerSkill == null) return true;
+
+            transferDialog?.TryClose();
+            transferDialog = new SkillTransferDialog(Client, activePlayerSkill);
+            transferDialog.TryOpen();
+            return true;
         }
 
         /// <summary>
