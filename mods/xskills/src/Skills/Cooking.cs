@@ -96,6 +96,7 @@ namespace XSkills
         private static bool IsReconversion(ItemStack outputStack, ItemStack[] sourceStacks)
         {
             if (outputStack?.Collectible?.Code == null) return false;
+            if (outputStack.Collectible is BlockPie) return false;
             if (outputStack.Collectible.NutritionProps != null) return false;
             if (sourceStacks == null || sourceStacks.Length == 0) return false;
 
@@ -869,14 +870,6 @@ namespace XSkills
             }
 
             bool reconversion = IsReconversion(outputStack, sourceStacks);
-
-            world.Logger.Notification("[recon] out={0} prev={1} srcCount={2} src0={3} content0={4} recon={5}",
-    outputStack.Collectible.Code,
-    previousOutputStack?.Collectible?.Code,
-    sourceStacks?.Length ?? -1,
-    sourceStacks != null && sourceStacks.Length > 0 ? sourceStacks[0]?.Collectible?.Code : null,
-    contentStacks.Length > 0 ? contentStacks[0]?.Collectible?.Code : null,
-    reconversion);
 
             //experience
             float exp = expMult * (Config as CookingSkillConfig).expBase;

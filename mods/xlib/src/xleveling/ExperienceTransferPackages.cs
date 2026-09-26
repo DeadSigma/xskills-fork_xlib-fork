@@ -3,13 +3,13 @@ using ProtoBuf;
 namespace XLib.XLeveling
 {
     /// <summary>
-    /// Пакет запроса передачи опыта другому игроку
+    /// Запрос на передачу опыта другому игроку
     /// </summary>
     [ProtoContract]
     public class ExperienceTransferPackage
     {
         /// <summary>
-        /// Навык для передачи опыта
+        /// ID передаваемого навыка
         /// </summary>
         [ProtoMember(1)]
         public int skillId;
@@ -33,13 +33,17 @@ namespace XLib.XLeveling
         public float experience;
 
         /// <summary>
-        /// Пустой пакет создаётся для сериализации
+        /// Создаётся пустой пакет передачи
         /// </summary>
         public ExperienceTransferPackage() { }
 
         /// <summary>
-        /// Пакет заполняется данными передачи
+        /// Создаётся пакет передачи опыта
         /// </summary>
+        /// <param name="skillId">ID навыка</param>
+        /// <param name="targetPlayerName">Имя игрока</param>
+        /// <param name="levels">Количество уровней</param>
+        /// <param name="experience">Количество опыта</param>
         public ExperienceTransferPackage(int skillId, string targetPlayerName, int levels, float experience)
         {
             this.skillId = skillId;
@@ -50,13 +54,13 @@ namespace XLib.XLeveling
     }
 
     /// <summary>
-    /// Пакет синхронизации навыка после передачи опыта
+    /// Состояние навыка синхронизируется после передачи
     /// </summary>
     [ProtoContract]
     public class ExperienceTransferUpdatePackage
     {
         /// <summary>
-        /// Навык для синхронизации
+        /// ID изменённого навыка
         /// </summary>
         [ProtoMember(1)]
         public int skillId;
@@ -74,25 +78,48 @@ namespace XLib.XLeveling
         public float experience;
 
         /// <summary>
-        /// Изменение опыта для отображения
+        /// Изменение опыта для уведомления
         /// </summary>
         [ProtoMember(4)]
         public float experienceDelta;
 
         /// <summary>
-        /// Пустой пакет создаётся для сериализации
+        /// Оставшееся время до следующей передачи в секундах
+        /// </summary>
+        [ProtoMember(5)]
+        public float transferCooldown = -1f;
+
+        /// <summary>
+        /// Создаётся пустой пакет синхронизации
         /// </summary>
         public ExperienceTransferUpdatePackage() { }
 
         /// <summary>
-        /// Пакет заполняется итоговым состоянием навыка
+        /// Создаётся пакет синхронизации навыка
         /// </summary>
+        /// <param name="skillId">ID навыка</param>
+        /// <param name="level">Итоговый уровень</param>
+        /// <param name="experience">Итоговый опыт</param>
+        /// <param name="experienceDelta">Изменение опыта</param>
         public ExperienceTransferUpdatePackage(int skillId, int level, float experience, float experienceDelta)
+            : this(skillId, level, experience, experienceDelta, -1f)
+        { }
+
+        /// <summary>
+        /// Создаётся пакет синхронизации навыка и задержки
+        /// </summary>
+        /// <param name="skillId">ID навыка</param>
+        /// <param name="level">Итоговый уровень</param>
+        /// <param name="experience">Итоговый опыт</param>
+        /// <param name="experienceDelta">Изменение опыта</param>
+        /// <param name="transferCooldown">Оставшееся время до передачи</param>
+        public ExperienceTransferUpdatePackage(int skillId, int level, float experience, float experienceDelta, float transferCooldown)
         {
             this.skillId = skillId;
             this.level = level;
             this.experience = experience;
             this.experienceDelta = experienceDelta;
+            this.transferCooldown = transferCooldown;
         }
     }
 }

@@ -46,7 +46,7 @@ namespace xSkillGilded
         private void ConfirmTransfer(PlayerSkill skill, string target)
         {
             XLevelingClient client = XLeveling.Instance(api)?.IXLevelingAPI as XLevelingClient;
-            if (client == null) return;
+            if (client == null || client.TransferCooldownRemaining > 0f) return;
 
             client.SendPackage(new ExperienceTransferPackage(skill.Skill.Id, target, transferLevels, transferXp));
 
@@ -82,6 +82,8 @@ namespace xSkillGilded
             const float itemScale = 1.2f;   // размер текста, полей и кнопок
 
             PlayerSkill skill = transferSkill;
+            XLevelingClient xlevelingClient = XLeveling.Instance(api)?.IXLevelingAPI as XLevelingClient;
+            int cooldownSeconds = (int)Math.Ceiling(xlevelingClient?.TransferCooldownRemaining ?? 0f);
 
             // в кадре открытия клики не принимаются - тот же клик мог попасть в кнопку окна
             mouseBlocked = ImGui.GetFrameCount() == transferOpenFrame;
@@ -148,7 +150,7 @@ namespace xSkillGilded
 
                 // высота берётся от прежней компоновки, но не опускается ниже нужной элементам
                 float ph0 = _ui(24) * 2 + titleH / itemScale + _ui(18) + (rowH / itemScale + _ui(12)) * 4;
-                float phMin = pad * 2 + titleH + _ui(6 * itemScale) + rowH * 4 + _ui(12 * itemScale) * 5;
+                float phMin = pad * 2 + titleH + _ui(6 * itemScale) + rowH * 5 + _ui(12 * itemScale) * 6;
                 float ph = Math.Max(ph0 * boxScale, phMin);
 
                 float px = (float)Math.Round((windowWidth - pw) / 2);
@@ -174,9 +176,8 @@ namespace xSkillGilded
                 drawImage(Sprite("elements", "tooltip_sep"), x, y, w, 1);
                 drawSetColor(c_white);
 
-                // свободная высота делится между строками в прежней пропорции 1:1:1:2
                 float by = py + ph - pad - rowH;
-                float unit = (by - y - rowH * 3) / 5;
+                float unit = (by - y - rowH * 4) / 6;
                 y += unit;
 
                 DrawTransferLabel(lPlayer, x, y, rowH);
@@ -214,11 +215,20 @@ namespace xSkillGilded
                 drawSetColor(c_grey);
                 drawTextFont(fSubtitle, "/ " + maxXp + " xp", cx + xpW + _ui(12 * itemScale), y + rowH / 2, HALIGN.Left, VALIGN.Center);
                 drawSetColor(c_white);
+                y += rowH + unit;
+
+                string cooldownText = cooldownSeconds > 0
+                    ? Lang.Get("xlib:transfercooldownremaining", FormatTransferCooldown(cooldownSeconds))
+                    : Lang.Get("xlib:transfercooldownready");
+                drawSetColor(cooldownSeconds > 0 ? c_grey : c_white);
+                drawTextFont(fSubtitle, cooldownText, x + w / 2, y + rowH / 2, HALIGN.Center, VALIGN.Center);
+                drawSetColor(c_white);
 
                 transferTyping = typing;
 
                 string target = transferName.Trim();
-                bool canConfirm = target.Length > 0
+                bool canConfirm = cooldownSeconds <= 0
+                    && target.Length > 0
                     && !target.Equals(api.World.Player.PlayerName, StringComparison.OrdinalIgnoreCase)
                     && (transferLevels > 0 || transferXp > 0);
 
@@ -245,6 +255,13 @@ namespace xSkillGilded
                 windowPosX = windowX;
                 windowPosY = windowY;
             }
+        }
+
+        private static string FormatTransferCooldown(int totalSeconds)
+        {
+            TimeSpan time = TimeSpan.FromSeconds(Math.Max(0, totalSeconds));
+            int hours = (int)time.TotalHours;
+            return $"{hours:00}:{time.Minutes:00}:{time.Seconds:00}";
         }
 
         private void DrawTransferLabel(string text, float x, float y, float rowH)

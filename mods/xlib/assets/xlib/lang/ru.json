@@ -104,5 +104,9 @@
   "xlibfork:xpdrops-skill-temporaladaptation": "Т.Адаптация",
   "xlibfork:xpdrops-toggle-off": "Отображение опыта выключено.",
   "xlibfork:xpdrops-toggle-on": "Отображение опыта включено.",
-  "you receive": "Вы получаете"
+  "you receive": "Вы получаете",
+
+  "transfercooldownremaining": "До следующей передачи: {0}",
+  "transfercooldownready": "Передача опыта доступна",
+  "transfererrorcooldown": "Передача будет доступна через {0}"
 }

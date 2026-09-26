@@ -55,6 +55,13 @@ namespace XLib.XLeveling
         /// </value>
         public Dictionary<string, SavedPlayerSkillSet> DiscPlayerSkillSets { get; private set; }
 
+        private Dictionary<string, long> transferCooldowns = new Dictionary<string, long>();
+
+        private string TransferCooldownFileName => Path.Combine(
+            SaveFileDirectory,
+            Path.GetFileNameWithoutExtension(FileName) + ".transfercooldowns.json"
+        );
+
         /// <summary>
         /// Gets the player group
         /// </summary>
@@ -163,6 +170,7 @@ namespace XLib.XLeveling
 
             this.LoadConfiguration();
             this.LoadData();
+            this.LoadTransferCooldowns();
 
             //create chat channel
             PlayerGroup = api.Groups.GetPlayerGroupByName(XLeveling.XLibGroupName);
@@ -561,6 +569,87 @@ namespace XLib.XLeveling
             this.DiscPlayerSkillSets = new Dictionary<string, SavedPlayerSkillSet>();
         }
 
+        private void LoadTransferCooldowns()
+        {
+            transferCooldowns = new Dictionary<string, long>();
+            if (!File.Exists(TransferCooldownFileName)) return;
+
+            try
+            {
+                transferCooldowns = JsonConvert.DeserializeObject<Dictionary<string, long>>(
+                    File.ReadAllText(TransferCooldownFileName)
+                ) ?? new Dictionary<string, long>();
+
+                ClearExpiredTransferCooldowns();
+            }
+            catch (Exception error)
+            {
+                transferCooldowns = new Dictionary<string, long>();
+                XLeveling.Api.Logger.Warning("[XLeveling] Failed to load transfer cooldowns: " + error.Message);
+            }
+        }
+
+        private void SaveTransferCooldowns()
+        {
+            try
+            {
+                ClearExpiredTransferCooldowns();
+                File.WriteAllText(
+                    TransferCooldownFileName,
+                    JsonConvert.SerializeObject(transferCooldowns, Formatting.Indented)
+                );
+            }
+            catch (Exception error)
+            {
+                XLeveling.Api.Logger.Warning("[XLeveling] Failed to save transfer cooldowns: " + error.Message);
+            }
+        }
+
+        private void ClearExpiredTransferCooldowns()
+        {
+            if (transferCooldowns == null || transferCooldowns.Count == 0) return;
+
+            long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            List<string> expired = new List<string>();
+            foreach (KeyValuePair<string, long> pair in transferCooldowns)
+            {
+                if (pair.Value <= now) expired.Add(pair.Key);
+            }
+
+            foreach (string playerUid in expired) transferCooldowns.Remove(playerUid);
+        }
+
+        private float GetTransferCooldownRemaining(string playerUid)
+        {
+            if (string.IsNullOrEmpty(playerUid) || transferCooldowns == null) return 0f;
+            if (!transferCooldowns.TryGetValue(playerUid, out long until)) return 0f;
+
+            long remaining = until - DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            if (remaining > 0) return remaining;
+
+            transferCooldowns.Remove(playerUid);
+            return 0f;
+        }
+
+        private float StartTransferCooldown(IServerPlayer player)
+        {
+            if (player == null) return 0f;
+
+            double seconds = Math.Max(0.0, Config.transferCooldown * 60.0);
+            if (seconds <= 0.0)
+            {
+                transferCooldowns.Remove(player.PlayerUID);
+                SaveTransferCooldowns();
+                return 0f;
+            }
+
+            long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            long until = now + (long)Math.Ceiling(seconds);
+            transferCooldowns[player.PlayerUID] = until;
+            SaveTransferCooldowns();
+            return until - now;
+        }
+
         /// <summary>
         /// Saves the skill data of all players to a json file.
         /// </summary>
@@ -615,6 +704,7 @@ namespace XLib.XLeveling
         private void OnWorldSave()
         {
             this.SaveData();
+            this.SaveTransferCooldowns();
         }
 
         /// <summary>
@@ -722,6 +812,12 @@ namespace XLib.XLeveling
             {
                 this.channel.SendPacket(new KnowledgePackage(key, skillSet.Knowledge[key]), byPlayer);
             }
+
+            float transferCooldown = GetTransferCooldownRemaining(byPlayer.PlayerUID);
+            this.channel.SendPacket(
+                new ExperienceTransferUpdatePackage(-1, 0, 0f, 0f, transferCooldown),
+                byPlayer
+            );
         }
 
         /// <summary>
@@ -844,6 +940,17 @@ namespace XLib.XLeveling
         private void OnExperienceTransfer(IServerPlayer fromPlayer, ExperienceTransferPackage package)
         {
             if (fromPlayer == null || package == null || string.IsNullOrWhiteSpace(package.targetPlayerName)) return;
+
+            float cooldown = GetTransferCooldownRemaining(fromPlayer.PlayerUID);
+            if (cooldown > 0f)
+            {
+                this.channel.SendPacket(
+                    new ExperienceTransferUpdatePackage(-1, 0, 0f, 0f, cooldown),
+                    fromPlayer
+                );
+                return;
+            }
+
             if (package.skillId < 0 || package.levels < 0 || package.experience < 0f) return;
             if (float.IsNaN(package.experience) || float.IsInfinity(package.experience)) return;
             if (package.levels == 0 && package.experience <= 0f) return;
@@ -902,8 +1009,16 @@ namespace XLib.XLeveling
             sourceSkill.Experience = newExperience;
             targetSkill.Experience += transferAmount;
 
+            float transferCooldown = StartTransferCooldown(fromPlayer);
+
             this.channel.SendPacket(
-                new ExperienceTransferUpdatePackage(package.skillId, sourceSkill.Level, sourceSkill.Experience, -transferAmount),
+                new ExperienceTransferUpdatePackage(
+                    package.skillId,
+                    sourceSkill.Level,
+                    sourceSkill.Experience,
+                    -transferAmount,
+                    transferCooldown
+                ),
                 fromPlayer
             );
             this.channel.SendPacket(

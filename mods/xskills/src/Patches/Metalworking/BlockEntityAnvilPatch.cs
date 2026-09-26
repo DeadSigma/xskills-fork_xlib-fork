@@ -209,7 +209,7 @@ namespace XSkills
                         (__instance.Api as ICoreClientAPI).TriggerIngameError(__instance, "needbitforging",
                             Lang.Get("xskills:ingameerror-bitforging"));
                     }
-                    return false; // пропускаем оригинальный TryPut -> кусок не кладётся
+                    return false; // пропускаем оригинальный TryPut - кусок не кладётся
                 }
             }
             return true;

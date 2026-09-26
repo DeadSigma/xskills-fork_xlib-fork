@@ -60,6 +60,20 @@ namespace XLib.XLeveling
         /// </summary>
         private long AccumulatedTimeStamp;
 
+        private double transferCooldownUntil;
+
+        /// <summary>
+        /// Возвращается оставшееся время до следующей передачи опыта в секундах
+        /// </summary>
+        public float TransferCooldownRemaining
+        {
+            get
+            {
+                double now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() / 1000.0;
+                return (float)Math.Max(0.0, transferCooldownUntil - now);
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="XLevelingClient" /> class.
         /// </summary>
@@ -217,7 +231,15 @@ namespace XLib.XLeveling
 
         private void MessageHandler(ExperienceTransferUpdatePackage package)
         {
-            if (package == null || package.skillId < 0 || package.skillId >= LocalPlayerSkillSet?.PlayerSkills.Count) return;
+            if (package == null) return;
+
+            if (package.transferCooldown >= 0f)
+            {
+                double now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() / 1000.0;
+                transferCooldownUntil = now + package.transferCooldown;
+            }
+
+            if (package.skillId < 0 || package.skillId >= LocalPlayerSkillSet?.PlayerSkills.Count) return;
 
             PlayerSkill playerSkill = LocalPlayerSkillSet.PlayerSkills[package.skillId];
             int oldLevel = playerSkill.Level;

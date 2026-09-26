@@ -862,5 +862,8 @@
   "abilitydesc-widechipping": "Каждый успешный удар откалывает до {0} дополнительных соседних вокселей, которые не входят в рецепт",
 
   "ability-winterweaver": "Зимний ткач",
-  "abilitydesc-winterweaver": "Созданная вами одежда даёт на {0}% больше тепла."
+  "abilitydesc-winterweaver": "Созданная вами одежда даёт на {0}% больше тепла.",
+
+  "game:traitname-ability-catcher": "Ловец"
+
 }

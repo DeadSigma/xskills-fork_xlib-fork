@@ -12,6 +12,7 @@ namespace XLib.XLeveling
         private string targetName = "";
         private int transferLevels;
         private int transferXp;
+        private int lastCooldownSeconds = -1;
 
         public override string ToggleKeyCombinationCode => null;
         public override bool UnregisterOnClose => true;
@@ -37,9 +38,10 @@ namespace XLib.XLeveling
             ElementBounds xpLabelBounds = ElementBounds.Fixed(0, 156, 120, 24);
             ElementBounds xpInputBounds = ElementBounds.Fixed(120, 152, 120, 30);
             ElementBounds limitsBounds = ElementBounds.Fixed(0, 194, 360, 22);
-            ElementBounds statusBounds = ElementBounds.Fixed(0, 222, 360, 42);
-            ElementBounds cancelBounds = ElementBounds.Fixed(116, 274, 110, 28);
-            ElementBounds confirmBounds = ElementBounds.Fixed(238, 274, 122, 28);
+            ElementBounds cooldownBounds = ElementBounds.Fixed(0, 222, 360, 22);
+            ElementBounds statusBounds = ElementBounds.Fixed(0, 250, 360, 42);
+            ElementBounds cancelBounds = ElementBounds.Fixed(116, 302, 110, 28);
+            ElementBounds confirmBounds = ElementBounds.Fixed(238, 302, 122, 28);
 
             bgBounds.BothSizing = ElementSizing.FitToChildren;
             bgBounds.WithChildren(
@@ -51,6 +53,7 @@ namespace XLib.XLeveling
                 xpLabelBounds,
                 xpInputBounds,
                 limitsBounds,
+                cooldownBounds,
                 statusBounds,
                 cancelBounds,
                 confirmBounds
@@ -70,6 +73,7 @@ namespace XLib.XLeveling
                 .AddStaticText(Lang.Get("xlib:experience"), CairoFont.WhiteDetailText(), xpLabelBounds)
                 .AddNumberInput(xpInputBounds, OnXpChanged, CairoFont.WhiteDetailText(), "TransferXp")
                 .AddDynamicText("", CairoFont.WhiteDetailText(), limitsBounds, "TransferLimits")
+                .AddDynamicText("", CairoFont.WhiteDetailText(), cooldownBounds, "TransferCooldown")
                 .AddDynamicText("", CairoFont.WhiteDetailText(), statusBounds, "TransferStatus")
                 .AddSmallButton(Lang.Get("xlib:transfercancel"), OnCancel, cancelBounds)
                 .AddSmallButton(Lang.Get("xlib:transferconfirm"), OnConfirm, confirmBounds)
@@ -90,6 +94,7 @@ namespace XLib.XLeveling
             xpInput.SetValue(0f);
 
             UpdateLimits();
+            UpdateCooldown();
         }
 
         private void OnTargetChanged(string value)
@@ -141,11 +146,48 @@ namespace XLib.XLeveling
             return maxLevels;
         }
 
+        /// <summary>
+        /// Оставшееся время передачи обновляется при отрисовке окна
+        /// </summary>
+        /// <param name="deltaTime">Время кадра</param>
+        public override void OnRenderGUI(float deltaTime)
+        {
+            base.OnRenderGUI(deltaTime);
+            UpdateCooldown();
+        }
+
+        private void UpdateCooldown()
+        {
+            int seconds = (int)Math.Ceiling(client.TransferCooldownRemaining);
+            if (seconds == lastCooldownSeconds) return;
+
+            lastCooldownSeconds = seconds;
+            string text = seconds > 0
+                ? Lang.Get("xlib:transfercooldownremaining", FormatCooldown(seconds))
+                : Lang.Get("xlib:transfercooldownready");
+
+            SingleComposer?.GetDynamicText("TransferCooldown")?.SetNewText(text);
+        }
+
+        private static string FormatCooldown(int totalSeconds)
+        {
+            TimeSpan time = TimeSpan.FromSeconds(Math.Max(0, totalSeconds));
+            int hours = (int)time.TotalHours;
+            return $"{hours:00}:{time.Minutes:00}:{time.Seconds:00}";
+        }
+
         private bool OnConfirm()
         {
             string target = SingleComposer.GetTextInput("TransferPlayer")?.GetText()?.Trim() ?? targetName;
             int levels = Math.Max(0, (int)Math.Floor(SingleComposer.GetNumberInput("TransferLevels")?.GetValue() ?? 0f));
             int xp = Math.Max(0, (int)Math.Floor(SingleComposer.GetNumberInput("TransferXp")?.GetValue() ?? 0f));
+
+            int cooldown = (int)Math.Ceiling(client.TransferCooldownRemaining);
+            if (cooldown > 0)
+            {
+                SetStatus(Lang.Get("xlib:transfererrorcooldown", FormatCooldown(cooldown)));
+                return true;
+            }
 
             if (string.IsNullOrWhiteSpace(target))
             {

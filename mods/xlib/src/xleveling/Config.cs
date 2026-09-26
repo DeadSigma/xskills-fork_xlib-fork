@@ -125,6 +125,13 @@ namespace XLib.XLeveling
         [ProtoMember(13)]
         [DefaultValue(false)]
         public bool consumeSkillBookOnStudy;
+
+        /// <summary>
+        /// Задержка между передачами опыта задаётся в минутах
+        /// </summary>
+        [ProtoMember(14)]
+        [DefaultValue(120.0f)]
+        public float transferCooldown;
         /// <summary>
         /// Initializes a new instance of the <see cref="Config"/> class.
         /// </summary>
@@ -146,6 +153,7 @@ namespace XLib.XLeveling
             this.configVersion = 6;
             this.disableAllClassRequirements = false;
             this.consumeSkillBookOnStudy = false;
+            this.transferCooldown = 120.0f;
         }
     }//!class Config
 }

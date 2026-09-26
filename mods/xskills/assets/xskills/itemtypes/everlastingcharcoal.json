@@ -19,7 +19,7 @@
 			}
 		},
 		"inForge": {
-			"tempGainDeg": 600,
+			"tempGainDeg": 350,
 			"durationMul": 1000
 		},
 		"handbook": {

@@ -293,19 +293,16 @@ namespace XSkills
 
             this.duplicatable = new List<SmithingRecipe>();
 
-            // 1. Сначала безопасно получаем саму систему регистрации рецептов
             RecipeRegistrySystem recipeSystem = this.XLeveling.Api.ModLoader.GetModSystem<RecipeRegistrySystem>();
 
-            // 2. Проверяем: если система найдена И в ней есть список кузнечных рецептов
             if (recipeSystem?.SmithingRecipes != null)
             {
-                // 3. Только теперь запускаем цикл по рецептам
                 foreach (SmithingRecipe recipe in recipeSystem.SmithingRecipes)
                 {
-                    // В 1.22 крайне важно проверять Output на null здесь
                     if (recipe.Output?.ResolvedItemstack?.Collectible == null) continue;
 
                     CollectibleObject collectible = recipe.Output.ResolvedItemstack.Collectible;
+                    if (collectible is ItemMetalPlate) continue;
 
                     int neededVoxels = 0;
                     if (collectible.CombustibleProps?.SmeltedStack?.ResolvedItemstack != null)
