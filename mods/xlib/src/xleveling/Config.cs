@@ -1,6 +1,10 @@
-﻿using ProtoBuf;
+﻿using Newtonsoft.Json;
+using ProtoBuf;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Runtime.Serialization;
 
 namespace XLib.XLeveling
 {
@@ -132,6 +136,26 @@ namespace XLib.XLeveling
         [ProtoMember(14)]
         [DefaultValue(120.0f)]
         public float transferCooldown;
+
+        /// <summary>
+        /// Передача опыта отключается для веток из списка
+        /// </summary>
+        [ProtoMember(15)]
+        [DefaultValue(false)]
+        public bool disableExperienceTransferInSelectedSkills;
+
+        /// <summary>
+        /// Ветки, для которых передача опыта отключается
+        /// </summary>
+        [ProtoMember(16, OverwriteList = true)]
+        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]
+        public List<string> disabledExperienceTransferSkills;
+
+        /// <summary>
+        /// Подсказка для настройки списка отключённых веток
+        /// </summary>
+        [JsonProperty(ObjectCreationHandling = ObjectCreationHandling.Replace)]
+        public List<string> hint;
         /// <summary>
         /// Initializes a new instance of the <see cref="Config"/> class.
         /// </summary>
@@ -154,6 +178,70 @@ namespace XLib.XLeveling
             this.disableAllClassRequirements = false;
             this.consumeSkillBookOnStudy = false;
             this.transferCooldown = 120.0f;
+            this.disableExperienceTransferInSelectedSkills = false;
+            this.disabledExperienceTransferSkills = new List<string>
+            {
+                "survival",
+                "farming",
+                "digging",
+                "forestry",
+                "mining",
+                "husbandry",
+                "combat",
+                "metalworking",
+                "pottery",
+                "cooking",
+                "fishing",
+                "temporaladaptation",
+                "tailoring",
+                "brewing",
+                "sailing",
+                "riding",
+                "alchemy",
+                "knapping"
+            };
+            this.hint = new List<string>
+            {
+                "Вы можете просто удалить из списка ветки, которые не хотите отключать, по умолчанию все ветки находятся в списке"
+            };
+        }
+
+        [OnDeserialized]
+        private void OnDeserialized(StreamingContext context)
+        {
+            if (disabledExperienceTransferSkills == null)
+                disabledExperienceTransferSkills = new List<string>();
+            else
+                disabledExperienceTransferSkills = disabledExperienceTransferSkills
+                    .Where(name => !string.IsNullOrWhiteSpace(name))
+                    .Select(name => name.Trim())
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .ToList();
+
+            if (hint == null)
+                hint = new List<string>();
+            else
+                hint = hint
+                    .Where(text => !string.IsNullOrWhiteSpace(text))
+                    .Distinct()
+                    .ToList();
+        }
+
+        /// <summary>
+        /// Проверяется, отключена ли передача опыта для указанной ветки
+        /// </summary>
+        public bool IsExperienceTransferDisabled(string skillName)
+        {
+            if (!disableExperienceTransferInSelectedSkills ||
+                string.IsNullOrWhiteSpace(skillName) ||
+                disabledExperienceTransferSkills == null)
+            {
+                return false;
+            }
+
+            return disabledExperienceTransferSkills.Exists(
+                name => string.Equals(name?.Trim(), skillName, StringComparison.OrdinalIgnoreCase)
+            );
         }
     }//!class Config
 }

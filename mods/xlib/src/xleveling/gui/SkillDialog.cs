@@ -231,6 +231,10 @@ namespace XLib.XLeveling
             abilityTooltip = new AbilityTooltip(this.capi, dialogBounds);
             abilityTooltip.SkillDialog = this;
 
+            skillTabsActive = skillTabsActive >= activeList.Count ? 0 : skillTabsActive;
+            playerSkill = activeList[skillTabsActive];
+            activePlayerSkill = playerSkill;
+
             SingleComposer = this.capi.Gui.CreateCompo("SkillDialog", dialogBounds)
                  .AddShadedDialogBG(bgBounds, true)
                  .AddDialogTitleBar(Lang.GetUnformatted("xlib:skills"), OnTitleBarCloseClicked)
@@ -238,22 +242,24 @@ namespace XLib.XLeveling
 
             SingleComposer.AddHorizontalTabs(skillTabs, skillTabBounds, OnSkillTabClicked, CairoFont.WhiteSmallText(), CairoFont.WhiteSmallText(), "SkillTabs");
 
+            SingleComposer.AddRichtext("", CairoFont.WhiteDetailText(), textBounds, "SkillInfo");
+
+            if (Client.Config?.IsExperienceTransferDisabled(playerSkill.Skill.Name) != true)
+            {
+                SingleComposer.AddSmallButton(
+                    Lang.Get("xlib:transferexperience"),
+                    OnTransferClicked,
+                    transferBounds,
+                    EnumButtonStyle.Normal,
+                    "TransferExperience");
+            }
+
             SingleComposer
-                 .AddRichtext("", CairoFont.WhiteDetailText(), textBounds, "SkillInfo")
-                 .AddSmallButton(
-                     Lang.Get("xlib:transferexperience"),
-                     OnTransferClicked,
-                     transferBounds,
-                     EnumButtonStyle.Normal,
-                     "TransferExperience")
                  .AddInteractiveElement(unlearnToggle)
                  .AddInteractiveElement(unlearnAbilityToggle)
                  .AddInteractiveElement(sparringToggle);
 
             //creates a button for every ability that belongs to the chosen skill
-            skillTabsActive = skillTabsActive >= activeList.Count ? 0 : skillTabsActive;
-            playerSkill = activeList[skillTabsActive];
-            activePlayerSkill = playerSkill;
             int abilityCount = 0;
             foreach (PlayerAbility playerAbility in playerSkill.PlayerAbilities)
             {
@@ -355,6 +361,7 @@ namespace XLib.XLeveling
         private bool OnTransferClicked()
         {
             if (activePlayerSkill == null) return true;
+            if (Client.Config?.IsExperienceTransferDisabled(activePlayerSkill.Skill.Name) == true) return true;
 
             transferDialog?.TryClose();
             transferDialog = new SkillTransferDialog(Client, activePlayerSkill);

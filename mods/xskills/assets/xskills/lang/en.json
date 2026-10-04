@@ -39,6 +39,7 @@
   "game:characterclass-huntergloo": "GlooMeClasses: Hunter",
   "game:characterclass-malefactorgloo": "GlooMeClasses: Malefactor",
   "game:characterclass-smith": "GlooMeClasses: Smith",
+  "game:traitname-ability-catcher": "Catcher",
   "group-collecting": "Collecting",
   "group-processing": "Processing",
   "group-survival": "Survival",

@@ -39,6 +39,7 @@
   "game:characterclass-huntergloo": "GlooMeClasses : Chasseur",
   "game:characterclass-malefactorgloo": "GlooMeClasses : Malfaiteur",
   "game:characterclass-smith": "GlooMeClasses : Forgeron",
+  "game:traitname-ability-catcher": "Attrapeur",
   "group-collecting": "Collecte",
   "group-processing": "Transformation",
   "group-survival": "Survie",

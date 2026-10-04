@@ -39,6 +39,7 @@
   "game:characterclass-huntergloo": "GlooMeClasses: Cazador",
   "game:characterclass-malefactorgloo": "GlooMeClasses: Maleante",
   "game:characterclass-smith": "GlooMeClasses: Herrero",
+  "game:traitname-ability-catcher": "Atrapa",
   "group-collecting": "Recolección",
   "group-processing": "Procesamiento",
   "group-survival": "Supervivencia",

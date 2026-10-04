@@ -960,6 +960,7 @@ namespace XLib.XLeveling
 
             PlayerSkill sourceSkill = sourceSet.PlayerSkills[package.skillId];
             if (sourceSkill?.Skill == null || !sourceSkill.Skill.Enabled) return;
+            if (Config?.IsExperienceTransferDisabled(sourceSkill.Skill.Name) == true) return;
 
             PlayerSkillSet targetSet = null;
             foreach (PlayerSkillSet playerSkillSet in PlayerSkillSets.Values)

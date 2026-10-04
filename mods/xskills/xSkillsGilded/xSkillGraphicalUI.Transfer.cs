@@ -24,6 +24,8 @@ namespace xSkillGilded
 
         private void OpenTransfer(PlayerSkill skill)
         {
+            if (IsTransferDisabled(skill)) return;
+
             // ник между открытиями сохраняется
             transferSkill = skill;
             transferLevels = 0;
@@ -46,7 +48,7 @@ namespace xSkillGilded
         private void ConfirmTransfer(PlayerSkill skill, string target)
         {
             XLevelingClient client = XLeveling.Instance(api)?.IXLevelingAPI as XLevelingClient;
-            if (client == null || client.TransferCooldownRemaining > 0f) return;
+            if (client == null || client.TransferCooldownRemaining > 0f || IsTransferDisabled(skill)) return;
 
             client.SendPackage(new ExperienceTransferPackage(skill.Skill.Id, target, transferLevels, transferXp));
 
@@ -57,6 +59,8 @@ namespace xSkillGilded
         // по клику на название ветки в meta spec открывается окно передачи
         private bool DrawTransferHover(PlayerSkill skill, float x, float y, float w, ref string hoverId)
         {
+            if (IsTransferDisabled(skill)) return false;
+
             float h = TextSize(fSubtitleGold, skill.Skill.DisplayName).Y;
             if (!mouseHover(x - _ui(4), y - _ui(2), x + w, y + h + _ui(2))) return false;
 
@@ -83,6 +87,12 @@ namespace xSkillGilded
 
             PlayerSkill skill = transferSkill;
             XLevelingClient xlevelingClient = XLeveling.Instance(api)?.IXLevelingAPI as XLevelingClient;
+            if (IsTransferDisabled(skill))
+            {
+                CloseTransfer(false);
+                return;
+            }
+
             int cooldownSeconds = (int)Math.Ceiling(xlevelingClient?.TransferCooldownRemaining ?? 0f);
 
             // в кадре открытия клики не принимаются - тот же клик мог попасть в кнопку окна
@@ -255,6 +265,15 @@ namespace xSkillGilded
                 windowPosX = windowX;
                 windowPosY = windowY;
             }
+        }
+
+
+        private bool IsTransferDisabled(PlayerSkill skill)
+        {
+            if (skill?.Skill == null) return true;
+
+            XLevelingClient client = XLeveling.Instance(api)?.IXLevelingAPI as XLevelingClient;
+            return client?.Config?.IsExperienceTransferDisabled(skill.Skill.Name) ?? false;
         }
 
         private static string FormatTransferCooldown(int totalSeconds)
