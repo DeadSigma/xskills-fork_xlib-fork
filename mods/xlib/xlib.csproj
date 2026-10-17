@@ -9,7 +9,7 @@
     <OutputPath>.\bin</OutputPath>
     <IntermediateOutputPath>.\obj\Debug\xlib\</IntermediateOutputPath>
     <DocumentationFile>..\..\..\..\..\..\..\bin\xlib.xml</DocumentationFile>
-	<VINTAGE_STORY>C:\Users\Mrzub\AppData\Roaming\Vintagestory 1.22.2</VINTAGE_STORY>
+	<VINTAGE_STORY>C:\Users\blsra\AppData\Roaming\Vintagestory</VINTAGE_STORY>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>.\bin</OutputPath>
@@ -142,7 +142,7 @@
 
 		<RemoveDir Directories="$(ZipTempDir)" />
 
-		<Exec Command="py &quot;C:\sourcecode\копирует xlib в папку с модами.py&quot;" />
+		<Exec Command="py &quot;C:\Users\blsra\source\копирует xlib в папку с модами.py&quot;" />
 	</Target>
   <ProjectExtensions>
 	  <VisualStudio>

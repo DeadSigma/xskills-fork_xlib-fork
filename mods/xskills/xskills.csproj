@@ -6,7 +6,7 @@
 		<NuGetAudit>false</NuGetAudit>
 	</PropertyGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<VINTAGE_STORY>C:\Users\Mrzub\AppData\Roaming\Vintagestory 1.22.2</VINTAGE_STORY>
+		<VINTAGE_STORY>C:\Users\blsra\AppData\Roaming\Vintagestory</VINTAGE_STORY>
 		<OutputPath>.\bin</OutputPath>
 		<IntermediateOutputPath>.\obj\Debug\xskills\</IntermediateOutputPath>
 	</PropertyGroup>
@@ -206,7 +206,7 @@
 
 		<RemoveDir Directories="$(ZipTempDir)" />
 
-		<Exec Command="py &quot;C:\sourcecode\копирует xskills в папку с модами.py&quot;" />
+		<Exec Command="py &quot;C:\Users\blsra\source\копирует xskills в папку с модами.py&quot;" />
 
 	</Target>
 
