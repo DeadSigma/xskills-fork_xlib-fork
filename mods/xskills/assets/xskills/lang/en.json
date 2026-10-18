@@ -512,7 +512,7 @@
   "abilitydesc-luminiferous": "You begin to glow in dark areas, creating a bright area around you with a light level of {2}.",
 
   "ability-machinelearning": "Machine Learning",
-  "abilitydesc-machinelearning": "You can share your smithing knowledge with helve hammers and they can profit from some of your abilities.",
+  "abilitydesc-machinelearning": "You can share your smithing knowledge with helve hammers and they can profit from the Heating Hits ability.",
 
   "ability-magnetichook": "Magnetic Hook",
   "abilitydesc-magnetichook": "With a {0}% chance (+{1}% per Fishing level, up to {2}%), you will pull a random item from the water instead of a fish.",

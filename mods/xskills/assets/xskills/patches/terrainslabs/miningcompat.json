@@ -1,0 +1,30 @@
+[
+  {
+    "dependsOn": [
+      { "modid": "terrainslabs" }
+    ],
+    "file": "terrainslabs:blocktypes/rock.json",
+    "op": "addmerge",
+    "path": "/behaviors/-",
+    "value": {
+      "name": "XSkillsStone",
+      "properties": {
+        "xp": 0.05
+      }
+    }
+  },
+  {
+    "dependsOn": [
+      { "modid": "terrainslabs" }
+    ],
+    "file": "terrainslabs:blocktypes/crackedrock.json",
+    "op": "addmerge",
+    "path": "/behaviors/-",
+    "value": {
+      "name": "XSkillsStone",
+      "properties": {
+        "xp": 0.05
+      }
+    }
+  }
+]

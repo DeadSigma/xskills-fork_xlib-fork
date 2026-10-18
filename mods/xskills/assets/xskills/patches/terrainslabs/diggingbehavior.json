@@ -1,0 +1,114 @@
+[
+  {
+    "dependsOn": [
+      { "modid": "terrainslabs" }
+    ],
+    "file": "terrainslabs:blocktypes/soil.json",
+    "op": "addmerge",
+    "path": "/behaviors/-",
+    "value": {
+      "name": "XSkillsSoil",
+      "properties": {
+        "xp": 0.05
+      }
+    }
+  },
+  {
+    "dependsOn": [
+      { "modid": "terrainslabs" }
+    ],
+    "file": "terrainslabs:blocktypes/devastatedsoil.json",
+    "op": "addmerge",
+    "path": "/behaviors/-",
+    "value": {
+      "name": "XSkillsSoil",
+      "properties": {
+        "xp": 0.05
+      }
+    }
+  },
+  {
+    "dependsOn": [
+      { "modid": "terrainslabs" }
+    ],
+    "file": "terrainslabs:blocktypes/clay.json",
+    "op": "addmerge",
+    "path": "/behaviors/-",
+    "value": {
+      "name": "XSkillsClay",
+      "properties": {
+        "xp": 0.165
+      }
+    }
+  },
+  {
+    "dependsOn": [
+      { "modid": "terrainslabs" }
+    ],
+    "file": "terrainslabs:blocktypes/cob.json",
+    "op": "addmerge",
+    "path": "/behaviors/-",
+    "value": {
+      "name": "XSkillsSoil",
+      "properties": {
+        "xp": 0.075
+      }
+    }
+  },
+  {
+    "dependsOn": [
+      { "modid": "terrainslabs" }
+    ],
+    "file": "terrainslabs:blocktypes/forestfloor.json",
+    "op": "addmerge",
+    "path": "/behaviors/-",
+    "value": {
+      "name": "XSkillsSoil",
+      "properties": {
+        "xp": 0.05
+      }
+    }
+  },
+  {
+    "dependsOn": [
+      { "modid": "terrainslabs" }
+    ],
+    "file": "terrainslabs:blocktypes/gravel.json",
+    "op": "addmerge",
+    "path": "/behaviors/-",
+    "value": {
+      "name": "XSkillsSand",
+      "properties": {
+        "xp": 0.05
+      }
+    }
+  },
+  {
+    "dependsOn": [
+      { "modid": "terrainslabs" }
+    ],
+    "file": "terrainslabs:blocktypes/muddygravel.json",
+    "op": "addmerge",
+    "path": "/behaviors/-",
+    "value": {
+      "name": "XSkillsSoil",
+      "properties": {
+        "xp": 0.05
+      }
+    }
+  },
+  {
+    "dependsOn": [
+      { "modid": "terrainslabs" }
+    ],
+    "file": "terrainslabs:blocktypes/sand.json",
+    "op": "addmerge",
+    "path": "/behaviors/-",
+    "value": {
+      "name": "XSkillsSand",
+      "properties": {
+        "xp": 0.05
+      }
+    }
+  }
+]
