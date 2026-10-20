@@ -485,7 +485,7 @@
   "abilitydesc-leatherworker": "Obiectele din piele create de dumneavoastră primesc +{0}% la caracteristici. Incompatibil cu abilitatea „Țesător».",
 
   "ability-lightarmorexpert": "Expert în armură ușoară",
-  "abilitydesc-lightarmorexpert": "Atâta timp cât nu porți armură care reduce viteza de deplasare, următoarele atribute sunt îmbunătățite cu {0}%:\n{1}",
+  "abilitydesc-lightarmorexpert": "Atâta timp cât porți armură care reduce viteza de deplasare cu cel mult 5% pentru fiecare piesă, următoarele atribute sunt îmbunătățite cu {0}%:\n{1}",
 
   "ability-lightcavalry": "Cavalerie ușoară",
   "abilitydesc-lightcavalry": "Crește cu {0}% viteza și manevrabilitatea wapitiilor și a monturilor ușoare din moduri.",

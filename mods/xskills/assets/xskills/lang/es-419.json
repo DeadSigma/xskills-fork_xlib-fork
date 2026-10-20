@@ -485,7 +485,7 @@
   "abilitydesc-leatherworker": "Los objetos de cuero que fabricas obtienen +{0}% a sus características. Incompatible con la habilidad «Tejedor».",
 
   "ability-lightarmorexpert": "Experto en armadura ligera",
-  "abilitydesc-lightarmorexpert": "Mientras no lleves una armadura que reduzca la velocidad de movimiento, las siguientes características mejoran en un {0}%:\n{1}",
+  "abilitydesc-lightarmorexpert": "Mientras lleves una armadura que reduzca la velocidad de movimiento como máximo un 5% por pieza, las siguientes características mejoran en un {0}%:\n{1}",
 
   "ability-lightcavalry": "Caballería ligera",
   "abilitydesc-lightcavalry": "Aumenta en un {0}% la velocidad y maniobrabilidad de los wapitíes y otras monturas ligeras de los mods.",

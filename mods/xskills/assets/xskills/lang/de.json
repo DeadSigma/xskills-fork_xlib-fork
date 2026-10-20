@@ -485,7 +485,7 @@
   "abilitydesc-leatherworker": "Von Ihnen gefertigte Ledergegenstände erhalten +{0}% auf ihre Werte. Nicht kombinierbar mit der Fähigkeit „Weber«.",
 
   "ability-lightarmorexpert": "Experte für leichte Rüstung",
-  "abilitydesc-lightarmorexpert": "Solange ihr keine Rüstung tragt, die eure Laufgeschwindigkeit verringert, werden die folgenden Werte um {0} % erhöht:\n{1}",
+  "abilitydesc-lightarmorexpert": "Solange ihr Rüstung tragt, die eure Laufgeschwindigkeit um höchstens 5 % pro Rüstungsteil verringert, werden die folgenden Werte um {0} % erhöht:\n{1}",
 
   "ability-lightcavalry": "Leichte Kavallerie",
   "abilitydesc-lightcavalry": "Erhöht Geschwindigkeit und Wendigkeit von Wapitis sowie leichten Reittieren aus Mods um {0}%.",

@@ -485,7 +485,7 @@
   "abilitydesc-leatherworker": "Les objets en cuir que vous fabriquez gagnent +{0}% à leurs caractéristiques. Incompatible avec la compétence « Tisserand ».",
 
   "ability-lightarmorexpert": "Expert en armure légère",
-  "abilitydesc-lightarmorexpert": "Tant que vous ne portez pas d'armure réduisant votre vitesse de déplacement, les caractéristiques suivantes sont améliorées de {0} % :\n{1}",
+  "abilitydesc-lightarmorexpert": "Tant que vous portez une armure qui réduit la vitesse de déplacement de 5 % maximum par pièce, les caractéristiques suivantes sont améliorées de {0} % :\n{1}",
 
   "ability-lightcavalry": "Cavalerie légère",
   "abilitydesc-lightcavalry": "Augmente de {0}% la vitesse et la maniabilité des wapitis ainsi que des montures légères issues des mods.",

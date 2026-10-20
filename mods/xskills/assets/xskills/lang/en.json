@@ -485,7 +485,7 @@
   "abilitydesc-leatherworker": "Leather items you craft gain +{0}% to their stats. Incompatible with the Cloth Weaver ability.",
 
   "ability-lightarmorexpert": "Light Armor Expert",
-  "abilitydesc-lightarmorexpert": "As long as you are not wearing armor that reduces walking speed, the following stats are improved by {0}%:\n{1}",
+  "abilitydesc-lightarmorexpert": "As long as you are wearing armor that reduces walking speed by no more then 5% per piece, the following stats are improved by {0}%:\n{1}",
 
   "ability-lightcavalry": "Light Cavalry",
   "abilitydesc-lightcavalry": "Increases the speed and maneuverability of wapiti and other light mounts from mods by {0}%.",

@@ -485,7 +485,7 @@
   "abilitydesc-leatherworker": "Skórzane przedmioty wykonane przez ciebie otrzymują +{0}% do swoich statystyk. Nie łączy się z umiejętnością „Tkacz».",
 
   "ability-lightarmorexpert": "Ekspert lekkiej zbroi",
-  "abilitydesc-lightarmorexpert": "Dopóki nie nosisz zbroi zmniejszającej prędkość ruchu, następujące statystyki są zwiększone o {0}%:\n{1}",
+  "abilitydesc-lightarmorexpert": "Dopóki nosisz zbroję, która zmniejsza prędkość ruchu o nie więcej niż 5% za każdy element, następujące statystyki są zwiększone o {0}%:\n{1}",
 
   "ability-lightcavalry": "Lekka kawaleria",
   "abilitydesc-lightcavalry": "Zwiększa prędkość i zwrotność wapiti oraz lekkich wierzchowców z modów o {0}%.",

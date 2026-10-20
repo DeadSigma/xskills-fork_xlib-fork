@@ -485,7 +485,7 @@
   "abilitydesc-leatherworker": "你制作的皮革物品属性提高 +{0}%。与«织工»技能互斥。",
 
   "ability-lightarmorexpert": "轻甲专家",
-  "abilitydesc-lightarmorexpert": "只要你没有穿戴会降低移动\n速度的护甲，以下属性将提\n高{0}%：{1}",
+  "abilitydesc-lightarmorexpert": "只要你穿戴的每件护甲使行走速度降低不超过 5%，以下属性将提高 {0}%：\n{1}",
 
   "ability-lightcavalry": "轻骑兵",
   "abilitydesc-lightcavalry": "将马鹿（Wapiti）以及模组中的轻型坐骑的速度和机动性提高 {0}%。",

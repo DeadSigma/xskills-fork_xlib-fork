@@ -36,9 +36,13 @@ namespace XSkills
         public int BloodlustId { get; private set; }
         public int MonsterExpertId { get; private set; }
         public int SwiftSpearId { get; private set; }
-        public int CarefulShooterId { get; private set; } //Перк от пользователя Taper4ik
+        public int CarefulShooterId { get; private set; } // Perk from user Taper4ik
+        private ICoreAPI api;
         public Combat(ICoreAPI api) : base("combat", "xskills:skill-combat", "xskills:group-survival")
         {
+            this.api = api;
+            this.api.Logger.Debug("Combat skill initialized");
+
             (XLeveling.Instance(api))?.RegisterSkill(this);
 
             // increases damage with swords
@@ -71,13 +75,13 @@ namespace XSkills
                 "xskills:abilitydesc-spearman",
                 1, 3, new int[] { 10, 1, 20, 20, 2, 40, 20, 2, 60 }));
 
-            // Уменьшает время прицеливания копьем
-            // 0: процент ускорения прицеливания
+            // Reduces aiming time with a spear
+            // 0: aiming speed increase percentage
             SwiftSpearId = this.AddAbility(new Ability(
                 "swiftspear",
                 "xskills:ability-swiftspear",
                 "xskills:abilitydesc-swiftspear",
-                5, 3, new int[] { 15, 25, 35 })); // 5 - требуемый уровень навыка, 3 - макс. тир
+                5, 3, new int[] { 15, 25, 35 })); // 5 - required skill level, 3 - maximum tier
 
             // increases damage absorbed by shields
             // 0: base value
@@ -318,8 +322,8 @@ namespace XSkills
                     stat.ValuesByKey.TryGetValue("CombatOverhaul:Armor", out temp);
                     value += temp?.Value ?? 0.0f;
 
-                    // Значение бонуса если нет штрафа к скорости
-                    float bonusValue = value >= 0.0f ? playerAbility.FValue(0) : 0.0f;
+                    // Bonus value when there is no movement speed penalty
+                    float bonusValue = value < 0.0f && value > -0.05f ? playerAbility.FValue(0) : 0.0f;
 
                     foreach (string statName in (playerAbility.Ability as ArmorAbility)?.BonusTraits)
                     {
@@ -328,8 +332,8 @@ namespace XSkills
                             stat = stats[statName];
                             if (stat == null) continue;
 
-                            // Инвертируем значение для скорости голодания, 
-                            // чтобы бонус замедлял голод, а не ускорял его
+                            // Invert the value for hunger rate,
+                            // so the bonus slows hunger rather than accelerating it
                             if (statName == "hungerrate")
                             {
                                 stat.Set("ability-armorexpert", -bonusValue);

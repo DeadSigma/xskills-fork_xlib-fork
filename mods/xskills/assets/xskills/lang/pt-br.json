@@ -485,7 +485,7 @@
   "abilitydesc-leatherworker": "Itens de couro confeccionados por você recebem +{0}% em seus atributos. Incompatível com a habilidade «Tecelão».",
 
   "ability-lightarmorexpert": "Especialista em armadura leve",
-  "abilitydesc-lightarmorexpert": "Enquanto você não estiver usando armadura que reduza a velocidade de movimento, os seguintes atributos são melhorados em {0}%:\n{1}",
+  "abilitydesc-lightarmorexpert": "Desde que você esteja usando uma armadura que reduza a velocidade de movimento em no máximo 5% por peça, os seguintes atributos são aprimorados em {0}%:\n{1}",
 
   "ability-lightcavalry": "Cavalaria Leve",
   "abilitydesc-lightcavalry": "Aumenta em {0}% a velocidade e a manobrabilidade dos wapitis e de outras montarias leves de mods.",

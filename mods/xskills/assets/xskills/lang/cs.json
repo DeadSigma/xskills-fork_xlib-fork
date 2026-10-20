@@ -485,7 +485,7 @@
   "abilitydesc-leatherworker": "Kožené předměty, které vytvoříte, získají +{0}% ke svým vlastnostem. Nelze kombinovat se schopností „Tkadlec«.",
 
   "ability-lightarmorexpert": "Expert na lehké brnění",
-  "abilitydesc-lightarmorexpert": "Dokud nenosíte zbroj snižující rychlost chůze, následující vlastnosti jsou zvýšeny o {0} %:\n{1}",
+  "abilitydesc-lightarmorexpert": "Dokud nosíte zbroj, která snižuje rychlost chůze nejvýše o 5 % za každý kus, následující vlastnosti jsou zvýšeny o {0} %:\n{1}",
 
   "ability-lightcavalry": "Lehká kavalerie",
   "abilitydesc-lightcavalry": "Zvyšuje rychlost a ovladatelnost wapiti a dalších lehkých jízdních zvířat z modů o {0}%.",

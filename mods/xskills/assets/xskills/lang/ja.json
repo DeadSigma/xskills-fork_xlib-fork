@@ -485,7 +485,7 @@
   "abilitydesc-leatherworker": "作成した革製品の性能が +{0}% 向上します。「織工」とは両立できません。",
 
   "ability-lightarmorexpert": "軽装鎧の達人",
-  "abilitydesc-lightarmorexpert": "移動速度を低下させる防具を装備していない間、次の能力値が{0}%向上します:\n{1}",
+  "abilitydesc-lightarmorexpert": "装備している防具1部位あたりの移動速度低下が5%以下である限り、次の能力値が{0}%向上します:\n{1}",
 
   "ability-lightcavalry": "軽騎兵",
   "abilitydesc-lightcavalry": "ワピチおよびMODで追加される軽量マウントの速度と機動性が {0}% 向上します。",

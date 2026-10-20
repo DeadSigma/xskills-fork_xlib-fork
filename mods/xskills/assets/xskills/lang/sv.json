@@ -485,8 +485,8 @@
   "abilitydesc-leatherworker": "Läderföremål som du tillverkar får +{0}% bättre egenskaper. Kan inte kombineras med förmågan «Vävare».",
 
   "ability-lightarmorexpert": "Lätt rustnings-expert",
-  "abilitydesc-lightarmorexpert": "Så länge du inte bär rustning som minskar gånghastigheten förbättras följande egenskaper med {0}%:\n{1}",
-
+  "abilitydesc-lightarmorexpert": "Så länge du bär rustning som minskar gånghastigheten med högst 5 % per del förbättras följande egenskaper med {0} %:\n{1}",
+  
   "ability-lightcavalry": "Lätt kavalleri",
   "abilitydesc-lightcavalry": "Ökar hastigheten och manövrerbarheten för wapiti och andra lätta riddjur från moddar med {0}%.",
 
