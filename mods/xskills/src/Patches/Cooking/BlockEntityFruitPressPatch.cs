@@ -104,6 +104,7 @@ namespace XSkills
         [HarmonyPatch("getJuiceableProps")]
         public static void getJuiceablePropsPostfix(BlockEntityFruitPress __instance, JuiceableProperties __result, ItemStack stack)
         {
+            if (stack?.Collectible is ItemPressedMash) return;
             if (__result?.LitresPerItem == null) return;
             BlockEntityBehaviorOwnable ownable = __instance?.GetBehavior<BlockEntityBehaviorOwnable>();
             IPlayer player = ownable?.Owner;
