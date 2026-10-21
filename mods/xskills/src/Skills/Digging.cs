@@ -384,14 +384,14 @@ namespace XSkills
         }
     }//!class XSkillsSandBehavior
 
-    // ПАТЧИ ДЛЯ ЛОТКА (ПРОМЫВКА ПОЧВЫ И ЛУТ)
+    // PAN PATCHES (SOIL PANNING AND LOOT)
     [HarmonyPatch(typeof(Vintagestory.GameContent.BlockPan))]
     public class BlockPanPatches
     {
-        // 1. Быстрая промывка (Quick Pan) - Ускоряем процесс анимации
+        // 1. Quick Panning - Speed up the animation
         [HarmonyPatch("OnHeldInteractStep")]
         [HarmonyPrefix]
-        [HarmonyPriority(Priority.High)] //ЗАСТАВЛЯЕМ ВЫПОЛНЯТЬСЯ ПЕРВЫМ
+        [HarmonyPriority(Priority.High)] // FORCE THIS TO EXECUTE FIRST
         public static void StepPrefix(EntityAgent byEntity, ref float secondsUsed)
         {
             if (byEntity == null) return;
@@ -401,17 +401,17 @@ namespace XSkills
                 PlayerAbility quickPan = byEntity.GetBehavior<PlayerSkillSet>()?[digging.Id]?[digging.QuickPanId];
                 if (quickPan != null && quickPan.Tier > 0)
                 {
-                    // Компенсация пинга для сервера (из прошлого фикса)
+                    // Server ping compensation (from the previous fix)
                     float pingAllowance = (byEntity.Api.Side == EnumAppSide.Server) ? 0.4f : 0f;
                     secondsUsed = (secondsUsed + pingAllowance) * (1.0f + quickPan.Value(0) / 100f);
                 }
             }
         }
 
-        // 2. Быстрая промывка (Quick Pan) - Ускоряем финиш (выдачу лута)
+        // 2. Quick Panning - Speed up completion (loot distribution)
         [HarmonyPatch("OnHeldInteractStop")]
         [HarmonyPrefix]
-        [HarmonyPriority(Priority.High)] //ЗАСТАВЛЯЕМ ВЫПОЛНЯТЬСЯ ПЕРВЫМ
+        [HarmonyPriority(Priority.High)] // FORCE THIS TO EXECUTE FIRST
         public static void StopPrefix(EntityAgent byEntity, ref float secondsUsed)
         {
             if (byEntity == null) return;
@@ -427,7 +427,7 @@ namespace XSkills
             }
         }
 
-        // 3. Золотоискатель (Gold Digger) - Увеличиваем добычу и даем опыт
+        // 3. Gold Digger - Increase loot and grant experience
         [HarmonyPatch("CreateDrop")]
         [HarmonyPrefix]
         public static bool CreateDropPrefix(Vintagestory.GameContent.BlockPan __instance, EntityAgent byEntity, string fromBlockCode)
@@ -435,7 +435,7 @@ namespace XSkills
             EntityPlayer entityPlayer = byEntity as EntityPlayer;
             IPlayer player = entityPlayer?.Player;
 
-            // Читаем ванильные дропы лотка через Reflection
+            // Read the vanilla pan drops through reflection
             var dropsBySourceMat = (Dictionary<string, PanningDrop[]>)AccessTools.Field(typeof(Vintagestory.GameContent.BlockPan), "dropsBySourceMat").GetValue(__instance);
 
             PanningDrop[] drops = null;
@@ -454,17 +454,17 @@ namespace XSkills
             string rocktype = (block != null) ? block.Variant["rock"] : null;
             drops.Shuffle(byEntity.Api.World.Rand);
 
-            // Считаем бонус от перка Золотоискатель
+            // Calculate the Gold Digger perk bonus
             float yieldMultiplier = 1.0f;
             Digging digging = XLeveling.Instance(byEntity.Api)?.GetSkill("digging") as Digging;
             if (digging != null)
             {
                 PlayerSkill playerSkill = byEntity.GetBehavior<PlayerSkillSet>()?[digging.Id];
 
-                // Выдаем опыт на сервере за сам факт промывки одного слоя (даже если ничего не нашли)
+                // Grant server experience for panning one layer, even if nothing was found
                 if (byEntity.Api.Side == EnumAppSide.Server)
                 {
-                    playerSkill?.AddExperience(0.5f); // Базовый опыт за 1 слой 
+                    playerSkill?.AddExperience(0.5f); // Base experience for one layer 
                 }
 
                 PlayerAbility goldDigger = playerSkill?[digging.GoldDiggerId];
@@ -489,7 +489,7 @@ namespace XSkills
                 float val2 = drop.Chance.nextFloat() * extraMul;
                 ItemStack stack = drop.ResolvedItemstack;
 
-                // Заменяем породу у предметов (например медный самородок "в граните")
+                // Replace the rock type in items, such as a copper nugget "in granite"
                 if (drops[i].Code.Path.Contains("{rocktype}"))
                 {
                     var resolveMethod = AccessTools.Method(typeof(Vintagestory.GameContent.BlockPan), "Resolve");
@@ -500,7 +500,7 @@ namespace XSkills
                 {
                     stack = stack.Clone();
 
-                    // УВЕЛИЧЕНИЕ ЛУТА
+                    // INCREASE LOOT
                     float totalYield = stack.StackSize * yieldMultiplier;
                     int finalStackSize = (int)totalYield;
 
@@ -510,7 +510,7 @@ namespace XSkills
                     }
                     stack.StackSize = Math.Max(1, finalStackSize);
 
-                    // Бонусный опыт за удачную находку (только на сервере)
+                    // Bonus experience for a successful find (server only)
                     if (digging != null && byEntity.Api.Side == EnumAppSide.Server)
                     {
                         PlayerSkill playerSkill = byEntity.GetBehavior<PlayerSkillSet>()?[digging.Id];
@@ -518,7 +518,7 @@ namespace XSkills
                         playerSkill?.AddExperience(stack.StackSize * 0.2f);
                     }
 
-                    // Выдача предметов (строго на сервере, чтобы избежать глитчей в мультиплеере)
+                    // Give items (server only, to avoid multiplayer glitches)
                     if (byEntity.Api.Side == EnumAppSide.Server)
                     {
                         if (player == null || !player.InventoryManager.TryGiveItemstack(stack, true))
@@ -527,14 +527,14 @@ namespace XSkills
                         }
                     }
 
-                    return false; // Отменяем ванильный оригинальный метод
+                    return false; // Cancel the original vanilla method
                 }
                 else
                 {
                     i++;
                 }
             }
-            return false; // Отменяем ванильный метод CreateDrop
+            return false; // Cancel the vanilla CreateDrop method
         }
     }
 }//!namespace XSkills

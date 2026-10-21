@@ -123,22 +123,7 @@
           {
             "minimumTier": 2,
             "code": "class",
-            "class": "huntergloo"
-          },
-          {
-            "minimumTier": 2,
-            "code": "class",
-            "class": "malefactorgloo"
-          },
-          {
-            "minimumTier": 2,
-            "code": "class",
             "class": "smith"
-          },
-          {
-            "minimumTier": 2,
-            "code": "class",
-            "class": "malefactor"
           },
           {
             "minimumTier": 2,
@@ -149,6 +134,13 @@
             "minimumTier": 2,
             "code": "class",
             "class": "archer"
+          },
+          {
+            "minimumTier": 2,
+            "code": "ability",
+            "skill": "husbandry",
+            "ability": "hunter",
+            "requiredTier": 3
           }
         ]
       }

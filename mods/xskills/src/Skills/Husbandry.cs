@@ -175,11 +175,10 @@ namespace XSkills
                 "xskills:abilitydesc-masshusbandry",
                 10, 1, new int[] { 0, 1, 1, 30 }));
 
-
-            // Добавляет дополнительный слот для сумки из Butchery
-            // 0: Уровень на котором доступен перк
-            // 1: Сколько уровней у перка
-            // 2: Кол-во слотов
+            // Adds an additional slot to the Butchery bag
+            // 0: Level at which the perk becomes available
+            // 1: Number of perk levels
+            // 2: Number of slots
             HunterBagId = this.AddAbility(new Ability(
                 "hunterbag",
                 "xskills:ability-hunterbag",
@@ -201,7 +200,7 @@ namespace XSkills
 
         }
 
-        //Охотничий слот
+        // Hunting bag slot
         public void OnHunterBag(PlayerAbility playerAbility, int oldTier)
         {
             IPlayer player = playerAbility.PlayerSkill.PlayerSkillSet.Player;
@@ -223,10 +222,10 @@ namespace XSkills
             int slotsCount = playerAbility.Tier > 0 ? playerAbility.Value(0) : 0;
             inv.SetSize(slotsCount);
 
-            // Сервер: применяем штраф скорости за вес содержимого (в т.ч. после захода в игру)
+            // Server: apply the weight-based speed penalty, including after joining the game
             if (player.Entity.Api.Side == EnumAppSide.Server) inv.UpdateWeightPenalty();
 
-            // UI строим только на локальном клиенте и только для своего игрока
+            // Build the UI only on the local client and only for the local player
             if (player.Entity.Api is ICoreClientAPI capi && player.PlayerUID == capi.World.Player?.PlayerUID)
             {
                 UpdateHunterBagUI(capi, inv, playerAbility.Tier);
@@ -235,7 +234,7 @@ namespace XSkills
 
         private GuiDialogHunterBag bagDialog;
 
-        // Только клиент (ICoreClientAPI)
+        // Client only (ICoreClientAPI)
         private void UpdateHunterBagUI(ICoreClientAPI capi, HunterBagInventory inv, int tier)
         {
             bool shouldShow = tier > 0 && inv != null && inv.Count > 0;

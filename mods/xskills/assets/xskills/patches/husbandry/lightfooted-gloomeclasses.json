@@ -1,0 +1,35 @@
+[
+  {
+    "file": "xskillsfork:skills/husbandry.json",
+    "op": "add",
+    "path": "/lightfooted/requirements/0/requirements/-",
+    "value": {
+      "minimumTier": 2,
+      "code": "class",
+      "class": "huntergloo"
+    },
+    "dependsOn": [ { "modid": "gloomeclasses" } ]
+  },
+  {
+    "file": "xskillsfork:skills/husbandry.json",
+    "op": "add",
+    "path": "/lightfooted/requirements/0/requirements/-",
+    "value": {
+      "minimumTier": 2,
+      "code": "class",
+      "class": "malefactorgloo"
+    },
+    "dependsOn": [ { "modid": "gloomeclasses" } ]
+  },
+  {
+    "file": "xskillsfork:skills/husbandry.json",
+    "op": "add",
+    "path": "/lightfooted/requirements/0/requirements/-",
+    "value": {
+      "minimumTier": 2,
+      "code": "class",
+      "class": "malefactor"
+    },
+    "dependsOn": [ { "modid": "gloomeclasses" } ]
+  }
+]

@@ -8,7 +8,7 @@
         "clockmaker": 0.1,
         "malefactor": 0.1,
         "hunter": 0.05,
-        "commoner": 0.0,
+        "commoner": 0.1,
 
         "archer": -0.05,
         "mercenary": -0.1,
