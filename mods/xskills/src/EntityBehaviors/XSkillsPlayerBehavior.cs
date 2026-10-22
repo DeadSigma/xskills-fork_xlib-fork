@@ -171,7 +171,7 @@ namespace XSkills
             PlayerAbility playerAbility = this.entity.GetBehavior<PlayerSkillSet>()?[this.survival.Id]?[survival.DiverId];
             if ((playerAbility?.Tier ?? 0) < 1) return;
 
-            // дерева может не быть - оно ещё не синхронизировалось или behavior дыхания снят другим модом
+            // The tree may be missing—it has not synchronized yet, or the breathing behavior was removed by another mod
             ITreeAttribute oxygen = entity.WatchedAttributes.GetTreeAttribute("oxygen");
             if (oxygen == null)
             {
@@ -182,7 +182,7 @@ namespace XSkills
             float currentOxygen = oxygen.GetFloat("currentoxygen");
             float maxOxygen = oxygen.GetFloat("maxoxygen");
 
-            // защита от кривого дерева - иначе Math.Min зажмёт кислород в ноль
+            // Protect against a malformed tree; otherwise Math.Min would clamp oxygen to zero
             if (maxOxygen <= 0.0f) return;
 
             float deltaOxygen = oldOxygen - currentOxygen;
@@ -363,7 +363,7 @@ namespace XSkills
                 ApplyAbilitiesOxygen();
                 ApplyMovementAbilities();
 
-                // Вызовы вынесенных методов
+                // Calls to extracted methods
                 ApplyFishingAbilities();
                 ApplyTailoringAbilities();
                 ApplyBrewingAbilities();
@@ -464,7 +464,7 @@ namespace XSkills
             // inventory unlink
             PlayerSkillSet playerSkillSet = this.entity.GetBehavior<PlayerSkillSet>();
 
-            // Добавлена проверка: || this.survival == null
+            // Added check: || this.survival == null
             if (playerSkillSet == null || this.survival == null) return;
 
             PlayerSkill playerSurvival = playerSkillSet[this.survival.Id];

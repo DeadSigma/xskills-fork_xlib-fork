@@ -1,15 +1,18 @@
 {
   "classexpmult": {
+    "forager": 0.2,
+
+    "gatherer": 0.1,
     "commoner": 0.1,
-    "hunter": -0.1,
-    "malefactor": -0.15,
-    "clockmaker": -0.2,
-    "blackguard": -0.05,
-    "miner": 0.15,
-    "forager": -0.15,
+    "miner": 0.05,
     "archer": 0.05,
     "vanguard": 0.05,
-    "gatherer": 0.05,
-    "mercenary": 0.1
+    "mercenary": 0.05,
+    "tailor": 0.05,
+
+    "hunter": -0.05,
+    "blackguard": -0.05,
+    "malefactor": -0.1,
+    "clockmaker": -0.15
   }
 }
