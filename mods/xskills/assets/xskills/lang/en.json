@@ -712,6 +712,9 @@
   "ability-shovelknight": "Shovel Knight",
   "abilitydesc-shovelknight": "Every time you hit an enemy with a shovel you have a chance of {0}% to deal a massive amount of damage.",
 
+  "ability-signaturegarb": "Signature Garb",
+  "abilitydesc-signaturegarb": "Wear clothing and armor crafted by the same tailor to gain +{0}% to all stats.",
+
   "ability-skyrider": "Sky Rider",
   "abilitydesc-skyrider": "+{0}% to the stats of flying mounts.",
 
