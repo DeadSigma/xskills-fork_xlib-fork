@@ -763,12 +763,12 @@ namespace XSkills
 
         private void TryPatchToolsmith(ICoreAPI api)
         {
-            // В одиночной игре AssetsLoaded вызывается и для клиента, и для сервера -
-            // защищаемся от повторного патча
+            // In single-player mode, AssetsLoaded is called for both the client and server—
+            // prevent the patch from being applied twice
             if (toolsmithPatched) return;
 
-            // Ищем тип по имени, не перечисляя все типы каждой сборки.
-            // Иначе падаем на сборках с неразрешимыми зависимостями (OpenTK.Graphics / csogg на сервере)
+            // Find the type by name without enumerating every type in each assembly.
+            // Otherwise, assemblies with unresolved dependencies (OpenTK.Graphics / csogg on the server) may fail.
             Type toolsmithNuggetType = null;
             foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
             {
