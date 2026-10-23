@@ -644,7 +644,7 @@
   "abilitydesc-reinforceddecking": "Os barcos que você constrói recebem +{0}% de durabilidade.",
 
   "ability-reinforcedseams": "Costuras Reforçadas",
-  "abilitydesc-reinforcedseams": "As armaduras que você fabrica recebem +{0}% de proteção.",
+  "abilitydesc-reinforcedseams": "As armaduras que você fabrica de couro ou tecido recebem +{0}% de proteção. Enquanto estiver usando armadura, você recebe {0}% menos dano.",
 
   "ability-repotting": "Replantio",
   "abilitydesc-repotting": "Colher culturas não maduras sempre gera sementes.",
@@ -711,6 +711,9 @@
 
   "ability-shovelknight": "Cavaleiro da Pá",
   "abilitydesc-shovelknight": "Toda vez que você acertar um inimigo com uma pá, você tem uma chance de {0}% de causar uma quantidade enorme de dano.",
+
+  "ability-signaturegarb": "Traje característico",
+  "abilitydesc-signaturegarb": "Use roupas e armaduras feitas pelo mesmo alfaiate para obter +{0}% em todos os atributos.",
 
   "ability-skyrider": "Cavaleiro dos Céus",
   "abilitydesc-skyrider": "+{0}% aos atributos das montarias voadoras.",

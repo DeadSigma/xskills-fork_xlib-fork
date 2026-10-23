@@ -1,0 +1,870 @@
+{
+  "adrenalinerush-effect": "Adrenalinsus",
+  "adrenalinerush-effectdesc": "",
+  "armor-heavy-dec": "Ganghastighed, sultforbrug, helingseffektivitet",
+  "armor-heavy-inc": "Præcision med afstandsvåben, buens spændehastighed",
+  "armor-light-inc": "Helingseffektivitet, præcision med afstandsvåben, buens spændehastighed",
+  "beehive-harvest": "Tag udbyttet fra bistadet",
+  "block-cage-wooden-east": "Bur",
+  "block-cage-wooden-north": "Bur",
+  "block-cage-wooden-south": "Bur",
+  "block-cage-wooden-west": "Bur",
+  "blockhelp-bloomery-takeresult": "Tag {0} ud af blæseovnen",
+  "blockhelp-cage-catch": "Fang et dyr",
+  "blockhelp-cage-pickup": "Saml buret op",
+  "blockhelp-cage-place": "Placér buret",
+  "blockhelp-cage-release": "Slip {0} fri",
+  "bloodlust-effect": "Blodrus",
+  "bloodlust-effectdesc": "",
+  "book-meteorology": "Meteorologi for begyndere",
+  "book-monster": "Monsterkompendium",
+  "catchable": "Kan fanges",
+  "cateyes-compress-off": "Lyskomprimering: Fra",
+  "cateyes-compress-on": "Lyskomprimering: Til",
+  "cateyes-filter-blue": "Katteøjnefilter: Blåt",
+  "cateyes-filter-deactivated": "Katteøjnefilter: Deaktiveret",
+  "cateyes-filter-gray": "Katteøjnefilter: Gråt",
+  "cateyes-filter-green": "Katteøjnefilter: Grønt",
+  "cateyes-filter-none": "Katteøjnefilter: Intet (standard)",
+  "cateyes-filter-red": "Katteøjnefilter: Rødt",
+  "cateyes-filter-sepia": "Katteøjnefilter: Sepia",
+  "cateyes-off": "Katteøjne: Fra",
+  "cateyes-on": "Katteøjne: Til",
+  "cloudiness-range": "Skydække mellem {0:P2} og {1:P2}",
+  "cooking-finished": "Madlavning færdig: {0}",
+  "error-gilded-conflict": "Fjern xSkills Gilded-modifikationen! Den er nu fuldt integreret i hovedmodifikationen xSkills.",
+  "game:characterclass-archer": "Bueskytte",
+  "game:characterclass-clockmakergloo": "GlooMeClasses: Urmager",
+  "game:characterclass-forger": "Smed",
+  "game:characterclass-huntergloo": "GlooMeClasses: Jæger",
+  "game:characterclass-malefactorgloo": "GlooMeClasses: Forbryder",
+  "game:characterclass-smith": "GlooMeClasses: Smed",
+  "game:traitname-ability-catcher": "Fanger",
+  "group-collecting": "Indsamling",
+  "group-processing": "Forarbejdning",
+  "group-survival": "Overlevelse",
+  "group-travel": "Rejse",
+  "harvestable-in-days": "Kan høstes om {0:N1} dage",
+  "hotkey-cateyesonoff": "xSkills: Slå katteøjne til/fra",
+  "hotkey-cateyestoggle": "xSkills: Skift katteøjnefiltre",
+  "hotkey-effectframehotkey": "xSkills: Vis/skjul effektoversigten",
+  "hotkey-skilldialoghotkey_v2": "xSkills: Vis/skjul den gamle færdighedsmenu",
+  "hotkey-steeplechasertoggle": "xSkills: Slå forhindringsløber til/fra",
+  "hotkey-xskillshotbarswitch": "xSkills: Skift genvejslinje",
+  "hotkey-xskillsslotlock": "xSkills: Slå låsning af pladser i Stærk ryg til/fra",
+  "in-days": "Om {0} dage",
+  "ingameerror-bitforging": "Du skal have evnen Smedning af metalstykker for at bearbejde metalstykker på ambolten.",
+  "isnearby": " er i nærheden!",
+  "item-everlastingcharcoal": "Evigt brændende trækul",
+  "itemdesc-everlastingcharcoal": "Et stykke trækul, der brænder længe.",
+  "meteorology": "Meteorologi",
+  "monster": "Monster",
+  "owner-desc": "Ejer: {0}",
+  "perk-bonus": "Aktuel bonus: +{0}%\n(Grundbonus {1}% + {2}% pr. niveau)",
+  "perk-chance": "Aktuel chance: {0}%\n(Grundchance {1}% + {2}% pr. niveau)",
+  "perk-damage": "Aktuel skade-/forsvarsbonus: +{0}%\n(Grundbonus {1}% + {2}% pr. niveau)",
+  "perk-maxbonus": "Aktuel maksimal bonus: {0} stk.",
+  "pottery-finished": "Brænding færdig: {0}",
+  "probability-of-precipitation-range": "Sandsynlighed for regn fra {0:P2} til {1:P2}",
+  "progress": "Fremskridt: {0:P0}",
+  "quality-bad": "Kvalitet: dårlig",
+  "quality-common": "Kvalitet: almindelig",
+  "quality-epic": "Kvalitet: episk",
+  "quality-legendary": "Kvalitet: legendarisk",
+  "quality-rare": "Kvalitet: sjælden",
+  "quality-uncommon": "Kvalitet: usædvanlig",
+  "ready-to-mate": "Klar til parring om {0:N1} dage",
+  "resourcereduction": "Ressourceforbrug reduceret: {0:P2}",
+  "saturated": "Mæt",
+  "saturated-expMult-effect": "Mæt: Erfaring",
+  "saturated-expMult-effectdesc": "Øger den erfaring, du får for alle færdigheder, med {0:P2}.",
+  "saturated-health-effect": "Mæt: Helbred",
+  "saturated-health-effectdesc": "Øger dit maksimale helbred med {0:N2} point.",
+  "saturated-heated-effect": "Mæt: Opvarmning",
+  "saturated-heated-effectdesc": "Øger din kropstemperatur med {0:N2} hvert {1:N2}. sekund, op til en temperatur på {2:N2}.",
+  "saturated-hot-effect": "Mæt: Heling",
+  "saturated-hot-effectdesc": "Gendanner {0:N2} helbredspoint hvert {1:N2}. sekund.",
+  "saturated-hungerrate-effect": "Mæt: Sultforbrug",
+  "saturated-hungerrate-effectdesc": "Reducerer dit sultforbrug med {0:P2}.",
+  "saturated-miningSpeed-effect": "Mæt: Minehastighed",
+  "saturated-miningSpeed-effectdesc": "Øger din minehastighed med {0:P2}.",
+  "skill-alchemy": "Alkymi",
+  "skill-brewing": "Fermentering",
+  "skill-combat": "Kamp",
+  "skill-cooking": "Madlavning",
+  "skill-digging": "Gravning",
+  "skill-farming": "Landbrug",
+  "skill-fishing": "Fiskeri",
+  "skill-forestry": "Skovbrug",
+  "skill-husbandry": "Dyrehold",
+  "skill-knapping": "Stenbearbejdning",
+  "skill-metalworking": "Metalbearbejdning",
+  "skill-mining": "Minedrift",
+  "skill-pottery": "Keramik",
+  "skill-riding": "Ridning",
+  "skill-sailing": "Sejlads",
+  "skill-survival": "Overlevelse",
+  "skill-tailoring": "Skrædderarbejde",
+  "skill-temporaladaptation": "Tidslig tilpasning",
+  "slots-fixed": "er låst og ignoreres ved sortering af inventaret",
+  "slots-freed": "er låst op og sorteres sammen med de øvrige pladser.",
+  "slots-strongback-status": "Pladser i Stærk ryg {0}",
+  "steeplechaser-off": "Forhindringsløber: Fra",
+  "steeplechaser-on": "Forhindringsløber: Til",
+  "sunrise-at": "Solopgang kl. {0}",
+  "sunset-at": "Solnedgang kl. {0}",
+  "temperature-range": "Temperatur fra {0:0.0}°C til {1:0.0}°C",
+  "the-day-after-tomorrow": "I overmorgen",
+  "today": "I dag",
+  "tomorrow": "I morgen",
+  "weather-forecast-from": "Vejrudsigt fra {0}",
+  "xleveling:requirement-trait": "Påkrævet egenskab: {0}",
+  "xlib:skillbook-studied": "<font color=\"#ff9999\">Læst</font>",
+
+  "ability-abundanceadaptation": "Tilpasning til overflod",
+  "abilitydesc-abundanceadaptation": "Øger helingseffektiviteten med {0}%, men mad forbruges til gengæld {1}% hurtigere.",
+
+  "ability-adrenalinerush": "Adrenalinsus",
+  "abilitydesc-adrenalinerush": "Hvis dit helbred falder til under {0}% af dit maksimale helbred, får du effekten Adrenalinsus, som øger din bevægelseshastighed med {1}% og reducerer den indkommende skade med {2}% i {3} sekunder. Når effekten ophører, bliver du udmattet i {4} sekunder.",
+
+  "ability-afforestation": "Skovrejsning",
+  "abilitydesc-afforestation": "Du får {0}% flere træplanter, når du knuser blade.",
+
+  "ability-airshipcaptain": "Luftskibskaptajn",
+  "abilitydesc-airshipcaptain": "+{0}% hastighed og manøvredygtighed, når du styrer et luftskib.",
+
+  "ability-alchemist": "Alkymist",
+  "abilitydesc-alchemist": "Du får {0}% mere erfaring fra alle handlinger relateret til alkymi. Profession. Antallet af professioner, du kan lære, er begrænset.",
+
+  "ability-allrounder": "Altmuligmand",
+  "abilitydesc-allrounder": "Du kan lære {0} ekstra specialiseringer.",
+
+  "ability-ancientmariner": "Gammel søulk",
+  "abilitydesc-ancientmariner": "Reducerer sultforbruget med {0}%, mens du holder en fiskestang.",
+
+  "ability-archer": "Bueskytte",
+  "abilitydesc-archer": "Øger skaden med buer, slynger, armbrøster og skydevåben med {0}% samt yderligere {1}% pr. kampfærdighedsniveau.\nMaksimal værdi: {2}%.",
+
+  "ability-armoredagility": "Bevægelighed i rustning",
+  "abilitydesc-armoredagility": "Reducerer straffen på din ganghastighed fra at bære rustning med {0}%.",
+
+  "ability-autobaiter": "Behændige hænder",
+  "abilitydesc-autobaiter": "Sætter automatisk madding fra dit inventar på fiskestangen, når du kaster linen ud.",
+
+  "ability-automatedsmithing": "Automatiseret smedning",
+  "abilitydesc-automatedsmithing": "Dine vippehamre kan bearbejde genstande med op til {0} lag.",
+
+  "ability-axeexpert": "Øksemester",
+  "abilitydesc-axeexpert": "Når du knuser en blok med en økse, øges din hastighed med økser, når du fælder træer, med {0}% og yderligere 0.{1}% for hvert niveau i skovbrugsfærdigheden. Maksimum er {2}%. Effekten stables op til {3} gange og varer {4} sekunder.",
+
+  "ability-baitmaster": "Maddingmester",
+  "abilitydesc-baitmaster": "Med {0}% chance (+{1}% pr. fiskeriniveau, op til {2}%) forbruges maddingen ikke ved en vellykket fangst.",
+
+  "ability-barrelinspector": "Tøndekontrollør",
+  "abilitydesc-barrelinspector": "Gør det muligt at se fermenteringens fremskridt uden at åbne tønden.",
+
+  "ability-beekeeper": "Biavler",
+  "abilitydesc-beekeeper": "Når du knuser høstklare bistader, får du {0} ekstra honningtavler.",
+
+  "ability-beemaster": "Biemester",
+  "abilitydesc-beemaster": "Du kan høste bistader med højreklik uden at knuse dem.",
+
+  "ability-bigbatch": "Stor portion",
+  "abilitydesc-bigbatch": "Øger fermenteringstøndens kapacitet med {0}%.",
+
+  "ability-bitforging": "Smedning af metalstykker",
+  "abilitydesc-bitforging": "Gør det muligt at smede genstande direkte af metalstykker, når de når arbejdstemperaturen. Hvert stykke tilfører lidt materiale til emnet.",
+
+  "ability-blacksmith": "Smed",
+  "abilitydesc-blacksmith": "Bestemmer kvalitetsværdien for genstande, du smeder.\nKvaliteten forbedrer genstandens egenskaber og afhænger af din metalbearbejdningsfærdighed, din smedeerfaring med genstande af en bestemt type og held.\n\n- Maksimal kvalitet efter smedning: 3 > 8\n- Samlet maksimal kvalitetsgrænse: {1}\n\nGrundkvaliteten afhænger af:\n- Metalbearbejdningsniveau: 0,1 kvalitet pr. niveau (op til niveau 25).\n- Smedeerfaring: 0,01 kvalitet pr. fremstillet genstand i samme kategori – værktøj, rustning eller våben (op til 200 genstande tælles i hver kategori).\n\nFor at nå den maksimale grænse skal delen hærdnes.",
+
+  "ability-blaster": "Sprængningsekspert",
+  "abilitydesc-blaster": "Dine evner Stenknuser, Stenskærer, Malmgraver og Ædelstensgraver virker også, når du sprænger sten eller malm med bomber.",
+
+  "ability-bloodlust": "Blodrus",
+  "abilitydesc-bloodlust": "Hver gang du dræber en fjende, får du en stak af effekten Blodrus. Hver stak øger den skade, du giver, med {0}% og den skade, du modtager, med {1}%. Effekten kan stables op til {3} gange og varer {2} sekunder.",
+
+  "ability-bloomeryexpert": "Blæseovnsekspert",
+  "abilitydesc-bloomeryexpert": "Gør det muligt at tage færdige produkter ud af blæseovnen uden at ødelægge den. På evneniveau 2 kan du også smelte alle metalstykker direkte om til barrer.",
+
+  "ability-bomberman": "Bomber",
+  "abilitydesc-bomberman": "Når du sprænger sten eller malm med en bombe, er straffen på byttet {0}% mindre.",
+
+  "ability-bonebreaker": "Knogleknuser",
+  "abilitydesc-bonebreaker": "Øger udbyttet ved partering af dyrekroppe med {0}% og yderligere {1}% for hvert niveau i dyrehold, op til maksimalt {2}%.",
+
+  "ability-breeder": "Opdrætter",
+  "abilitydesc-breeder": "Reducerer dyrenes drægtighedstid med {0}% og yderligere {1}% for hvert niveau i dyrehold samt {2}% gange moderens generation, op til maksimalt {3}%.",
+
+  "ability-brewingspeed": "Bryghastighed",
+  "abilitydesc-brewingspeed": "Øger hastigheden, hvormed du brygger potions i kedlen, med {0}%.",
+
+  "ability-brightharvest": "Effektiv høst",
+  "abilitydesc-brightharvest": "Dine sakse og leer kan knuse {0}% flere blokke ad gangen.",
+
+  "ability-bully": "Bølle",
+  "abilitydesc-bully": "Øger tilbageslagskraften fra dine nærkampsangreb med {0}% og yderligere {1}% for hvert kampfærdighedsniveau, op til maksimalt {2}%.",
+
+  "ability-burningrage": "Brændende raseri",
+  "abilitydesc-burningrage": "Hver gang du rammer en fjende, har du {0}% chance for at sætte den i brand.",
+
+  "ability-burntmastery": "Ekspert i brændt mad",
+  "abilitydesc-burntmastery": "Overtilberedning og forkulning sænker ikke længere kvaliteten: Produktet får kvalitet som en normal ret baseret på dit Gourmet-niveau.",
+
+  "ability-bushnursery": "Buskplanteskole",
+  "abilitydesc-bushnursery": "En plantet stikling vokser til en busk på {0}% af den normale tid.",
+
+  "ability-butcher": "Slagter",
+  "abilitydesc-butcher": "Øger kødudbyttet fra dyr med {0}% og yderligere {1}% for hvert niveau i dyrehold, op til maksimalt {2}%.",
+
+  "ability-canteencook": "Kantinekøkken",
+  "abilitydesc-canteencook": "Du kan tilberede {0}% flere portioner ad gangen.",
+
+  "ability-carefuldigger": "Forsigtig graver",
+  "abilitydesc-carefuldigger": "Når du graver med en skovl, har du {0}% chance og yderligere {1}% for hvert niveau i gravefærdigheden for ikke at mindske skovlens holdbarhed. Chancen er begrænset til {2}%.",
+
+  "ability-carefulhands": "Forsigtige hænder",
+  "abilitydesc-carefulhands": "Gør det muligt at høste svampe og siv med de bare hænder uden at ødelægge rødderne.",
+
+  "ability-carefullumberjack": "Forsigtig skovhugger",
+  "abilitydesc-carefullumberjack": "Når du fælder et træ med en økse, har du {0}% chance og yderligere {1}% for hvert niveau i skovbrugsfærdigheden for ikke at mindske øksens holdbarhed. Chancen er begrænset til {2}%.",
+
+  "ability-carefulminer": "Forsigtig minearbejder",
+  "abilitydesc-carefulminer": "Når du udgraver sten eller malm med en hakke, har du {0}% chance og yderligere {1}% for hvert niveau i minefærdigheden for ikke at mindske hakkens holdbarhed. Chancen er begrænset til {2}%.",
+
+  "ability-carefulreader": "Forsigtig læser",
+  "abilitydesc-carefulreader": "Når du studerer en færdighedsbog, er der {0}% chance for, at du ikke beskadiger den. Så kan den læses igen.",
+
+  "ability-carefulshooter": "Forsigtig skytte",
+  "abilitydesc-carefulshooter": "Når du skyder med bue, slynge eller armbrøst, er der {0}% chance (plus yderligere {1}% pr. kampfærdighedsniveau) for, at våbnet ikke mister holdbarhed.\nMaksimal værdi: {2}%.\nNår du bruger en slynge, er der også {3}% chance for ikke at forbruge en almindelig sten.",
+
+  "ability-cargocaptain": "Fragt kaptajn",
+  "abilitydesc-cargocaptain": "Bådcontainere, du placerer, kan bære {0}% mere vægt.",
+
+  "ability-catcher": "Fanger",
+  "abilitydesc-catcher": "Gør det muligt at fremstille bure og bruge dem til at fange små dyr.",
+
+  "ability-cateyes": "Katteøjne",
+  "abilitydesc-cateyes": "Dine øjne kan tilpasse sig mørke områder og øge lysstyrken op til {0} gange, men du kan miste nogle farver. Pas på stærke lyskilder, mens dine øjne er tilpasset.",
+
+  "ability-caveman": "Huleboer",
+  "abilitydesc-caveman": "Reducerer tabet af tidslig stabilitet med op til {0}% og yderligere {1}% for hvert niveau i færdigheden Tidslig tilpasning. Jo dybere du befinder dig, desto større er fordelen. Maksimum er {2}%.",
+
+  "ability-charcoalburner": "Trækulsbrænder",
+  "abilitydesc-charcoalburner": "Du får {0}% mere trækul fra trækulbunker.",
+
+  "ability-cheesycheese": "Ekstra ostet",
+  "abilitydesc-cheesycheese": "Når du malker et dyr, har du {0}% chance plus yderligere {1}% for hver dag, dyret ikke er blevet malket, for at få ost i stedet for mælk.",
+
+  "ability-chef": "Kok",
+  "abilitydesc-chef": "Du får {0}% mere erfaring for madlavningsfærdigheden. Antallet af specialiseringer, du kan lære, er begrænset.",
+
+  "ability-claydigger": "Lergraver",
+  "abilitydesc-claydigger": "Øger lerudbyttet med {0}% og yderligere {1}% for hvert niveau i gravefærdigheden. Maksimum er {2}%.",
+
+  "ability-clothweaver": "Stofvæver",
+  "abilitydesc-clothweaver": "Genstande af stof, som du fremstiller, får +{0}% til deres egenskaber. Kan ikke kombineres med evnen Læderarbejder.",
+
+  "ability-coastalmaster": "Kystekspert",
+  "abilitydesc-coastalmaster": "+{0}% større chance for bid i saltvand. Kan ikke kombineres med evnen Flodspecialist.",
+
+  "ability-coastalpilot": "Kystpilot",
+  "abilitydesc-coastalpilot": "Tæt på kysten øges hastighed og manøvredygtighed med {0}%.",
+
+  "ability-composting": "Kompostering",
+  "abilitydesc-composting": "Hver gang du høster en fuldvoksen afgrøde, får landbrugsjorden nogle næringsstoffer tilbage.",
+
+  "ability-couturier": "Modeskrædder",
+  "abilitydesc-couturier": "Du får {0}% mere erfaring fra alle aktiviteter relateret til skrædderarbejde. Profession. Antallet af professioner, du kan lære, er begrænset.",
+
+  "ability-crewcaptain": "Besætningskaptajn",
+  "abilitydesc-crewcaptain": "+{0}% bådhastighed for hvert ekstra besætningsmedlem.",
+
+  "ability-crossbreeding": "Krydsbestøvning",
+  "abilitydesc-crossbreeding": "Når du høster en fuldvoksen afgrøde ved siden af en fuldvoksen afgrøde af en anden type, er der en grundchance på {0}% for, at et tilfældigt frø falder.",
+
+  "ability-crystalseeker": "Krystaljæger",
+  "abilitydesc-crystalseeker": "Øger effekten af evnen Malmgraver på krystalliserede malme med {0}%.",
+
+  "ability-cultivatedseeds": "Dyrkede frø",
+  "abilitydesc-cultivatedseeds": "Når du planter frø, har planten {0}% chance og yderligere {1}% for hvert niveau i din landbrugsfærdighed for at springe et vækststadie over. Hvis afgrøden plantes i et drivhus, udløses evnen altid og kan muligvis udløses igen. Chancen er begrænset til {2}%.",
+
+  "ability-cuttingrhythm": "Beskæringsrytme",
+  "abilitydesc-cuttingrhythm": "Reducerer ventetiden, før du kan høste den næste stikling fra en busk, med {0}%.",
+
+  "ability-defender": "Forsvarer",
+  "abilitydesc-defender": "Øger chancen for at absorbere skade med dit skjold, når du aktivt parerer et slag, med {0}%.",
+
+  "ability-demetersbless": "Demeters velsignelse",
+  "abilitydesc-demetersbless": "Øger udbyttet af indsamlede frø med {0}% og yderligere {1}% for hvert niveau i landbrugsfærdigheden. Maksimum er {2}%.",
+
+  "ability-desalinate": "Afsaltning",
+  "abilitydesc-desalinate": "Gør det muligt at fordampe saltvand i en kedel for at udvinde mineraler. Når alle 4 madlavningspladser er fyldt helt med saltvand, giver fordampningen {0} enheder salt samt {1} enheder kalk.",
+
+  "ability-digger": "Graver",
+  "abilitydesc-digger": "Du får {0}% mere erfaring fra alle graveaktiviteter. Antallet af specialiseringer, du kan lære, er begrænset.",
+
+  "ability-dilution": "Fortynding",
+  "abilitydesc-dilution": "Øger antallet af portioner, du får ved madlavning, med {0}% og yderligere {1}% for hvert niveau i madlavningsfærdigheden. Begrænset til {2}%.",
+
+  "ability-diver": "Dykker",
+  "abilitydesc-diver": "Reducerer dit iltforbrug med {0}%.",
+
+  "ability-doublehook": "Dobbeltkrog",
+  "abilitydesc-doublehook": "Med {0}% chance (+{1}% pr. fiskeriniveau, op til {2}%) kan du hale to fisk ind med ét kast!",
+
+  "ability-dragonbond": "Dragebånd",
+  "abilitydesc-dragonbond": "+{0}% til kampværdierne og udholdenheden hos drager fra modifikationen Draconis. Reducerer også skaden, rytteren modtager. Kræver modifikationen Draconis.",
+
+  "ability-drunkenmaster": "Beruset mester",
+  "abilitydesc-drunkenmaster": "Øger skaden, du giver med de bare hænder, med op til {0}% afhængigt af, hvor beruset du er, men reducerer din skade med {1}%, hvis du er ædru.",
+
+  "ability-duplicator": "Kopist",
+  "abilitydesc-duplicator": "Du har {0}% chance og yderligere {1}% for hvert niveau i metalbearbejdningsfærdigheden for at få en ekstra identisk genstand, når du har afsluttet et metalemne på en ambolt. Maksimum er {2}%. Påvirker ikke visse emner, hvor produktet kan smeltes om.",
+
+  "ability-durableweave": "Slidstærk vævning",
+  "abilitydesc-durableweave": "Tøj, du fremstiller, får +{0}% holdbarhed.",
+
+  "ability-eggtimer": "Æggeur",
+  "abilitydesc-eggtimer": "Du får en besked, når et måltid er færdigtilberedt.",
+
+  "ability-equestrian": "Rytter",
+  "abilitydesc-equestrian": "Profession: mesterrytter. +{0}% erfaring fra ridning.",
+
+  "ability-equusaffinity": "Hestetække",
+  "abilitydesc-equusaffinity": "+{0}% til egenskaberne hos heste fra modifikationen Equus Genelib. Kræver modifikationen Equus.",
+
+  "ability-extensivefarming": "Ekstensivt landbrug",
+  "abilitydesc-extensivefarming": "Giver nogle landbrugsredskaber værktøjstilstande, der bearbejder et større område. Tilføjer en værktøjstilstand med et område på {0} gange {0}.",
+
+  "ability-farmer": "Landmand",
+  "abilitydesc-farmer": "Du får {0}% mere erfaring fra alle landbrugsaktiviteter. Antallet af specialiseringer, du kan lære, er begrænset.",
+
+  "ability-fastfood": "Hurtig madlavning",
+  "abilitydesc-fastfood": "Du kan lave mad {0}% hurtigere samt yderligere {1}% for hvert niveau i madlavningsfærdigheden. Begrænset til {2}%.",
+
+  "ability-fastforward": "Hurtig fremspoling",
+  "abilitydesc-fastforward": "Øger din minehastighed og dit madforbrug med op til {0}%. Jo lavere din tidslige stabilitet er, desto større er effekten.",
+
+  "ability-fastknapper": "Hurtig stenbearbejdning",
+  "abilitydesc-fastknapper": "Hvert vellykket slag har op til {0}% chance for at fjerne alt resterende overskydende materiale. Chancen stiger, efterhånden som arbejdet nærmer sig sin afslutning.",
+
+  "ability-fastpotter": "Hurtig keramiker",
+  "abilitydesc-fastpotter": "Ved hvert trin har du en chance for at færdiggøre et keramikarbejde med det samme. Jo mere avanceret arbejdet er, desto større er chancen. Den maksimale chance er {0}% plus yderligere 0.{1}% for hvert niveau i keramikfærdigheden. Chancen er begrænset til {2}% pr. trin.",
+
+  "ability-featherfall": "Fjerlet fald",
+  "abilitydesc-featherfall": "Reducerer faldskade med {0} og yderligere {1}%.",
+
+  "ability-feeder": "Fodrer",
+  "abilitydesc-feeder": "Dyr, der spiser fra dine fodertrug, har {0}% chance plus yderligere {1}% for hvert niveau i dyreholdsfærdigheden for ikke at forbruge foder, op til maksimalt {2}%. Når dyr spiser fra dine fodertrug, har de desuden {3}% chance for at stige en generation, op til generation {4}.",
+
+  "ability-fibersorter": "Fiberindsamler",
+  "abilitydesc-fibersorter": "+{0}% flere fibre, når du høster hør eller bomuld eller klipper får.",
+
+  "ability-finishingtouch": "Den sidste finish",
+  "abilitydesc-finishingtouch": "Ved hvert slag har du en chance for at færdiggøre et smedearbejde med det samme. Jo mere avanceret arbejdet er, desto større er chancen. Den maksimale chance er {0}% plus yderligere 0.{1}% for hvert niveau i metalbearbejdningsfærdigheden. Chancen er begrænset til {2}% pr. slag.",
+
+  "ability-fisher": "Fisker",
+  "abilitydesc-fisher": "Du får {0}% mere erfaring i fiskerifærdigheden. PROFESSION.\nAntallet af professioner, du kan lære, er begrænset.",
+
+  "ability-fishfilleter": "Ekspert i fiskefiletering",
+  "abilitydesc-fishfilleter": "Når du fileterer fisk, har du {0}% chance (+{1}% pr. fiskeriniveau, op til {2}%) for at få ekstra fileter.\nDet maksimale antal bonusfileter svarer til dit færdighedsniveau (op til 5).",
+
+  "ability-forester": "Skovarbejder",
+  "abilitydesc-forester": "Du får {0}% mere erfaring fra alle skovbrugsaktiviteter. Antallet af specialiseringer, du kan lære, er begrænset.",
+
+  "ability-freshfish": "Frisk fisk",
+  "abilitydesc-freshfish": "Fangede fisk bliver {0}% langsommere fordærvede, så du får mere tid til at tilberede eller konservere dem.",
+
+  "ability-freshflesh": "Frisk kød",
+  "abilitydesc-freshflesh": "Hver gang du dræber en fjende, får du {0} proteinmæthed.",
+
+  "ability-furrier": "Pelsjæger",
+  "abilitydesc-furrier": "Øger udbyttet af skind fra dyr med {0}% og yderligere {1}% for hvert niveau i dyreholdsfærdigheden, op til maksimalt {2}%.",
+
+  "ability-gatherer": "Samler",
+  "abilitydesc-gatherer": "Øger udbyttet ved høst af græs, bærbuske, siv og svampe med {0}% og yderligere {1}% for hvert niveau i landbrugsfærdigheden. Maksimum er {2}%.",
+
+  "ability-gemstoneminer": "Ædelstensgraver",
+  "abilitydesc-gemstoneminer": "Øger antallet af ædelsten, du får, med {0}% og yderligere {1}% for hvert niveau i minefærdigheden. Maksimum er {2}%.",
+
+  "ability-geologist": "Geolog",
+  "abilitydesc-geologist": "Hver gang du knuser en klippe, får du besked, hvis der er malmblokke i nærheden. Jo højere niveau, desto større er radius.",
+
+  "ability-golddigger": "Guldgraver",
+  "abilitydesc-golddigger": "Øger dit udbytte ved guldvaskning med {0}% og yderligere {1}% for hvert niveau i gravefærdigheden. Maksimum er {2}%.",
+
+  "ability-goodbait": "God madding",
+  "abilitydesc-goodbait": "Fisk bider {0}% hurtigere (+{1}% pr. fiskeriniveau, op til {2}%).",
+
+  "ability-gourmet": "Gourmet",
+  "abilitydesc-gourmet": "Mad, du tilbereder, kan nu få en kvalitet på mindst {0} og højst {1}. Når en spiller spiser mad med kvalitet, får spilleren en positiv effekt i 10 minutter. Effekten afhænger af madens næringsværdier, og dens styrke afhænger af madens kvalitet. Du kan kun have én af disse effekter ad gangen.",
+
+  "ability-grafter": "Podeekspert",
+  "abilitydesc-grafter": "Øger chancen for at pode og få grene fra frugttræer til at slå rod med {0}%.",
+
+  "ability-greenthumb": "Grønne fingre",
+  "abilitydesc-greenthumb": "Øger udbyttet af høstede afgrøder med {0}% og yderligere {1}% for hvert niveau i landbrugsfærdigheden. Maksimum er {2}%.",
+
+  "ability-guardian": "Vogter",
+  "abilitydesc-guardian": "Øger chancen for at absorbere skade med dit skjold, når du passivt parerer et slag, med {0}%.",
+
+  "ability-hammerexpert": "Hammerekspert",
+  "abilitydesc-hammerexpert": "Når du har færdiggjort et metalemne på en ambolt, genvinder din hammer holdbarhed. Den genvundne holdbarhed svarer til {0}% plus yderligere {1}% for hvert niveau i metalbearbejdningsfærdigheden af den brugte holdbarhed. Maksimum er {2}%.",
+
+  "ability-hangoverresistance": "Modstandsdygtighed over for tømmermænd",
+  "abilitydesc-hangoverresistance": "De negative effekter af alkohol, du brygger, reduceres med {0}%.",
+
+  "ability-happymeal": "Glædesmåltid",
+  "abilitydesc-happymeal": "Der er {0}% chance plus yderligere {1}% pr. niveau i madlavningsfærdigheden for, at en ekstra tilfældig ingrediens føjes til måltidet. Chancen er højst {2}%. På niveau 4 ender giftige ingredienser ikke længere i din mad.",
+
+  "ability-healer": "Helbreder",
+  "abilitydesc-healer": "Helbredende genstande, du bruger, helbreder yderligere {0}% over {1} sekunder.",
+
+  "ability-heatinghits": "Opvarmende slag",
+  "abilitydesc-heatinghits": "Hvert slag på emnet opvarmer det med {0}°C.",
+
+  "ability-heavyarmorexpert": "Ekspert i tung rustning",
+  "abilitydesc-heavyarmorexpert": "Reducerer visse rustningsstraffe med {0}%, men øger andre rustningsstraffe med {1}%.\nReducerede straffe: {2}\nØgede straffe: {3}",
+
+  "ability-heavycavalry": "Tungt kavaleri",
+  "abilitydesc-heavycavalry": "+{0}% til kampværdier og holdbarhed for tunge ridedyr (bulliver og andre store dyr). Kan ikke kombineres med evnerne Let kavaleri og Himmelrytter.",
+
+  "ability-heavyhits": "Tunge slag",
+  "abilitydesc-heavyhits": "Gør det muligt at slå slagger af et emne med almindelige, kraftige hammerslag.",
+
+  "ability-hopwhisperer": "Humlemester",
+  "abilitydesc-hopwhisperer": "Du får en ekstra bonus på +{0}% til ølkvaliteten i opskrifter.",
+
+  "ability-hugestomach": "Stor mave",
+  "abilitydesc-hugestomach": "Øger din maksimale mæthed med {0}.",
+
+  "ability-hunter": "Jæger",
+  "abilitydesc-hunter": "Øger den skade, du giver dyr, og reducerer den skade, dyr giver dig, med {0}% og yderligere {1}% for hvert niveau i dyreholdsfærdigheden, op til maksimalt {2}%.",
+
+  "ability-hunterbag": "Jægertaske",
+  "abilitydesc-hunterbag": "Tilføjer en ekstra plads til spilleren, som kun kan rumme jægertasker fra modifikationen Butchering.",
+
+  "ability-icefisher": "Isfisker",
+  "abilitydesc-icefisher": "Reducerer kuldens effekt med {0}%, mens du holder en fiskestang.",
+
+  "ability-infallible": "Ufejlbarlig",
+  "abilitydesc-infallible": "Øger radius for evnerne Perfekt pasform og Perfektionist med {0}. Niveau 2 påvirker også lag.",
+
+  "ability-ingredientefficiency": "Effektiv ingrediensbrug",
+  "abilitydesc-ingredientefficiency": "Når du fremstiller potions, har du {0}% chance for at bevare {1}% af de anvendte ingredienser.",
+
+  "ability-inspiration": "Inspiration",
+  "abilitydesc-inspiration": "Når du brænder et opbevaringskar, en urtepotte eller en plantekasse, har du {0}% chance for at skabe en særlig variant.",
+
+  "ability-ironfist": "Jernnæve",
+  "abilitydesc-ironfist": "Øger skaden, du giver med de bare hænder, med {0} gange den gennemsnitlige beskyttelsesværdi for din rustning.",
+
+  "ability-ironforearms": "Jernunderarme",
+  "abilitydesc-ironforearms": "Klatring i rigging bruger {0}% mindre udholdenhed.",
+
+  "ability-jackpot": "Jackpot",
+  "abilitydesc-jackpot": "Du har {0}% chance plus yderligere {1}% for hvert niveau i keramikfærdigheden for at få en ekstra identisk genstand, når du har færdiggjort et keramikarbejde. Maksimum er {2}%.",
+
+  "ability-juicer": "Saftpresser",
+  "abilitydesc-juicer": "Øger mængden af saft, du får fra hver frugt, med {0}%.",
+
+  "ability-knapper": "Stenbearbejder",
+  "abilitydesc-knapper": "Du får {0}% mere erfaring i stenbearbejdningsfærdigheden. Antallet af tilgængelige specialiseringer er begrænset.",
+
+  "ability-knappingjackpot": "Kopist",
+  "abilitydesc-knappingjackpot": "Du har {0}% chance plus yderligere {1}% for hvert niveau i stenbearbejdningsfærdigheden for at få et ekstra identisk resultat. Maksimum {2}%.",
+
+  "ability-laststand": "Sidste kamp",
+  "abilitydesc-laststand": "Du har en chance for at overleve et slag, der ellers ville dræbe dig. Overlevelseschancen svarer til din resterende relative helbredsværdi ganget med {0}%.",
+
+  "ability-layerlayer": "Lag på lag",
+  "abilitydesc-layerlayer": "Når du kopierer lag, kopierer du {0} ekstra voxler.",
+
+  "ability-leatherworker": "Læderarbejder",
+  "abilitydesc-leatherworker": "Genstande af læder, som du fremstiller, får +{0}% til deres egenskaber. Kan ikke kombineres med evnen Stofvæver.",
+
+  "ability-lightarmorexpert": "Ekspert i let rustning",
+  "abilitydesc-lightarmorexpert": "Så længe du bærer rustning, der højst reducerer ganghastigheden med 5% pr. stykke, forbedres følgende egenskaber med {0}%:\n{1}",
+
+  "ability-lightcavalry": "Let kavaleri",
+  "abilitydesc-lightcavalry": "Øger hastigheden og manøvredygtigheden for wapitier og andre lette ridedyr fra modifikationer med {0}%.",
+
+  "ability-lightfooted": "Let på tå",
+  "abilitydesc-lightfooted": "Reducerer dyrenes søgeafstand med {0}%.",
+
+  "ability-lighttack": "Let seletøj",
+  "abilitydesc-lighttack": "Gør det muligt at ride med kun et hovedtøj og uden sadel.",
+
+  "ability-longlife": "Langt liv",
+  "abilitydesc-longlife": "Øger dit helbred med {0}% og yderligere {1}% for hvert niveau i overlevelsesfærdigheden. Maksimum er {2}%.",
+
+  "ability-longrider": "Langdistance­rytter",
+  "abilitydesc-longrider": "Faldskade, når du stiger af eller falder ned fra dit ridedyr, reduceres med {0}%.",
+
+  "ability-looter": "Byttejæger",
+  "abilitydesc-looter": "Øger mængden af bytte fra væsner med {0}% og yderligere {1}% for hvert niveau i kampfærdigheden. Begrænset til {2}%.",
+
+  "ability-lumberjack": "Skovhugger",
+  "abilitydesc-lumberjack": "Øger træudbyttet ved fældning af træer med {0}% og yderligere {1}% for hvert niveau i skovbrugsfærdigheden. Maksimum er {2}%.",
+
+  "ability-luminiferous": "Lysende",
+  "abilitydesc-luminiferous": "Du begynder at lyse i mørke områder og skaber et oplyst område omkring dig med lysstyrke {2}.",
+
+  "ability-machinelearning": "Maskinlæring",
+  "abilitydesc-machinelearning": "Du kan dele din smedeviden med vippehamre, så de kan drage nytte af nogle af dine evner. Det gælder Opvarmende slag, Den sidste finish, Metalgenvinding, Smed og Kopist.",
+
+  "ability-magnetichook": "Magnetisk krog",
+  "abilitydesc-magnetichook": "Med {0}% chance (+{1}% pr. fiskeriniveau, op til {2}%) trækker du en tilfældig genstand op af vandet i stedet for en fisk.",
+
+  "ability-maltmaster": "Maltmester",
+  "abilitydesc-maltmaster": "Korn giver {0}% mere drik.",
+
+  "ability-masshusbandry": "Masseavl",
+  "abilitydesc-masshusbandry": "Øger antallet af afkom fra dyr med {0}% og yderligere {1}% for hvert niveau i dyreholdsfærdigheden samt {2}% gange moderens generation, op til maksimalt {3}%.",
+
+  "ability-masterbrewmaster": "Mesterbrygger",
+  "abilitydesc-masterbrewmaster": "Du får {0}% mere erfaring fra alle aktiviteter relateret til fermentering. Profession. Antallet af professioner, du kan lære, er begrænset.",
+
+  "ability-mastersmith": "Mestersmed",
+  "abilitydesc-mastersmith": "Dine tunge slag flytter op til {0} voxler til passende positioner i stedet for blot at sprede dem. Hver voxel kan flyttes op til {1} positioner.",
+
+  "ability-meadmaster": "Mjødmester",
+  "abilitydesc-meadmaster": "+{0}% til kvaliteten af mjødopskrifter. Kan ikke kombineres med evnerne Humlemester og Vinmager.",
+
+  "ability-meatshield": "Kødskjold",
+  "abilitydesc-meatshield": "Absorberer {0}% af den indkommende skade. Du mister mæthed svarende til {1} gange den absorberede skade.",
+
+  "ability-metalrecovery": "Metalgenvinding",
+  "abilitydesc-metalrecovery": "Når du har færdiggjort et metalemne på en ambolt, får du ét metalstykke for hver {0} spaltninger, du har udført på emnet.",
+
+  "ability-metalworker": "Metalarbejder",
+  "abilitydesc-metalworker": "Du får {0}% mere erfaring i metalbearbejdningsfærdigheden. Antallet af specialiseringer, du kan lære, er begrænset.",
+
+  "ability-meteorologist": "Meteorolog",
+  "abilitydesc-meteorologist": "Hver dag får du en vejrudsigt for de næste {0} dage.",
+
+  "ability-miner": "Minearbejder",
+  "abilitydesc-miner": "Du får {0}% mere erfaring fra alle mineaktiviteter. Antallet af specialiseringer, du kan lære, er begrænset.",
+
+  "ability-mixedclay": "Blandet ler",
+  "abilitydesc-mixedclay": "Når du høster én type ler, har du {0}% chance for også at få et ekstra stykke ler af en anden type.",
+
+  "ability-monk": "Munk",
+  "abilitydesc-monk": "Øger skaden, du giver med de bare hænder, med {0} gange. Den gennemsnitlige beskyttelsesværdi for din rustning reducerer bonusskaden.",
+
+  "ability-monsterexpert": "Monsterekspert",
+  "abilitydesc-monsterexpert": "Du får ekstra oplysninger om de fjender, du møder.",
+
+  "ability-moonlitwaters": "Månebelyst vand",
+  "abilitydesc-moonlitwaters": "Chancen for bid om natten øges yderligere med {0}%.",
+
+  "ability-moreladders": "Flere stiger!",
+  "abilitydesc-moreladders": "Gør det lettere at bygge stiger ved at give dig flere pinde, når du knuser blade. Du kan selvfølgelig også bare brænde dem. Du får {0}% flere pinde fra blade samt yderligere {1}% for hvert niveau i skovbrugsfærdigheden. Maksimum er {2}%.",
+
+  "ability-mountedcombatant": "Rytter i kamp",
+  "abilitydesc-mountedcombatant": "+{0}% nærkampsskade, når du angriber fra hesteryg.",
+
+  "ability-multiseatmaster": "Besætningsmester",
+  "abilitydesc-multiseatmaster": "+{0}% bonus for hver passager på et ridedyr med flere sæder.",
+
+  "ability-nudist": "Nudist",
+  "abilitydesc-nudist": "Tøj er en byrde. Øger din bevægelseshastighed med op til {0}%, dit helbred med op til {2} point og din temperaturmodstand med op til {6} point samt reducerer dit sultforbrug med op til {4}%. Hvert stykke tøj, du bærer, reducerer disse effekter og kan give ulemper.",
+
+  "ability-ontheroad": "På farten",
+  "abilitydesc-ontheroad": "Øger din bevægelseshastighed på stier med {0}%.",
+
+  "ability-opensea": "Åbent hav",
+  "abilitydesc-opensea": "På åbent hav øges hastigheden og manøvredygtigheden med {0}%.",
+
+  "ability-orchardist": "Frugtavler",
+  "abilitydesc-orchardist": "Øger udbyttet fra frugttræer med {0}% og yderligere {1}% for hvert niveau i landbrugsfærdigheden. Maksimum er {2}%.",
+
+  "ability-oreminer": "Malmgraver",
+  "abilitydesc-oreminer": "Øger mængden af malm, du får, med {0}% og yderligere {1}% for hvert niveau i minefærdigheden. Maksimum er {2}%.",
+
+  "ability-packanimal": "Lastdyr",
+  "abilitydesc-packanimal": "Dit ridedyr får +{0} ekstra saddeltaskeplads.",
+
+  "ability-patchwork": "Lappeteknik",
+  "abilitydesc-patchwork": "Reparation af slidt tøj bruger {0}% færre materialer.",
+
+  "ability-patternmemory": "Mønsterhukommelse",
+  "abilitydesc-patternmemory": "{0}% chance for at fremstille et stykke tøj uden at forbruge materialer.",
+
+  "ability-peatcutter": "Tørvegraver",
+  "abilitydesc-peatcutter": "Øger tørveudbyttet med {0}% og yderligere {1}% for hvert niveau i gravefærdigheden. Maksimum er {2}%.",
+
+  "ability-pegasusrider": "Pegasusrytter",
+  "abilitydesc-pegasusrider": "+{0}% flyveudholdenhed og maksimal flyvehøjde for pegasusser. Kræver modifikationen Pegasus.",
+
+  "ability-perfectfit": "Perfekt pasform",
+  "abilitydesc-perfectfit": "Når du fjerner enkelte voxler, kan du ikke fjerne de forkerte voxler.",
+
+  "ability-perfectionist": "Perfektionist",
+  "abilitydesc-perfectionist": "Når du tilføjer enkelte voxler, kan du ikke tilføje en forkert voxel.",
+
+  "ability-perfectquenching": "Guddommelig hærdning",
+  "abilitydesc-perfectquenching": "Med denne evne kan du hærde værktøj et ubegrænset antal gange og fremstille værktøj af guddommelig kvalitet.",
+
+  "ability-photosynthesis": "Fotosyntese",
+  "abilitydesc-photosynthesis": "Øger din helbredsregenerering i sollys med op til {0}%, men reducerer den i mørke med op til {1}%.",
+
+  "ability-pickaxeexpert": "Hakkemesteren",
+  "abilitydesc-pickaxeexpert": "Når du knuser en blok med en hakke, øges din minehastighed med hakker med {0}% og yderligere 0.{1}% for hvert niveau i minefærdigheden. Maksimum er {2}%. Effekten stables op til {3} gange og varer {4} sekunder.",
+
+  "ability-potionquality": "Potionkvalitet",
+  "abilitydesc-potionquality": "Potions, du brygger, får en kvalitetsværdi (grundværdi: {0}, maksimum: {1}). En spiller, der drikker en sådan potion, får en ekstra bonus til potionens varighed. Jo højere kvalitet, desto større bonus.",
+
+  "ability-potter": "Keramiker",
+  "abilitydesc-potter": "Du får {0}% mere erfaring i keramikfærdigheden. Antallet af specialiseringer, du kan lære, er begrænset.",
+
+  "ability-potterytimer": "Keramikur",
+  "abilitydesc-potterytimer": "Du får en besked, når keramik er færdigbrændt.",
+
+  "ability-preserver": "Konservator",
+  "abilitydesc-preserver": "Øger den tid, kød høstet fra dyrekroppe holder sig friskt, med {0}% og yderligere {1}% for hvert niveau i dyreholdsfærdigheden, op til maksimalt {2}%.",
+
+  "ability-pureyeast": "Ren gær",
+  "abilitydesc-pureyeast": "+{0}% alkoholudbytte under fermentering.",
+
+  "ability-quickpan": "Hurtig guldvaskning",
+  "abilitydesc-quickpan": "Øger din hastighed ved guldvaskning med {0}%.",
+
+  "ability-rancher": "Rancher",
+  "abilitydesc-rancher": "Øger mælkeudbyttet fra dyr, der kan malkes, og antallet af æg, du kan tage fra hønsekasser, med {0}%. Derudover har du {1}% chance for at øge generationen hos et malket dyr, op til generation {2}.",
+
+  "ability-recycler": "Genanvender",
+  "abilitydesc-recycler": "Når du knuser landbrugsjord, taber den nu jord afhængigt af den resterende frugtbarhed. Kan forbedre jorden op til en grundfrugtbarhed på {0}.",
+
+  "ability-refineddilution": "Forfinet fortynding",
+  "abilitydesc-refineddilution": "Gør det muligt for evnen Fortynding også at øge udbyttet af uspiselige produkter som stearinlys, læder og mere.",
+
+  "ability-reinforceddecking": "Forstærket dæk",
+  "abilitydesc-reinforceddecking": "Både, du bygger, får +{0}% holdbarhed.",
+
+  "ability-reinforcedseams": "Forstærkede sømme",
+  "abilitydesc-reinforcedseams": "Rustning, du fremstiller af læder eller stof, får +{0}% beskyttelse. Når du bærer rustning, modtager du {0}% mindre skade.",
+
+  "ability-repotting": "Omplantning",
+  "abilitydesc-repotting": "Når du høster umodne afgrøder, taber de altid frø.",
+
+  "ability-reputabletavernkeep": "Velrenommeret krofatter",
+  "abilitydesc-reputabletavernkeep": "Handlende betaler +{0}% mere for alkohol, du brygger.",
+
+  "ability-resinextractor": "Harptapper",
+  "abilitydesc-resinextractor": "Du har en chance for at få harpiks fra hvert træ, du fælder. Chancen er {0}% af chancen fra evnen Harpiksindsamler.",
+
+  "ability-resinfarmer": "Harpiksindsamler",
+  "abilitydesc-resinfarmer": "Hver gang du fælder et fyrretræ, er der {0}% chance pr. træstamme for, at det drypper harpiks.",
+
+  "ability-rigger": "Rigger",
+  "abilitydesc-rigger": "Klatring i rigging går {0}% hurtigere.",
+
+  "ability-riverrunner": "Flodsejler",
+  "abilitydesc-riverrunner": "+{0}% hastighed og manøvredygtighed på strømmende floder. Kan ikke kombineres med evnerne Kystpilot og Åbent hav.",
+
+  "ability-riverspecialist": "Flodspecialist",
+  "abilitydesc-riverspecialist": "+{0}% større chance for bid i strømmende ferskvand. Kan ikke kombineres med evnen Kystekspert.",
+
+  "ability-saddlesmith": "Sadelmager",
+  "abilitydesc-saddlesmith": "Bonusser fra sadler og hovedtøj øges med {0}%.",
+
+  "ability-safequenching": "Sikker hærdning",
+  "abilitydesc-safequenching": "Med denne evne splintres dit værktøj ikke længere i atomer under hærdning. Hvis hærdningen mislykkes, bliver genstanden blot beskadiget.",
+
+  "ability-saltpeterdigger": "Salpetergraver",
+  "abilitydesc-saltpeterdigger": "Øger udbyttet ved indsamling af salpeter med {0}% og yderligere {1}% for hvert niveau i gravefærdigheden. Maksimum er {2}%.",
+
+  "ability-saltybackpack": "Salt rygsæk",
+  "abilitydesc-saltybackpack": "Madlavningsingredienser i din rygsæk fordærves kun {0}% så hurtigt som normalt.",
+
+  "ability-salvager": "Skrothandler",
+  "abilitydesc-salvager": "Hold højre museknap nede, mens du bruger en hammer, for at skille acrid ad og få metalstykker. Chancen for at få materialer er {0}% plus yderligere {1}% pr. niveau i metalbearbejdningsfærdigheden. Chancen er højst {2}%.",
+
+  "ability-scout": "Spejder",
+  "abilitydesc-scout": "Øger din bevægelseshastighed med {0}%.",
+
+  "ability-scrapdetector": "Skrotdetektor",
+  "abilitydesc-scrapdetector": "Hver gang du knuser en sand- eller grusblok, er der {0}% chance for, at blokken brydes, som om den var blevet siet med en pande.",
+
+  "ability-scrapspecialist": "Skrotspecialist",
+  "abilitydesc-scrapspecialist": "Øger mængden af sjældne genstande fra evnen Skrotdetektor med {1}%.",
+
+  "ability-seadog": "Søulk",
+  "abilitydesc-seadog": "Profession: erfaren sømand. +{0}% erfaring i sejlads.",
+
+  "ability-senseoftime": "Tidsfornemmelse",
+  "abilitydesc-senseoftime": "Du får en besked, når smeltningen i en digel er færdig.",
+
+  "ability-shepherd": "Hyrde",
+  "abilitydesc-shepherd": "Du får {0}% mere erfaring i dyreholdsfærdigheden. Antallet af specialiseringer, du kan lære, er begrænset.",
+
+  "ability-shifter": "Formskifter",
+  "abilitydesc-shifter": "Du har op til {0}% chance for at undgå al skade fra fjender. Jo lavere din tidslige stabilitet er, desto større er chancen.",
+
+  "ability-shipwright": "Skibsbygger",
+  "abilitydesc-shipwright": "+{0}% hastighed på bådbygning ved byggeunderstellet.",
+
+  "ability-shovelexpert": "Skovlekspert",
+  "abilitydesc-shovelexpert": "Når du knuser en blok med en skovl, øges din gravehastighed med skovle med {0}% og yderligere 0.{1}% for hvert niveau i gravefærdigheden. Maksimum er {2}%. Effekten stables op til {3} gange og varer {4} sekunder.",
+
+  "ability-shovelknight": "Skovleridder",
+  "abilitydesc-shovelknight": "Hver gang du rammer en fjende med en skovl, har du {0}% chance for at gøre enorm skade.",
+
+  "ability-signaturegarb": "Signaturdragt",
+  "abilitydesc-signaturegarb": "Bær tøj og rustning fremstillet af den samme skrædder for at få +{0}% til alle egenskaber.",
+
+  "ability-skyrider": "Himmelrytter",
+  "abilitydesc-skyrider": "+{0}% til flyvende ridedyrs egenskaber.",
+
+  "ability-smelter": "Smelter",
+  "abilitydesc-smelter": "Du skal bruge {0}% mindre metal for at fylde en form. Påvirker kun værktøjsforme med produkter, der ikke kan smeltes om.",
+
+  "ability-sniper": "Skarpskytte",
+  "abilitydesc-sniper": "Øger din præcision med afstandsvåben med {0}%.",
+
+  "ability-soulboundbag": "Sjælebundet taske",
+  "abilitydesc-soulboundbag": "Hvis du dør, mister du ikke genstandene i dit inventar fra evnen Stærk ryg.",
+
+  "ability-spearman": "Spydkæmper",
+  "abilitydesc-spearman": "Øger skaden, du gør med spyd, med {0}% og yderligere {1}% for hvert niveau i kampfærdigheden. Maksimum er {2}%.",
+
+  "ability-sprinter": "Sprinter",
+  "abilitydesc-sprinter": "Øger din bevægelseshastighed med {0}% og dit sultforbrug med {1}%.",
+
+  "ability-stableminer": "Stabil minearbejder",
+  "abilitydesc-stableminer": "Øger dit udbytte fra alle malmtyper med op til {0}%, når du befinder dig i et tidsligt stabilt område.",
+
+  "ability-stablewarrior": "Stabil kriger",
+  "abilitydesc-stablewarrior": "Øger den skade, du gør, med op til {0}%, når du befinder dig i et tidsligt stabilt område.",
+
+  "ability-steadyhand": "Stø hånd",
+  "abilitydesc-steadyhand": "Fermenteringen afsluttes {0}% hurtigere.",
+
+  "ability-steadyhelm": "Stø roret",
+  "abilitydesc-steadyhelm": "Både, du styrer, sejler {0}% hurtigere. Grundbonus: {0}% plus yderligere +{1}% pr. sejlerniveau, op til maksimalt {2}%.",
+
+  "ability-steadyreins": "Stø tøjler",
+  "abilitydesc-steadyreins": "Dine ridedyr bevæger sig {0}% hurtigere. Grundbonus: {0}% plus yderligere +{1}% pr. rideniveau, op til maksimalt {2}%.",
+
+  "ability-steeplechaser": "Forhindringsrytter",
+  "abilitydesc-steeplechaser": "Øger din trin-højde med {0}%.",
+
+  "ability-stoker": "Fyrbøder",
+  "abilitydesc-stoker": "Når du bryder lag af trækul, er der {0}% chance for også at bryde et ekstra lag.",
+
+  "ability-stonebreaker": "Stenknuser",
+  "abilitydesc-stonebreaker": "Øger antallet af sten, du får, med {0}% og yderligere {1}% for hvert niveau i minefærdigheden. Maksimum er {2}%.",
+
+  "ability-stonecutter": "Stenhugger",
+  "abilitydesc-stonecutter": "Hver gang du knuser en klippe, har du {0}% chance plus yderligere {1}% for hvert niveau i minefærdigheden for at få råklippen i stedet for sten. Maksimum er {2}%.",
+
+  "ability-strongback": "Stærk ryg",
+  "abilitydesc-strongback": "Giver din figur et ekstra inventar med {0} pladser. Du kan flytte genstande mellem dette inventar og din genvejslinje. [standard: R]",
+
+  "ability-strongline": "Stærk fiskeline",
+  "abilitydesc-strongline": "Med {0}% chance (+{1}% pr. fiskeriniveau, op til {2}%) mister din fiskestang ikke holdbarhed, når du bruger den.",
+
+  "ability-strongoarsman": "Stærk roer",
+  "abilitydesc-strongoarsman": "+{0}% robådsfart, når du ror.",
+
+  "ability-summerweaver": "Sommerens væver",
+  "abilitydesc-summerweaver": "Tøj, du fremstiller, giver {0}% mere køling. Kan ikke kombineres med evnen Vinterens væver.",
+
+  "ability-swiftspear": "Hurtigt spyd",
+  "abilitydesc-swiftspear": "Øger hastigheden, hvormed du sigter med spyd, med {0}%.",
+
+  "ability-swordsman": "Sværdkæmper",
+  "abilitydesc-swordsman": "Øger skaden, du gør med sværd, med {0}% og yderligere {1}% for hvert niveau i kampfærdigheden. Maksimum er {2}%.",
+
+  "ability-tank": "Tank",
+  "abilitydesc-tank": "Øger den skade, du kan absorbere med et skjold, med {0}% og yderligere {1}% for hvert niveau i kampfærdigheden. Maksimum er {2}%.",
+
+  "ability-tanner": "Garver",
+  "abilitydesc-tanner": "Reducerer væskeforbruget ved garvning af læder med {0}% og yderligere {1}% for hvert niveau i dyreholdsfærdigheden, op til maksimalt {2}%.",
+
+  "ability-temporaladapted": "Tidsligt tilpasset",
+  "abilitydesc-temporaladapted": "Reducerer tabet af tidslig stabilitet med op til {0}% og yderligere {1}% for hvert niveau i færdigheden Tidslig tilpasning. Jo lavere din nuværende stabilitet er, desto større er fordelen. Maksimum er {2}%.",
+
+  "ability-temporalrecovery": "Tidslig genopretning",
+  "abilitydesc-temporalrecovery": "Øger hastigheden, hvormed din tidslige stabilitet genoprettes, med {0}%.",
+
+  "ability-temporalstable": "Tidsligt stabil",
+  "abilitydesc-temporalstable": "Reducerer det samlede tab af tidslig stabilitet med {0}% og yderligere {1}% for hvert niveau i færdigheden Tidslig tilpasning. Maksimum er {2}%.",
+
+  "ability-temporalunstable": "Tidsligt ustabil",
+  "abilitydesc-temporalunstable": "Dine evner Stabil minearbejder og Stabil kriger får bonusser i tidsligt ustabile områder i stedet for tidsligt stabile områder, og bonusserne øges med {0}%.",
+
+  "ability-tenuation": "Potionudbytte",
+  "abilitydesc-tenuation": "Øger udbyttet af den færdige potion ved brygning med {0}% (+{1}% pr. alkymilevel, op til {2}%).",
+
+  "ability-thrift": "Sparsommelighed",
+  "abilitydesc-thrift": "Du får {0} ekstra voxler for hvert stykke ler, du bruger til keramik.",
+
+  "ability-thriftybrewer": "Sparsommelig brygger",
+  "abilitydesc-thriftybrewer": "Brygning bruger {0}% færre ingredienser.",
+
+  "ability-thriftycuts": "Sparsomme snit",
+  "abilitydesc-thriftycuts": "Fremstilling af tøj bruger {0}% færre materialer.",
+
+  "ability-timeless": "Tidløs",
+  "abilitydesc-timeless": "Du tager ikke længere skade af tidslig ustabilitet.",
+
+  "ability-timelord": "Tidsherre",
+  "abilitydesc-timelord": "Du får {0}% mere erfaring i færdigheden Tidslig tilpasning. Antallet af specialiseringer, du kan lære, er begrænset.",
+
+  "ability-tipplerstolerance": "Alkoholtolerance",
+  "abilitydesc-tipplerstolerance": "Fuldstændig immunitet over for alkoholens negative effekter.",
+
+  "ability-tirelesstrot": "Utrættelig trav",
+  "abilitydesc-tirelesstrot": "Øger chancen for at blive siddende på et dyr, mens du tæmmer det, med {0}%.",
+
+  "ability-toolmastery": "Værktøjsmesterskab",
+  "abilitydesc-toolmastery": "Øger skaden, du gør med værktøj, med {0}% og yderligere {1}% for hvert niveau i den tilsvarende færdighed. Begrænset til {2}%. Hakker påvirkes af minefærdigheden, økser af skovbrugsfærdigheden, hamre af metalbearbejdningsfærdigheden, hakker af landbrugsfærdigheden og skovle af gravefærdigheden.",
+
+  "ability-trailprovisions": "Proviant til turen",
+  "abilitydesc-trailprovisions": "Når du bevæger dig, bruger du {0}% mindre mæthed.",
+
+  "ability-trawler": "Trawler",
+  "abilitydesc-trawler": "{0}% chance pr. spil-tick for passivt at få erfaring i fiskeri og lejlighedsvis fange en fisk, mens du sejler.",
+
+  "ability-treenursery": "Træplanteskole",
+  "abilitydesc-treenursery": "Plantede træer behøver kun {0}% af den normale tid for at vokse.",
+
+  "ability-tunneldigger": "Tunnelgraver",
+  "abilitydesc-tunneldigger": "Gør det muligt at udgrave et område på 3 gange 3 stenblokke på én gang. Dit værktøj tager {0}% ekstra skade, og du mister {1} mæthed for hver ekstra blok, du udgraver.",
+
+  "ability-vampire": "Vampyr",
+  "abilitydesc-vampire": "Hver gang du rammer en fjende, får du helbredelse svarende til {0}% af den skade, du gjorde. Til gengæld reduceres din helbredsregenerering i sollys med op til {1}%.",
+
+  "ability-veinminer": "Malmlagets minearbejder",
+  "abilitydesc-veinminer": "Når du udgraver malm- eller ædelstensblokke, udgraver du {0} ekstra blokke plus 1 for hvert {1}. niveau i minefærdigheden. Dette er begrænset til højst {2} blokke. Dit værktøj tager {3}% ekstra skade, og du mister {4} mæthed for hver ekstra blok, du udgraver.",
+
+  "ability-vet": "Dyrlæge",
+  "abilitydesc-vet": "Dit ridedyr genvinder {0} helbred pr. minut, mens du rider.",
+
+  "ability-vintner": "Vinmager",
+  "abilitydesc-vintner": "+{0}% til kvaliteten af opskrifter på cider og vin. Kan ikke kombineres med evnerne Humlemester og Mjødmester.",
+
+  "ability-wanderingtailor": "Omvandrende skrædder",
+  "abilitydesc-wanderingtailor": "Når du bærer et helt sæt tøj, du selv har fremstillet, øges alle dine egenskaber med {0}%.",
+
+  "ability-warrior": "Kriger",
+  "abilitydesc-warrior": "Du får {0}% mere erfaring for at dræbe fjender. Antallet af specialiseringer, du kan lære, er begrænset.",
+
+  "ability-wavereader": "Bølgelæser",
+  "abilitydesc-wavereader": "Viser vejret og stormvarsler, mens du sejler på havet.",
+
+  "ability-welldone": "Godt gennemstegt",
+  "abilitydesc-welldone": "Øger holdbarheden af dine tilberedte portioner med {0}% og yderligere {1}% for hvert niveau i madlavningsfærdigheden. Begrænset til {2}%. Til gengæld øges tilberedningstiden med {3}%.",
+
+  "ability-wellrested": "Veludhvilet",
+  "abilitydesc-wellrested": "Øger din erfaring fra hver færdighed med op til {0}% i {1} sekunder, afhængigt af hvor udhvilet du er efter at have sovet.",
+
+  "ability-widechipping": "Bred afhugning",
+  "abilitydesc-widechipping": "Hvert vellykket slag afhugger op til {0} ekstra tilstødende voxler, der ikke indgår i opskriften.",
+
+  "ability-winterweaver": "Vinterens væver",
+  "abilitydesc-winterweaver": "Tøj, du fremstiller, giver {0}% mere varme."
+}

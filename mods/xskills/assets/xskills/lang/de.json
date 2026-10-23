@@ -644,7 +644,7 @@
   "abilitydesc-reinforceddecking": "Von Ihnen gebaute Boote erhalten +{0}% Haltbarkeit.",
 
   "ability-reinforcedseams": "Verstärkte Nähte",
-  "abilitydesc-reinforcedseams": "Von Ihnen gefertigte Rüstung erhält +{0}% Schutz.",
+  "abilitydesc-reinforcedseams": "Aus Leder oder Stoff hergestellte Rüstungen erhalten +{0} % Schutz. Solange du Rüstung trägst, erleidest du {0} % weniger Schaden.",
 
   "ability-repotting": "Umpflanzen",
   "abilitydesc-repotting": "Bei der Ernte nicht gereifter Pflanzen fallen immer die Samen ab.",
@@ -711,6 +711,9 @@
 
   "ability-shovelknight": "Shovel Knight",
   "abilitydesc-shovelknight": "Jedes Mal, wenn du einen Feind mit einer Schaufel triffst, hast du eine Chance von {0}%, massiven Schaden zu verursachen.",
+
+  "ability-signaturegarb": "Markante Garderobe",
+  "abilitydesc-signaturegarb": "Trage Kleidung und Rüstung, die vom selben Schneider gefertigt wurden, um +{0} % auf alle Werte zu erhalten.",
 
   "ability-skyrider": "Himmelsreiter",
   "abilitydesc-skyrider": "+{0}% auf die Werte fliegender Reittiere.",

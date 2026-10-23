@@ -644,7 +644,7 @@
   "abilitydesc-reinforceddecking": "Les bateaux que vous construisez gagnent +{0}% de durabilité.",
 
   "ability-reinforcedseams": "Coutures renforcées",
-  "abilitydesc-reinforcedseams": "Les armures que vous fabriquez gagnent +{0}% de protection.",
+  "abilitydesc-reinforcedseams": "Les armures que vous fabriquez en cuir ou en tissu gagnent +{0}% de protection. Lorsque vous portez une armure, vous subissez {0}% de dégâts en moins.",
 
   "ability-repotting": "Rempottage",
   "abilitydesc-repotting": "Récolter des cultures non matures vous rendent toujours les graines.",
@@ -711,6 +711,9 @@
 
   "ability-shovelknight": "Chevalier à la pelle",
   "abilitydesc-shovelknight": "Chaque fois que vous touchez un ennemi avec une pelle, vous avez une chance de {0}% d'infliger une énorme quantité de dégats.",
+
+  "ability-signaturegarb": "Tenue signature",
+  "abilitydesc-signaturegarb": "Portez des vêtements et une armure confectionnés par le même tailleur pour obtenir +{0} % à toutes les caractéristiques.",
 
   "ability-skyrider": "Cavalier céleste",
   "abilitydesc-skyrider": "+{0}% aux caractéristiques des montures volantes.",

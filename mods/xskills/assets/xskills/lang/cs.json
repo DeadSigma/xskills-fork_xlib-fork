@@ -644,7 +644,7 @@
   "abilitydesc-reinforceddecking": "Lodě, které postavíte, získají +{0}% odolnosti.",
 
   "ability-reinforcedseams": "Zesílené švy",
-  "abilitydesc-reinforcedseams": "Vámi vyrobená zbroj získává +{0}% ochrany.",
+  "abilitydesc-reinforcedseams": "Zbroj, kterou vyrobíte z kůže nebo látky, získá +{0}% ochrany. Při nošení zbroje obdržíte o {0}% méně poškození.",
 
   "ability-repotting": "Tos Poryl",
   "abilitydesc-repotting": "Při sklizni nevyzrálých plodin vždy dostaneš semena zpět.",
@@ -711,6 +711,9 @@
 
   "ability-shovelknight": "Rytíř z lopatou",
   "abilitydesc-shovelknight": "Pokaždé, když zasáhnete nepřítele lopatou, máte šanci {0}% způsobit obrovské poškození.",
+
+  "ability-signaturegarb": "Oblečení na míru",
+  "abilitydesc-signaturegarb": "Noste oblečení a zbroj vyrobené stejným krejčím a získejte +{0} % ke všem statistikám.",
 
   "ability-skyrider": "Nebeský jezdec",
   "abilitydesc-skyrider": "+{0}% ke statistikám létajících jízdních zvířat.",

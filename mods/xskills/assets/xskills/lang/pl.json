@@ -644,7 +644,7 @@
   "abilitydesc-reinforceddecking": "Łodzie zbudowane przez ciebie zyskują +{0}% wytrzymałości.",
 
   "ability-reinforcedseams": "Wzmocnione szwy",
-  "abilitydesc-reinforcedseams": "Wykonana przez ciebie zbroja zyskuje +{0}% ochrony.",
+  "abilitydesc-reinforcedseams": "Zbroja, którą wykonasz ze skóry lub tkaniny, zyskuje +{0}% ochrony. Podczas noszenia zbroi otrzymujesz o {0}% mniej obrażeń.",
 
   "ability-repotting": "Przesadzanie",
   "abilitydesc-repotting": "Zbiór niedojrzałych plonów zawsze skutkuje upuszczeniem nasion.",
@@ -711,6 +711,9 @@
 
   "ability-shovelknight": "Rycerz łopaty",
   "abilitydesc-shovelknight": "Za każdym razem, gdy uderzysz wroga łopatą, masz szansę {0}% na zadanie ogromnej ilości obrażeń.",
+
+  "ability-signaturegarb": "Charakterystyczny strój",
+  "abilitydesc-signaturegarb": "Noś ubrania i zbroję uszyte przez tego samego krawca, aby zyskać +{0}% do wszystkich statystyk.",
 
   "ability-skyrider": "Podniebny jeździec",
   "abilitydesc-skyrider": "+{0}% do statystyk latających wierzchowców.",

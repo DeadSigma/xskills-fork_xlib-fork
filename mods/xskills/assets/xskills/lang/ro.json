@@ -644,7 +644,7 @@
   "abilitydesc-reinforceddecking": "Bărcile construite de dumneavoastră primesc +{0}% durabilitate.",
 
   "ability-reinforcedseams": "Cusături întărite",
-  "abilitydesc-reinforcedseams": "Armurile create de dumneavoastră primesc +{0}% protecție.",
+  "abilitydesc-reinforcedseams": "Armura pe care o creați din piele sau material textil primește +{0}% protecție. În timp ce purtați armură, primiți cu {0}% mai puține daune.",
 
   "ability-repotting": "Repotting",
   "abilitydesc-repotting": "Harvesting non-matured crops drops always the seeds.",
@@ -711,6 +711,9 @@
 
   "ability-shovelknight": "Shovel Knight",
   "abilitydesc-shovelknight": "Every time you hit an enemy with a shovel you have a chance of {0}% to deal a massive amount of damage.",
+
+  "ability-signaturegarb": "Ținută emblematică",
+  "abilitydesc-signaturegarb": "Poartă haine și armură croite de același croitor pentru a obține +{0}% la toate statisticile.",
 
   "ability-skyrider": "Călăreț al cerului",
   "abilitydesc-skyrider": "+{0}% la caracteristicile monturilor zburătoare.",

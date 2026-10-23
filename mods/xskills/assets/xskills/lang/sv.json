@@ -486,7 +486,7 @@
 
   "ability-lightarmorexpert": "Lätt rustnings-expert",
   "abilitydesc-lightarmorexpert": "Så länge du bär rustning som minskar gånghastigheten med högst 5 % per del förbättras följande egenskaper med {0} %:\n{1}",
-  
+
   "ability-lightcavalry": "Lätt kavalleri",
   "abilitydesc-lightcavalry": "Ökar hastigheten och manövrerbarheten för wapiti och andra lätta riddjur från moddar med {0}%.",
 
@@ -644,7 +644,7 @@
   "abilitydesc-reinforceddecking": "Båtar du bygger får +{0}% hållbarhet.",
 
   "ability-reinforcedseams": "Förstärkta sömmar",
-  "abilitydesc-reinforcedseams": "Rustningar du tillverkar får +{0}% skydd.",
+  "abilitydesc-reinforcedseams": "Rustningar du tillverkar av läder eller tyg får +{0}% skydd. När du bär rustning tar du {0}% mindre skada.",
 
   "ability-repotting": "Repotting",
   "abilitydesc-repotting": "Harvesting non-matured crops drops always the seeds.",
@@ -711,6 +711,9 @@
 
   "ability-shovelknight": "Shovel Knight",
   "abilitydesc-shovelknight": "Every time you hit an enemy with a shovel you have a chance of {0}% to deal a massive amount of damage.",
+
+  "ability-signaturegarb": "Signaturklädsel",
+  "abilitydesc-signaturegarb": "Bär kläder och rustning tillverkade av samma skräddare för att få +{0} % till all statistik.",
 
   "ability-skyrider": "Himmelsryttare",
   "abilitydesc-skyrider": "+{0}% till flygande riddjurs egenskaper.",

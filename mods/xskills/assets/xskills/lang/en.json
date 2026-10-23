@@ -644,7 +644,7 @@
   "abilitydesc-reinforceddecking": "Boats you build gain +{0}% durability.",
 
   "ability-reinforcedseams": "Reinforced Seams",
-  "abilitydesc-reinforcedseams": "Armor you craft gains +{0}% protection.",
+  "abilitydesc-reinforcedseams": "Armor you craft from leather or cloth gains +{0}% protection. While wearing armor, take {0}% less damage.",
 
   "ability-repotting": "Repotting",
   "abilitydesc-repotting": "Harvesting non-matured crops always drop the seeds",

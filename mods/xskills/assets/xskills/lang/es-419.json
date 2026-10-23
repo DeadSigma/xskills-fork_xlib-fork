@@ -644,7 +644,7 @@
   "abilitydesc-reinforceddecking": "Las embarcaciones que construyes obtienen +{0}% de durabilidad.",
 
   "ability-reinforcedseams": "Costuras reforzadas",
-  "abilitydesc-reinforcedseams": "La armadura que fabricas obtiene +{0}% de protección.",
+  "abilitydesc-reinforcedseams": "La armadura que fabricas con cuero o tela obtiene +{0}% de protección. Mientras lleves armadura, recibes {0}% menos daño.",
 
   "ability-repotting": "Trasplantar",
   "abilitydesc-repotting": "Siempre conseguirás semillas al cosechar cultivos no maduros.",
@@ -712,6 +712,9 @@
   "ability-shovelknight": "Shovel Knight",
   "abilitydesc-shovelknight": "Cada vez que golpeas a un enemigo con una pala, tienes un {0}% de probabilidad de infligir una gran cantidad de daño.",
 
+  "ability-signaturegarb": " atuendo distintivo",
+  "abilitydesc-signaturegarb": "Usa ropa y armadura confeccionadas por el mismo sastre para obtener +{0}% a todas las estadísticas."
+  
   "ability-skyrider": "Jinete celestial",
   "abilitydesc-skyrider": "+{0}% a las estadísticas de las monturas voladoras.",
 

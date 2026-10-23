@@ -644,7 +644,7 @@
   "abilitydesc-reinforceddecking": "你建造的船只获得 +{0}% 耐久度。",
 
   "ability-reinforcedseams": "加固缝线",
-  "abilitydesc-reinforcedseams": "你制作的护甲获得 +{0}% 防护值。",
+  "abilitydesc-reinforcedseams": "你用皮革或布料制作的护甲获得 +{0}% 防护值。穿戴护甲时，受到的伤害减少 {0}%。",
 
   "ability-repotting": "换盆",
   "abilitydesc-repotting": "收获未成熟的作物总是会\n掉落种子。",
@@ -711,6 +711,9 @@
 
   "ability-shovelknight": "铲子武士",
   "abilitydesc-shovelknight": "你每次用铲子击中一个敌人\n都有几率{0}%的几率造成大量\n的伤害。",
+
+  "ability-signaturegarb": "招牌套装",
+  "abilitydesc-signaturegarb": "穿戴同一位裁缝制作的衣物和护甲，所有属性提高 +{0}%。",
 
   "ability-skyrider": "天空骑士",
   "abilitydesc-skyrider": "飞行坐骑的属性提高 +{0}%。",

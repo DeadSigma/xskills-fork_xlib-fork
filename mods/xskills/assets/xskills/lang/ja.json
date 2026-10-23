@@ -644,7 +644,7 @@
   "abilitydesc-reinforceddecking": "自分で建造した船の耐久力が +{0}% 上昇します。",
 
   "ability-reinforcedseams": "補強された縫い目",
-  "abilitydesc-reinforcedseams": "作成した防具の防御力が +{0}% 増加します。",
+  "abilitydesc-reinforcedseams": "革や布で作成した防具の防御力が +{0}% 増加します。防具を装備している間、受けるダメージが {0}% 減少します。",
 
   "ability-repotting": "植え替え",
   "abilitydesc-repotting": "成熟していない作物を収穫すると、必ず種が落ちます。",
@@ -711,6 +711,9 @@
 
   "ability-shovelknight": "シャベルナイト",
   "abilitydesc-shovelknight": "シャベルを敵に当てる度に{0}%の確率で大ダメージを与えます。",
+
+  "ability-signaturegarb": "シグネチャー装備",
+  "abilitydesc-signaturegarb": "同じ仕立て屋が作った服と鎧を身に着けると、全ステータスが +{0}% 上昇する。",
 
   "ability-skyrider": "空の騎手",
   "abilitydesc-skyrider": "飛行マウントの性能が +{0}% 向上します。",
