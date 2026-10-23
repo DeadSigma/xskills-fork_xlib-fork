@@ -126,6 +126,13 @@ namespace XSkills
             InspirationCollectibles.Add("flowerpot", null);
             InspirationCollectibles.Add("storagevessel", null);
 
+            if (api.ModLoader.IsModEnabled("fromgoldencombs"))
+            {
+                InspirationCollectibles.Add("ceramicbroodpot", null);
+                InspirationCollectibles.Add("ceramichive", null);
+                InspirationCollectibles.Add("hivetop", null);
+            }
+
             this.ExperienceEquation = QuadraticEquation;
             this.ExpBase = 40;
             this.ExpMult = 10.0f;
