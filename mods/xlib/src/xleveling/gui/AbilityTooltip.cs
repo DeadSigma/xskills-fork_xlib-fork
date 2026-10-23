@@ -79,7 +79,7 @@ namespace XLib.XLeveling
             // Перки на шанс (Вероятность события)
             var chanceAbilities = new System.Collections.Generic.HashSet<string>
              {
-                 "magnetichook", "doublehook", "baitmaster", "strongline",
+                 "shifter" , "magnetichook", "doublehook", "baitmaster", "strongline",
                  "carefuldigger", "carefullumberjack", "carefulminer",
                  "cultivatedseeds", "stonecutter", "feeder", "duplicator",
                  "jackpot", "happymeal", "finishingtouch", "fastpotter", "carefulshooter", "masshusbandry", "preserver", "tanner", "rancher"
@@ -88,18 +88,18 @@ namespace XLib.XLeveling
                      // Перки на бонус/ Добычу (Увеличение лута, скорости, ХП и так далее)
                      var bonusAbilities = new System.Collections.Generic.HashSet<string>
              {
-                 "goodbait", "greenthumb", "demetersbless", "gatherer", "orchardist",
-                 "claydigger", "peatcutter", "saltpeterdigger", "golddigger",
-                 "lumberjack", "moreladders", "stonebreaker", "oreminer",
-                 "gemstoneminer", "butcher", "furrier", "bonebreaker",
-                 "looter", "salvager", "dilution", "longlife", "hammerexpert",
+                 "temporalstable" , "archer", "goodbait", "greenthumb", "demetersbless", "gatherer", "orchardist",
+                 "temporaladapted" , "caveman" , "claydigger", "peatcutter", "saltpeterdigger", "golddigger",
+                 "temporalrecovery" , "fastforward" , "lumberjack", "moreladders", "stonebreaker", "oreminer",
+                 "stablewarrior" , "temporalunstable" , "gemstoneminer", "butcher", "furrier", "bonebreaker",
+                 "stableminer" , "timelord" , "looter", "salvager", "dilution", "longlife", "hammerexpert",
                  "shovelexpert", "axeexpert", "pickaxeexpert", "fastfood", "steadyhelm", "steadyreins"
              };
 
                      // Перки на урон и защиту
                      var damageAbilities = new System.Collections.Generic.HashSet<string>
              {
-                 "swordsman", "archer", "spearman", "tank", "hunter", "toolmastery"
+                 "swordsman", "spearman", "tank", "hunter", "toolmastery"
              };
 
                      // Перки с максимальным кол-вом штук (Особая математика)

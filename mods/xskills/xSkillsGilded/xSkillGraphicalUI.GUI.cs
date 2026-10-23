@@ -702,7 +702,7 @@ namespace xSkillGilded
                     // Перки на шанс (Вероятность события)
                     var chanceAbilities = new System.Collections.Generic.HashSet<string>
                     {
-                        "magnetichook", "doublehook", "baitmaster", "strongline",
+                        "shifter" , "magnetichook", "doublehook", "baitmaster", "strongline",
                         "carefuldigger", "carefullumberjack", "carefulminer",
                         "cultivatedseeds", "stonecutter", "feeder", "duplicator",
                         "jackpot", "happymeal", "finishingtouch", "fastpotter", "masshusbandry", "carefulshooter",  "preserver", "tanner", "rancher"
@@ -711,11 +711,11 @@ namespace xSkillGilded
                     // Перки на бонус/ Добычу (Увеличение лута, скорости, ХП)
                     var bonusAbilities = new System.Collections.Generic.HashSet<string>
                     {
-                        "goodbait", "greenthumb", "demetersbless", "gatherer", "orchardist",
-                        "claydigger", "peatcutter", "saltpeterdigger", "golddigger",
-                        "lumberjack", "moreladders", "stonebreaker", "oreminer",
-                        "gemstoneminer", "butcher", "furrier", "bonebreaker",
-                        "looter", "salvager", "dilution", "longlife", "hammerexpert",
+                        "temporalstable" , "archer", "goodbait", "greenthumb", "demetersbless", "gatherer", "orchardist",
+                        "temporaladapted" , "caveman" , "claydigger", "peatcutter", "saltpeterdigger", "golddigger",
+                        "temporalrecovery" , "fastforward" , "lumberjack", "moreladders", "stonebreaker", "oreminer",
+                        "stablewarrior" , "temporalunstable" , "gemstoneminer", "butcher", "furrier", "bonebreaker",
+                        "stableminer" , "timelord" , "looter", "salvager", "dilution", "longlife", "hammerexpert",
                         "shovelexpert", "axeexpert", "pickaxeexpert", "fastfood", "steadyhelm", "steadyreins"
                     };
 
