@@ -268,14 +268,25 @@ namespace XSkills
             List<ItemStack> drops = base.GetDropsList(world, pos, byPlayer, dropChanceMultiplier, ref handling);
             if (drops.Count == 0) return drops;
 
-            //resin farmer and resin extractor
+            // resin farmer and resin extractor
             PlayerSkill playerSkill = byPlayer.Entity.GetBehavior<PlayerSkillSet>()[this.Skill.Id];
             PlayerAbility playerAbility = playerSkill[forestry.ResinFarmerId];
             PlayerAbility playerAbility2 = playerSkill[forestry.ResinExtractor];
             if (playerAbility == null || playerAbility2 == null) return drops;
 
-            if ((this.block.FirstCodePart(2) == "pine" && playerAbility.Value(0) * 0.01 > world.Rand.NextDouble()) ||
-                (playerAbility.Value(0) * 0.01 * playerAbility2.Value(0) * 0.01 > world.Rand.NextDouble()))
+            double resinFarmerChance = playerAbility.Value(0) * 0.01d;
+            double resinExtractorPercent = playerAbility2.Value(0) * 0.01d;
+            double nonPineChance = resinFarmerChance * (0.5d + resinExtractorPercent * 0.5d);
+            double roll = world.Rand.NextDouble();
+
+            bool isPine = this.block.FirstCodePart(2) == "pine";
+            bool shouldDropResin = isPine
+                ? resinFarmerChance > roll
+                : nonPineChance > roll;
+
+            world.Api.Logger.Debug($"[xSkills] ResinFarmer check: block={this.block.Code}, isPine={isPine}, resinFarmer={playerAbility.Value(0)}, resinExtractor={playerAbility2.Value(0)}, pineChance={resinFarmerChance}, nonPineChance={nonPineChance}, roll={roll}, shouldDrop={shouldDropResin}");
+
+            if (shouldDropResin)
             {
                 ItemStack drop = new ItemStack(world.GetItem(new AssetLocation("game", "resin")), 1);
                 if (drop != null) drops.Add(drop);
