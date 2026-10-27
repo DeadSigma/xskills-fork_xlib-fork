@@ -455,7 +455,7 @@
   "abilitydesc-ingredientefficiency": "制作药水时，你有 {0}% 的概率保留所使用材料的 {1}%。",
 
   "ability-inspiration": "灵感",
-  "abilitydesc-inspiration": "当你烧制一个陶罐、花盆或\n种植盆时，你有{0}%的机会\n创造出一种特殊变种。",
+  "abilitydesc-inspiration": "当你烧制一个陶瓷物品时，你有{0}%的机会创造出一种特殊变种。",
 
   "ability-ironfist": "铁拳",
   "abilitydesc-ironfist": "使你徒手造成的伤害增加\n{0}倍，乘以你的盔甲的平均\n防护等级",

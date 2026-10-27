@@ -455,7 +455,7 @@
   "abilitydesc-ingredientefficiency": "När du tillverkar drycker har du {0}% chans att behålla {1}% av de använda ingredienserna.",
 
   "ability-inspiration": "Inspiration",
-  "abilitydesc-inspiration": "When you burn a storage vessel, a flowerpot or a planter you have a chance of {0}% to create a special variant.",
+  "abilitydesc-inspiration": "När du bränner ett keramiskt föremål har du {0}% chans att skapa en specialvariant.",
 
   "ability-ironfist": "Iron Fist",
   "abilitydesc-ironfist": "Increases damage you deal with your bare hands by {0} times multiplied by the average protection tier of your armor.",

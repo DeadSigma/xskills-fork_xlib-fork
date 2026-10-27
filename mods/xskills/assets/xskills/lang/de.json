@@ -455,7 +455,7 @@
   "abilitydesc-ingredientefficiency": "Beim Herstellen von Tränken habt ihr eine Chance von {0}%, {1}% der verwendeten Zutaten zu behalten.",
 
   "ability-inspiration": "Eingebung",
-  "abilitydesc-inspiration": "Beim Brennen eines Vorratsgefäßes, eines Blumentopfes oder eines Pflanzkübels hast du eine Chance von {0}% eine spezielle Variante zu erhalten.",
+  "abilitydesc-inspiration": "Wenn du ein keramisches Objekt verbrennst, hast du eine Chance von {0}% eine spezielle Variante zu erhalten.",
 
   "ability-ironfist": "Eisenfaust",
   "abilitydesc-ironfist": "Erhöht den Schaden, den du mit bloßen Händen verursachst, um das {0}-fache multipliziert mit der durchschnittlichen Schutzstufe deiner Rüstung.",

@@ -455,7 +455,7 @@
   "abilitydesc-ingredientefficiency": "ポーションを作成する際、{0}%の確率で使用した材料の{1}%を消費せずに残します。",
 
   "ability-inspiration": "ひらめき",
-  "abilitydesc-inspiration": "貯蔵容器、植木鉢、プランターを燃やすと、{0}%の確率で特殊な変種を作ることが出来ます。",
+  "abilitydesc-inspiration": "陶器を焼くと、{0}%の確率で特殊な変種を作ることができます。",
 
   "ability-ironfist": "鉄拳",
   "abilitydesc-ironfist": "素手の与ダメージが防具の平均防御力の{0}倍に増加します。",

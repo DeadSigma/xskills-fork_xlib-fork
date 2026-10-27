@@ -455,7 +455,7 @@
   "abilitydesc-ingredientefficiency": "Lors de la fabrication de potions, vous avez {0}% de chances de conserver {1}% des ingrédients utilisés.",
 
   "ability-inspiration": "Inspiration",
-  "abilitydesc-inspiration": "Quand vous cuisez une jarre, un pot de fleurs ou une jardinière, vous avez une chance de {0}% de créer une variante spéciale.",
+  "abilitydesc-inspiration": "Quand vous brûlez un objet en céramique, vous avez une chance de {0}% de créer une variante spéciale.",
 
   "ability-ironfist": "Poings de fer",
   "abilitydesc-ironfist": "Augmente les dégats que vous infligez à mains nues de {0} fois, multiplié par la moyenne de protection de votre armure.",

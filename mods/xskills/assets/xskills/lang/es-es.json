@@ -455,7 +455,7 @@
   "abilitydesc-ingredientefficiency": "Al elaborar pociones, tienes un {0}% de probabilidad de conservar el {1}% de los ingredientes utilizados.",
 
   "ability-inspiration": "Creatividad artística",
-  "abilitydesc-inspiration": "Cuando quemas un recipiente de almacenamiento, una maceta u otro recipiente, tienes una probabilidad del {0} % de crear una variante especial.",
+  "abilitydesc-inspiration": "Cuando quemas un objeto de cerámica, tienes una probabilidad del {0}% de crear una variante especial.",
 
   "ability-ironfist": "Puño de hierro",
   "abilitydesc-ironfist": "Aumenta el daño que infliges con tus propias manos {0} veces, multiplicado por el nivel de protección promedio de tu armadura.",

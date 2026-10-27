@@ -455,7 +455,7 @@
   "abilitydesc-ingredientefficiency": "Når du fremstiller potions, har du {0}% chance for at bevare {1}% af de anvendte ingredienser.",
 
   "ability-inspiration": "Inspiration",
-  "abilitydesc-inspiration": "Når du brænder et opbevaringskar, en urtepotte eller en plantekasse, har du {0}% chance for at skabe en særlig variant.",
+  "abilitydesc-inspiration": "Når du brænder et keramisk genstand, har du {0}% chance for at skabe en særlig variant.",
 
   "ability-ironfist": "Jernnæve",
   "abilitydesc-ironfist": "Øger skaden, du giver med de bare hænder, med {0} gange den gennemsnitlige beskyttelsesværdi for din rustning.",

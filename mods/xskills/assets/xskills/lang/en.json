@@ -455,7 +455,7 @@
   "abilitydesc-ingredientefficiency": "When crafting potions, you have a {0}% chance to preserve {1}% of the ingredients used.",
 
   "ability-inspiration": "Inspiration",
-  "abilitydesc-inspiration": "When you burn a storage vessel, a flowerpot or a planter you have a chance of {0}% to create a special variant.",
+  "abilitydesc-inspiration": "When you burn a ceramic item you have a chance of {0}% to create a special variant.",
 
   "ability-ironfist": "Iron Fist",
   "abilitydesc-ironfist": "Increases damage you deal with your bare hands by {0} times multiplied by the average protection tier of your armor.",
