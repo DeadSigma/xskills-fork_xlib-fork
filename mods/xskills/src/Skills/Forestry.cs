@@ -274,17 +274,19 @@ namespace XSkills
             PlayerAbility playerAbility2 = playerSkill[forestry.ResinExtractor];
             if (playerAbility == null || playerAbility2 == null) return drops;
 
-            double resinFarmerChance = playerAbility.Value(0) * 0.01d;
+            double resinFarmerBaseChance = playerAbility.Value(0) * 0.01d;
+            double forestryLevelBonus = playerSkill.Level * 0.001d;
             double resinExtractorPercent = playerAbility2.Value(0) * 0.01d;
-            double nonPineChance = resinFarmerChance * (0.5d + resinExtractorPercent * 0.5d);
+
+            double resinFarmerChance = Math.Min(1.0d, resinFarmerBaseChance + forestryLevelBonus);
+            double pineChance = Math.Min(1.0d, resinFarmerChance + (resinFarmerChance * resinExtractorPercent));
+            double nonPineChance = Math.Min(1.0d, resinFarmerChance * resinExtractorPercent);
             double roll = world.Rand.NextDouble();
 
             bool isPine = this.block.FirstCodePart(2) == "pine";
             bool shouldDropResin = isPine
-                ? resinFarmerChance > roll
+                ? pineChance > roll
                 : nonPineChance > roll;
-
-            world.Api.Logger.Debug($"[xSkills] ResinFarmer check: block={this.block.Code}, isPine={isPine}, resinFarmer={playerAbility.Value(0)}, resinExtractor={playerAbility2.Value(0)}, pineChance={resinFarmerChance}, nonPineChance={nonPineChance}, roll={roll}, shouldDrop={shouldDropResin}");
 
             if (shouldDropResin)
             {
