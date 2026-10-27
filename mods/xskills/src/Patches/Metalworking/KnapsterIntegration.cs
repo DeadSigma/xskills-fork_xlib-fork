@@ -76,7 +76,7 @@ namespace XSkills
         }
 
         /// <summary>
-        /// ДО удара: запоминаем всё, потому что после удара заготовки может уже не быть!
+        /// Before the hit: save everything, because after the hit the workpiece may already be gone!
         /// </summary>
         public static void MetalRecovery_Prefix(BlockEntityAnvil anvil, IPlayer byPlayer, ref object __state)
         {
@@ -102,18 +102,18 @@ namespace XSkills
 
             IPlayer player = byPlayer ?? anvil.GetUsedByPlayer();
 
-            // Сохраняем "слепок" состояния в массив
+            // Save a snapshot of the state into an array
             __state = new object[] { voxels, splits, baseMat, temp, player };
         }
 
         /// <summary>
-        /// ПОСЛЕ удара: достаем память и выдаем награду, даже если наковальня очистилась.
+        /// After the hit: restore the saved state and grant rewards even if the anvil has been cleared.
         /// </summary>
         public static void MetalRecovery_Postfix(BlockEntityAnvil anvil, ref object __state)
         {
             if (__state is not object[] stateData) return;
 
-            // Распаковываем наши сохраненные данные
+            // Unpack the saved data
             int oldVoxels = (int)stateData[0];
             int oldSplits = (int)stateData[1];
             string baseMaterial = (string)stateData[2];
@@ -125,14 +125,14 @@ namespace XSkills
             int currentVoxels = CountMetalVoxels(anvil);
             int metalRemoved = oldVoxels - currentVoxels;
 
-            // Если вокселей вдруг стало 0 (или пропала целая гора), значит предмет завершился и наковальня очищена!
-            // В таком случае мы точно знаем, что игрок отсёк 1 завершающий кусок металла.
+            // If the voxel count suddenly becomes 0 (or a whole pile disappears), the item is complete and the anvil has been cleared.
+            // In that case, we know the player cut off one final metal piece.
             if (metalRemoved > 5 || (oldVoxels > 0 && currentVoxels == 0))
             {
                 metalRemoved = 1;
             }
 
-            // Если удалили шлак (или вообще ничего) - выходим
+            // If slag was removed (or nothing was removed at all), exit
             if (metalRemoved <= 0) return;
 
             Metalworking metalworking = XLeveling.Instance(anvil.Api)?.GetSkill("metalworking") as Metalworking;
@@ -148,7 +148,7 @@ namespace XSkills
             int divideBy = ability.Value(0);
             if (divideBy <= 0) return;
 
-            // Считаем прогресс по отсечению
+            // Track cut-off progress
             int currentSplits = oldSplits + metalRemoved;
 
             if (currentSplits >= divideBy)
@@ -156,13 +156,13 @@ namespace XSkills
                 int bitsCount = currentSplits / divideBy;
                 int newSplits = currentSplits % divideBy;
 
-                // Записываем остаток, только если заготовка еще жива
+                // Write the remainder only if the workpiece is still alive
                 if (anvil?.WorkItemStack != null)
                 {
                     anvil.SetSplitCount(newSplits);
                 }
 
-                // Спавним кусочек металла на сервере 
+                // Spawn a metal piece on the server
                 if (anvil.Api.Side == EnumAppSide.Server)
                 {
                     string domain = (config?.useVanillaBits ?? true) ? "game" : "xskills";
@@ -183,7 +183,7 @@ namespace XSkills
             }
             else
             {
-                // Записываем прогресс, только если заготовка еще жива
+                // Write progress only if the workpiece is still alive
                 if (anvil?.WorkItemStack != null)
                 {
                     anvil.SetSplitCount(currentSplits);

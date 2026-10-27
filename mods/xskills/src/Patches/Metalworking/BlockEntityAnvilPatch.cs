@@ -189,7 +189,7 @@ namespace XSkills
             CollectibleObject collectible = byPlayer?.InventoryManager?.ActiveHotbarSlot?.Itemstack?.Collectible;
             __state = collectible is ItemMetalPlate;
 
-            // Ванильные куски металла куются на наковальне только с перком.
+            // Vanilla metal bits can only be forged on an anvil with a hammer.
             if (collectible != null && MetalBitAnvilBehavior.IsMetalBit(collectible))
             {
                 Metalworking metalworking = XLeveling.Instance(__instance.Api)?.GetSkill("metalworking") as Metalworking;
@@ -209,7 +209,7 @@ namespace XSkills
                         (__instance.Api as ICoreClientAPI).TriggerIngameError(__instance, "needbitforging",
                             Lang.Get("xskills:ingameerror-bitforging"));
                     }
-                    return false; // пропускаем оригинальный TryPut - кусок не кладётся
+                    return false; // Skip the original TryPut - the bit is not placed
                 }
             }
             return true;
@@ -226,10 +226,10 @@ namespace XSkills
             if (__instance.WorkItemStack != null)
             {
                 float currentTemp = __instance.WorkItemStack.Collectible.GetTemperature(__instance.Api.World, __instance.WorkItemStack);
-                // Метку остывания запоминаем ДО SetTemperature (она перезапишет её на "сейчас").
+                // Save the cooling timestamp before SetTemperature overwrites it with "now".
                 double prevLastUpdate = __instance.WorkItemStack.Attributes?.GetTreeAttribute("temperature")?.GetDouble("temperatureLastUpdate") ?? double.MinValue;
                 __instance.WorkItemStack.Collectible.SetTemperature(__instance.Api.World, __instance.WorkItemStack, currentTemp, false);
-                // 15-секундная задержка остывания (вместо ванильных ~50 сек), без сброса по ударам - чтобы клиент совпадал с сервером
+                // 15-second cooling delay (instead of vanilla ~50 seconds), without resetting on hits so the client matches the server
                 ApplyForgeCooldownDelay(__instance.Api.World, __instance.WorkItemStack, prevLastUpdate);
             }
         }
@@ -320,19 +320,19 @@ namespace XSkills
                 __instance.SetSplitCount(__instance.GetSplitCount() + 1);
             }
 
-            // ЛОГИКА HEATING HITS ДЛЯ АВТО-МОЛОТА
+            // HEATING HITS LOGIC FOR THE AUTO-HAMMER
             if (__instance.Api.Side == EnumAppSide.Server)
             {
                 IPlayer player = __instance.GetUsedByPlayer();
                 if (player != null)
                 {
                     Metalworking metalworking = __instance.Api.ModLoader.GetModSystem<XLeveling>()?.GetSkill("metalworking") as Metalworking;
-                    if (metalworking == null) return; // Если скилл не найден, просто выходим
+                    if (metalworking == null) return; // If the skill was not found, just exit
 
-                    // Теперь берем строгий int
+                    // Now use a strict int
                     PlayerSkill playerSkill = player.Entity?.GetBehavior<PlayerSkillSet>()?[metalworking.Id];
 
-                    // Жесткое условие: проверяем Machine Learning
+                    // Hard requirement: check Machine Learning
                     if (playerSkill != null && playerSkill[metalworking.MachineLearningId]?.Tier > 0)
                     {
                         PlayerAbility heatingAbility = playerSkill[metalworking.HeatingHitsId];
@@ -366,7 +366,7 @@ namespace XSkills
                                 collectible.SetTemperature(__instance.Api.World, workItem, currentTemp, false);
                                 ApplyForgeCooldownDelay(__instance.Api.World, workItem, prevLastUpdate);
 
-                                // Принудительно отправляем обновленную температуру клиенту, чтобы избежать затирания
+                                // Force-send the updated temperature to the client to avoid it being overwritten
                                 __instance.MarkDirty(true);
                             }
                         }
@@ -428,7 +428,7 @@ namespace XSkills
             playerAbility = playerSkill?[__state.metalworking.MetalRecoveryId];
             int divideBy = playerAbility?.Value(0) ?? 0;
 
-            // Убрали проверку !__state.wasIronBloom, так как шлак и так не учитывается в splitCount
+            // Removed the !__state.wasIronBloom check because slag is already excluded from splitCount
             if (divideBy > 0)
             {
                 int bitsCount = __state.splitCount / divideBy;
@@ -439,7 +439,7 @@ namespace XSkills
 
                     if (baseMaterial == "steel" && !__instance.Api.ModLoader.IsModEnabled("smithingplus")) baseMaterial = "blistersteel";
 
-                    // Подстраховка: если материал крицы определился как ironbloom, приводим его к обычному железу
+                    // Safeguard: if the bloom material was resolved as ironbloom, convert it back to regular iron
                     if (baseMaterial == "ironbloom") baseMaterial = "iron";
 
                     AssetLocation MetalBitsCode = new AssetLocation(domain, "metalbit" + "-" + baseMaterial);
@@ -458,8 +458,8 @@ namespace XSkills
                 }
             }
 
-            //heating hits - пишем температуру ТОЛЬКО на сервере.
-            //Иначе клиентский OnHelveHammerHit из рендера затирает синканное значение и сбрасывает таймер.
+            //heating hits - write temperature ONLY on the server.
+            //Otherwise the client-side OnHelveHammerHit from rendering overwrites the synced value and resets the timer.
             if (world.Side == EnumAppSide.Server && !helveHammer)
             {
                 playerAbility = playerSkill?[__state.metalworking.HeatingHitsId];
