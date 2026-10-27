@@ -113,30 +113,14 @@ namespace XSkills
                 "xskills:abilitydesc-inspiration",
                 7, 2, new int[] { 10, 20 }));
 
-            // chance to get a unique storage vessel
-            // 0: chance
-           PotteryTimerId = this.AddAbility(new Ability(
+            // recieves a message when the kiln is done firing, if the player has the ability
+            PotteryTimerId = this.AddAbility(new Ability(
                 "potterytimer",
                 "xskills:ability-potterytimer",
                 "xskills:abilitydesc-potterytimer",
                 8));
 
             InspirationCollectibles = new Dictionary<string, List<CollectibleObject>>();
-            InspirationCollectibles.Add("clayplanter", null);
-            InspirationCollectibles.Add("flowerpot", null);
-            InspirationCollectibles.Add("storagevessel", null);
-
-            if (api.ModLoader.IsModEnabled("fromgoldencombs"))
-            {
-                InspirationCollectibles.Add("ceramicbroodpot", null);
-                InspirationCollectibles.Add("ceramichive", null);
-                InspirationCollectibles.Add("hivetop", null);
-            }
-
-            this.ExperienceEquation = QuadraticEquation;
-            this.ExpBase = 40;
-            this.ExpMult = 10.0f;
-            this.ExpEquationValue = 0.8f;
         }
     }//! class Pottery
 }//!namespace Xskills
