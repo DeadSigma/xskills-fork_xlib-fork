@@ -166,7 +166,7 @@ namespace XSkills
                 "bloomeryexpert",
                 "xskills:ability-bloomeryexpert",
                 "xskills:abilitydesc-bloomeryexpert",
-                8, 2, new int[] { 1, 2 })); // 8 - мин уровень, 2 - количество уровней перка
+                8, 2, new int[] { 1, 2 })); // 8 - minimum level, 2 - number of ability tiers
 
             // helve hammers can smith advanced recipes
             AutomatedSmithingId = this.AddAbility(new Ability(
@@ -175,25 +175,25 @@ namespace XSkills
                 "xskills:abilitydesc-automatedsmithing",
                 10, 6, new int[] { 1, 2, 3, 4, 5, 6 }));
 
-            // Шанс спасти заготовку при неудачной закалке
-            // 0: шанс в процентах 
+            // Chance to save the workpiece after an unsuccessful quench
+            // 0: chance as a percentage
             SafeQuenchingId = this.AddAbility(new Ability(
                 "safequenching",
                 "xskills:ability-safequenching",
                 "xskills:abilitydesc-safequenching",
                 5, 1, new int[] { 100 }));
 
-            // Читерская идеальная закалка без поломок вообще (отключена по умолчанию)
+            // Cheat-like perfect quenching without any breakage (disabled by default)
             Ability perfectQuenchingAbility = new Ability(
                 "perfectquenching",
                 "xskills:ability-perfectquenching",
                 "xskills:abilitydesc-perfectquenching",
-                5, 1, new int[] { 100 }); // Можно вернуть maxTier 1, так как перк выключен целиком
+                5, 1, new int[] { 100 }); // maxTier can remain 1 because the ability is entirely disabled
 
             perfectQuenchingAbility.Enabled = false;
             PerfectQuenchingId = this.AddAbility(perfectQuenchingAbility);
 
-            // позволяет ковать заготовки из кусочков металла
+            // Allows workpieces to be forged from metal bits
             BitForgingId = this.AddAbility(new Ability(
                 "bitforging",
                 "xskills:ability-bitforging",
@@ -247,14 +247,14 @@ namespace XSkills
             {
                 foreach (GridRecipe recipe in this.XLeveling.Api.World.GridRecipes)
                 {
-                    // 1. Защита: У рецепта может не быть имени в 1.22
+                    // 1. Safeguard: a recipe may not have a name in 1.22
                     if (recipe.Name == null || recipe.Name.Path == null) continue;
 
                     if (recipe.Name.Path.Contains("metalbit") ||
                         recipe.Name.Path.Contains("ingot") ||
                         recipe.Name.Path.Contains("recycling"))
                     {
-                        // 2. Защита: Убедимся, что Ingredients не null
+                        // 2. Safeguard: make sure Ingredients is not null
                         if (recipe.Ingredients == null || recipe.Ingredients.Count != 2) continue;
 
                         CraftingRecipeIngredient ingredient = null;
@@ -269,8 +269,8 @@ namespace XSkills
 
                         if ((!(ingredient?.Code?.Path.Contains("ingot") ?? true)) && foundTool)
                         {
-                            // 3. Защита: У рецепта может не быть ResolvedItemStack на этапе загрузки
-                            // (Кстати, проверь в dnSpy: возможно в 1.22 это пишется как ResolvedItemstack с маленькой 's')
+                            // 3. Safeguard: a recipe may not have a ResolvedItemStack during loading
+                            // (In 1.22, this may be written as ResolvedItemstack with a lowercase 's')
                             if (recipe.Output?.ResolvedItemStack != null)
                             {
                                 recipe.Output.ResolvedItemStack.StackSize = (int)(recipe.Output.ResolvedItemStack.StackSize * recipeRatio);
@@ -608,14 +608,14 @@ namespace XSkills
             return true;
         }
 
-        //Патч переплавки всего в сыродутной печи
+        // Patch for smelting everything in the bloomery
         [HarmonyPatch(typeof(BlockEntityBloomery), "TryAdd")]
         public class BlockEntityBloomery_TryAdd_Patch
         {
             [HarmonyPrefix]
             public static bool Prefix(BlockEntityBloomery __instance, IPlayer byPlayer, int quantity, ref bool __result)
             {
-                // 1. Проверяем наличие 2 уровня перка BloomeryExpert
+                // 1. Check for BloomeryExpert ability tier 2
                 if (byPlayer?.Entity == null) return true;
                 Metalworking metalworking = XLeveling.Instance(byPlayer.Entity.Api)?.GetSkill("metalworking") as Metalworking;
                 if (metalworking == null) return true;
@@ -624,18 +624,18 @@ namespace XSkills
                 if (playerSkill == null) return true;
 
                 PlayerAbility ability = playerSkill.PlayerAbilities[metalworking.BloomeryExpertId];
-                if (ability.Tier < 2) return true; // Если уровень меньше 2, работает стандартная логика печи
+                if (ability.Tier < 2) return true; // If the tier is below 2, use the standard furnace logic
 
-                // 2. Получаем предмет из активного слота
+                // 2. Get the item from the active slot
                 ItemSlot sourceSlot = byPlayer.InventoryManager.ActiveHotbarSlot;
                 if (sourceSlot.Empty || sourceSlot.Itemstack == null) return true;
 
                 string path = sourceSlot.Itemstack.Collectible.Code.Path;
 
-                // 3. Если это не кусочек металла, отдаем управление ванильной логике
+                // 3. If this is not a metal bit, return control to the vanilla logic
                 if (!path.StartsWith("metalbit") && !path.StartsWith("nugget")) return true;
 
-                // 4. Реализуем логику добавления
+                // 4. Implement the insertion logic
                 if (__instance.IsBurning) return true;
 
                 ItemSlot outSlot = (ItemSlot)AccessTools.Property(typeof(BlockEntityBloomery), "OutSlot").GetValue(__instance);
@@ -644,7 +644,7 @@ namespace XSkills
                 ItemSlot oreSlot = (ItemSlot)AccessTools.Property(typeof(BlockEntityBloomery), "OreSlot").GetValue(__instance);
                 int oreCapacity = (int)AccessTools.Property(typeof(BlockEntityBloomery), "OreCapacity").GetValue(__instance);
 
-                // Проверяем, есть ли место и совпадает ли предмет с тем, что уже лежит
+                // Check whether there is room and whether the item matches the existing contents
                 if (oreSlot.StackSize + quantity <= oreCapacity &&
                    (oreSlot.Empty || oreSlot.Itemstack.Equals(__instance.Api.World, sourceSlot.Itemstack, GlobalConstants.IgnoredStackAttributes)))
                 {
@@ -655,8 +655,8 @@ namespace XSkills
                         AssetLocation sound = (AssetLocation)AccessTools.Property(typeof(BlockEntityBloomery), "OreSoundLocation").GetValue(__instance);
                         __instance.Api.World.PlaySoundAt(sound, __instance.Pos, 0.0, byPlayer, true, 32f, 1f);
 
-                        __result = true; // Успешно добавлено
-                        return false;    // Отменяем вызов оригинального метода TryAdd, так как мы всё сделали сами
+                        __result = true; // Added successfully
+                        return false;    // Cancel the original TryAdd call because the operation is complete
                     }
                 }
 
@@ -675,10 +675,10 @@ namespace XSkills
                 string path = oreSlot.Itemstack.Collectible.Code.Path;
                 if (!path.StartsWith("metalbit") && !path.StartsWith("nugget")) return true;
 
-                // 1. Узнаем тип металла (например, из "metalbit-silver" получаем "silver")
+                // 1. Determine the metal type (for example, get "silver" from "metalbit-silver")
                 string metalType = path.Replace("metalbit-", "").Replace("nugget-", "");
 
-                // Получаем кол-во кусочков для 1 слитка (используем конфиг твоего мода или 20 по умолчанию)
+                // Get the number of bits required for one ingot (use the mod configuration or 20 by default)
                 int bitsForIngot = 20;
                 Metalworking metalworking = XLeveling.Instance(__instance.Api)?.GetSkill("metalworking") as Metalworking;
                 if (metalworking != null)
@@ -686,19 +686,19 @@ namespace XSkills
                     bitsForIngot = (metalworking.Config as MetalworkingConfig)?.bitsForIngot ?? 20;
                 }
 
-                // 2. Ищем слиток этого металла (поддерживаем предметы из других модов)
+                // 2. Find an ingot of this metal (also supports items from other mods)
                 AssetLocation ingotDomainLoc = new AssetLocation(oreSlot.Itemstack.Collectible.Code.Domain, "ingot-" + metalType);
                 Item ingotItem = __instance.Api.World.GetItem(ingotDomainLoc);
 
                 if (ingotItem == null)
                 {
-                    // На всякий случай ищем в ванильном домене game
+                    // As a fallback, search the vanilla game domain
                     ingotItem = __instance.Api.World.GetItem(new AssetLocation("game", "ingot-" + metalType));
                 }
 
-                if (ingotItem == null) return true; // Если слитка вообще не существует в игре, пусть разбирается ванилла
+                if (ingotItem == null) return true; // If the ingot does not exist in the game, let vanilla handle it
 
-                // 3. Высчитываем количество слитков
+                // 3. Calculate the number of ingots
                 int totalBits = oreSlot.StackSize;
                 int ingotsCount = totalBits / bitsForIngot;
 
@@ -707,30 +707,30 @@ namespace XSkills
 
                 if (ingotsCount > 0)
                 {
-                    // Создаем и кладем слитки в слот результата
+                    // Create the ingots and place them in the output slot
                     ItemStack ingotStack = new ItemStack(ingotItem, ingotsCount);
                     outSlot.Itemstack = ingotStack;
-                    // Делаем их горячими (900 градусов)
+                    // Heat them to 900 degrees
                     ingotItem.SetTemperature(__instance.Api.World, outSlot.Itemstack, 900f, true);
 
-                    // Забираем потраченные кусочки
+                    // Remove the consumed bits
                     oreSlot.TakeOut(ingotsCount * bitsForIngot);
                 }
 
-                // 4. Сбрасываем состояние печи
+                // 4. Reset the furnace state
                 if (oreSlot.StackSize == 0) oreSlot.Itemstack = null;
-                fuelSlot.Itemstack = null; // Топливо сгорает
+                fuelSlot.Itemstack = null; // The fuel is consumed
 
                 AccessTools.Field(typeof(BlockEntityBloomery), "burning").SetValue(__instance, false);
                 AccessTools.Field(typeof(BlockEntityBloomery), "burningUntilTotalDays").SetValue(__instance, 0.0);
                 __instance.MarkDirty(false, null);
 
-                return false; // Отменяем вызов ванильного DoSmelt
+                return false; // Cancel the vanilla DoSmelt call
             }
         }
     }//!class XSkillsBloomeryBehavior
 
-    //Выдача опыта за закалку 
+    // Grant experience for quenching
     [HarmonyPatch(typeof(CollectibleBehaviorQuenchable), "IsGettingCooled")]
     public class QuenchingExperiencePatch
     {
@@ -756,10 +756,10 @@ namespace XSkills
         {
             if (world == null || world.Side == EnumAppSide.Client || slot?.Itemstack == null) return;
 
-            // Проверяем, стоял ли маячок закалки и остыл ли предмет до 200 градусов или ниже
+            // Check whether the quenching marker was set and the item cooled to 200 degrees or below
             if (slot.Itemstack.TempAttributes.GetBool("xskills_wasQuenching") && temperature <= 200f)
             {
-                // Снимаем маячок, чтобы опыт начислился ровно 1 раз за процесс
+                // Remove the marker so experience is granted exactly once per process
                 slot.Itemstack.TempAttributes.RemoveAttribute("xskills_wasQuenching");
 
                 IPlayer player = null;
@@ -814,6 +814,6 @@ namespace XSkills
                 }
             }
         }
-    } //Выдача опыта за закалку 
+    } // Grant experience for quenching
 
 }//!namespace XSkills
