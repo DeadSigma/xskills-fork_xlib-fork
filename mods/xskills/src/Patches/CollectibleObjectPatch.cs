@@ -267,8 +267,12 @@ namespace XSkills
         [HarmonyPatch("DoSmelt")]
         public static void Postfix(DoSmeltState __state, IWorldAccessor world, ISlotProvider cookingSlotsProvider, ItemSlot outputSlot)
         {
+            if (world?.BlockAccessor == null || outputSlot == null) return;
+
             InventoryBase inv = cookingSlotsProvider as InventoryBase;
             if (inv == null) return;
+            if (inv.Pos == null) return;
+
             BlockEntity blockEntity = world?.BlockAccessor.GetBlockEntity(inv.Pos);
             BlockEntityBehaviorOwnable ownable = blockEntity?.GetBehavior<BlockEntityBehaviorOwnable>();
 

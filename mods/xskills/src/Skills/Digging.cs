@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
@@ -388,6 +389,37 @@ namespace XSkills
     [HarmonyPatch(typeof(Vintagestory.GameContent.BlockPan))]
     public class BlockPanPatches
     {
+        /// <summary>
+        /// Conditionally enables individual BlockPan patches based on Digging ability config.
+        /// </summary>
+        /// <param name="original">The currently evaluated target method.</param>
+        /// <returns>True when the method should be patched.</returns>
+        public static bool Prepare(MethodBase original)
+        {
+            XSkills xSkills = XSkills.Instance;
+            if (xSkills == null) return false;
+
+            xSkills.Skills.TryGetValue("digging", out Skill skill);
+            Digging digging = skill as Digging;
+
+            if (!(digging?.Enabled ?? false)) return false;
+            if (original == null)
+            {
+                return digging[digging.QuickPanId].Enabled || digging[digging.GoldDiggerId].Enabled;
+            }
+
+            switch (original.Name)
+            {
+                case "OnHeldInteractStep":
+                case "OnHeldInteractStop":
+                    return digging[digging.QuickPanId].Enabled;
+                case "CreateDrop":
+                    return digging[digging.GoldDiggerId].Enabled;
+                default:
+                    return true;
+            }
+        }
+
         // 1. Quick Panning - Speed up the animation
         [HarmonyPatch("OnHeldInteractStep")]
         [HarmonyPrefix]
