@@ -185,7 +185,7 @@
   "abilitydesc-bloodlust": "Hver gang du dræber en fjende, får du en stak af effekten Blodrus. Hver stak øger den skade, du giver, med {0}% og den skade, du modtager, med {1}%. Effekten kan stables op til {3} gange og varer {2} sekunder.",
 
   "ability-bloomeryexpert": "Blæseovnsekspert",
-  "abilitydesc-bloomeryexpert": "Gør det muligt at tage færdige produkter ud af blæseovnen uden at ødelægge den. På evneniveau 2 kan du også smelte alle metalstykker direkte om til barrer.",
+  "abilitydesc-bloomeryexpert": "Gør det muligt at tage færdige produkter ud af blæseovnen uden at ødelægge den. På evneniveau 2 får du 2 brændsel tilbage, når du tager blæseovnens metaloutput, og blæseovnen smelter 20 % hurtigere.",
 
   "ability-bomberman": "Bomber",
   "abilitydesc-bomberman": "Når du sprænger sten eller malm med en bombe, er straffen på byttet {0}% mindre.",

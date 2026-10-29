@@ -185,7 +185,7 @@
   "abilitydesc-bloodlust": "Every time you kill an enemy you will get one stack of the bloodlust effect. It increases your caused damage by {0}% per stack and your received damage by {1}% per stack. This effect can stack up to {3} times and lasts {2} seconds.",
 
   "ability-bloomeryexpert": "Bloomery Expert",
-  "abilitydesc-bloomeryexpert": "Allows you to take finished products out of the bloomery without destroying it, and at perk level 2, smelt any metal bits directly into ingots.",
+  "abilitydesc-bloomeryexpert": "Allows you to take finished products out of the bloomery without destroying it. At perk level 2, taking bloomery metal output refunds 2 fuel and bloomeries smelt 20% faster.",
 
   "ability-bomberman": "Bomberman",
   "abilitydesc-bomberman": "If you blow up rock or ores with a bomb there are {0}% less drop penalties.",

@@ -161,7 +161,7 @@ namespace XSkills
                 "xskills:abilitydesc-machinelearning",
                 8, 1, new int[] {}));
 
-            // can take items out of bloomeries (Tier 1) and smelt any metal bits (Tier 2)
+            // can take items out of bloomeries (Tier 1) and improve bloomery efficiency (Tier 2)
             BloomeryExpertId = this.AddAbility(new Ability(
                 "bloomeryexpert",
                 "xskills:ability-bloomeryexpert",
@@ -539,6 +539,14 @@ namespace XSkills
 
     public class XSkillsBloomeryBehavior : BlockBehavior
     {
+        private static readonly Dictionary<string, (string FuelCode, string FuelType)> BloomeryFuelRefundByPos = new Dictionary<string, (string FuelCode, string FuelType)>();
+        private static readonly Dictionary<string, double> BloomerySpeedAppliedStartByPos = new Dictionary<string, double>();
+
+        private static string BloomeryPosKey(BlockPos pos)
+        {
+            return pos == null ? string.Empty : $"{pos.X}:{pos.Y}:{pos.Z}";
+        }
+
         public XSkillsBloomeryBehavior(Block block) : base(block)
         { }
 
@@ -553,7 +561,7 @@ namespace XSkills
             Metalworking metalworking = XLeveling.Instance(world.Api)?.GetSkill("metalworking") as Metalworking;
             if (metalworking == null) return new WorldInteraction[] { };
             PlayerAbility playerAbility = forPlayer.Entity?.GetBehavior<PlayerSkillSet>()?[metalworking.Id]?[metalworking.BloomeryExpertId];
-            if (playerAbility.Tier < 1) return new WorldInteraction[] { };
+            if ((playerAbility?.Tier ?? 0) < 1) return new WorldInteraction[] { };
 
             return new WorldInteraction[] { new WorldInteraction()
             {
@@ -571,8 +579,8 @@ namespace XSkills
 
             Metalworking metalworking = XLeveling.Instance(world.Api)?.GetSkill("metalworking") as Metalworking;
             if (metalworking == null) return "";
-            PlayerAbility playerAbility = forPlayer.Entity?.GetBehavior<PlayerSkillSet>()?[metalworking.Id]?[metalworking.SpecialisationID];
-            if (playerAbility.Tier < 1) return "";
+            PlayerAbility playerAbility = forPlayer.Entity?.GetBehavior<PlayerSkillSet>()?[metalworking.Id]?[metalworking.BloomeryExpertId];
+            if ((playerAbility?.Tier ?? 0) < 1) return "";
 
             double start = typeof(BlockEntityBloomery).GetField("burningUntilTotalDays", BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(beb) as double? ?? 0.0;
             double end = typeof(BlockEntityBloomery).GetField("burningStartTotalDays", BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(beb) as double? ?? 0.0;
@@ -592,7 +600,7 @@ namespace XSkills
             Metalworking metalworking = XLeveling.Instance(world.Api)?.GetSkill("metalworking") as Metalworking;
             if (metalworking == null) return false;
             PlayerAbility playerAbility = byPlayer.Entity?.GetBehavior<PlayerSkillSet>()?[metalworking.Id]?[metalworking.BloomeryExpertId];
-            if (playerAbility.Tier < 1) return false;
+            if ((playerAbility?.Tier ?? 0) < 1) return false;
 
             BlockEntityBloomery beb = world.BlockAccessor.GetBlockEntity(blockSel.Position) as BlockEntityBloomery;
             if (beb == null || beb.IsBurning) return false;
@@ -603,129 +611,155 @@ namespace XSkills
             {
                 world.SpawnItemEntity(slot.Itemstack, blockSel.Position.ToVec3d().Add(0.5, 0.5, 0.5));
             }
+
+            if ((playerAbility?.Tier ?? 0) >= 2)
+            {
+                string outputPath = slot.Itemstack?.Collectible?.Code?.Path;
+                bool isBloomeryMetalOutput = outputPath != null && (outputPath.StartsWith("ingot-") || outputPath == "ironbloom");
+                if (isBloomeryMetalOutput)
+                {
+                    string bloomeryPos = BloomeryPosKey(blockSel.Position);
+                    if (BloomeryFuelRefundByPos.TryGetValue(bloomeryPos, out (string FuelCode, string FuelType) refundData) && !string.IsNullOrEmpty(refundData.FuelCode))
+                    {
+                        ItemStack refundStack = null;
+                        AssetLocation fuelLoc = new AssetLocation(refundData.FuelCode);
+                        if (refundData.FuelType == "block")
+                        {
+                            Block fuelBlock = world.GetBlock(fuelLoc);
+                            if (fuelBlock != null) refundStack = new ItemStack(fuelBlock, 2);
+                        }
+                        else
+                        {
+                            Item fuelItem = world.GetItem(fuelLoc);
+                            if (fuelItem != null) refundStack = new ItemStack(fuelItem, 2);
+                        }
+
+                        if (refundStack != null)
+                        {
+                            if (!byPlayer.InventoryManager.TryGiveItemstack(refundStack))
+                            {
+                                world.SpawnItemEntity(refundStack, blockSel.Position.ToVec3d().Add(0.5, 0.5, 0.5));
+                            }
+                        }
+
+                        BloomeryFuelRefundByPos.Remove(bloomeryPos);
+                        BloomerySpeedAppliedStartByPos.Remove(bloomeryPos);
+                    }
+                }
+            }
+
+            BloomeryFuelRefundByPos.Remove(BloomeryPosKey(blockSel.Position));
+            BloomerySpeedAppliedStartByPos.Remove(BloomeryPosKey(blockSel.Position));
+
             handling = EnumHandling.PreventDefault;
             slot.Itemstack = null;
             return true;
         }
 
-        // Patch for smelting everything in the bloomery
-        [HarmonyPatch(typeof(BlockEntityBloomery), "TryAdd")]
-        public class BlockEntityBloomery_TryAdd_Patch
+        // Tier 2 bloomery bonus: record fuel type for later refund on finished output collection
+        [HarmonyPatch(typeof(BlockBloomery), "OnTryIgniteBlockOver")]
+        public class BlockBloomery_OnTryIgniteBlockOver_Patch
         {
-            [HarmonyPrefix]
-            public static bool Prefix(BlockEntityBloomery __instance, IPlayer byPlayer, int quantity, ref bool __result)
+            private const double BloomerySpeedMultiplier = 0.8;
+
+            private static void LogDebug(IWorldAccessor world, string message)
             {
-                // 1. Check for BloomeryExpert ability tier 2
+                world?.Api?.Logger?.Debug($"[XSkills][BloomeryExpert] {message}");
+            }
+
+            private static string PlayerName(IPlayer player)
+            {
+                return player?.PlayerName ?? player?.PlayerUID ?? "unknown";
+            }
+
+            [HarmonyPrefix]
+            public static bool Prefix(EntityAgent byEntity, BlockPos pos, float secondsIgniting, ref EnumHandling handling)
+            {
+                if (byEntity?.World == null || pos == null) return true;
+
+                IPlayer byPlayer = (byEntity as EntityPlayer)?.Player;
                 if (byPlayer?.Entity == null) return true;
+
                 Metalworking metalworking = XLeveling.Instance(byPlayer.Entity.Api)?.GetSkill("metalworking") as Metalworking;
                 if (metalworking == null) return true;
 
-                PlayerSkill playerSkill = byPlayer.Entity.GetBehavior<PlayerSkillSet>()?.PlayerSkills[metalworking.Id];
-                if (playerSkill == null) return true;
+                PlayerAbility ability = byPlayer.Entity.GetBehavior<PlayerSkillSet>()?[metalworking.Id]?[metalworking.BloomeryExpertId];
+                if ((ability?.Tier ?? 0) < 2) return true;
 
-                PlayerAbility ability = playerSkill.PlayerAbilities[metalworking.BloomeryExpertId];
-                if (ability.Tier < 2) return true; // If the tier is below 2, use the standard furnace logic
-
-                // 2. Get the item from the active slot
-                ItemSlot sourceSlot = byPlayer.InventoryManager.ActiveHotbarSlot;
-                if (sourceSlot.Empty || sourceSlot.Itemstack == null) return true;
-
-                string path = sourceSlot.Itemstack.Collectible.Code.Path;
-
-                // 3. If this is not a metal bit, return control to the vanilla logic
-                if (!path.StartsWith("metalbit") && !path.StartsWith("nugget")) return true;
-
-                // 4. Implement the insertion logic
-                if (__instance.IsBurning) return true;
-
-                ItemSlot outSlot = (ItemSlot)AccessTools.Property(typeof(BlockEntityBloomery), "OutSlot").GetValue(__instance);
-                if (outSlot.StackSize > 0) return true;
-
-                ItemSlot oreSlot = (ItemSlot)AccessTools.Property(typeof(BlockEntityBloomery), "OreSlot").GetValue(__instance);
-                int oreCapacity = (int)AccessTools.Property(typeof(BlockEntityBloomery), "OreCapacity").GetValue(__instance);
-
-                // Check whether there is room and whether the item matches the existing contents
-                if (oreSlot.StackSize + quantity <= oreCapacity &&
-                   (oreSlot.Empty || oreSlot.Itemstack.Equals(__instance.Api.World, sourceSlot.Itemstack, GlobalConstants.IgnoredStackAttributes)))
+                BlockEntityBloomery beb = byEntity.World.BlockAccessor.GetBlockEntity(pos) as BlockEntityBloomery;
+                if (beb == null || beb.IsBurning)
                 {
-                    int moved = sourceSlot.TryPutInto(__instance.Api.World, oreSlot, Math.Min(oreCapacity - oreSlot.StackSize, quantity));
-                    if (moved > 0)
-                    {
-                        __instance.MarkDirty(false, null);
-                        AssetLocation sound = (AssetLocation)AccessTools.Property(typeof(BlockEntityBloomery), "OreSoundLocation").GetValue(__instance);
-                        __instance.Api.World.PlaySoundAt(sound, __instance.Pos, 0.0, byPlayer, true, 32f, 1f);
+                    LogDebug(byEntity.World, $"Ignite by {PlayerName(byPlayer)} -> default logic (missing bloomery or already burning). Tier 2 fuel refund not tracked.");
+                    return true;
+                }
 
-                        __result = true; // Added successfully
-                        return false;    // Cancel the original TryAdd call because the operation is complete
-                    }
+                ItemSlot outSlot = (ItemSlot)AccessTools.Property(typeof(BlockEntityBloomery), "OutSlot").GetValue(beb);
+                if (outSlot?.StackSize > 0)
+                {
+                    LogDebug(byEntity.World, $"Ignite by {PlayerName(byPlayer)} -> default logic (output slot occupied). Tier 2 fuel refund not tracked.");
+                    return true;
+                }
+
+                ItemSlot oreSlot = (ItemSlot)AccessTools.Property(typeof(BlockEntityBloomery), "OreSlot").GetValue(beb);
+                ItemSlot fuelSlot = (ItemSlot)AccessTools.Property(typeof(BlockEntityBloomery), "FuelSlot").GetValue(beb);
+                int oreStack = oreSlot?.StackSize ?? 0;
+                int fuelStack = fuelSlot?.StackSize ?? 0;
+                if (oreStack <= 0 || fuelStack <= 0)
+                {
+                    LogDebug(byEntity.World, $"Ignite by {PlayerName(byPlayer)} -> default logic (missing ore or fuel). Tier 2 fuel refund not tracked.");
+                    return true;
+                }
+
+                ItemStack fuelStackItem = fuelSlot.Itemstack;
+                string fuelType = fuelStackItem?.Class == EnumItemClass.Block ? "block" : "item";
+                string fuelCode = fuelStackItem?.Collectible?.Code?.ToShortString();
+                if (!string.IsNullOrEmpty(fuelCode))
+                {
+                    BloomeryFuelRefundByPos[BloomeryPosKey(pos)] = (fuelCode, fuelType);
+                    LogDebug(byEntity.World, $"Ignite by {PlayerName(byPlayer)} -> Tier 2 fuel refund tracking set (fuel='{fuelCode}', type='{fuelType}').");
+                }
+                else
+                {
+                    LogDebug(byEntity.World, $"Ignite by {PlayerName(byPlayer)} -> default logic (fuel code unavailable). Tier 2 fuel refund not tracked.");
                 }
 
                 return true;
             }
-        }
-        [HarmonyPatch(typeof(BlockEntityBloomery), "DoSmelt")]
-        public class BlockEntityBloomery_DoSmelt_Patch
-        {
-            [HarmonyPrefix]
-            public static bool Prefix(BlockEntityBloomery __instance)
+
+            [HarmonyPostfix]
+            public static void Postfix(EntityAgent byEntity, BlockPos pos, float secondsIgniting, ref EnumHandling handling)
             {
-                ItemSlot oreSlot = (ItemSlot)AccessTools.Property(typeof(BlockEntityBloomery), "OreSlot").GetValue(__instance);
-                if (oreSlot == null || oreSlot.Empty) return true;
+                if (byEntity?.World == null || pos == null) return;
 
-                string path = oreSlot.Itemstack.Collectible.Code.Path;
-                if (!path.StartsWith("metalbit") && !path.StartsWith("nugget")) return true;
+                IPlayer byPlayer = (byEntity as EntityPlayer)?.Player;
+                if (byPlayer?.Entity == null) return;
 
-                // 1. Determine the metal type (for example, get "silver" from "metalbit-silver")
-                string metalType = path.Replace("metalbit-", "").Replace("nugget-", "");
+                Metalworking metalworking = XLeveling.Instance(byPlayer.Entity.Api)?.GetSkill("metalworking") as Metalworking;
+                if (metalworking == null) return;
 
-                // Get the number of bits required for one ingot (use the mod configuration or 20 by default)
-                int bitsForIngot = 20;
-                Metalworking metalworking = XLeveling.Instance(__instance.Api)?.GetSkill("metalworking") as Metalworking;
-                if (metalworking != null)
+                PlayerAbility ability = byPlayer.Entity.GetBehavior<PlayerSkillSet>()?[metalworking.Id]?[metalworking.BloomeryExpertId];
+                if ((ability?.Tier ?? 0) < 2) return;
+
+                BlockEntityBloomery beb = byEntity.World.BlockAccessor.GetBlockEntity(pos) as BlockEntityBloomery;
+                if (beb == null || !beb.IsBurning) return;
+
+                string bloomeryPos = BloomeryPosKey(pos);
+                double start = (double)(AccessTools.Field(typeof(BlockEntityBloomery), "burningStartTotalDays").GetValue(beb) ?? 0.0);
+
+                if (BloomerySpeedAppliedStartByPos.TryGetValue(bloomeryPos, out double appliedStart) && Math.Abs(appliedStart - start) < 0.0000001)
                 {
-                    bitsForIngot = (metalworking.Config as MetalworkingConfig)?.bitsForIngot ?? 20;
+                    return;
                 }
 
-                // 2. Find an ingot of this metal (also supports items from other mods)
-                AssetLocation ingotDomainLoc = new AssetLocation(oreSlot.Itemstack.Collectible.Code.Domain, "ingot-" + metalType);
-                Item ingotItem = __instance.Api.World.GetItem(ingotDomainLoc);
+                double end = (double)(AccessTools.Field(typeof(BlockEntityBloomery), "burningUntilTotalDays").GetValue(beb) ?? 0.0);
+                if (end <= start) return;
 
-                if (ingotItem == null)
-                {
-                    // As a fallback, search the vanilla game domain
-                    ingotItem = __instance.Api.World.GetItem(new AssetLocation("game", "ingot-" + metalType));
-                }
+                double newEnd = start + (end - start) * BloomerySpeedMultiplier;
+                AccessTools.Field(typeof(BlockEntityBloomery), "burningUntilTotalDays").SetValue(beb, newEnd);
+                beb.MarkDirty(false, null);
 
-                if (ingotItem == null) return true; // If the ingot does not exist in the game, let vanilla handle it
-
-                // 3. Calculate the number of ingots
-                int totalBits = oreSlot.StackSize;
-                int ingotsCount = totalBits / bitsForIngot;
-
-                ItemSlot fuelSlot = (ItemSlot)AccessTools.Property(typeof(BlockEntityBloomery), "FuelSlot").GetValue(__instance);
-                ItemSlot outSlot = (ItemSlot)AccessTools.Property(typeof(BlockEntityBloomery), "OutSlot").GetValue(__instance);
-
-                if (ingotsCount > 0)
-                {
-                    // Create the ingots and place them in the output slot
-                    ItemStack ingotStack = new ItemStack(ingotItem, ingotsCount);
-                    outSlot.Itemstack = ingotStack;
-                    // Heat them to 900 degrees
-                    ingotItem.SetTemperature(__instance.Api.World, outSlot.Itemstack, 900f, true);
-
-                    // Remove the consumed bits
-                    oreSlot.TakeOut(ingotsCount * bitsForIngot);
-                }
-
-                // 4. Reset the furnace state
-                if (oreSlot.StackSize == 0) oreSlot.Itemstack = null;
-                fuelSlot.Itemstack = null; // The fuel is consumed
-
-                AccessTools.Field(typeof(BlockEntityBloomery), "burning").SetValue(__instance, false);
-                AccessTools.Field(typeof(BlockEntityBloomery), "burningUntilTotalDays").SetValue(__instance, 0.0);
-                __instance.MarkDirty(false, null);
-
-                return false; // Cancel the vanilla DoSmelt call
+                BloomerySpeedAppliedStartByPos[bloomeryPos] = start;
+                LogDebug(byEntity.World, $"Ignite by {PlayerName(byPlayer)} -> Tier 2 speed bonus applied (bloomery smelts 20% faster).");
             }
         }
     }//!class XSkillsBloomeryBehavior

@@ -185,7 +185,7 @@
   "abilitydesc-bloodlust": "你每杀死一个敌人都会获得\n一层嗜血效果。每层造成的\n伤害提高{0}%，每层受到的伤害\n提高{1}%。该效果最多可叠加{3}\n次并持续{2}秒。",
 
   "ability-bloomeryexpert": "熔炼专家",
-  "abilitydesc-bloomeryexpert": "允许你在不破坏锻铁炉的情\n况下取出成品，并且在该特长\n达到 2 级时，可将任何金属碎\n块直接熔炼成金属锭。",
+  "abilitydesc-bloomeryexpert": "允许你在不破坏锻铁炉的情况下取出成品。该特长达到2级时，领取锻铁炉金属产物会返还2个燃料，并且锻铁炉冶炼速度提高20%。",
 
   "ability-bomberman": "炸弹人",
   "abilitydesc-bomberman": "你使用炸弹爆破岩石或矿石\n时，掉落惩罚减少{0}%。",

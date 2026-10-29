@@ -185,7 +185,7 @@
   "abilitydesc-bloodlust": "Jedes Mal, wenn du einen Gegner tötest, erhältst du einen Stapel von Blutrausch. Er erhöht deinen verursachen Schaden um {0}% für jeden Stapel und deinen erlittenen Schaden um {1}% für jeden Stapel. Dieser Effekt kann bis zu {3} mal gestapelt werden und hält {2} Sekunden lang an.",
 
   "ability-bloomeryexpert": "Rennofen-Experte",
-  "abilitydesc-bloomeryexpert": "Ermöglicht es, fertige Produkte aus dem Rennofen zu entnehmen, ohne ihn zu zerstören, und auf Perk-Stufe 2 beliebige Metallstücke direkt zu Barren einzuschmelzen.",
+  "abilitydesc-bloomeryexpert": "Ermöglicht es, fertige Produkte aus dem Rennofen zu entnehmen, ohne ihn zu zerstören. Auf Perk-Stufe 2 erhältst du beim Entnehmen von Metallausgabe aus dem Rennofen 2 Brennstoff zurück und der Rennofen schmilzt 20 % schneller.",
 
   "ability-bomberman": "Bomberman",
   "abilitydesc-bomberman": "Wenn du Steine oder Erze mit einer Bombe in die Luft jagst, gibt es {0}% weniger Drop-Strafen.",

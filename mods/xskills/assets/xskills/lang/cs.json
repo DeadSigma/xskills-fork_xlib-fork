@@ -185,7 +185,7 @@
   "abilitydesc-bloodlust": "Pokaždé, když zabijete nepřítele, získáte jednu hromádku efektu krvežíznivosti. Zvyšuje vaše způsobené poškození o {0} % na hromádku a vaše obdržené poškození o {1} % na hromádku. Tento efekt může stohuje se až {3}krát a trvá {2} sekund.",
 
   "ability-bloomeryexpert": "Železář",
-  "abilitydesc-bloomeryexpert": "Umožňuje vyjmout hotové produkty ze zkujňovací pece bez jejího zničení a na 2. úrovni perku tavit jakékoli kovové kousky přímo do ingotů.",
+  "abilitydesc-bloomeryexpert": "Umožňuje vyjmout hotové produkty ze zkujňovací pece bez jejího zničení. Na 2. úrovni perku vrátí vyzvednutí kovového výstupu ze zkujňovací pece 2 paliva a pec taví o 20 % rychleji.",
 
   "ability-bomberman": "Bomberman",
   "abilitydesc-bomberman": "Pokud vyhodíte do povětří kámen nebo rudy pomocí bomby, budete mít o {0} % nižší penalizaci za použití bomby.",

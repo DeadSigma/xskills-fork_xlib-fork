@@ -185,7 +185,7 @@
   "abilitydesc-bloodlust": "Za każdym razem, gdy zabijesz wroga, otrzymasz jeden ładunek efektu żądzy krwi. Zwiększa on twoje zadawane obrażenia o {0}% i otrzymywane obrażenia o {1}% na ładunek. Efekt ten może się kumulować do {3} razy i trwa {2} sekund.",
 
   "ability-bloomeryexpert": "Ekspert hutniczy",
-  "abilitydesc-bloomeryexpert": "Pozwala wyjmować gotowe produkty z dymarki bez jej niszczenia, a na 2. poziomie atutu przetapiać dowolne kawałki metalu bezpośrednio w sztabki.",
+  "abilitydesc-bloomeryexpert": "Pozwala wyjmować gotowe produkty z dymarki bez jej niszczenia. Na 2. poziomie atutu odebranie metalowego wyniku z dymarki zwraca 2 paliwa, a dymarka przetapia o 20% szybciej.",
 
   "ability-bomberman": "Bombardier",
   "abilitydesc-bomberman": "Jeśli wysadzasz skały lub rudy za pomocą bomby, masz o {0}% mniej kar za upuszczone przedmioty.",
