@@ -152,7 +152,9 @@
 		<BaseOutputPath>./bin</BaseOutputPath>
 	</PropertyGroup>
 	<ProjectExtensions>
-		<VisualStudio><UserProperties assets_4xskills_4lang_4en_1json__JsonSchema="" /></VisualStudio>
+		<VisualStudio>
+			<UserProperties assets_4xskills_4lang_4en_1json__JsonSchema="" />
+		</VisualStudio>
 	</ProjectExtensions>
 	<Target Name="PostRebuild" AfterTargets="Rebuild">
 		<PropertyGroup>
