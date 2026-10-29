@@ -12,7 +12,7 @@ namespace XLib.XLeveling
         /// Current configuration version.
         /// Increase this value in releases that require applying new migrations.
         /// </summary>
-        public const int CurrentVersion = 14;
+        public const int CurrentVersion = 43;
 
         /// <summary>
         /// Defines reset parameters for a skill or ability during a version update.
