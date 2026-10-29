@@ -1,7 +1,6 @@
-using HarmonyLib;
 using System;
 using System.Reflection;
-using System.Text;
+using HarmonyLib;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.Server;
@@ -11,23 +10,6 @@ using XSkills;
 
 namespace XSkills
 {
-    [HarmonyPatch(typeof(CollectibleObject),nameof(CollectibleObject.GetHeldItemInfo),new Type[] {typeof(ItemSlot),typeof(StringBuilder),typeof(IWorldAccessor),typeof(bool)})]
-    public static class CraftedByTooltipPatch
-    {
-        [HarmonyPostfix]
-        public static void Postfix(ItemSlot inSlot, StringBuilder dsc)
-        {
-            string maker = inSlot?.Itemstack?.Attributes?
-                .GetString("xskills-crafterName");
-
-            if (!string.IsNullOrWhiteSpace(maker))
-            {
-                dsc.AppendLine();
-                dsc.Append("This item bears ").Append(maker).Append("'s mark");
-            }
-        }
-    }
-
     [HarmonyPatch(typeof(CollectibleBehaviorWearable))]
     public class CollectibleBehaviorWearablePatches
     {
@@ -40,13 +22,6 @@ namespace XSkills
         [HarmonyPatch("OnCreatedByCrafting")]
         public static void OnCreatedByCraftingPostfix(ItemSlot[] inSlots, ItemSlot outputSlot, IRecipeBase byRecipe)
         {
-            ILogger logger = outputSlot?.Inventory?.Api?.Logger;
-            logger?.Notification("[XSkills] OnCreatedByCrafting postfix entered.");
-
-            logger?.Notification(
-                $"[XSkills] Output inventory type: " +
-                $"{outputSlot?.Inventory?.GetType().FullName ?? "<null>"}");
-
             if (((outputSlot != null) ? outputSlot.Itemstack : null) == null)
             {
                 return;
@@ -57,15 +32,6 @@ namespace XSkills
             {
                 return;
             }
-            ITreeAttribute attributes = outputSlot.Itemstack.Attributes;
-            if (attributes == null)
-            {
-                attributes = new TreeAttribute();
-                outputSlot.Itemstack.Attributes = attributes;
-            }
-
-            attributes.SetString("xskills-crafterName", player.PlayerName);
-            outputSlot.MarkDirty();
             XSkills instance = XSkills.Instance;
             Tailoring tailoring = ((instance != null) ? instance.Skills["tailoring"] : null) as Tailoring;
             if (tailoring == null)
@@ -78,21 +44,11 @@ namespace XSkills
             {
                 return;
             }
-            attributes.SetString("xskills-crafterUid", player.PlayerUID);
-
-            PlayerAbility signatureGarb = tailoring.SignatureGarbId >= 0
-                ? playerSkill[tailoring.SignatureGarbId]
-                : null;
-
-            int signatureGarbTier =
-                signatureGarb != null ? signatureGarb.Tier : 0;
-
-            float signatureGarbBonus =
-                signatureGarbTier > 0 ? signatureGarb.FValue(0, 0f) : 0f;
-
-            attributes.SetInt("xskills-signaturegarb-tier", signatureGarbTier);
-            attributes.SetFloat("xskills-signaturegarb-bonus", signatureGarbBonus);
-            outputSlot.MarkDirty();
+            ITreeAttribute attributes = outputSlot.Itemstack.Attributes;
+            if (attributes != null)
+            {
+                attributes.SetString("xskills-crafterUid", player.PlayerUID);
+            }
             float num = 1f;
             PlayerAbility playerAbility = playerSkill[tailoring.DurableWeaveId];
             if (playerAbility != null && playerAbility.Tier > 0)
@@ -119,8 +75,6 @@ namespace XSkills
                 outputSlot.Itemstack.Attributes.SetFloat("reinforcedProtection", protectionBonus);
                 outputSlot.MarkDirty();
             }
-            player.Entity.World.Logger.Notification(
-             $"[XSkills] Crafted Signature Garb item: tier={signatureGarbTier}, bonus={signatureGarbBonus:P0}");
             if (num > 1.001f)
             {
                 int durability = outputSlot.Itemstack.Collectible.Durability;
@@ -138,7 +92,7 @@ namespace XSkills
             }
         }
 
-        
+
         private static bool HasMetalInput(ItemSlot[] slots)
         {
             return HasInput(slots, "metal")

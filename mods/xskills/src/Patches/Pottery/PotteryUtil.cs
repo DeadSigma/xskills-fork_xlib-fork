@@ -11,13 +11,17 @@ using XLib.XLeveling;
 namespace XSkills
 {
     /// <summary>
-    /// Provides helper methods for pottery-related logic and progression.
+    /// Contains a collection of methods for the pottery skill.
     /// </summary>
     public class PotteryUtil
     {
         /// <summary>
-        /// Converts clay from a player's inventory into usable voxels for a clay form entity.
+        /// Converts clay in a player inventory to usable voxels for clay form entities.
         /// </summary>
+        /// <param name="cfe">The clay form entity.</param>
+        /// <param name="slot">The slot.</param>
+        /// <param name="entity">The entity. Usually a player.</param>
+        /// <returns></returns>
         public static bool AddClay(BlockEntityClayForm cfe, ItemSlot slot, EntityAgent entity)
         {
             if (cfe == null || slot == null) return false;
@@ -37,28 +41,27 @@ namespace XSkills
 
                 Pottery pottery = XLeveling.Instance(entity.Api).GetSkill("pottery") as Pottery;
                 if (pottery == null) return true;
-
-                PlayerSkill playerSkill = entity.GetBehavior<PlayerSkillSet>()?[pottery.Id];
+                PlayerSkill playerSkill = (entity.GetBehavior<PlayerSkillSet>())?[pottery.Id];
                 if (playerSkill == null) return true;
 
-                // Thrift bonus.
+                //thrift
                 PlayerAbility playerAbility = playerSkill[pottery.ThriftId];
                 if (playerAbility == null) return true;
-
                 cfe.AvailableVoxels += playerAbility.Value(0);
                 return true;
             }
-
             return false;
         }
 
         /// <summary>
-        /// Applies the selected recipe to the clay form.
+        /// Finishes the recipe.
         /// </summary>
+        /// <param name="clayForm">The clay form.</param>
+        /// <param name="slot">The slot.</param>
+        /// <param name="entity">The entity.</param>
         public static void FinishRecipe(BlockEntityClayForm clayForm, ItemSlot slot, EntityAgent entity)
         {
             if (clayForm == null) return;
-
             int ymax = Math.Min(16, clayForm.SelectedRecipe.QuantityLayers);
 
             for (int y = 0; y < ymax; ++y)
@@ -75,15 +78,10 @@ namespace XSkills
                                 {
                                     if (!AddClay(clayForm, slot, entity)) return;
                                 }
-
                                 clayForm.AvailableVoxels--;
                             }
-                            else
-                            {
-                                clayForm.AvailableVoxels++;
-                            }
+                            else clayForm.AvailableVoxels++;
                         }
-
                         clayForm.Voxels[x, y, z] = clayForm.SelectedRecipe.Voxels[x, y, z];
                     }
                 }
@@ -91,12 +89,13 @@ namespace XSkills
         }
 
         /// <summary>
-        /// Determines how much of the selected recipe has been completed.
+        /// Determines which portion is finished. 
         /// </summary>
+        /// <param name="clayForm">The clay form.</param>
+        /// <returns></returns>
         public static float FinishedProportion(BlockEntityClayForm clayForm)
         {
             if (clayForm?.SelectedRecipe == null) return 0.0f;
-
             int finishedVoxel = 0;
             int neededVoxels = 0;
             int voxelCount = 0;
@@ -112,7 +111,6 @@ namespace XSkills
                         if (clayForm.SelectedRecipe.Voxels[x, y, z])
                         {
                             neededVoxels++;
-
                             if (clayForm.Voxels[x, y, z])
                             {
                                 voxelCount++;
@@ -126,22 +124,19 @@ namespace XSkills
                     }
                 }
             }
-
-            float temp1 = voxelCount < neededVoxels
-                ? (float)voxelCount / neededVoxels
-                : (float)neededVoxels / voxelCount;
-
-            float temp2 = (float)finishedVoxel / voxelCount;
+            float temp1 = voxelCount < neededVoxels ? (float)voxelCount / neededVoxels : (float)neededVoxels / voxelCount;
+            float temp2 = finishedVoxel / voxelCount;
             return temp1 * temp2;
         }
 
         /// <summary>
-        /// Counts the voxels in a clay-forming recipe.
+        /// Counts the voxels of a clay forming recipe.
         /// </summary>
+        /// <param name="recipe">The recipe.</param>
+        /// <returns></returns>
         public static int CountVoxels(ClayFormingRecipe recipe)
         {
             int voxelCount = 0;
-
             for (int x = 0; x < 16; x++)
             {
                 for (int y = 0; y < recipe.QuantityLayers; y++)
@@ -149,161 +144,127 @@ namespace XSkills
                     for (int z = 0; z < 16; z++)
                     {
                         if (recipe.Voxels[x, y, z])
-                        {
                             voxelCount++;
-                        }
                     }
                 }
             }
-
             return voxelCount;
         }
 
         /// <summary>
-        /// Applies pottery-related bonuses and inspirations to the given output stack.
+        /// Applies pottery abilities on the given stack.
         /// </summary>
+        /// <param name="byPlayer">The player.</param>
+        /// <param name="world">The world.</param>
+        /// <param name="outputSlot">The output slot.</param>
+        /// <returns></returns>
         public static bool ApplyOnStack(IPlayer byPlayer, IWorldAccessor world, ItemSlot outputSlot)
         {
-            Pottery pottery = byPlayer?.Entity?.Api.ModLoader
-                .GetModSystem<XLeveling>()?.GetSkill("pottery") as Pottery;
-
+            Pottery pottery = byPlayer?.Entity?.Api.ModLoader.GetModSystem<XLeveling>()?.GetSkill("pottery") as Pottery;
             if (pottery == null || world == null) return false;
-            if (outputSlot?.Itemstack?.Collectible?.Code == null) return false;
 
             PlayerSkill playerSkill = byPlayer.Entity.GetBehavior<PlayerSkillSet>()?[pottery.Id];
 
-            // Give the player 1 XP for a successful firing, regardless of perk level.
+            // Выдаем 1 XP игроку за успешный обжиг, независимо от уровня перков
             playerSkill?.AddExperience(1);
 
             PlayerAbility playerAbility = playerSkill?[pottery.PotteryTimerId];
             if (playerAbility?.Tier > 0)
             {
-                NotifyPlayer(
-                    world,
-                    outputSlot,
-                    byPlayer,
-                    "xskills:pottery-finished",
-                    "xskillsPotteryMsg"
-                );
+                NotifyPlayer(world, outputSlot, byPlayer, "xskills:pottery-finished", "xskillsPotteryMsg");
             }
 
-            // Inspiration bonus.
+            //inspiration
             playerAbility = playerSkill?[pottery.InspirationId];
-            if (playerAbility == null || playerAbility.Tier <= 0) return false;
+            if (playerAbility == null) return false;
+            if (playerAbility.Tier <= 0) return false;
 
             string name = outputSlot.Itemstack.Collectible.Code.FirstCodePart();
+            List<CollectibleObject> dest;
+            if (!pottery.InspirationCollectibles.TryGetValue(name, out dest)) return false;
 
-            // Build and cache matching collectibles when this code stem is first encountered.
-            if (!pottery.InspirationCollectibles.TryGetValue(name, out List<CollectibleObject> dest)
-                || dest == null)
+            //create mapping list
+            if (dest == null)
             {
                 dest = new List<CollectibleObject>();
+                pottery.InspirationCollectibles[name] = dest;
 
                 foreach (CollectibleObject collectible in world.Collectibles)
                 {
                     if (collectible?.Code == null) continue;
                     if (collectible == outputSlot.Itemstack.Collectible) continue;
+                    if (!collectible.Code.Path.Contains(name)) continue;
 
-                    // Related variants must share the same code stem, such as "clayplanter-...".
-                    if (!collectible.Code.Path.StartsWith(name + "-", StringComparison.Ordinal)) continue;
-
-                    // Exclude unfired variants.
+                    // отсекаем любые необожженные варианты, где бы ни стояло состояние в коде
                     if (IsUnfired(collectible)) continue;
-                    if (collectible.Code.Path.EndsWith("fired", StringComparison.Ordinal)) continue;
+                    if (collectible.Code.Path.EndsWith("fired")) continue;
 
                     dest.Add(collectible);
                 }
-
-                pottery.InspirationCollectibles[name] = dest;
             }
 
             if (dest.Count <= 0) return true;
-
-            if (world.Rand.NextDouble()
-                < playerAbility.FValue(0) / outputSlot.Itemstack.StackSize)
+            if (world.Rand.NextDouble() < playerAbility.FValue(0) / outputSlot.Itemstack.StackSize)
             {
                 CollectibleObject obj = dest[world.Rand.Next(dest.Count)];
+
                 ItemStack stack = new ItemStack(obj, outputSlot.Itemstack.StackSize);
-
                 string type = obj.Attributes?["defaultType"]?.AsString();
-                if (type != null)
-                {
-                    stack.Attributes.SetString("type", type);
-                }
+                if (type != null) stack.Attributes.SetString("type", type);
 
-                ITreeAttribute pairs =
-                    outputSlot.Itemstack.Attributes.GetTreeAttribute("temperature");
-
+                ITreeAttribute pairs = outputSlot.Itemstack.Attributes.GetTreeAttribute("temperature");
                 if (pairs != null)
                 {
                     float temperature = pairs.GetFloat("temperature", 0.0f);
-                    double temperatureLastUpdate =
-                        pairs.GetDouble("temperatureLastUpdate", 0.0f);
-
+                    double temperatureLastUpdate = pairs.GetDouble("temperatureLastUpdate", 0.0f);
                     if (temperature > 50.0f)
                     {
-                        ITreeAttribute tempTree =
-                            stack.Attributes.GetOrAddTreeAttribute("temperature");
-
+                        ITreeAttribute tempTree = stack.Attributes.GetOrAddTreeAttribute("temperature");
                         tempTree.SetFloat("temperature", temperature);
                         tempTree.SetDouble("temperatureLastUpdate", temperatureLastUpdate);
                     }
                 }
-
                 outputSlot.Itemstack = stack;
                 outputSlot.MarkDirty();
             }
-
             return true;
         }
 
         /// <summary>
-        /// Checks whether a collectible is an unfired raw product.
+        /// Checks whether a collectible is an unfired (raw) product.
         /// </summary>
+        /// <param name="collectible">The collectible.</param>
+        /// <returns></returns>
         private static bool IsUnfired(CollectibleObject collectible)
         {
-            // Raw products have a defined firing result.
+            // у сырого изделия всегда задан результат обжига - это работает для любого мода
             CombustibleProperties props = collectible.CombustibleProps;
-            if (props != null
-                && props.SmeltingType == EnumSmeltType.Fire
-                && props.SmeltedStack != null)
-            {
-                return true;
-            }
+            if (props != null && props.SmeltingType == EnumSmeltType.Fire && props.SmeltedStack != null) return true;
 
-            // Fallback check for mods that use their own firing process.
+            // запасная проверка по частям кода, если мод обжигает своими средствами
             string[] parts = collectible.Code.Path.Split('-');
-
             for (int i = 0; i < parts.Length; i++)
             {
-                if (parts[i] == "raw"
-                    || parts[i] == "unfired"
-                    || parts[i] == "unburned")
-                {
-                    return true;
-                }
+                if (parts[i] == "raw" || parts[i] == "unfired" || parts[i] == "unburned") return true;
             }
-
             return false;
         }
 
         /// <summary>
-        /// Notifies the player when a process has completed.
+        /// Notifies the player that a process has finished.
         /// </summary>
-        public static void NotifyPlayer(
-            IWorldAccessor world,
-            ItemSlot slot,
-            IPlayer player,
-            string msg,
-            string attribute)
+        /// <param name="world">The world.</param>
+        /// <param name="slot">The slot.</param>
+        /// <param name="player">The player.</param>
+        /// <param name="msg">The MSG.</param>
+        /// <param name="attribute">The name of the attribute. Is used for a cooldown to prohibit spam.</param>
+
+        public static void NotifyPlayer(IWorldAccessor world, ItemSlot slot, IPlayer player, string msg, string attribute)
         {
             BlockPos pos = slot.Inventory.Pos;
-            Block block = pos != null
-                ? world.BulkBlockAccessor.GetBlock(pos)
-                : null;
+            Block block = pos != null ? world.BulkBlockAccessor.GetBlock(pos) : null;
 
-            bool emptyInput =
-                (slot.Inventory as InventorySmelting)?[1].Empty ?? true;
+            bool emptyInput = (slot.Inventory as InventorySmelting)?[1].Empty ?? true;
 
             if (block != null && emptyInput)
             {
@@ -313,22 +274,12 @@ namespace XSkills
                 if (now > lastMsg + 0.333)
                 {
                     player.Entity.Attributes.SetDouble(attribute, now);
-                    world.PlaySoundFor(
-                        new AssetLocation("sounds/tutorialstepsuccess.ogg"),
-                        player
-                    );
-
-                    (player as IServerPlayer)?.SendMessage(
-                        0,
-                        Lang.Get(
-                            msg,
-                            block.GetPlacedBlockName(world, pos)
-                                + " (" + pos.X + ", " + pos.X + pos.Y + ", " + pos.Z + ")"
-                        ),
-                        EnumChatType.Notification
-                    );
+                    world.PlaySoundFor(new AssetLocation("sounds/tutorialstepsuccess.ogg"), player);
+                    (player as IServerPlayer)?.SendMessage(0,
+                        Lang.Get(msg, block.GetPlacedBlockName(world, pos) +
+                        " (" + pos.X + ", " + pos.X + pos.Y + ", " + pos.Z + ")"), EnumChatType.Notification);
                 }
             }
         }
-    }
-}
+    }//!class PotteryUtil
+}//!namespace XSkills

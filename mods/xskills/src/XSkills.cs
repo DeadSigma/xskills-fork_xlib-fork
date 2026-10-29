@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Reflection.Emit;
-using System.Runtime.CompilerServices;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
@@ -361,76 +359,6 @@ namespace XSkills
         {
             base.StartClientSide(api);
             this.XLeveling.CreateDescriptionFile();
-            api.Event.BlockTexturesLoaded += () =>
-            {
-                var characterDialog = api.Gui.LoadedGuis
-                    .Find(d => d is GuiDialogCharacterBase) as GuiDialogCharacterBase;
-
-                if (characterDialog == null)
-                {
-                    api.Logger.Warning("[xskillsfork] In-game character dialog not found.");
-                    return;
-                }
-
-                // Avoid adding the tab twice.
-                foreach (var tab in characterDialog.Tabs)
-                {
-                    if (tab.Name == "XSkills") return;
-                }
-
-                int tabIndex = characterDialog.RenderTabHandlers.Count;
-
-                api.Logger.Notification(
-                    $"[xskillsfork] Adding XSkills tab: {tabIndex}; " +
-                    $"tabs={characterDialog.Tabs.Count}, handlers={characterDialog.RenderTabHandlers.Count}"
-                );
-
-                characterDialog.Tabs.Add(new GuiTab
-                {
-                    Name = "XSkills",
-                    DataInt = tabIndex
-                });
-
-                characterDialog.RenderTabHandlers.Add(composer =>
-                {
-                    string classCode = api.World.Player.Entity
-                        .WatchedAttributes.GetString("characterClass");
-
-                    string text = CharacterCreatorScreenPatch.GetClassExpText(classCode);
-
-                    var clipBounds = ElementBounds.Fixed(0, 25, 350, 266);
-                    var textBounds = ElementBounds.Fixed(0, 25, 350, 266);
-                    var scrollbarBounds = ElementBounds.Fixed(355, 25, 18, 266);
-
-                    composer
-                        .AddVerticalScrollbar(value =>
-                        {
-                            textBounds.fixedY = 25 - value;
-                            textBounds.CalcWorldBounds();
-                        }, scrollbarBounds, "xskillsXpScrollbar")
-                        .BeginClip(clipBounds)
-                            .AddRichtext(
-                                text,
-                                CairoFont.WhiteDetailText().WithLineHeightMultiplier(1.15),
-                                textBounds,
-                                "xskillsXpText"
-                            )
-                        .EndClip();
-
-                    api.Event.RegisterCallback(_ =>
-                    {
-                        var richText = composer.GetRichtext("xskillsXpText");
-                        var scrollbar = composer.GetScrollbar("xskillsXpScrollbar");
-
-                        if (richText == null || scrollbar == null) return;
-
-                        scrollbar.SetHeights(
-                            (float)clipBounds.fixedHeight,
-                            (float)Math.Max(clipBounds.fixedHeight, richText.TotalHeight)
-                        );
-                    }, 100);
-                });
-            };
 
             string slotLockDescription = Lang.Get("xskills:hotkey-xskillsslotlock");
             api.Input.RegisterHotKey("xskillsslotlock", slotLockDescription, GlKeys.Y);
@@ -452,75 +380,6 @@ namespace XSkills
                 PlayerInventoryLibCompat.ApplyPatch(api);
             }
             XInvTweaksCompat.ApplyPatch(api);
-
-            harmony = new Harmony("XSkillsPatch");
-
-            var dialogType = AccessTools.TypeByName("Vintagestory.GameContent.GuiDialogCreateCharacter");
-            if (dialogType == null)
-            {
-                api.Logger.Error("Could not find GuiDialogCreateCharacter.");
-                return;
-            }
-            var target = AccessTools.Method(dialogType, "ComposeGuis");
-            var transpiler = AccessTools.Method(
-                typeof(CharacterCreatorScreenPatch),
-                nameof(CharacterCreatorScreenPatch.AddClassButtonTranspiler)
-            );
-
-            CharacterCreatorScreenPatch.ClientApi = api;
-            CharacterCreatorScreenPatch.ClassXpWindow = new ClassXpDialog(api);
-            CharacterCreatorScreenPatch.CharacterCreatorDialogType = dialogType;
-
-            if (target != null && transpiler != null)
-            {
-                CharacterCreatorScreenPatch.Log =message => api.Logger.Notification("[xskillsfork] " + message);
-                harmony.Patch(target, transpiler: new HarmonyMethod(transpiler));
-            }
-            else
-            {
-                api.Logger.Error("Could not find ComposeGuis or the class-button transpiler.");
-            }
-
-            var changeClass = AccessTools.Method(
-                 dialogType,
-                 "changeClass",
-                new[] { typeof(int) }
-            );
-
-            var classChangePostfix = AccessTools.Method(
-                typeof(CharacterCreatorScreenPatch),
-                nameof(CharacterCreatorScreenPatch.AfterClassChanged)
-            );
-
-            if (changeClass != null && classChangePostfix != null)
-            {
-                harmony.Patch(
-                    changeClass,
-                    postfix: new HarmonyMethod(classChangePostfix)
-                );
-            }
-            else
-            {
-                api.Logger.Error("Could not find changeClass(int) or its postfix.");
-            }
-
-            var closeMethod = AccessTools.Method(dialogType, "OnGuiClosed");
-            var closePostfix = AccessTools.Method(
-                typeof(CharacterCreatorScreenPatch),
-                nameof(CharacterCreatorScreenPatch.AfterCharacterCreatorClosed)
-            );
-
-            if (closeMethod != null && closePostfix != null)
-            {
-                harmony.Patch(
-                    closeMethod,
-                    postfix: new HarmonyMethod(closePostfix)
-                );
-            }
-            else
-            {
-                api.Logger.Error("Could not find OnGuiClosed or its postfix.");
-            }
         }
 
         public override void StartServerSide(ICoreServerAPI api)
@@ -574,33 +433,6 @@ namespace XSkills
                     ability.Description = Lang.GetUnformatted(ability.Description);
                 }
             }
-
-            if (api.Side != EnumAppSide.Client) return;
-
-            CharacterCreatorScreenPatch.SkillConfigs.Clear();
-
-            var configs = api.Assets.GetMany<CharacterCreatorScreenPatch.SkillConfig>(
-                api.Logger,
-                "skills",
-                "xskills"
-            );
-
-            foreach (var entry in configs)
-            {
-                // "skills/alchemy.json" becomes the key "alchemy"
-                string filename = entry.Key.Path;
-                int slash = filename.LastIndexOf('/');
-                if (slash >= 0) filename = filename.Substring(slash + 1);
-
-                int dot = filename.LastIndexOf('.');
-                if (dot >= 0) filename = filename.Substring(0, dot);
-
-                CharacterCreatorScreenPatch.SkillConfigs[filename] = entry.Value;
-            }
-
-            api.Logger.Notification(
-                $"[xskillsfork] Loaded {configs.Count} skill modifier files."
-            );
         }
 
         public bool OnHotbarSwitch(KeyCombination keys)
@@ -763,12 +595,12 @@ namespace XSkills
 
         private void TryPatchToolsmith(ICoreAPI api)
         {
-            // In single-player mode, AssetsLoaded is called for both the client and server—
-            // prevent the patch from being applied twice
+            // В одиночной игре AssetsLoaded вызывается и для клиента, и для сервера -
+            // защищаемся от повторного патча
             if (toolsmithPatched) return;
 
-            // Find the type by name without enumerating every type in each assembly.
-            // Otherwise, assemblies with unresolved dependencies (OpenTK.Graphics / csogg on the server) may fail.
+            // Ищем тип по имени, не перечисляя все типы каждой сборки.
+            // Иначе падаем на сборках с неразрешимыми зависимостями (OpenTK.Graphics / csogg на сервере)
             Type toolsmithNuggetType = null;
             foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
             {

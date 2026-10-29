@@ -4,49 +4,49 @@ using System.Collections.Generic;
 namespace XLib.XLeveling
 {
     /// <summary>
-    /// Provides declarative configuration migration mechanisms between versions.
+    /// Предоставляет механизмы декларативной миграции конфигураций между версиями.
     /// </summary>
     public static class ConfigMigrations
     {
         /// <summary>
-        /// Current configuration version.
-        /// Increase this value in releases that require applying new migrations.
+        /// Текущая версия конфигурации. 
+        /// Значение необходимо увеличивать в релизах, требующих применения новых миграций
         /// </summary>
-        public const int CurrentVersion = 43;
+        public const int CurrentVersion = 10;
 
         /// <summary>
-        /// Defines reset parameters for a skill or ability during a version update.
+        /// Определяет параметры сброса навыка или способности при обновлении версии
         /// </summary>
         public struct SkillReset
         {
             /// <summary>
-            /// Version from which this reset rule is applied.
+            /// Версия, начиная с которой применяется данный сброс.
             /// </summary>
             public int Version;
 
             /// <summary>
-            /// Skill identifier (matches the file name, for example, skill.json).
+            /// Идентификатор навыка (соответствует имени файла, например, skill.json)
             /// </summary>
             public string Skill;
 
             /// <summary>
-            /// Ability (perk) identifier. If null or empty, the entire skill file is reset.
+            /// Идентификатор способности (перка). Если значение null или пусто, будет сброшен весь файл навыка
             /// </summary>
             public string Ability;
 
             /// <summary>
-            /// Previous default ability values.
-            /// If specified, reset is applied only for users whose values match these values.
+            /// Предыдущие стандартные значения способности. 
+            /// Если заданы, сброс применяется только у тех пользователей, чьи значения совпадают с указанными
             /// </summary>
             public int[] OldValues;
 
             /// <summary>
-            /// Initializes a new instance of the <see cref="SkillReset"/> struct.
+            /// Инициализирует новый экземпляр структуры <see cref="SkillReset"/>.
             /// </summary>
-            /// <param name="version">Version in which the reset is applied.</param>
-            /// <param name="skill">Skill name.</param>
-            /// <param name="ability">Ability name (null to reset the entire skill).</param>
-            /// <param name="oldValues">Array of old values to match (null for unconditional reset).</param>
+            /// <param name="version">Версия, в которой применяется сброс</param>
+            /// <param name="skill">Имя навыка</param>
+            /// <param name="ability">Имя способности (null для сброса всего навыка)</param>
+            /// <param name="oldValues">Массив старых значений для проверки (null для безусловного сброса)</param>
             public SkillReset(int version, string skill, string ability = null, int[] oldValues = null)
             {
                 Version = version;
@@ -57,55 +57,55 @@ namespace XLib.XLeveling
         }
 
         /// <summary>
-        /// Migration table. Extended with new entries in each release.
+        /// Таблица миграций. Дополняется новыми записями при каждом релизе.
         /// </summary>
         private static readonly SkillReset[] Resets = new SkillReset[]
         {
-            // Version 10: treenursery - default values update
-            // Reset applies only to old values (user changes are preserved)
+            // Версия 10: treenursery - обновление стандартных значений
+            // Сброс применяется только для старых значений (пользовательские изменения сохраняются)
             new SkillReset(10, "forestry", "treenursery", new int[] { 87, 74, 60 })
         };
 
         /// <summary>
-        /// Defines reset rules for a single ability.
+        /// Определяет правила сброса для отдельной способности
         /// </summary>
         public class AbilityReset
         {
             /// <summary>
-            /// Indicates that an unconditional reset is required without checking previous values.
+            /// Указывает на необходимость безусловного сброса без проверки предыдущих значений
             /// </summary>
             public bool Unconditional;
 
             /// <summary>
-            /// Collection of value sets. If current values match any set, a reset is performed.
+            /// Коллекция наборов значений. Если текущие значения совпадают с любым из наборов, выполняется сброс
             /// </summary>
             public List<int[]> MatchOldValues = new List<int[]>();
         }
 
         /// <summary>
-        /// Represents a skill and ability reset plan for a specified version range.
+        /// Представляет план сброса навыков и способностей для заданного диапазона версий
         /// </summary>
         public class SkillResetPlan
         {
             /// <summary>
-            /// Set of skills that require a full reset.
+            /// Набор навыков, подлежащих полному сбросу
             /// </summary>
             public HashSet<string> WholeSkills =
                 new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
             /// <summary>
-            /// Dictionary of abilities requiring partial or conditional reset, grouped by skill.
+            /// Словарь способностей, подлежащих частичному или условному сбросу, сгруппированных по навыкам
             /// </summary>
             public Dictionary<string, Dictionary<string, AbilityReset>> Abilities =
                 new Dictionary<string, Dictionary<string, AbilityReset>>(StringComparer.OrdinalIgnoreCase);
         }
 
         /// <summary>
-        /// Builds and returns a reset plan for versions in the range from <paramref name="fromVersion"/> to <paramref name="toVersion"/>.
+        /// Собирает и возвращает план сбросов для версий, находящихся в диапазоне от <paramref name="fromVersion"/> до <paramref name="toVersion"/>
         /// </summary>
-        /// <param name="fromVersion">Starting version (exclusive).</param>
-        /// <param name="toVersion">Target version (inclusive).</param>
-        /// <returns>Reset plan <see cref="SkillResetPlan"/>.</returns>
+        /// <param name="fromVersion">Начальная версия (исключительно)</param>
+        /// <param name="toVersion">Конечная версия (включительно)</param>
+        /// <returns>План сбросов <see cref="SkillResetPlan"/></returns>
         public static SkillResetPlan CollectSkillResets(int fromVersion, int toVersion)
         {
             var plan = new SkillResetPlan();

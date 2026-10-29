@@ -1,15 +1,10 @@
 ﻿using ProtoBuf;
-using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Config;
 using Vintagestory.API.Server;
-using Vintagestory.API.Datastructures;
-using Vintagestory.Common;
-using Vintagestory.GameContent;
 using XLib.XLeveling;
 
 namespace XSkills
@@ -41,13 +36,9 @@ namespace XSkills
         public int BloodlustId { get; private set; }
         public int MonsterExpertId { get; private set; }
         public int SwiftSpearId { get; private set; }
-        public int CarefulShooterId { get; private set; } // Perk from user Taper4ik
-        private ICoreAPI api;
+        public int CarefulShooterId { get; private set; } //Перк от пользователя Taper4ik
         public Combat(ICoreAPI api) : base("combat", "xskills:skill-combat", "xskills:group-survival")
         {
-            this.api = api;
-            this.api.Logger.Debug("Combat skill initialized");
-
             (XLeveling.Instance(api))?.RegisterSkill(this);
 
             // increases damage with swords
@@ -80,13 +71,13 @@ namespace XSkills
                 "xskills:abilitydesc-spearman",
                 1, 3, new int[] { 10, 1, 20, 20, 2, 40, 20, 2, 60 }));
 
-            // Reduces aiming time with a spear
-            // 0: aiming speed increase percentage
+            // Уменьшает время прицеливания копьем
+            // 0: процент ускорения прицеливания
             SwiftSpearId = this.AddAbility(new Ability(
                 "swiftspear",
                 "xskills:ability-swiftspear",
                 "xskills:abilitydesc-swiftspear",
-                5, 3, new int[] { 15, 25, 35 })); // 5 - required skill level, 3 - maximum tier
+                5, 3, new int[] { 15, 25, 35 })); // 5 - требуемый уровень навыка, 3 - макс. тир
 
             // increases damage absorbed by shields
             // 0: base value
@@ -229,7 +220,7 @@ namespace XSkills
                 "adrenalinerush",
                 "xskills:ability-adrenalinerush",
                 "xskills:abilitydesc-adrenalinerush",
-                7, 2, new int[] {20, 20, 25, 10, 24, 20, 40, 50, 12, 20}));
+                7, 2, new int[] { 20, 20, 25, 10, 24, 20, 40, 50, 12, 20 }));
 
             // steal the health of enemies, reduces life reg at daytime
             // 0: life steal
@@ -273,7 +264,7 @@ namespace XSkills
                 "monsterexpert",
                 "xskills:ability-monsterexpert",
                 "xskills:abilitydesc-monsterexpert",
-                10, 1, new int[] {}));
+                10, 1, new int[] { }));
 
             //Перк от пользователя Taper4ik
             // уменьшает потерю прочности и повышает шанс сохранить боеприпасы для пращ и луков
@@ -319,226 +310,38 @@ namespace XSkills
             playerAbility = playerSkill[this.LightArmorExpertId];
             if (playerAbility != null)
             {
-                bool shouldApplyBonus = ShouldApplyLightArmorExpertBonus(player);
-                float bonusValue = shouldApplyBonus ? playerAbility.FValue(0) : 0.0f;
-
-                foreach (string statName in (playerAbility.Ability as ArmorAbility)?.BonusTraits)
+                EntityFloatStats stat = stats["walkspeed"];
+                if (stat != null)
                 {
-                    try
-                    {
-                        EntityFloatStats stat = stats[statName];
-                        if (stat == null) continue;
+                    stat.ValuesByKey.TryGetValue("wearablemod", out EntityStat<float> temp);
+                    float value = temp?.Value ?? 0.0f;
+                    stat.ValuesByKey.TryGetValue("CombatOverhaul:Armor", out temp);
+                    value += temp?.Value ?? 0.0f;
 
-                        // Invert the value for hunger rate,
-                        // so the bonus slows hunger rather than accelerating it
-                        if (statName == "hungerrate")
-                        {
-                            stat.Set("ability-armorexpert", -bonusValue);
-                        }
-                        else
-                        {
-                            stat.Set("ability-armorexpert", bonusValue);
-                        }
-                    }
-                    catch (KeyNotFoundException) { }
-                }
-            }
-        }
+                    // Значение бонуса если нет штрафа к скорости
+                    float bonusValue = value >= 0.0f ? playerAbility.FValue(0) : 0.0f;
 
-        private bool ShouldApplyLightArmorExpertBonus(IPlayer player)
-        {
-            InventoryCharacter inv = player?.InventoryManager?
-                .GetOwnInventory(GlobalConstants.characterInvClassName) as InventoryCharacter;
-            if (inv == null) return false;
-
-            int firstArmorSlot = (int)EnumCharacterDressType.ArmorHead;
-            if (inv.Count <= firstArmorSlot) return false;
-
-            bool hasArmorPiece = false;
-            for (int ii = firstArmorSlot; ii < inv.Count; ++ii)
-            {
-                ItemStack stack = inv[ii]?.Itemstack;
-                if (stack == null) continue;
-
-                hasArmorPiece = true;
-                float pieceValue = GetArmorWalkSpeedValue(stack);
-                if (!(pieceValue < 0.0f && pieceValue > -0.05f)) return false;
-            }
-
-            return hasArmorPiece;
-        }
-
-        private float GetArmorWalkSpeedValue(ItemStack stack)
-        {
-            CollectibleBehaviorWearable wearableBehavior = stack?.Collectible?.GetBehavior<CollectibleBehaviorWearable>();
-            if (wearableBehavior != null)
-            {
-                Type behaviorType = wearableBehavior.GetType();
-                BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.IgnoreCase;
-
-                string[] methodNames = new string[]
-                {
-                    "GetWalkSpeedModifier", "GetWalkspeedModifier", "GetWalkSpeedMul", "GetWalkspeedMul", "GetWalkSpeed", "GetWalkspeed"
-                };
-
-                foreach (string methodName in methodNames)
-                {
-                    MethodInfo method = behaviorType.GetMethod(methodName, flags, null, new Type[] { typeof(ItemSlot) }, null);
-                    if (method != null)
+                    foreach (string statName in (playerAbility.Ability as ArmorAbility)?.BonusTraits)
                     {
                         try
                         {
-                            if (TryGetFloat(method.Invoke(wearableBehavior, new object[] { null }), out float methodValueWithNullSlot))
+                            stat = stats[statName];
+                            if (stat == null) continue;
+
+                            // Инвертируем значение для скорости голодания, 
+                            // чтобы бонус замедлял голод, а не ускорял его
+                            if (statName == "hungerrate")
                             {
-                                return NormalizeWalkSpeedValue(methodName, methodValueWithNullSlot);
+                                stat.Set("ability-armorexpert", -bonusValue);
+                            }
+                            else
+                            {
+                                stat.Set("ability-armorexpert", bonusValue);
                             }
                         }
-                        catch { }
-                    }
-
-                    method = behaviorType.GetMethod(methodName, flags, null, Type.EmptyTypes, null);
-                    if (method != null)
-                    {
-                        try
-                        {
-                            if (TryGetFloat(method.Invoke(wearableBehavior, null), out float methodValue))
-                            {
-                                return NormalizeWalkSpeedValue(methodName, methodValue);
-                            }
-                        }
-                        catch { }
+                        catch (KeyNotFoundException) { }
                     }
                 }
-
-                string[] memberNames = new string[]
-                {
-                    "walkspeedModifier", "walkSpeedModifier", "walkspeed", "walkSpeed", "walkspeedMul", "walkSpeedMul", "walkSpeedPenalty"
-                };
-
-                foreach (string memberName in memberNames)
-                {
-                    PropertyInfo property = behaviorType.GetProperty(memberName, flags);
-                    if (property != null && TryGetFloat(property.GetValue(wearableBehavior), out float propertyValue))
-                    {
-                        return NormalizeWalkSpeedValue(memberName, propertyValue);
-                    }
-
-                    FieldInfo field = behaviorType.GetField(memberName, flags);
-                    if (field != null && TryGetFloat(field.GetValue(wearableBehavior), out float fieldValue))
-                    {
-                        return NormalizeWalkSpeedValue(memberName, fieldValue);
-                    }
-                }
-
-                // Fallback: inspect any numeric members with names related to walk speed.
-                foreach (PropertyInfo property in behaviorType.GetProperties(flags))
-                {
-                    if (!property.CanRead) continue;
-                    string nameLower = property.Name.ToLowerInvariant();
-                    if (!(nameLower.Contains("walk") || nameLower.Contains("speed"))) continue;
-                    try
-                    {
-                        if (TryGetFloat(property.GetValue(wearableBehavior), out float value) && value != 0.0f)
-                        {
-                            return NormalizeWalkSpeedValue(property.Name, value);
-                        }
-                    }
-                    catch { }
-                }
-
-                foreach (FieldInfo field in behaviorType.GetFields(flags))
-                {
-                    string nameLower = field.Name.ToLowerInvariant();
-                    if (!(nameLower.Contains("walk") || nameLower.Contains("speed"))) continue;
-                    try
-                    {
-                        if (TryGetFloat(field.GetValue(wearableBehavior), out float value) && value != 0.0f)
-                        {
-                            return NormalizeWalkSpeedValue(field.Name, value);
-                        }
-                    }
-                    catch { }
-                }
-            }
-
-            JsonObject attrs = stack?.Collectible?.Attributes;
-            if (TryGetWalkSpeedFromAttributes(attrs, out float attrValue))
-            {
-                return attrValue;
-            }
-
-            return 0.0f;
-        }
-
-        private bool TryGetWalkSpeedFromAttributes(JsonObject attrs, out float value)
-        {
-            value = 0.0f;
-            if (attrs == null) return false;
-
-            string[] directKeys = new string[]
-            {
-                "walkspeed", "walkSpeed", "walkspeedModifier", "walkSpeedModifier", "walkspeedMul", "walkSpeedMul", "walkSpeedMultiplier", "walkspeedMultiplier"
-            };
-
-            foreach (string key in directKeys)
-            {
-                if (!attrs.KeyExists(key)) continue;
-                float rawValue = attrs[key].AsFloat(0.0f);
-                value = NormalizeWalkSpeedValue(key, rawValue);
-                return true;
-            }
-
-            string[] parentKeys = new string[] { "protectionModifiers", "statModifiers", "modifiers" };
-            foreach (string parent in parentKeys)
-            {
-                if (!attrs.KeyExists(parent)) continue;
-
-                JsonObject nested = attrs[parent];
-                if (nested == null) continue;
-
-                foreach (string key in directKeys)
-                {
-                    if (!nested.KeyExists(key)) continue;
-                    float rawValue = nested[key].AsFloat(0.0f);
-                    value = NormalizeWalkSpeedValue(key, rawValue);
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private float NormalizeWalkSpeedValue(string sourceName, float rawValue)
-        {
-            string lower = sourceName?.ToLowerInvariant() ?? string.Empty;
-            bool looksLikeMultiplier = lower.Contains("mul") || lower.Contains("multiplier");
-            if (looksLikeMultiplier && rawValue > 0.0f && rawValue <= 1.0f)
-            {
-                return rawValue - 1.0f;
-            }
-
-            return rawValue;
-        }
-
-        private bool TryGetFloat(object source, out float value)
-        {
-            switch (source)
-            {
-                case float floatValue:
-                    value = floatValue;
-                    return true;
-                case double doubleValue:
-                    value = (float)doubleValue;
-                    return true;
-                case int intValue:
-                    value = intValue;
-                    return true;
-                case long longValue:
-                    value = longValue;
-                    return true;
-                default:
-                    value = 0.0f;
-                    return false;
             }
         }
 
@@ -579,8 +382,8 @@ namespace XSkills
             }
             //delay the call to make sure armor stats are applied before the call
             IInventory inv = byPlayer.InventoryManager.GetOwnInventory(GlobalConstants.characterInvClassName);
-            if (inv != null) inv.SlotModified += 
-                    (int slotID) => byPlayer.Entity.Api.Event.RegisterCallback( 
+            if (inv != null) inv.SlotModified +=
+                    (int slotID) => byPlayer.Entity.Api.Event.RegisterCallback(
                         (float _) => ApplyArmorAbilities(byPlayer), 0);
         }
 

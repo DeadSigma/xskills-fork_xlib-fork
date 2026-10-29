@@ -216,7 +216,7 @@ namespace XLib.XLeveling
         /// The default calculation is [expBase] * pow([expMult], current level - 1).</param>
         /// <param name="maxLevel">The maximum level that a player can reach in this skill.</param>
         /// <exception cref="ArgumentNullException">Is thrown if name is <c>null</c>.</exception>
-        public Skill(string name, string displayName = null, string group = null, int expBase = 200, float expMult = 1.33f, int maxLevel = 30)
+        public Skill(string name, string displayName = null, string group = null, int expBase = 200, float expMult = 1.33f, int maxLevel = 25)
         {
             this.Name = name ?? throw new ArgumentNullException("A skill name must not be null."); ;
             this.DisplayName = displayName ?? this.Name;

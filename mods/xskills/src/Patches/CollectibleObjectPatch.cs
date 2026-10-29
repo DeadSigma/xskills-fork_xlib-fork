@@ -72,7 +72,7 @@ namespace XSkills
             {
                 //for multiplayer server the clients sometimes don't set the forestry skill properly
                 //and i don't know why. This should fix it. 
-                if(beh.Skill == null)
+                if (beh.Skill == null)
                 {
                     if (beh is XSkillsCharcoalBehavior charcoalBehavior)
                     {
@@ -110,9 +110,9 @@ namespace XSkills
 
         [HarmonyPostfix]
         [HarmonyPatch("GetAttackPower")]
-        public static void Postfix1(ref float __result, ItemStack itemStack) 
+        public static void Postfix1(ref float __result, ItemStack itemStack)
         {
-            float quality = itemStack?.Attributes.TryGetFloat("quality") ?? 0.0f; 
+            float quality = itemStack?.Attributes.TryGetFloat("quality") ?? 0.0f;
             if (quality > 0.0f && __result > 0.5f) __result = (float)(__result * (1.0f + quality * 0.02f));
         }
 
@@ -134,7 +134,7 @@ namespace XSkills
             float quality = 0.0f;
             int count = 0;
             bool useQuality = false;
-            foreach(ItemSlot slot in allInputSlots)
+            foreach (ItemSlot slot in allInputSlots)
             {
                 if (slot.Itemstack == null) continue;
                 float? inputQuality = slot.Itemstack.Attributes.TryGetFloat("quality");
@@ -194,7 +194,7 @@ namespace XSkills
             if (op.SourceSlot.Itemstack == null) return true;
             if (!(op.SourceSlot.Itemstack.Collectible.Attributes?.KeyExists("qualityType") ?? false)) return true;
             if (op.SinkSlot.Itemstack == null) return true;
-            if (op.SourceSlot.Itemstack.Attributes.GetDecimal("quality") == 
+            if (op.SourceSlot.Itemstack.Attributes.GetDecimal("quality") ==
                 op.SinkSlot.Itemstack.Attributes.GetDecimal("quality")) return true;
             return XSkills.Instance.XLeveling.Config.mergeQualities;
         }
@@ -205,8 +205,8 @@ namespace XSkills
             if (op.MovedQuantity <= 0) return;
             if (__state?.Attributes == null || op.SinkSlot.Itemstack?.Attributes == null) return;
             float quality = (
-                __state.Attributes.GetFloat("quality") * (op.MovedQuantity) + 
-                op.SinkSlot.Itemstack.Attributes.GetFloat("quality") * (op.SinkSlot.Itemstack.StackSize - op.MovedQuantity)) / 
+                __state.Attributes.GetFloat("quality") * (op.MovedQuantity) +
+                op.SinkSlot.Itemstack.Attributes.GetFloat("quality") * (op.SinkSlot.Itemstack.StackSize - op.MovedQuantity)) /
                 op.SinkSlot.Itemstack.StackSize;
             if (quality > 0.0f) op.SinkSlot.Itemstack.Attributes.SetFloat("quality", quality);
         }
@@ -250,8 +250,8 @@ namespace XSkills
             if (byEntity?.World.Api.Side == EnumAppSide.Server && __state.foodCategory != EnumFoodCategory.NoNutrition && secondsUsed >= 0.95f)
             {
                 Cooking.ApplyQuality(
-                    __state.quality, __state.size - (slot.Itemstack?.StackSize ?? 0), 
-                    __state.temperature, __state.foodCategory, 
+                    __state.quality, __state.size - (slot.Itemstack?.StackSize ?? 0),
+                    __state.temperature, __state.foodCategory,
                     EnumFoodCategory.Unknown, byEntity);
             }
         }
@@ -267,12 +267,8 @@ namespace XSkills
         [HarmonyPatch("DoSmelt")]
         public static void Postfix(DoSmeltState __state, IWorldAccessor world, ISlotProvider cookingSlotsProvider, ItemSlot outputSlot)
         {
-            if (world?.BlockAccessor == null || outputSlot == null) return;
-
             InventoryBase inv = cookingSlotsProvider as InventoryBase;
             if (inv == null) return;
-            if (inv.Pos == null) return;
-
             BlockEntity blockEntity = world?.BlockAccessor.GetBlockEntity(inv.Pos);
             BlockEntityBehaviorOwnable ownable = blockEntity?.GetBehavior<BlockEntityBehaviorOwnable>();
 

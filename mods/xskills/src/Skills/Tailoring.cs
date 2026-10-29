@@ -11,7 +11,6 @@ namespace XSkills
         public int FiberSorterId { get; private set; }
         public int WinterWeaverId { get; private set; }
         public int WanderingTailorId { get; private set; }
-        public int SignatureGarbId { get; private set; }
         public int LeatherWorkerId { get; private set; } = -1; // Disabled, not working
         public int ClothWeaverId { get; private set; } = -1;// Disabled, not working
         public int ThriftyCutsId { get; private set; } = -1;
@@ -75,15 +74,6 @@ namespace XSkills
                 "xskills:ability-wanderingtailor",
                 "xskills:abilitydesc-wanderingtailor",
                 7, 2, new int[] { 10, 20 }, false));
-
-            // (9) minimum level
-            // (2) maximum tier
-            // { 5, 10 } values
-            this.SignatureGarbId = base.AddAbility(new Ability(
-                "signaturegarb",
-                "xskills:ability-signaturegarb",
-                "xskills:abilitydesc-signaturegarb",
-                9, 2, new int[] { 5, 10 }, false));
 
             // (5) minimum level
             // (1) maximum tier
