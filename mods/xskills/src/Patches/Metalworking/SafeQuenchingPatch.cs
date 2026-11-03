@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using System;
 using System.Reflection;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
@@ -206,6 +207,95 @@ namespace XSkills
                     }
                 }
             }
+        }
+    }
+
+    [HarmonyPatch(typeof(CollectibleBehaviorQuenchable), "SetTemperature")]
+    public class CollectibleBehaviorQuenchable_SetTemperature_QualityPatch
+    {
+        private const string BaseQualityAttr = "xskillsBaseQuality";
+
+        public static int[] CaptureIterations(ItemStack itemstack)
+        {
+            int quench = itemstack?.Attributes?.GetInt("quenchIteration") ?? 0;
+            int temper = itemstack?.Attributes?.GetInt("temperIteration") ?? 0;
+            return new int[] { quench, temper };
+        }
+
+        [HarmonyPrefix]
+        public static void Prefix(ItemStack itemstack, out int[] __state)
+        {
+            __state = CaptureIterations(itemstack);
+        }
+
+        [HarmonyPostfix]
+        public static void Postfix(IWorldAccessor world, ItemStack itemstack, int[] __state)
+        {
+            ApplyQualityIfHeatTreatmentChanged(world, itemstack, __state);
+        }
+
+        public static void ApplyQualityIfHeatTreatmentChanged(IWorldAccessor world, ItemStack itemstack, int[] __state)
+        {
+            if (world?.Side != EnumAppSide.Server || itemstack?.Attributes == null || __state == null) return;
+
+            int oldQuench = __state[0];
+            int oldTemper = __state[1];
+            int newQuench = itemstack.Attributes.GetInt("quenchIteration");
+            int newTemper = itemstack.Attributes.GetInt("temperIteration");
+
+            if (newQuench == oldQuench && newTemper == oldTemper) return;
+
+            float quality = itemstack.Attributes.GetFloat("quality", 0.0f);
+            if (quality <= 0.0f) return;
+
+            float baseQuality = itemstack.Attributes.GetFloat(BaseQualityAttr, 0.0f);
+            if (baseQuality <= 0.0f)
+            {
+                float previousMultiplier = QualityMultiplier(oldQuench, oldTemper);
+                if (previousMultiplier <= 0.001f) return;
+                baseQuality = quality / previousMultiplier;
+                itemstack.Attributes.SetFloat(BaseQualityAttr, baseQuality);
+            }
+
+            float oldMultiplier = QualityMultiplier(oldQuench, oldTemper);
+            float newMultiplier = QualityMultiplier(newQuench, newTemper);
+            float targetQuality = baseQuality * newMultiplier;
+            float maxQuality = baseQuality * 1.5f;
+            float finalQuality = Math.Max(0.01f, Math.Min(targetQuality, maxQuality));
+            itemstack.Attributes.SetFloat("quality", finalQuality);
+        }
+
+        private static float QualityMultiplier(int quenchIterations, int temperIterations)
+        {
+            float multiplier = 0.7f;
+
+            if (quenchIterations >= 1) multiplier += 0.15f;
+            if (temperIterations >= 1) multiplier += 0.05f;
+            if (quenchIterations >= 2) multiplier += 0.10f;
+
+            int extraTreatments = Math.Max(0, quenchIterations - 2) + Math.Max(0, temperIterations - 1);
+            if (extraTreatments > 0)
+            {
+                multiplier += 0.5f * (1.0f - (float)Math.Pow(0.85f, extraTreatments));
+            }
+
+            return Math.Min(multiplier, 1.5f);
+        }
+    }
+
+    [HarmonyPatch(typeof(CollectibleBehaviorQuenchable), "AfterGetTemperature")]
+    public class CollectibleBehaviorQuenchable_AfterGetTemperature_QualityPatch
+    {
+        [HarmonyPrefix]
+        public static void Prefix(ItemStack itemstack, out int[] __state)
+        {
+            __state = CollectibleBehaviorQuenchable_SetTemperature_QualityPatch.CaptureIterations(itemstack);
+        }
+
+        [HarmonyPostfix]
+        public static void Postfix(IWorldAccessor world, ItemStack itemstack, int[] __state)
+        {
+            CollectibleBehaviorQuenchable_SetTemperature_QualityPatch.ApplyQualityIfHeatTreatmentChanged(world, itemstack, __state);
         }
     }
 }

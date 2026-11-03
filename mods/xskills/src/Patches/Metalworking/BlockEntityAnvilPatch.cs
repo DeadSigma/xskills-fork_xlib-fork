@@ -493,8 +493,10 @@ namespace XSkills
             collectible = __state.recipe.Output.ResolvedItemstack.Collectible;
             playerAbility = playerSkill?[__state.metalworking.BlacksmithId];
             string type = QualityUtil.GetQualityType(collectible);
+            bool forgingCompletedNow = finished >= 1.0f || __instance.FinishedProportion() >= 1.0f;
 
-            if (playerAbility?.Tier > 0 &&
+            if (forgingCompletedNow &&
+                playerAbility?.Tier > 0 &&
                 !(__state.wasPlate && collectible is ItemMetalPlate) &&
                 (type != null ||
                 collectible.Tool != null ||
@@ -503,7 +505,9 @@ namespace XSkills
             {
                 int forged = type != null ?
                     byPlayer.Entity.WatchedAttributes.GetTreeAttribute("forged")?.GetInt(type) ?? 0 : 0;
-                float quality = Math.Min(forged, MAXFORGED) * 0.01f + Math.Min(playerSkill.Level, 25) * 0.1f;
+                float forgedContribution = Math.Min(forged, MAXFORGED) * 0.01f;
+                float levelContribution = Math.Min(playerSkill.Level, 25) * 0.1f;
+                float quality = forgedContribution + levelContribution;
 
                 //subtract 1.0f for quenching
                 quality = Math.Min(quality * playerAbility.Value(0), playerAbility.Value(1) * 0.5f - 1.0f);
@@ -515,6 +519,11 @@ namespace XSkills
                     quality = (int)(quality / config.qualitySteps + 0.5f) * config.qualitySteps;
                 }
 
+                float baseQuality = quality;
+
+                quality *= 0.7f;
+
+                __state.recipe.Output.ResolvedItemstack.Attributes.SetFloat("xskillsBaseQuality", baseQuality);
                 __state.recipe.Output.ResolvedItemstack.Attributes.SetFloat("quality", quality);
             }
 
@@ -528,7 +537,9 @@ namespace XSkills
             ItemStack resolvedStack = __state.recipe?.Output.ResolvedItemstack;
 
             float quality = resolvedStack?.Attributes.GetFloat("quality") ?? 0.0f;
+            float baseQuality = resolvedStack?.Attributes.GetFloat("xskillsBaseQuality") ?? 0.0f;
             resolvedStack?.Attributes.RemoveAttribute("quality");
+            resolvedStack?.Attributes.RemoveAttribute("xskillsBaseQuality");
             if (__instance.WorkItemStack != null || __state.metalworking == null) return;
 
             PlayerSkill playerSkill = null;
@@ -589,6 +600,7 @@ namespace XSkills
                     ItemStack outstack = resolvedStack.Clone();
                     outstack.Collectible.SetTemperature(world, outstack, temperature);
                     if (quality > 0.0f) outstack.Attributes.SetFloat("quality", quality);
+                    if (baseQuality > 0.0f) outstack.Attributes.SetFloat("xskillsBaseQuality", baseQuality);
                     if (helveHammer || !byPlayer.InventoryManager.TryGiveItemstack(outstack))
                     {
                         world.SpawnItemEntity(outstack, __instance.Pos.ToVec3d().Add(0.5, 1.5, 0.5));
