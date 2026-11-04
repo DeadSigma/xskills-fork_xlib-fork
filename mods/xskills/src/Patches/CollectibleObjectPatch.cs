@@ -4,6 +4,7 @@ using System.Text;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Datastructures;
+using Vintagestory.API.MathTools;
 using XLib.XLeveling;
 
 namespace XSkills
@@ -13,6 +14,9 @@ namespace XSkills
     {
         [ThreadStatic]
         private static bool suppressTryMergeQualityHandling;
+
+        [ThreadStatic]
+        private static IPlayer heldInteractPlayer;
 
         //public static bool Prepare(MethodBase original)
         //{
@@ -90,6 +94,22 @@ namespace XSkills
         {
             float quality = inSlot?.Itemstack?.Attributes.TryGetFloat("quality") ?? 0.0f;
             QualityUtil.AddQualityString(quality, dsc);
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch("OnHeldInteractStep")]
+        public static void OnHeldInteractStepPrefix(out IPlayer __state, EntityAgent byEntity)
+        {
+            __state = heldInteractPlayer;
+            heldInteractPlayer = (byEntity as EntityPlayer)?.Player;
+        }
+
+        [HarmonyFinalizer]
+        [HarmonyPatch("OnHeldInteractStep")]
+        public static Exception OnHeldInteractStepFinalizer(IPlayer __state, Exception __exception)
+        {
+            heldInteractPlayer = __state;
+            return __exception;
         }
 
         [HarmonyPostfix]
@@ -502,12 +522,17 @@ namespace XSkills
         {
             InventoryBase inv = cookingSlotsProvider as InventoryBase;
             if (inv == null) return;
-            BlockEntity blockEntity = world?.BlockAccessor.GetBlockEntity(inv.Pos);
+
+            BlockPos pos = inv.Pos;
+            if (world?.BlockAccessor == null) return;
+
+            BlockEntity blockEntity = pos == null ? null : world.BlockAccessor.GetBlockEntity(pos);
             BlockEntityBehaviorOwnable ownable = blockEntity?.GetBehavior<BlockEntityBehaviorOwnable>();
+            IPlayer byPlayer = ownable?.Owner ?? heldInteractPlayer;
 
             int cooked = (outputSlot.Itemstack?.StackSize ?? 0) - __state.stackSize;
-            if (ownable?.Owner == null || cooked <= 0) return;
-            DoSmeltCooking(ownable.Owner, outputSlot, cooked, __state.quality);
+            if (byPlayer == null || cooked <= 0) return;
+            DoSmeltCooking(byPlayer, outputSlot, cooked, __state.quality);
         }
 
         internal static bool DoSmeltCooking(IPlayer byPlayer, ItemSlot outputSlot, int cooked, float quality)
