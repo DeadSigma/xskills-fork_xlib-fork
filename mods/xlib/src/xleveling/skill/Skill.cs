@@ -363,24 +363,26 @@ namespace XLib.XLeveling
         /// <param name="playerSkillSet">The player skill set of a player.</param>
         /// <param name="includeGlobalModifiers">Decides whether global modifiers should be included.</param>
         /// <returns>the experience multiplier for a specific player; returns 0.0f if playerSkillSet is null
-        /// или сущность игрока ещё не была создана.</returns>
+        /// or the player's entity has not been created yet.</returns>
         /// <remarks>
-        /// Вызывается из PlayerSkill.AddExperience на каждом игровом тике, включая первые тики после подключения игрока.
-        /// В этот момент сущность игрока и её синхронизируемые атрибуты (watched attributes) могут быть ещё не синхронизированы.
+        /// Called from PlayerSkill.AddExperience on every game tick, including the first ticks after a player connects.
+        /// At that moment, the player's entity and its synchronized attributes (watched attributes) may not be synchronized yet.
         /// </remarks>
         virtual public float GetExperienceMultiplier(PlayerSkillSet playerSkillSet, bool includeGlobalModifiers = true)
         {
             if (playerSkillSet == null) return 0.0f;
 
-            // Отсутствие сущности означает, что неоткуда считывать множители. Без этой проверки оператор null-propagation ниже просто перенесёт падение на строку дальше - к Entity.Stats.
+            // Missing entity means there is no source to read multipliers from. Without this check,
+            // null-propagation below would only move the failure further down to Entity.Stats.
             var entity = playerSkillSet.Player?.Entity;
             if (entity == null) return 0.0f;
 
             float value = 1.0f;
             float mult = 0.0f;
 
-            // GetString возвращает null, если атрибут отсутствует, а Dictionary.TryGetValue выбрасывает исключение, если ключ равен null.
-            // Атрибут отсутствует сразу после подключения игрока, а также если класс персонажа ещё не был выбран
+            // GetString returns null when the attribute is missing, and Dictionary.TryGetValue throws
+            // an exception when the key is null. The attribute can be missing right after player join,
+            // and also when the character class has not been selected yet.
             string characterClass = entity.WatchedAttributes?.GetString("characterClass");
             if (!string.IsNullOrEmpty(characterClass)) ClassExpMultipliers.TryGetValue(characterClass, out mult);
 

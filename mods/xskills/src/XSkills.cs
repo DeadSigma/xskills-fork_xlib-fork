@@ -322,14 +322,16 @@ namespace XSkills
             base.Start(api);
             (this.Skills["metalworking"] as Metalworking).RegisterAnvil();
 
-            //register 'quality' and 'owner' to be ignored
-            string[] temp = new string[GlobalConstants.IgnoredStackAttributes.Length + 2];
+            //register custom attributes to be ignored when comparing stacks for merging
+            string[] temp = new string[GlobalConstants.IgnoredStackAttributes.Length + 3];
             int count = 0;
             for (; count < GlobalConstants.IgnoredStackAttributes.Length; ++count)
             {
                 temp[count] = GlobalConstants.IgnoredStackAttributes[count];
             }
             temp[count] = "quality";
+            count++;
+            temp[count] = "xskillsBaseQuality";
             count++;
             temp[count] = "owner";
             GlobalConstants.IgnoredStackAttributes = temp;

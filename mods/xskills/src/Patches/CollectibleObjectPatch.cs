@@ -13,9 +13,6 @@ namespace XSkills
     public class CollectibleObjectPatch
     {
         [ThreadStatic]
-        private static bool suppressTryMergeQualityHandling;
-
-        [ThreadStatic]
         private static IPlayer heldInteractPlayer;
 
         //public static bool Prepare(MethodBase original)
@@ -198,270 +195,113 @@ namespace XSkills
             }
         }
 
-        public class MergeQualityState
+        public class TryMergeStacksState
         {
+            public bool SourceHasQuality;
+            public bool SourceHasBaseQuality;
+            public bool SinkHasQuality;
+            public bool SinkHasBaseQuality;
             public float SourceQuality;
-            public float SinkQuality;
             public float SourceBaseQuality;
+            public float SinkQuality;
             public float SinkBaseQuality;
-            public bool SourceHadQuality;
-            public bool SinkHadQuality;
-            public bool SourceHadBaseQuality;
-            public bool SinkHadBaseQuality;
-            public bool TempQualityOverrideApplied;
-            public bool TempBaseQualityOverrideApplied;
-            public bool ShouldAverage;
         }
 
+        private static float GetMergedValue(float sourceValue, float sinkValue, int moved, int oldSinkSize, int newSize)
+        {
+            return (sourceValue * moved + sinkValue * oldSinkSize) / newSize;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch("TryMergeStacks")]
-        public static bool Prefix(out MergeQualityState __state, ItemStackMergeOperation op)
+        public static void Prefix(out TryMergeStacksState __state, ItemStackMergeOperation op)
         {
             __state = null;
-            if (suppressTryMergeQualityHandling) return true;
 
-            if (op?.SourceSlot?.Itemstack == null || op.SinkSlot?.Itemstack == null) return true;
-            if (op.SourceSlot.Itemstack.Collectible != op.SinkSlot.Itemstack.Collectible) return true;
-            if (op.SinkSlot.MaxSlotStackSize <= 1) return true;
-            if (!(XSkills.Instance?.XLeveling?.Config?.mergeQualities ?? false)) return true;
+            if (op?.SourceSlot?.Itemstack == null || op.SinkSlot?.Itemstack == null) return;
+            if (op.CurrentPriority != EnumMergePriority.AutoMerge && op.CurrentPriority != EnumMergePriority.DirectMerge) return;
 
             ITreeAttribute sourceAttributes = op.SourceSlot.Itemstack.Attributes;
             ITreeAttribute sinkAttributes = op.SinkSlot.Itemstack.Attributes;
-            bool sourceHasQuality = sourceAttributes?.HasAttribute("quality") ?? false;
-            bool sinkHasQuality = sinkAttributes?.HasAttribute("quality") ?? false;
-            bool sourceHasBaseQuality = sourceAttributes?.HasAttribute("xskillsBaseQuality") ?? false;
-            bool sinkHasBaseQuality = sinkAttributes?.HasAttribute("xskillsBaseQuality") ?? false;
-            if (!sourceHasQuality && !sinkHasQuality && !sourceHasBaseQuality && !sinkHasBaseQuality) return true;
+            if (sourceAttributes == null || sinkAttributes == null) return;
 
-            float sourceQuality = sourceAttributes?.GetFloat("quality", 0.0f) ?? 0.0f;
-            float sinkQuality = sinkAttributes?.GetFloat("quality", 0.0f) ?? 0.0f;
-            float sourceBaseQuality = sourceAttributes?.GetFloat("xskillsBaseQuality", 0.0f) ?? 0.0f;
-            float sinkBaseQuality = sinkAttributes?.GetFloat("xskillsBaseQuality", 0.0f) ?? 0.0f;
+            bool sourceHasQuality = sourceAttributes.HasAttribute("quality");
+            bool sourceHasBaseQuality = sourceAttributes.HasAttribute("xskillsBaseQuality");
+            bool sinkHasQuality = sinkAttributes.HasAttribute("quality");
+            bool sinkHasBaseQuality = sinkAttributes.HasAttribute("xskillsBaseQuality");
+            bool hasSourceQuality = sourceHasQuality || sourceHasBaseQuality;
+            bool hasSinkQuality = sinkHasQuality || sinkHasBaseQuality;
+            if (!hasSourceQuality && !hasSinkQuality) return;
 
-            __state = new MergeQualityState
+            float sourceQuality = sourceAttributes.GetFloat("quality");
+            float sinkQuality = sinkAttributes.GetFloat("quality");
+            float sourceBaseQuality = sourceAttributes.GetFloat("xskillsBaseQuality");
+            float sinkBaseQuality = sinkAttributes.GetFloat("xskillsBaseQuality");
+
+            bool differentQuality = Math.Abs(sourceQuality - sinkQuality) > 0.0001f;
+            bool differentBaseQuality = Math.Abs(sourceBaseQuality - sinkBaseQuality) > 0.0001f;
+            if (!differentQuality && !differentBaseQuality) return;
+
+            __state = new TryMergeStacksState()
             {
+                SourceHasQuality = sourceHasQuality,
+                SourceHasBaseQuality = sourceHasBaseQuality,
+                SinkHasQuality = sinkHasQuality,
+                SinkHasBaseQuality = sinkHasBaseQuality,
                 SourceQuality = sourceQuality,
-                SinkQuality = sinkQuality,
                 SourceBaseQuality = sourceBaseQuality,
-                SinkBaseQuality = sinkBaseQuality,
-                SourceHadQuality = sourceHasQuality,
-                SinkHadQuality = sinkHasQuality,
-                SourceHadBaseQuality = sourceHasBaseQuality,
-                SinkHadBaseQuality = sinkHasBaseQuality,
-                ShouldAverage = true
+                SinkQuality = sinkQuality,
+                SinkBaseQuality = sinkBaseQuality
             };
 
-            if (Math.Abs(sourceQuality - sinkQuality) > 0.0001f)
-            {
-                op.SourceSlot.Itemstack.Attributes.SetFloat("quality", sinkQuality);
-                __state.TempQualityOverrideApplied = true;
-            }
-
-            bool baseQualityDiffers = sourceHasBaseQuality != sinkHasBaseQuality || Math.Abs(sourceBaseQuality - sinkBaseQuality) > 0.0001f;
-            if (baseQualityDiffers)
-            {
-                if (sinkHasBaseQuality) op.SourceSlot.Itemstack.Attributes.SetFloat("xskillsBaseQuality", sinkBaseQuality);
-                else op.SourceSlot.Itemstack.Attributes.RemoveAttribute("xskillsBaseQuality");
-                __state.TempBaseQualityOverrideApplied = true;
-            }
-
-            return true;
+            sourceAttributes.RemoveAttribute("quality");
+            sourceAttributes.RemoveAttribute("xskillsBaseQuality");
+            sinkAttributes.RemoveAttribute("quality");
+            sinkAttributes.RemoveAttribute("xskillsBaseQuality");
         }
 
+        [HarmonyPostfix]
         [HarmonyPatch("TryMergeStacks")]
-        public static void Postfix(MergeQualityState __state, ItemStackMergeOperation op)
+        public static void Postfix(TryMergeStacksState __state, ItemStackMergeOperation op)
         {
-            if (__state == null || op?.SourceSlot == null || op.SinkSlot == null) return;
-
-            if (__state.TempQualityOverrideApplied && op.SourceSlot.Itemstack?.Attributes != null)
+            if (op == null || __state == null) return;
+            if (op.SourceSlot?.Itemstack?.Attributes != null)
             {
-                if (__state.SourceHadQuality) op.SourceSlot.Itemstack.Attributes.SetFloat("quality", __state.SourceQuality);
+                if (__state.SourceHasQuality) op.SourceSlot.Itemstack.Attributes.SetFloat("quality", __state.SourceQuality);
                 else op.SourceSlot.Itemstack.Attributes.RemoveAttribute("quality");
-            }
 
-            if (__state.TempBaseQualityOverrideApplied && op.SourceSlot.Itemstack?.Attributes != null)
-            {
-                if (__state.SourceHadBaseQuality) op.SourceSlot.Itemstack.Attributes.SetFloat("xskillsBaseQuality", __state.SourceBaseQuality);
+                if (__state.SourceHasBaseQuality) op.SourceSlot.Itemstack.Attributes.SetFloat("xskillsBaseQuality", __state.SourceBaseQuality);
                 else op.SourceSlot.Itemstack.Attributes.RemoveAttribute("xskillsBaseQuality");
             }
 
-            if (op.MovedQuantity <= 0) return;
+            if (op.MovedQuantity <= 0 || op.SinkSlot?.Itemstack?.Attributes == null)
+            {
+                if (op.SinkSlot?.Itemstack?.Attributes != null)
+                {
+                    if (__state.SinkHasQuality) op.SinkSlot.Itemstack.Attributes.SetFloat("quality", __state.SinkQuality);
+                    else op.SinkSlot.Itemstack.Attributes.RemoveAttribute("quality");
 
-            if (!__state.ShouldAverage) return;
-            if (op.SinkSlot.Itemstack?.Attributes == null || op.SinkSlot.Itemstack.StackSize <= 0) return;
+                    if (__state.SinkHasBaseQuality) op.SinkSlot.Itemstack.Attributes.SetFloat("xskillsBaseQuality", __state.SinkBaseQuality);
+                    else op.SinkSlot.Itemstack.Attributes.RemoveAttribute("xskillsBaseQuality");
+                }
+
+                return;
+            }
 
             int moved = op.MovedQuantity;
             int newSize = op.SinkSlot.Itemstack.StackSize;
             int oldSinkSize = newSize - moved;
-            if (oldSinkSize < 0) return;
+            if (newSize <= 0 || oldSinkSize < 0) return;
 
-            float quality = (__state.SourceQuality * moved + __state.SinkQuality * oldSinkSize) / newSize;
+            float quality = GetMergedValue(__state.SourceQuality, __state.SinkQuality, moved, oldSinkSize, newSize);
+
             if (quality > 0.0f) op.SinkSlot.Itemstack.Attributes.SetFloat("quality", quality);
             else op.SinkSlot.Itemstack.Attributes.RemoveAttribute("quality");
 
-            if (__state.SourceHadBaseQuality || __state.SinkHadBaseQuality)
-            {
-                float baseQuality = (__state.SourceBaseQuality * moved + __state.SinkBaseQuality * oldSinkSize) / newSize;
-                if (baseQuality > 0.0f) op.SinkSlot.Itemstack.Attributes.SetFloat("xskillsBaseQuality", baseQuality);
-                else op.SinkSlot.Itemstack.Attributes.RemoveAttribute("xskillsBaseQuality");
-            }
-        }
+            float baseQuality = GetMergedValue(__state.SourceBaseQuality, __state.SinkBaseQuality, moved, oldSinkSize, newSize);
 
-        [HarmonyPatch(typeof(ItemSlot), "ActivateSlot")]
-        public class ItemSlotActivateTracePatch
-        {
-            public class ActivateTraceState
-            {
-                public bool CanApplyMergeAveraging;
-                public bool AppliedTempOverride;
-                public bool AppliedQualityOverride;
-                public bool AppliedBaseQualityOverride;
-                public IAttribute SourceTempAttribute;
-                public float SourceQuality;
-                public float SourceBaseQuality;
-                public bool SourceHadQuality;
-                public bool SourceHadBaseQuality;
-                public bool SinkHadBaseQuality;
-                public float SinkQuality;
-                public float SinkBaseQuality;
-                public float SourceTemperature;
-                public float SinkTemperature;
-                public bool SourceHadTemperature;
-                public bool SinkHadTemperature;
-            }
-
-            static bool IsMetalPlate(ItemStack stack)
-            {
-                string path = stack?.Collectible?.Code?.Path ?? string.Empty;
-                return path.Contains("metalplate");
-            }
-
-            static void Prefix(ItemSlot __instance, ItemSlot sourceSlot, ref ItemStackMoveOperation op, out ActivateTraceState __state)
-            {
-                __state = new ActivateTraceState
-                {
-                    CanApplyMergeAveraging = false,
-                    AppliedTempOverride = false,
-                    AppliedQualityOverride = false,
-                    AppliedBaseQualityOverride = false
-                };
-
-                ICoreAPI api = __instance?.Inventory?.Api ?? sourceSlot?.Inventory?.Api;
-                if (api?.Side != EnumAppSide.Server) return;
-
-                ItemStack sink = __instance?.Itemstack;
-                ItemStack source = sourceSlot?.Itemstack;
-                if (!IsMetalPlate(sink) && !IsMetalPlate(source)) return;
-
-                if (source != null && sink != null && source.Collectible == sink.Collectible && (XSkills.Instance?.XLeveling?.Config?.mergeQualities ?? false))
-                {
-                    __state.CanApplyMergeAveraging = true;
-                    ITreeAttribute sourceAttr = source.Attributes;
-                    ITreeAttribute sinkAttr = sink.Attributes;
-
-                    __state.SourceHadQuality = sourceAttr?.HasAttribute("quality") ?? false;
-                    __state.SourceHadBaseQuality = sourceAttr?.HasAttribute("xskillsBaseQuality") ?? false;
-                    __state.SinkHadBaseQuality = sinkAttr?.HasAttribute("xskillsBaseQuality") ?? false;
-                    __state.SourceQuality = sourceAttr?.GetFloat("quality", 0.0f) ?? 0.0f;
-                    __state.SourceBaseQuality = sourceAttr?.GetFloat("xskillsBaseQuality", 0.0f) ?? 0.0f;
-                    __state.SinkQuality = sinkAttr?.GetFloat("quality", 0.0f) ?? 0.0f;
-                    __state.SinkBaseQuality = sinkAttr?.GetFloat("xskillsBaseQuality", 0.0f) ?? 0.0f;
-
-                    ITreeAttribute sourceTempTree = sourceAttr?.GetTreeAttribute("temperature");
-                    ITreeAttribute sinkTempTree = sinkAttr?.GetTreeAttribute("temperature");
-                    __state.SourceHadTemperature = sourceTempTree != null;
-                    __state.SinkHadTemperature = sinkTempTree != null;
-                    __state.SourceTemperature = sourceTempTree?.GetFloat("temperature", 0.0f) ?? 0.0f;
-                    __state.SinkTemperature = sinkTempTree?.GetFloat("temperature", 0.0f) ?? 0.0f;
-
-                    if (__state.SourceHadTemperature != __state.SinkHadTemperature || Math.Abs(__state.SourceTemperature - __state.SinkTemperature) > 0.0001f)
-                    {
-                        __state.SourceTempAttribute = sourceAttr?["temperature"]?.Clone();
-                        if (sinkAttr?.HasAttribute("temperature") ?? false) sourceAttr["temperature"] = sinkAttr["temperature"].Clone();
-                        else sourceAttr?.RemoveAttribute("temperature");
-                        __state.AppliedTempOverride = true;
-                    }
-
-                    if (Math.Abs(__state.SourceQuality - __state.SinkQuality) > 0.0001f)
-                    {
-                        sourceAttr?.SetFloat("quality", __state.SinkQuality);
-                        __state.AppliedQualityOverride = true;
-                    }
-
-                    bool baseQualityDiffers = __state.SourceHadBaseQuality != __state.SinkHadBaseQuality || Math.Abs(__state.SourceBaseQuality - __state.SinkBaseQuality) > 0.0001f;
-                    if (baseQualityDiffers)
-                    {
-                        if (sinkAttr?.HasAttribute("xskillsBaseQuality") ?? false) sourceAttr?.SetFloat("xskillsBaseQuality", __state.SinkBaseQuality);
-                        else sourceAttr?.RemoveAttribute("xskillsBaseQuality");
-                        __state.AppliedBaseQualityOverride = true;
-                    }
-
-                    if (__state.AppliedTempOverride || __state.AppliedQualityOverride || __state.AppliedBaseQualityOverride)
-                    {
-                        suppressTryMergeQualityHandling = true;
-                    }
-                }
-
-            }
-
-            static void Postfix(ItemSlot __instance, ItemSlot sourceSlot, ItemStackMoveOperation op, ActivateTraceState __state)
-            {
-                if (__state == null) return;
-
-                ICoreAPI api = __instance?.Inventory?.Api ?? sourceSlot?.Inventory?.Api;
-                if (api?.Side != EnumAppSide.Server) return;
-
-                ItemStack sink = __instance?.Itemstack;
-                ItemStack source = sourceSlot?.Itemstack;
-
-                if (__state.AppliedTempOverride && source?.Attributes != null)
-                {
-                    if (__state.SourceTempAttribute != null) source.Attributes["temperature"] = __state.SourceTempAttribute;
-                    else source.Attributes.RemoveAttribute("temperature");
-                }
-
-                if (__state.AppliedQualityOverride && source?.Attributes != null)
-                {
-                    if (__state.SourceHadQuality) source.Attributes.SetFloat("quality", __state.SourceQuality);
-                    else source.Attributes.RemoveAttribute("quality");
-                }
-
-                if (__state.AppliedBaseQualityOverride && source?.Attributes != null)
-                {
-                    if (__state.SourceHadBaseQuality) source.Attributes.SetFloat("xskillsBaseQuality", __state.SourceBaseQuality);
-                    else source.Attributes.RemoveAttribute("xskillsBaseQuality");
-                }
-
-                if (__state.CanApplyMergeAveraging && (op?.MovedQuantity ?? 0) > 0 && sink?.Attributes != null)
-                {
-                    int moved = op.MovedQuantity;
-                    int newSize = sink.StackSize;
-                    int oldSinkSize = newSize - moved;
-                    if (oldSinkSize >= 0 && newSize > 0)
-                    {
-                        float quality = (__state.SourceQuality * moved + __state.SinkQuality * oldSinkSize) / newSize;
-                        if (quality > 0.0f) sink.Attributes.SetFloat("quality", quality);
-                        else sink.Attributes.RemoveAttribute("quality");
-
-                        if (__state.SourceHadBaseQuality || __state.SinkHadBaseQuality)
-                        {
-                            float baseQuality = (__state.SourceBaseQuality * moved + __state.SinkBaseQuality * oldSinkSize) / newSize;
-                            if (baseQuality > 0.0f) sink.Attributes.SetFloat("xskillsBaseQuality", baseQuality);
-                            else sink.Attributes.RemoveAttribute("xskillsBaseQuality");
-                        }
-
-                        if (__state.SourceHadTemperature || __state.SinkHadTemperature)
-                        {
-                            float mergedTemperature = (__state.SourceTemperature * moved + __state.SinkTemperature * oldSinkSize) / newSize;
-                            sink.Collectible?.SetTemperature(api.World, sink, mergedTemperature, false);
-                        }
-                    }
-                }
-
-                if (__state.AppliedTempOverride || __state.AppliedQualityOverride || __state.AppliedBaseQualityOverride)
-                {
-                    suppressTryMergeQualityHandling = false;
-                }
-            }
+            if (baseQuality > 0.0f) op.SinkSlot.Itemstack.Attributes.SetFloat("xskillsBaseQuality", baseQuality);
+            else op.SinkSlot.Itemstack.Attributes.RemoveAttribute("xskillsBaseQuality");
         }
 
         public class TryEatStopState
