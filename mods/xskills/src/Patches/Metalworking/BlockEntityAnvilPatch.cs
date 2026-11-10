@@ -132,6 +132,7 @@ namespace XSkills
     internal class BlockEntityAnvilPatch : ManualPatch
     {
         public const int MAXFORGED = 200;
+        private const string HelveHeatingAppliedFlag = "xskillsHelveHeatingApplied";
 
         // Сколько реальных секунд заготовка не остывает после нагрева
         public const double ForgeCooldownDelaySeconds = 15.0;
@@ -179,9 +180,88 @@ namespace XSkills
             PatchMethod(harmony, anvilType, patch, "OnUpset");
             PatchMethod(harmony, anvilType, patch, "OnSplit");
             PatchMethod(harmony, anvilType, patch, "OnHit");
+            PatchMethod(harmony, anvilType, patch, "OnHelveHammerHit");
             PatchMethod(harmony, anvilType, patch, "onHelveHitSuccess");
+            PatchMethod(harmony, anvilType, patch, "OnHelveHitSuccess");
             PatchMethod(harmony, anvilType, patch, "CheckIfFinished");
             PatchMethod(harmony, anvilType, patch, "recipeVoxels");
+        }
+
+        private static bool TryApplyHelveHeatingHits(BlockEntityAnvil anvil, string source)
+        {
+            if (anvil?.Api?.Side != EnumAppSide.Server) return false;
+
+            IPlayer player = anvil.GetUsedByPlayer();
+            if (player == null) return false;
+
+            Metalworking metalworking = anvil.Api.ModLoader.GetModSystem<XLeveling>()?.GetSkill("metalworking") as Metalworking;
+            if (metalworking == null) return false;
+
+            PlayerSkill playerSkill = player.Entity?.GetBehavior<PlayerSkillSet>()?[metalworking.Id];
+            if (playerSkill == null) return false;
+
+            if (playerSkill[metalworking.MachineLearningId]?.Tier <= 0) return false;
+
+            PlayerAbility heatingAbility = playerSkill[metalworking.HeatingHitsId];
+            if (heatingAbility == null || heatingAbility.Tier <= 0) return false;
+
+            ItemStack workItem = anvil.WorkItemStack;
+            if (workItem == null) return false;
+
+            CollectibleObject collectible = workItem.Collectible;
+            float currentTemp = collectible.GetTemperature(anvil.Api.World, workItem);
+            float tempBefore = currentTemp;
+
+            IAnvilWorkable anvilWorkable = collectible as IAnvilWorkable;
+            float meltingpoint = anvilWorkable != null ?
+                collectible.GetMeltingPoint(anvil.Api.World, null, new DummySlot(anvilWorkable.GetBaseMaterial(workItem))) :
+                0.0f;
+
+            float heatBonus = heatingAbility.Value(0);
+            if (meltingpoint > 0.0f)
+            {
+                if (currentTemp < meltingpoint)
+                {
+                    currentTemp = Math.Min(currentTemp + heatBonus, meltingpoint);
+                }
+            }
+            else
+            {
+                currentTemp += heatBonus;
+            }
+
+            double prevLastUpdate = workItem.Attributes?.GetTreeAttribute("temperature")?.GetDouble("temperatureLastUpdate") ?? double.MinValue;
+            collectible.SetTemperature(anvil.Api.World, workItem, currentTemp, false);
+            ApplyForgeCooldownDelay(anvil.Api.World, workItem, prevLastUpdate);
+
+            anvil.MarkDirty(true);
+            return true;
+        }
+
+        private static int ComputeVoxelSignature(BlockEntityAnvil anvil)
+        {
+            if (anvil?.Voxels == null) return 0;
+
+            unchecked
+            {
+                int hash = 17;
+                for (int x = 0; x < 16; x++)
+                {
+                    for (int y = 0; y < 6; y++)
+                    {
+                        for (int z = 0; z < 16; z++)
+                        {
+                            hash = hash * 31 + anvil.Voxels[x, y, z];
+                        }
+                    }
+                }
+                return hash;
+            }
+        }
+
+        public static void OnHelveHammerHitPrefix(BlockEntityAnvil __instance, out int __state)
+        {
+            __state = __instance?.WorkItemStack == null ? int.MinValue : ComputeVoxelSignature(__instance);
         }
 
         public static bool TryPutPrefix(BlockEntityAnvil __instance, ref bool __state, IPlayer byPlayer)
@@ -307,6 +387,7 @@ namespace XSkills
                         }
                     }
                 }
+
             }
             return true;
         }
@@ -320,59 +401,30 @@ namespace XSkills
                 __instance.SetSplitCount(__instance.GetSplitCount() + 1);
             }
 
-            // HEATING HITS LOGIC FOR THE AUTO-HAMMER
-            if (__instance.Api.Side == EnumAppSide.Server)
+            if (TryApplyHelveHeatingHits(__instance, "onHelveHitSuccess"))
             {
-                IPlayer player = __instance.GetUsedByPlayer();
-                if (player != null)
-                {
-                    Metalworking metalworking = __instance.Api.ModLoader.GetModSystem<XLeveling>()?.GetSkill("metalworking") as Metalworking;
-                    if (metalworking == null) return; // If the skill was not found, just exit
-
-                    // Now use a strict int
-                    PlayerSkill playerSkill = player.Entity?.GetBehavior<PlayerSkillSet>()?[metalworking.Id];
-
-                    // Hard requirement: check Machine Learning
-                    if (playerSkill != null && playerSkill[metalworking.MachineLearningId]?.Tier > 0)
-                    {
-                        PlayerAbility heatingAbility = playerSkill[metalworking.HeatingHitsId];
-                        if (heatingAbility != null && heatingAbility.Tier > 0)
-                        {
-                            ItemStack workItem = __instance.WorkItemStack;
-                            if (workItem != null)
-                            {
-                                CollectibleObject collectible = workItem.Collectible;
-                                float currentTemp = collectible.GetTemperature(__instance.Api.World, workItem);
-
-                                IAnvilWorkable anvilWorkable = collectible as IAnvilWorkable;
-                                float meltingpoint = anvilWorkable != null ?
-                                    collectible.GetMeltingPoint(__instance.Api.World, null, new DummySlot(anvilWorkable.GetBaseMaterial(workItem))) :
-                                    0.0f;
-
-                                float heatBonus = heatingAbility.Value(0);
-                                if (meltingpoint > 0.0f)
-                                {
-                                    if (currentTemp < meltingpoint)
-                                    {
-                                        currentTemp = Math.Min(currentTemp + heatBonus, meltingpoint);
-                                    }
-                                }
-                                else
-                                {
-                                    currentTemp += heatBonus;
-                                }
-
-                                double prevLastUpdate = workItem.Attributes?.GetTreeAttribute("temperature")?.GetDouble("temperatureLastUpdate") ?? double.MinValue;
-                                collectible.SetTemperature(__instance.Api.World, workItem, currentTemp, false);
-                                ApplyForgeCooldownDelay(__instance.Api.World, workItem, prevLastUpdate);
-
-                                // Force-send the updated temperature to the client to avoid it being overwritten
-                                __instance.MarkDirty(true);
-                            }
-                        }
-                    }
-                }
+                __instance.WorkItemStack?.Attributes?.SetBool(HelveHeatingAppliedFlag, true);
             }
+        }
+
+        public static void OnHelveHammerHitPostfix(BlockEntityAnvil __instance, int __state)
+        {
+            ItemStack workItem = __instance.WorkItemStack;
+            if (workItem == null) return;
+
+            bool successfulHelveWork = __state != int.MinValue && __state != ComputeVoxelSignature(__instance);
+            bool alreadyApplied = workItem.Attributes?.GetBool(HelveHeatingAppliedFlag) ?? false;
+            if (successfulHelveWork && !alreadyApplied)
+            {
+                TryApplyHelveHeatingHits(__instance, "OnHelveHammerHitFallback");
+            }
+
+            workItem.Attributes?.RemoveAttribute(HelveHeatingAppliedFlag);
+        }
+
+        public static void OnHelveHitSuccessPostfix(BlockEntityAnvil __instance, EnumVoxelMaterial mat, Vec3i usableMetalVoxel)
+        {
+            onHelveHitSuccessPostfix(__instance, mat, usableMetalVoxel);
         }
 
         public static bool CheckIfFinishedPrefix(BlockEntityAnvil __instance, out AnvilState __state, IPlayer byPlayer)
@@ -454,6 +506,7 @@ namespace XSkills
                         {
                             __instance.Api.World.SpawnItemEntity(metalBitsStack, __instance.Pos.ToVec3d().Add(0.5, 1.5, 0.5));
                         }
+
                     }
                 }
             }
@@ -581,7 +634,10 @@ namespace XSkills
                     int oldDurability = tool.Attributes.GetInt("durability");
                     int newDurability = oldDurability + (int)(__state.hitCount * playerAbility.SkillDependentFValue());
                     newDurability = Math.Min(newDurability, tool.Collectible.Durability);
-                    if (newDurability > oldDurability) tool.Attributes.SetInt("durability", newDurability);
+                    if (newDurability > oldDurability)
+                    {
+                        tool.Attributes.SetInt("durability", newDurability);
+                    }
                 }
             }
 
@@ -592,10 +648,14 @@ namespace XSkills
 
             bool fromSafeQuenching = __state.workItemStack.Attributes.GetBool("fromSafeQuenching", false);
 
-            if ((resolvedStack?.Collectible.CombustibleProps == null || __state.metalworking.IsDuplicatable(__state.recipe)) && !__state.wasPlate && !fromSafeQuenching)
+            bool duplicatorRecipeAllowed = resolvedStack?.Collectible.CombustibleProps == null || __state.metalworking.IsDuplicatable(__state.recipe);
+            bool duplicatorEligible = duplicatorRecipeAllowed && !__state.wasPlate && !fromSafeQuenching;
+
+            if (duplicatorEligible)
             {
                 playerAbility = playerSkill[__state.metalworking.DuplicatorId];
                 if (playerAbility == null) return;
+
                 if (playerAbility.SkillDependentFValue() >= world.Rand.NextDouble())
                 {
                     ItemStack outstack = resolvedStack.Clone();
