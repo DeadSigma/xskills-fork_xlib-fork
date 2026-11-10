@@ -325,29 +325,38 @@
             "rustmage": -0.2
         }
     },
-    {
-        "file": "xskills:skills/combat",
-        "op": "replace",
-        "path": "/bloodlust/requirements/1/classes",
-        "value": [
-            "malefactorgloo",
-            "blackguardgloo"
-        ]
-    },
-    {
-        "file": "xskills:skills/metalworking",
-        "op": "replace",
-        "path": "/salvager/requirements/0/requirements/1/classes",
-        "value": [
-            "clockmakergloo"
-        ]
-    },
-    {
-        "file": "xskills:skills/metalworking",
-        "op": "replace",
-        "path": "/salvager/requirements/2/classes",
-        "value": [
-            "clockmakergloo"
-        ]
-    }
+  {
+    "dependsOn": [
+      { "modid": "gloomeclasses" }
+    ],
+    "file": "xskills:skills/combat",
+    "op": "replace",
+    "path": "/bloodlust/requirements/1/classes",
+    "value": [
+      "malefactorgloo",
+      "blackguardgloo"
+    ]
+  },
+  {
+    "dependsOn": [
+      { "modid": "gloomeclasses" }
+    ],
+    "file": "xskills:skills/metalworking",
+    "op": "replace",
+    "path": "/salvager/requirements/0/requirements/1/classes",
+    "value": [
+      "clockmakergloo"
+    ]
+  },
+  {
+    "dependsOn": [
+      { "modid": "gloomeclasses" }
+    ],
+    "file": "xskills:skills/metalworking",
+    "op": "replace",
+    "path": "/salvager/requirements/2/classes",
+    "value": [
+      "clockmakergloo"
+    ]
+  }
 ]
