@@ -21,14 +21,14 @@ namespace XSkills
 
             string currentState = __instance.GetState(slot.Itemstack);
 
-            // Если предмет вот-вот сломается
+            // If the item is about to break
             if ((currentState == "quench" || currentState == "overheat") && temperature < slot.Itemstack.Collectible.GetTemperature(world, slot.Itemstack) - 2f)
             {
                 ItemStack clonedStack = slot.Itemstack.Clone();
                 IPlayer player = null;
                 Vec3d pos = null;
 
-                // щем, где находится предмет ДО того, как он пропадет
+                // Determine where the item is BEFORE it disappears
                 if (slot.Inventory is InventoryBasePlayer invPlayer)
                 {
                     player = invPlayer.Player;
@@ -36,10 +36,10 @@ namespace XSkills
                 }
                 else
                 {
-                    // Безопасно приводим world к IServerWorldAccessor
+                    // Safely cast world to IServerWorldAccessor
                     if (world is IServerWorldAccessor serverWorld)
                     {
-                        // Ищем брошенную сущность предмета (в воде)
+                        // Look for the dropped item entity (in water)
                         foreach (var entity in serverWorld.LoadedEntities.Values)
                         {
                             if (entity is EntityItem entityItem && (entityItem.Slot == slot || entityItem.Itemstack == slot.Itemstack))
@@ -50,7 +50,7 @@ namespace XSkills
                         }
                     }
 
-                    // Если это блок (например, корыто/бочка) и сущность не найдена
+                    // If this is a block inventory (e.g., trough/barrel) and no entity was found
                     if (pos == null && slot.Inventory != null)
                     {
                         var posProp = slot.Inventory.GetType().GetProperty("Pos");
@@ -60,7 +60,7 @@ namespace XSkills
                         }
                     }
 
-                    // Если нашли позицию - ищем игрока в радиусе 15 блоков
+                    // If we found a position, find a player within a 15-block radius
                     if (pos != null)
                     {
                         IPlayer nearest = world.NearestPlayer(pos.X, pos.Y, pos.Z);
@@ -78,16 +78,16 @@ namespace XSkills
                     {
                         PlayerAbility perfectQuench = player.Entity?.GetBehavior<PlayerSkillSet>()?[metalworking.Id]?[metalworking.PerfectQuenchingId];
 
-                        // Если читерский перк включен в конфигах и изучен игроком
+                        // If the perk is enabled in config and learned by the player
                         if (perfectQuench != null && perfectQuench.Tier > 0)
                         {
                             slot.Itemstack.TempAttributes.SetBool("willbreak", false);
-                            return; // Прерываем Prefix. В Postfix предмет не уйдет, так как останется целым.
+                            return; // Stop Prefix. In Postfix, the item will remain because it is still intact.
                         }
                     }
                 }
 
-                // Сохраняем состояние для Postfix
+                // Save state for Postfix
                 __state = new object[] { clonedStack, player, pos };
             }
         }
@@ -95,14 +95,14 @@ namespace XSkills
         [HarmonyPostfix]
         public static void Postfix(CollectibleBehaviorQuenchable __instance, IWorldAccessor world, ItemSlot slot, float temperature, object[] __state)
         {
-            // Если оригинальный код сломал предмет, и у нас есть сохраненные данные
+            // If the original code broke the item and we have saved data
             if (__state != null && slot.Itemstack == null)
             {
                 ItemStack originalStack = __state[0] as ItemStack;
                 IPlayer player = __state[1] as IPlayer;
                 Vec3d pos = __state[2] as Vec3d;
 
-                // Если игрок с подходящей дистанцией найден
+                // If a player within valid distance was found
                 if (player != null && originalStack != null)
                 {
                     Metalworking metalworking = XLeveling.Instance(world.Api)?.GetSkill("metalworking") as Metalworking;
@@ -166,7 +166,7 @@ namespace XSkills
                                             workItemStack.Attributes.SetBytes("voxels", voxelData);
                                             workItemStack.Attributes.SetInt("selectedRecipeId", shatteredRecipe.RecipeId);
 
-                                            // Помечаем заготовку как спасенную после неудачной закалки
+                                            // Mark the work item as recovered after a failed quench
                                             workItemStack.Attributes.SetBool("fromSafeQuenching", true);
                                         }
                                     }
@@ -174,22 +174,22 @@ namespace XSkills
 
                                 workItemStack.Collectible.SetTemperature(world, workItemStack, temperature);
 
-                                // 3. Определяем, как вернуть заготовку
+                                // 3. Decide how to return the work item
                                 if (slot.Inventory == null || slot.Inventory.ClassName == "dummy" || slot.Inventory.ClassName == "entity")
                                 {
-                                    // Предмет брошен в воду. Создаем НОВУЮ сущность предмета.
-                                    // Старая сущность (slot) останется пустой и игра ее безопасно удалит.
+                                    // The item was thrown into water. Create a NEW item entity.
+                                    // The old entity (slot) will remain empty and the game will safely remove it.
                                     Vec3d spawnPos = pos ?? player.Entity.Pos.XYZ;
                                     world.SpawnItemEntity(workItemStack, spawnPos);
                                 }
                                 else
                                 {
-                                    // Предмет в инвентаре или бочке - кладем обратно в слот
+                                    // The item is in an inventory or barrel - put it back into the slot
                                     slot.Itemstack = workItemStack;
                                     slot.MarkDirty();
                                 }
 
-                                // Возврат излишков, если игрок бросил сразу стак (2+ штуки)
+                                // Return extras if the player threw a stack (2+ items)
                                 if (originalStack.StackSize > 1)
                                 {
                                     ItemStack extraItems = originalStack.Clone();
