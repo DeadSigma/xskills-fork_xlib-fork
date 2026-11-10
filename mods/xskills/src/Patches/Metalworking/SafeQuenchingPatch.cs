@@ -272,11 +272,14 @@ namespace XSkills
             if (quenchIterations >= 1) multiplier += 0.15f;
             if (temperIterations >= 1) multiplier += 0.05f;
             if (quenchIterations >= 2) multiplier += 0.10f;
+            if (temperIterations >= 2) multiplier += 0.03f;
+            if (quenchIterations >= 3) multiplier += 0.05f;
+            if (temperIterations >= 3) multiplier += 0.01f;
 
-            int extraTreatments = Math.Max(0, quenchIterations - 2) + Math.Max(0, temperIterations - 1);
+            int extraTreatments = Math.Max(0, quenchIterations - 3) + Math.Max(0, temperIterations - 3);
             if (extraTreatments > 0)
             {
-                multiplier += 0.5f * (1.0f - (float)Math.Pow(0.85f, extraTreatments));
+                multiplier += (1.0f / 3.0f) * (1.0f - (float)Math.Pow(0.85f, extraTreatments));
             }
 
             return Math.Min(multiplier, 1.5f);

@@ -521,7 +521,8 @@ namespace XSkills
 
                 float baseQuality = quality;
 
-                quality *= 0.7f;
+                bool isQuenchable = collectible?.HasBehavior<CollectibleBehaviorQuenchable>() == true;
+                quality *= isQuenchable ? 0.7f : 1.0f;
 
                 __state.recipe.Output.ResolvedItemstack.Attributes.SetFloat("xskillsBaseQuality", baseQuality);
                 __state.recipe.Output.ResolvedItemstack.Attributes.SetFloat("quality", quality);
